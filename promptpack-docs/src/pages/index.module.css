@@ -21,3 +21,16 @@
   align-items: center;
   justify-content: center;
 }
+
+.versionBadge {
+  margin-left: 1rem;
+  font-size: 0.5em;
+  background-color: #7045af;
+  color: #ffffff !important;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: normal;
+  position: relative;
+  z-index: 10;
+  display: inline-block;
+}

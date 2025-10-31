@@ -1,0 +1,11 @@
+# PromptPack.org - Robot Exclusion Protocol
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://promptpack.org/sitemap.xml
+
+# Crawl-delay (optional - adjust based on server capacity)
+Crawl-delay: 1
