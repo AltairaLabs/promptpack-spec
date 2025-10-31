@@ -12,35 +12,35 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Universal Interoperability',
-    Svg: require('@site/static/img/interoperability.svg').default,
-    description: (
-      <>
-        PromptPack enables seamless integration across different conversational AI platforms,
-        tools, and frameworks. Share prompts between OpenAI, Anthropic, local models, and more
-        with standardized packaging.
-      </>
-    ),
-  },
-  {
-    title: 'Reusable Components',
+    title: 'Stop Building the Same Prompts Over and Over',
     Svg: require('@site/static/img/reusable.svg').default,
     description: (
       <>
-        Build once, use everywhere. Package your prompts, tools, and workflows into
-        reusable components that can be shared, versioned, and distributed across
-        teams and organizations.
+        Package your customer support, sales, and technical prompts into a single deployable unit.
+        Share proven AI solutions across teams, projects, and organizations. 
+        <strong> Build once, deploy everywhere.</strong>
       </>
     ),
   },
   {
-    title: 'Testable & Reliable',
+    title: 'Deploy AI Systems, Not Just Prompts',
+    Svg: require('@site/static/img/interoperability.svg').default,
+    description: (
+      <>
+        Everything your AI needs in one JSON file: specialized prompts, external tools, 
+        safety guardrails, and shared resources. No more hunting for scattered configurations.
+        <strong> One file = Complete AI system.</strong>
+      </>
+    ),
+  },
+  {
+    title: 'Know Your AI Works Before You Deploy',
     Svg: require('@site/static/img/testable.svg').default,
     description: (
       <>
-        Define comprehensive test suites for your prompts and conversational flows.
-        Ensure reliability with automated testing, performance benchmarks, and
-        quality assurance workflows.
+        Built-in testing shows which models work best, expected costs, and success rates.
+        Deploy with confidence knowing your AI performs reliably.
+        <strong> No more "works on my machine" surprises.</strong>
       </>
     ),
   },

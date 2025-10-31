@@ -64,7 +64,6 @@ promptpack-spec/
 ### 3. Join the Community
 
 - **GitHub Discussions**: Ask questions and share ideas
-- **Discord**: Real-time chat with other contributors
 - **RFC Process**: Participate in specification decisions
 - **Issue Tracker**: Find bugs to fix or features to implement
 
@@ -190,7 +189,6 @@ Active contributors may be invited to become maintainers with:
 ### Community
 
 - [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
-- [Discord Server](https://discord.gg/altairalabs)
 - [Issue Tracker](https://github.com/altairalabs/promptpack-spec/issues)
 - [Pull Requests](https://github.com/altairalabs/promptpack-spec/pulls)
 

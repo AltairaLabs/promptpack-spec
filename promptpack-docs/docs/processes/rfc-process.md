@@ -140,7 +140,6 @@ RFCs are evaluated based on:
 ## Getting Help
 
 - **Discussion Forum** - Use GitHub Discussions for questions
-- **Discord** - Join our community Discord server  
 - **Office Hours** - Attend monthly community calls
 - **Mentorship** - Request guidance from experienced contributors
 

@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'PromptPack',
-  tagline: 'The open specification for packaging, testing, and running multi-prompt conversational systems.',
+  tagline: 'Stop building AI systems from scratch. Package, share, and deploy production-ready conversational AI.',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -58,16 +58,16 @@ const config: Config = {
     // Social card for sharing
     image: 'img/promptpack-social-card.svg',
     metadata: [
-      {name: 'description', content: 'The open specification for packaging, testing, and running multi-prompt conversational systems.'},
-      {name: 'keywords', content: 'promptpack, prompts, conversational ai, llm, specification, yaml, testing, packaging'},
-      {property: 'og:title', content: 'PromptPack - Open Specification for Conversational Systems'},
-      {property: 'og:description', content: 'The open specification for packaging, testing, and running multi-prompt conversational systems.'},
+      {name: 'description', content: 'Stop building AI systems from scratch. PromptPack lets you package, share, and deploy production-ready conversational AI with everything included: specialized prompts, tools, and safety guardrails.'},
+      {name: 'keywords', content: 'promptpack, prompts, conversational ai, llm, specification, json, testing, packaging, deployment, production ai'},
+      {property: 'og:title', content: 'PromptPack - Deploy Production-Ready AI Systems'},
+      {property: 'og:description', content: 'Stop building AI systems from scratch. Package, share, and deploy production-ready conversational AI with everything included.'},
       {property: 'og:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
       {property: 'og:url', content: 'https://promptpack.org'},
       {property: 'og:type', content: 'website'},
       {name: 'twitter:card', content: 'summary_large_image'},
-      {name: 'twitter:title', content: 'PromptPack - Open Specification for Conversational Systems'},
-      {name: 'twitter:description', content: 'The open specification for packaging, testing, and running multi-prompt conversational systems.'},
+      {name: 'twitter:title', content: 'PromptPack - Deploy Production-Ready AI Systems'},
+      {name: 'twitter:description', content: 'Stop building AI systems from scratch. Package, share, and deploy production-ready conversational AI with everything included.'},
       {name: 'twitter:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
     ],
     colorMode: {
@@ -116,10 +116,6 @@ const config: Config = {
             {
               label: 'GitHub Discussions',
               href: 'https://github.com/altairalabs/promptpack-spec/discussions',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discord.gg/altairalabs',
             },
             {
               label: 'RFC Process',

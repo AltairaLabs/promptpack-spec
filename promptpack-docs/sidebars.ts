@@ -37,16 +37,16 @@ const sidebars: SidebarsConfig = {
         'processes/contributing',
       ],
     },
-    {
-      type: 'category',
-      label: 'Ecosystem',
-      items: [
-        'ecosystem/promptkit-runtime',
-        'ecosystem/arena-testing',
-        'ecosystem/community-tools',
-      ],
-    },
-    'adopters',
+    // {
+    //   type: 'category',
+    //   label: 'Ecosystem',
+    //   items: [
+    //     'ecosystem/promptkit-runtime',
+    //     'ecosystem/arena-testing',
+    //     'ecosystem/community-tools',
+    //   ],
+    // },
+    // 'adopters',
   ],
 };
 

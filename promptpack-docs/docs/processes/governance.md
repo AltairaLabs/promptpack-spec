@@ -128,7 +128,6 @@ All participants must follow our Code of Conduct:
 ### Communication Channels
 
 - **GitHub Discussions** - Asynchronous technical discussions
-- **Discord Server** - Real-time chat and community support
 - **Mailing List** - Important announcements and release notes
 - **Blog** - Regular updates on project progress and highlights
 

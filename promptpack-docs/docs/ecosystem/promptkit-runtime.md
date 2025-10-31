@@ -367,5 +367,4 @@ spec:
 
 - **Documentation** - [promptkit.org](https://promptkit.org)
 - **GitHub** - [github.com/altairalabs/promptkit](https://github.com/altairalabs/promptkit)
-- **Discord** - Join our community Discord server
 - **Issues** - Report bugs and request features on GitHub
