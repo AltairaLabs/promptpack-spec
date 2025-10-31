@@ -8,20 +8,32 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout main branch
+        run: |
+          git checkout main
       - name: Copy schema to versioned folder
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
+          echo "Publishing schema for version: $VERSION"
           mkdir -p promptpack-docs/static/schema/$VERSION
           cp schema/promptpack.schema.json promptpack-docs/static/schema/$VERSION/promptpack.schema.json
           cp schema/promptpack.schema.json promptpack-docs/static/schema/latest/promptpack.schema.json
       - name: Commit and push
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add promptpack-docs/static/schema
-          git commit -m "Publish schema for $VERSION"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            VERSION=${GITHUB_REF#refs/tags/}
+            git commit -m "Publish schema for $VERSION"
+            git push origin main
+          fi
