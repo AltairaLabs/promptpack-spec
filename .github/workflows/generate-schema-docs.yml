@@ -1,0 +1,24 @@
+name: Generate Schema Docs
+
+on:
+  push:
+    paths:
+      - 'schema/promptpack.schema.json'
+      - '.github/workflows/generate-schema-docs.yml'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Markdown documentation from JSON Schema
+        run: |
+          pip install json-schema-for-humans
+          generate-schema-doc schema/promptpack.schema.json promptpack-docs/docs/spec/schema-reference.md --config template_name=md
+      - name: Commit and push docs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add promptpack-docs/docs/spec/schema-reference.md
+          git commit -m "Regenerate schema reference docs" || exit 0
+          git push

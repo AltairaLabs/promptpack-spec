@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
         'spec/examples',
         'spec/file-format',
         'spec/schema-reference',
+        'spec/schema-guide',
       ],
     },
     {

@@ -1,0 +1,27 @@
+name: Publish Versioned Schema
+
+on:
+  push:
+    tags:
+      - 'v*'   # Triggers when a version tag is pushed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Copy schema to versioned folder
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          mkdir -p promptpack-docs/static/schema/$VERSION
+          cp schema/promptpack.schema.json promptpack-docs/static/schema/$VERSION/promptpack.schema.json
+          cp schema/promptpack.schema.json promptpack-docs/static/schema/latest/promptpack.schema.json
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add promptpack-docs/static/schema
+          git commit -m "Publish schema for $VERSION"
+          git push
