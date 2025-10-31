@@ -3,6 +3,7 @@
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
   "description": "Schema for packaging, testing, and running multi-prompt conversational systems",
+  "version": "1.0.0",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
