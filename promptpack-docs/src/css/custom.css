@@ -1,0 +1,160 @@
+/**
+ * PromptPack Documentation Site Styles
+ * Custom styling for the PromptPack specification documentation.
+ */
+
+/* PromptPack Brand Colors */
+:root {
+  --ifm-color-primary: #3B82F6;
+  --ifm-color-primary-dark: #2563EB;
+  --ifm-color-primary-darker: #1D4ED8;
+  --ifm-color-primary-darkest: #1E40AF;
+  --ifm-color-primary-light: #60A5FA;
+  --ifm-color-primary-lighter: #93C5FD;
+  --ifm-color-primary-lightest: #DBEAFE;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(59, 130, 246, 0.1);
+  
+  /* PromptPack-specific variables */
+  --promptpack-accent: #F59E0B;
+  --promptpack-success: #10B981;
+  --promptpack-warning: #F59E0B;
+  --promptpack-danger: #EF4444;
+  --promptpack-gray: #6B7280;
+  
+  /* Typography */
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-heading-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-font-weight-semibold: 600;
+  --ifm-font-weight-bold: 700;
+}
+
+/* Dark mode colors */
+[data-theme='dark'] {
+  --ifm-color-primary: #60A5FA;
+  --ifm-color-primary-dark: #3B82F6;
+  --ifm-color-primary-darker: #2563EB;
+  --ifm-color-primary-darkest: #1D4ED8;
+  --ifm-color-primary-light: #93C5FD;
+  --ifm-color-primary-lighter: #BFDBFE;
+  --ifm-color-primary-lightest: #DBEAFE;
+  --docusaurus-highlighted-code-line-bg: rgba(96, 165, 250, 0.15);
+  
+  --promptpack-accent: #FBBF24;
+  --promptpack-success: #34D399;
+  --promptpack-warning: #FBBF24;
+  --promptpack-danger: #F87171;
+}
+
+/* Custom styling */
+
+/* Hero section on homepage */
+.hero--primary {
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
+}
+
+.hero__title {
+  font-weight: var(--ifm-font-weight-bold);
+  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+/* Navbar styling */
+.navbar__brand:hover {
+  color: var(--ifm-navbar-link-hover-color);
+}
+
+.navbar__logo {
+  height: 32px;
+  margin-right: 0.75rem;
+}
+
+/* Code blocks */
+.prism-code {
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+/* Tables */
+table {
+  border-radius: 8px;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table th {
+  background-color: var(--ifm-color-emphasis-100);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Sidebar */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Table of contents */
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Admonitions/callouts */
+.admonition {
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.admonition-heading h5 {
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Custom badges */
+.badge--version {
+  background-color: var(--promptpack-accent);
+  color: white;
+  font-weight: var(--ifm-font-weight-semibold);
+  border-radius: 12px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.badge--status-draft {
+  background-color: var(--promptpack-warning);
+  color: white;
+}
+
+.badge--status-stable {
+  background-color: var(--promptpack-success);
+  color: white;
+}
+
+/* Footer enhancements */
+.footer {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.footer__title {
+  color: var(--ifm-color-primary);
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .hero__title {
+    font-size: 2rem;
+  }
+  
+  .navbar__logo {
+    height: 28px;
+  }
+}
+
+/* Focus and accessibility */
+:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}

@@ -1,0 +1,30 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="testableGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Test grid -->
+  <rect x="60" y="50" width="80" height="80" rx="8" fill="url(#testableGrad)" opacity="0.1" stroke="#3B82F6" stroke-width="2"/>
+  
+  <!-- Test checkmarks -->
+  <circle cx="80" cy="70" r="12" fill="#10B981"/>
+  <path d="M 75 70 L 78 73 L 85 66" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <circle cx="120" cy="70" r="12" fill="#10B981"/>
+  <path d="M 115 70 L 118 73 L 125 66" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <circle cx="80" cy="110" r="12" fill="#10B981"/>
+  <path d="M 75 110 L 78 113 L 85 106" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- One warning/pending test -->
+  <circle cx="120" cy="110" r="12" fill="#F59E0B"/>
+  <rect x="117" y="107" width="6" height="6" rx="1" fill="white"/>
+  
+  <!-- Test report lines -->
+  <rect x="70" y="140" width="60" height="3" rx="1.5" fill="#3B82F6"/>
+  <rect x="70" y="148" width="45" height="3" rx="1.5" fill="#3B82F6" opacity="0.6"/>
+  <rect x="70" y="156" width="30" height="3" rx="1.5" fill="#3B82F6" opacity="0.4"/>
+</svg>
