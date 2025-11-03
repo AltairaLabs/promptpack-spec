@@ -1,2 +1,19 @@
 DEPLOYMENT.md
 PROJECT_SUMMARY.md
+
+# Ignore Docusaurus and Node build artifacts in promptpack-docs
+promptpack-docs/build/
+promptpack-docs/.docusaurus/
+promptpack-docs/node_modules/
+
+# Ignore accidental top-level docs build artifacts
+docs/build/
+docs/.docusaurus/
+docs/node_modules/
+
+# Ignore OS and editor files
+.DS_Store
+*.log
+node_modules/
+build/
+.docusaurus/
