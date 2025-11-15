@@ -1,27 +1,27 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
+title: "Specification Overview (v1.0)"
 ---
 
 # Specification Overview
 
 <div style={{
   padding: '8px 16px',
-  backgroundColor: '#10b981',
+  backgroundColor: '#6b7280',
   color: 'white',
   borderRadius: '6px',
   display: 'inline-block',
   marginBottom: '24px',
   fontWeight: 'bold'
 }}>
-  📘 v1.1 (Current)
+  📦 v1.0 (Stable)
 </div>
 
-PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
-
-:::info Version Information
-This documentation covers **v1.1** of the PromptPack specification, which adds multimodal support. 
-Looking for the previous version? [View v1.0 docs →](./v1.0/overview)
+:::warning Archived Version
+This is the **v1.0** documentation (October 2024). For the latest features, see [v1.1 docs →](../overview)
 :::
+
+PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
 
 ## Why PromptPacks?
 

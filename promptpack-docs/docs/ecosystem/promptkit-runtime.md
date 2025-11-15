@@ -2,369 +2,98 @@
 sidebar_position: 1
 ---
 
-# PromptKit Runtime
+# PromptKit
 
-PromptKit is the reference implementation for running PromptPack specifications. It provides a complete runtime environment for executing prompts, tools, workflows, and personas.
+:::info Status
+PromptKit is under active development. Visit [promptkit.altairalabs.ai](https://promptkit.altairalabs.ai) for the latest information.
+:::
+
+PromptKit is the reference implementation for working with PromptPack specifications. It provides tools for authoring, validating, and testing PromptPacks.
 
 ## Overview
 
-PromptKit serves as both a reference implementation and a production-ready runtime for PromptPack files. It demonstrates how to properly interpret the specification while providing a robust platform for building conversational AI applications.
+PromptKit helps you work with the PromptPack specification by providing:
 
-### Key Features
+- **PromptArena** - A testing and evaluation platform for comparing prompt performance across different models
+- **Validation Tools** - Schema validation and format checking (planned)
+- **SDK Libraries** - Python and JavaScript libraries for loading and using PromptPacks (planned)
 
-- **Full PromptPack Support** - Implements the complete v1 specification
-- **Multi-LLM Backend** - Works with OpenAI, Anthropic, Ollama, and more
-- **Tool Integration** - Native support for external APIs and functions  
-- **Workflow Orchestration** - State management and complex conversation flows
-- **Persona System** - Consistent personality and behavioral enforcement
-- **Testing Framework** - Built-in validation and testing capabilities
+## PromptArena
 
-## Installation
+**Status:** ✅ Available
 
-### Using npm
+PromptArena is a web-based platform for testing and evaluating prompts across multiple LLM providers.
 
-```bash
-npm install -g promptkit
-```
+### Features
 
-### Using pip
+- **Side-by-side Testing** - Compare prompt responses from different models simultaneously
+- **Multi-Provider Support** - Test with OpenAI, Anthropic, Google, and more
+- **Evaluation Framework** - Score and rank prompt performance
+- **Batch Testing** - Run multiple test cases across providers
+- **Export Results** - Save evaluation data for analysis
 
-```bash
-pip install promptkit
-```
+### Access
 
-### Docker
+Visit [promptkit.altairalabs.ai](https://promptkit.altairalabs.ai) to use PromptArena.
 
-```bash
-docker run -it altairalabs/promptkit
-```
+## Planned Features
 
-## Quick Start
+The following features are under development:
 
-### Running a PromptPack
+### Validation Tools (Coming Soon)
+
+Command-line tools for validating PromptPacks:
 
 ```bash
-# Run a PromptPack file
-promptkit run my-assistant.promptpack.yml
-
-# Run with specific input
-promptkit run my-assistant.promptpack.yml --input "Hello, how are you?"
-
-# Run with custom LLM provider
-promptkit run my-assistant.promptpack.yml --provider openai --model gpt-4
+# Planned - not yet available
+promptkit validate my-assistant.promptpack.json
+promptkit lint my-assistant.promptpack.yml
 ```
 
-### Interactive Mode
+### SDK Libraries (In Development)
 
-```bash
-# Start interactive chat session
-promptkit chat my-assistant.promptpack.yml
+Language-specific SDKs for loading and using PromptPacks:
 
-# Load and chat with specific persona
-promptkit chat my-assistant.promptpack.yml --persona helpful_expert
+**Python (Planned):**
+```python
+# Planned API - not yet available
+from promptkit import load_pack
+
+pack = load_pack("my-assistant.promptpack.json")
+result = pack.execute("greeting", {"name": "Alice"})
 ```
 
-### Validation
+**JavaScript (Planned):**
+```javascript
+// Planned API - not yet available
+const { loadPack } = require('promptkit');
 
-```bash
-# Validate PromptPack syntax and schema
-promptkit validate my-assistant.promptpack.yml
-
-# Run built-in tests
-promptkit test my-assistant.promptpack.yml
-
-# Generate test report
-promptkit test my-assistant.promptpack.yml --report html
+const pack = await loadPack('my-assistant.promptpack.json');
+const result = await pack.execute('greeting', { name: 'Alice' });
 ```
 
-## Configuration
+## Get Involved
+
+Interested in contributing to PromptKit development?
+
+- **Repository:** [github.com/altairalabs/promptkit](https://github.com/altairalabs/promptkit) (coming soon)
+- **Discussions:** [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
+- **Roadmap:** See [PromptPack GitHub Issues](https://github.com/altairalabs/promptpack-spec/issues) for planned features
+
+## Contributing
+
+We welcome contributions! Areas where you can help:
+
+- **Runtime Implementations** - Build runtimes in different languages
+- **Validation Tools** - Schema validators and linters
+- **Testing Frameworks** - Automated testing tools
+- **Documentation** - Examples, tutorials, and guides
+- **Integrations** - Connect PromptPack to your favorite tools
+
+See our [Contributing Guide](/docs/processes/contributing) to get started.
+
+---
+
+**Note:** This page describes the PromptKit reference implementation. The PromptPack specification is open, and anyone can build compatible tools and runtimes. See [Community Tools](./community-tools) for other implementations.
 
 ### Provider Setup
-
-Configure your LLM providers:
-
-```yaml
-# ~/.promptkit/config.yml
-providers:
-  openai:
-    api_key: your-api-key
-    default_model: gpt-4
-  anthropic:
-    api_key: your-api-key  
-    default_model: claude-3-sonnet
-  ollama:
-    endpoint: http://localhost:11434
-    default_model: llama2
-```
-
-### Runtime Options
-
-```yaml
-# promptkit.config.yml in your project
-runtime:
-  max_tokens: 4096
-  temperature: 0.7
-  timeout: 30
-  
-logging:
-  level: info
-  format: json
-  
-tools:
-  timeout: 10
-  retry_attempts: 3
-```
-
-## API Usage
-
-### Python API
-
-```python
-from promptkit import PromptPackRunner
-
-# Load and run a PromptPack
-runner = PromptPackRunner("my-assistant.promptpack.yml")
-
-# Execute a prompt
-result = runner.execute_prompt(
-    prompt_name="greeting",
-    variables={"user_name": "Alice"}
-)
-
-# Run a workflow
-workflow_result = runner.run_workflow(
-    workflow_name="customer_support",
-    initial_input="I need help with my account"
-)
-
-# Chat session
-session = runner.create_session()
-response = session.chat("Hello, how can you help me?")
-```
-
-### JavaScript API
-
-```javascript
-const { PromptPackRunner } = require('promptkit');
-
-// Load PromptPack
-const runner = new PromptPackRunner('my-assistant.promptpack.yml');
-
-// Execute prompt
-const result = await runner.executePrompt('greeting', {
-  user_name: 'Alice'
-});
-
-// Stream responses
-const stream = runner.streamPrompt('conversation', {
-  message: 'Tell me about AI'
-});
-
-for await (const chunk of stream) {
-  console.log(chunk.content);
-}
-```
-
-### REST API
-
-Start the PromptKit server:
-
-```bash
-promptkit serve my-assistant.promptpack.yml --port 8000
-```
-
-Make API calls:
-
-```bash
-# Execute a prompt
-curl -X POST http://localhost:8000/prompts/greeting \
-  -H "Content-Type: application/json" \
-  -d '{"variables": {"user_name": "Alice"}}'
-
-# Run a workflow  
-curl -X POST http://localhost:8000/workflows/support_flow \
-  -H "Content-Type: application/json" \
-  -d '{"input": "I need help"}'
-
-# Chat session
-curl -X POST http://localhost:8000/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello", "session_id": "user123"}'
-```
-
-## Advanced Features
-
-### Custom Tools
-
-Register custom tools at runtime:
-
-```python
-from promptkit.tools import Tool
-
-@Tool.register("my_custom_tool")
-def calculate_score(data: dict) -> float:
-    """Calculate a custom score based on input data"""
-    return sum(data.values()) / len(data.values())
-
-# Tool is now available in PromptPacks as "my_custom_tool"
-```
-
-### Middleware
-
-Add custom processing middleware:
-
-```python
-from promptkit.middleware import Middleware
-
-class LoggingMiddleware(Middleware):
-    def before_prompt(self, prompt_name, variables):
-        print(f"Executing prompt: {prompt_name}")
-        
-    def after_prompt(self, prompt_name, result):
-        print(f"Prompt result: {result}")
-
-runner.add_middleware(LoggingMiddleware())
-```
-
-### Custom Providers
-
-Add support for new LLM providers:
-
-```python
-from promptkit.providers import LLMProvider
-
-class CustomLLMProvider(LLMProvider):
-    def generate(self, prompt: str, **kwargs) -> str:
-        # Your custom LLM integration
-        return self.call_custom_api(prompt, **kwargs)
-
-runner.register_provider("custom", CustomLLMProvider())
-```
-
-## Testing and Validation
-
-### Built-in Test Runner
-
-```bash
-# Run all tests in a PromptPack
-promptkit test my-assistant.promptpack.yml
-
-# Run specific test cases
-promptkit test my-assistant.promptpack.yml --test greeting_test
-
-# Generate coverage report
-promptkit test my-assistant.promptpack.yml --coverage
-```
-
-### Writing Tests
-
-Add tests directly in your PromptPack:
-
-```yaml
-spec:
-  prompts:
-    - name: greeting
-      template: "Hello {{name}}!"
-      tests:
-        - name: basic_greeting
-          variables:
-            name: "World"
-          expected:
-            contains: "Hello World!"
-        - name: custom_name
-          variables:
-            name: "Alice"
-          expected:
-            matches: "Hello Alice!"
-```
-
-## Performance and Scaling
-
-### Caching
-
-```python
-# Enable response caching
-runner = PromptPackRunner(
-    "my-assistant.promptpack.yml",
-    cache_enabled=True,
-    cache_ttl=3600  # 1 hour
-)
-```
-
-### Batch Processing
-
-```python
-# Process multiple inputs efficiently
-inputs = [
-    {"name": "Alice", "question": "What is AI?"},
-    {"name": "Bob", "question": "How does ML work?"}
-]
-
-results = runner.batch_execute("qa_prompt", inputs)
-```
-
-### Load Balancing
-
-```yaml
-# Configure multiple LLM endpoints
-providers:
-  openai:
-    endpoints:
-      - api_key: key1
-        weight: 0.7
-      - api_key: key2  
-        weight: 0.3
-    load_balance: round_robin
-```
-
-## Deployment
-
-### Production Deployment
-
-```dockerfile
-# Dockerfile
-FROM altairalabs/promptkit:latest
-
-COPY my-assistant.promptpack.yml /app/
-COPY promptkit.config.yml /app/
-
-EXPOSE 8000
-CMD ["promptkit", "serve", "/app/my-assistant.promptpack.yml", "--host", "0.0.0.0"]
-```
-
-### Kubernetes
-
-```yaml
-# deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: promptkit-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: promptkit
-  template:
-    metadata:
-      labels:
-        app: promptkit
-    spec:
-      containers:
-      - name: promptkit
-        image: altairalabs/promptkit:latest
-        ports:
-        - containerPort: 8000
-        env:
-        - name: OPENAI_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: llm-keys
-              key: openai
-```
-
-## Community and Support
-
-- **Documentation** - [promptkit.org](https://promptkit.org)
-- **GitHub** - [github.com/altairalabs/promptkit](https://github.com/altairalabs/promptkit)
-- **Issues** - Report bugs and request features on GitHub

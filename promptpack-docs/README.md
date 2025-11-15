@@ -21,7 +21,13 @@ npm install
 npm start
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+This command:
+1. Syncs RFCs from `/rfcs/` to `/docs/rfcs/` with Docusaurus frontmatter
+2. Starts a local development server and opens up a browser window
+
+Most changes are reflected live without having to restart the server.
+
+**Note:** RFC files in `docs/rfcs/` are auto-generated and gitignored. Edit RFCs in the root `/rfcs/` directory.
 
 ### Build
 

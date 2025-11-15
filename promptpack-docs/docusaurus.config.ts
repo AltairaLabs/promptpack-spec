@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'PromptPack',
-  tagline: 'Stop building AI systems from scratch. Package, share, and deploy production-ready conversational AI.',
+  tagline: 'An open specification for packaging conversational AI systems—portable, testable, and framework-agnostic.',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -82,6 +82,7 @@ const config: Config = {
       items: [
         {to: '/docs/spec/overview', label: 'Spec', position: 'left'},
         {to: '/docs/processes/rfc-process', label: 'Processes', position: 'left'},
+        {to: '/docs/rfcs/core-schema', label: 'RFCs', position: 'left'},
         {to: '/docs/ecosystem/promptkit-runtime', label: 'Ecosystem', position: 'left'},
         {
           href: 'https://github.com/altairalabs/promptpack-spec',
@@ -97,29 +98,20 @@ const config: Config = {
           title: 'Documentation',
           items: [
             {
-              label: 'Specification',
-              to: '/docs/spec/overview',
-            },
-            {
               label: 'Getting Started',
               to: '/docs/getting-started',
             },
             {
+              label: 'Why PromptPack?',
+              to: '/docs/why-promptpack',
+            },
+            {
+              label: 'Specification',
+              to: '/docs/spec/overview',
+            },
+            {
               label: 'Examples',
               to: '/docs/spec/examples',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'GitHub Discussions',
-              href: 'https://github.com/altairalabs/promptpack-spec/discussions',
-            },
-            {
-              label: 'RFC Process',
-              to: '/docs/processes/rfc-process',
             },
           ],
         },
@@ -131,17 +123,55 @@ const config: Config = {
               to: '/docs/ecosystem/promptkit-runtime',
             },
             {
-              label: 'Arena Testing',
+              label: 'PromptArena Testing',
               to: '/docs/ecosystem/arena-testing',
             },
+            {
+              label: 'Community Tools',
+              to: '/docs/ecosystem/community-tools',
+            },
+          ],
+        },
+        {
+          title: 'Community',
+          items: [
             {
               label: 'GitHub',
               href: 'https://github.com/altairalabs/promptpack-spec',
             },
+            {
+              label: 'Discussions',
+              href: 'https://github.com/altairalabs/promptpack-spec/discussions',
+            },
+            {
+              label: 'RFC Process',
+              to: '/docs/processes/rfc-process',
+            },
+            {
+              label: 'Contributing',
+              to: '/docs/processes/contributing',
+            },
+          ],
+        },
+        {
+          title: 'About',
+          items: [
+            {
+              label: 'Governance',
+              to: '/docs/processes/governance',
+            },
+            {
+              label: 'Code of Conduct',
+              href: 'https://github.com/altairalabs/promptpack-spec/blob/main/CODE_OF_CONDUCT.md',
+            },
+            {
+              label: 'AltairaLabs',
+              href: 'https://altairalabs.com',
+            },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} AltairaLabs. Built with Docusaurus.`,
+      copyright: `PromptPack is an open specification by AltairaLabs. Licensed under MIT. Building toward a community-driven future.`,
     },
     prism: {
       theme: prismThemes.github,

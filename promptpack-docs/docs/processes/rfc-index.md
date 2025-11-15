@@ -25,15 +25,21 @@ The RFC (Request for Comments) process is how the PromptPack community proposes,
 
 | RFC | Status | Title | Author | Date |
 |-----|--------|-------|--------|------|
-| RFC-0001 | 🚀 Implemented | Core PromptPack Schema | AltairaLabs | Oct 2024 |
-| RFC-0002 | 🚀 Implemented | YAML File Format | AltairaLabs | Oct 2024 |
-| RFC-0003 | 🚀 Implemented | Template Variable System | AltairaLabs | Oct 2024 |
+| [RFC-0001](/docs/rfcs/core-schema) | 🚀 Implemented | Core PromptPack Schema | AltairaLabs | Oct 2024 |
+| [RFC-0002](/docs/rfcs/yaml-format) | 🚀 Implemented | YAML File Format | AltairaLabs | Oct 2024 |
+| [RFC-0003](/docs/rfcs/template-variables) | 🚀 Implemented | Template Variable System | AltairaLabs | Oct 2024 |
+
+### v1.1 Enhancements
+
+| RFC | Status | Title | Author | Date |
+|-----|--------|-------|--------|------|
+| [RFC-0004](/docs/rfcs/multimodal-support) | 🚀 Implemented | Multimodal Content Support | AltairaLabs | Nov 2024 |
 
 *No active RFCs currently in review.*
 
 ## Upcoming Considerations
 
-### v1.1 Enhancements
+### Future v1.x Enhancements
 
 - **Enhanced Testing Framework**: More sophisticated test definitions
 - **Plugin System**: Extensible runtime capabilities  
@@ -96,11 +102,12 @@ RFCs are evaluated on:
 
 ### Example RFCs
 
-Learn from previous RFCs:
+Learn from implemented RFCs:
 
-- **[RFC-0001: Core Schema](https://github.com/altairalabs/promptpack-spec/issues/1)** - Comprehensive technical design
-- **[RFC-0002: YAML Format](https://github.com/altairalabs/promptpack-spec/issues/2)** - User experience focused
-- **[RFC-0003: Variables](https://github.com/altairalabs/promptpack-spec/issues/3)** - Implementation details
+- **[RFC-0001: Core Schema](/docs/rfcs/core-schema)** - Comprehensive technical design
+- **[RFC-0002: YAML Format](/docs/rfcs/yaml-format)** - User experience focused
+- **[RFC-0003: Variables](/docs/rfcs/template-variables)** - Implementation details
+- **[RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support)** - Adding image/audio/video support
 
 ## Community Guidelines
 
@@ -122,8 +129,8 @@ Learn from previous RFCs:
 
 | Metric | Count |
 |--------|-------|
-| **Total RFCs** | 3 |
-| **Implemented** | 3 |
+| **Total RFCs** | 4 |
+| **Implemented** | 4 |
 | **In Review** | 0 |
 | **Draft** | 0 |
 | **Contributors** | 1+ |

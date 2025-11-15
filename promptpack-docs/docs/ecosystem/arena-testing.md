@@ -4,387 +4,279 @@ sidebar_position: 2
 
 # Arena Testing
 
-Arena is a comprehensive testing platform for PromptPack specifications, enabling automated evaluation, A/B testing, and performance benchmarking of conversational AI systems.
+:::info Status
+✅ **Available Now** - PromptArena is actively being used for LLM testing
+:::
 
 ## Overview
 
-Arena provides a systematic approach to testing and validating PromptPack implementations across different scenarios, LLM providers, and performance criteria. It's designed to ensure reliability and quality in production deployments.
+**PromptArena** (`promptarena`) is a CLI tool for running multi-turn conversation simulations across multiple LLM providers, validating conversation flows, and generating comprehensive test reports.
 
-### Key Features
+Arena enables systematic testing of conversational AI systems with support for:
 
-- **Automated Testing** - Run comprehensive test suites against PromptPacks
-- **Multi-Provider Comparison** - Test across different LLM providers simultaneously  
-- **Performance Benchmarking** - Measure response time, accuracy, and cost metrics
-- **Regression Testing** - Detect changes in behavior across versions
-- **A/B Testing** - Compare different prompt variations and configurations
-- **Continuous Integration** - Integration with CI/CD pipelines
+- **Multi-Provider Testing** - Run the same tests across OpenAI, Anthropic, Google, and more
+- **Multi-Turn Conversations** - Test complex conversation flows and state management
+- **Self-Play Mode** - Simulate realistic user interactions with configurable roles
+- **Multimodal Testing** - Test with images, audio, and video content
+- **Comprehensive Reporting** - HTML, JSON, JUnit XML, and Markdown reports
+- **Mock Testing** - Fast, cost-free testing with mock providers
+- **CI/CD Integration** - Built for automated testing pipelines
 
 ## Installation
 
-### Using npm
-
-```bash
-npm install -g promptpack-arena
-```
-
-### Using pip
-
-```bash
-pip install promptpack-arena
-```
-
-### Docker
-
-```bash
-docker run -it altairalabs/promptpack-arena
-```
+PromptArena is available as part of the PromptKit toolkit. See the [PromptKit repository](https://github.com/AltairaLabs/PromptKit) for installation instructions.
 
 ## Quick Start
 
-### Basic Testing
+### Basic Usage
 
 ```bash
-# Run all tests in a PromptPack
-arena test my-assistant.promptpack.yml
+# Run all tests with default configuration
+promptarena run
 
-# Run specific test suite
-arena test my-assistant.promptpack.yml --suite regression
+# Specify configuration file
+promptarena run --config my-arena.yaml
 
-# Test against multiple providers
-arena test my-assistant.promptpack.yml --providers openai,anthropic,ollama
+# Run specific providers only
+promptarena run --provider openai,anthropic
+
+# Run specific scenarios
+promptarena run --scenario basic-qa,edge-cases
 ```
 
-### Generating Test Reports
+### Configuration File
 
-```bash
-# Generate HTML report
-arena test my-assistant.promptpack.yml --report html --output results.html
-
-# Generate JSON report for CI integration
-arena test my-assistant.promptpack.yml --report json --output results.json
-
-# Generate comprehensive report with benchmarks
-arena test my-assistant.promptpack.yml --benchmark --report comprehensive
-```
-
-## Test Configuration
-
-### Arena Configuration File
-
-Create an `arena.config.yml` file:
+Create an `arena.yaml` configuration file:
 
 ```yaml
-# Arena testing configuration
-providers:
-  openai:
-    models: ["gpt-4", "gpt-3.5-turbo"]
-    api_key: ${OPENAI_API_KEY}
-  anthropic:
-    models: ["claude-3-sonnet", "claude-3-haiku"]  
-    api_key: ${ANTHROPIC_API_KEY}
-  ollama:
-    models: ["llama2", "mistral"]
-    endpoint: http://localhost:11434
-
-test_suites:
-  smoke:
-    description: "Quick validation tests"
-    timeout: 30
-    max_concurrent: 5
-    
-  regression:
-    description: "Full regression testing"
-    timeout: 120
-    max_concurrent: 3
-    baseline_comparison: true
-    
-  performance:
-    description: "Performance benchmarking"
-    iterations: 100
-    metrics: [latency, throughput, cost]
-
-reporting:
-  formats: [html, json, junit]
-  include_traces: true
-  detailed_errors: true
-```
-
-## Writing Test Cases
-
-### Inline Tests
-
-Add tests directly to your PromptPack:
-
-```yaml
-spec:
-  prompts:
-    - name: customer_greeting
-      template: |
-        Hello {{customer.name}}, welcome to {{company.name}}!
-        How can I assist you today?
-      tests:
-        - name: basic_greeting
-          description: "Test basic greeting functionality"
-          variables:
-            customer:
-              name: "John Smith"
-            company:
-              name: "Acme Corp"
-          assertions:
-            - type: contains
-              value: "Hello John Smith"
-            - type: contains  
-              value: "Acme Corp"
-            - type: length
-              min: 20
-              max: 200
-
-        - name: tone_validation
-          description: "Ensure professional and friendly tone"
-          variables:
-            customer:
-              name: "Sarah Johnson"
-            company:
-              name: "Tech Solutions Inc"
-          assertions:
-            - type: sentiment
-              expected: positive
-            - type: tone
-              expected: professional
-            - type: no_profanity
-```
-
-### External Test Files
-
-Create separate test files for complex scenarios:
-
-```yaml
-# tests/customer-support.test.yml
-apiVersion: v1
-kind: ArenaTestSuite
+apiVersion: promptkit.altairalabs.ai/v1alpha1
+kind: Arena
 metadata:
-  name: customer-support-tests
-  promptpack: customer-support.promptpack.yml
-
+  name: my-arena
 spec:
-  test_cases:
-    - name: escalation_workflow
-      description: "Test customer issue escalation flow"
-      workflow: support_escalation
-      scenarios:
-        - name: technical_issue
-          input: "My software keeps crashing when I try to save files"
-          expected_path: [greeting, technical_assessment, solution_search, escalation]
-          
-        - name: billing_issue  
-          input: "I was charged twice for my subscription"
-          expected_path: [greeting, billing_assessment, refund_process]
-          
-    - name: sentiment_handling
-      description: "Test handling of different customer emotions"
-      prompt: customer_response
-      scenarios:
-        - name: angry_customer
-          variables:
-            customer_message: "This is ridiculous! Your service never works!"
-          assertions:
-            - type: tone
-              expected: empathetic
-            - type: de_escalation
-              required: true
-              
-        - name: confused_customer
-          variables:
-            customer_message: "I don't understand how to use this feature"
-          assertions:
-            - type: clarity_score
-              min: 0.8
-            - type: helpful_tone
-              required: true
-```
+  prompt_configs:
+    - id: assistant
+      file: prompts/assistant.yaml
 
-## Test Types and Assertions
-
-### Built-in Assertion Types
-
-#### Text Analysis
-```yaml
-assertions:
-  - type: contains
-    value: "expected text"
-    
-  - type: matches
-    pattern: "regex pattern"
-    
-  - type: length
-    min: 10
-    max: 500
-    
-  - type: word_count
-    min: 5
-    max: 100
-```
-
-#### Semantic Analysis
-```yaml
-assertions:
-  - type: sentiment
-    expected: positive  # positive, negative, neutral
-    threshold: 0.7
-    
-  - type: tone
-    expected: professional  # professional, casual, friendly, etc.
-    
-  - type: similarity
-    reference: "expected meaning"
-    threshold: 0.85
-    
-  - type: topic_relevance
-    topics: ["customer service", "technical support"]
-    min_score: 0.8
-```
-
-#### Workflow Validation
-```yaml
-assertions:
-  - type: workflow_path
-    expected: [step1, step2, step3]
-    
-  - type: tool_calls
-    expected: ["search_knowledge", "create_ticket"]
-    
-  - type: state_transitions
-    from: initial
-    to: resolved
-```
-
-### Performance Assertions
-```yaml
-assertions:
-  - type: response_time
-    max_ms: 2000
-    
-  - type: token_usage
-    max_tokens: 1000
-    
-  - type: cost
-    max_usd: 0.05
-```
-
-## A/B Testing
-
-### Comparing Prompt Variations
-
-```yaml
-# ab-test-config.yml
-apiVersion: v1
-kind: ArenaABTest
-metadata:
-  name: greeting_variations
-  
-spec:
-  variants:
-    - name: formal_greeting
-      promptpack: formal-assistant.promptpack.yml
-      traffic_split: 0.5
-      
-    - name: casual_greeting  
-      promptpack: casual-assistant.promptpack.yml
-      traffic_split: 0.5
-      
-  success_metrics:
-    - user_satisfaction_score
-    - conversation_length
-    - task_completion_rate
-    
-  test_inputs:
-    - "Hello, I need help with my account"
-    - "Can you help me understand this feature?"
-    - "I'm having trouble with the login process"
-    
-  duration: 7d
-  statistical_power: 0.8
-```
-
-Run A/B test:
-
-```bash
-# Start A/B test
-arena ab-test greeting_variations.yml --start
-
-# Check results
-arena ab-test greeting_variations.yml --results
-
-# Stop test early if significant
-arena ab-test greeting_variations.yml --stop
-```
-
-## Performance Benchmarking
-
-### Benchmark Configuration
-
-```yaml
-# benchmark.config.yml
-benchmark:
-  scenarios:
-    - name: high_load
-      concurrent_users: 100
-      requests_per_second: 50
-      duration: 300s  # 5 minutes
-      
-    - name: burst_traffic
-      concurrent_users: 500  
-      ramp_up: 30s
-      hold: 60s
-      ramp_down: 30s
-      
-  metrics:
-    - response_time_p95
-    - throughput
-    - error_rate
-    - cost_per_request
-    
   providers:
-    - openai
-    - anthropic
-    - azure_openai
+    - file: providers/openai.yaml
+    - file: providers/anthropic.yaml
+
+  scenarios:
+    - file: scenarios/test.yaml
+
+  defaults:
+    output:
+      dir: out
+      formats: ["json", "html"]
 ```
 
-Run benchmarks:
+## Key Features
+
+### Multi-Provider Testing
+
+Test the same scenarios across multiple LLM providers:
 
 ```bash
-# Run performance benchmark
-arena benchmark my-assistant.promptpack.yml --config benchmark.config.yml
-
-# Compare providers
-arena benchmark my-assistant.promptpack.yml --compare-providers
-
-# Load test specific endpoint
-arena benchmark my-assistant.promptpack.yml --load-test --target http://localhost:8000
+# Compare OpenAI, Anthropic, and Gemini
+promptarena run --provider openai,anthropic,gemini --format html
 ```
 
-## Continuous Integration
+Supported providers include:
+- OpenAI (GPT-4, GPT-3.5, etc.)
+- Anthropic (Claude 3 Opus, Sonnet, Haiku)
+- Google (Gemini Pro)
+- Azure OpenAI
+- And more
 
-### GitHub Actions Integration
+### Multi-Turn Conversations
+
+Define complex conversation flows in scenario files:
 
 ```yaml
-# .github/workflows/promptpack-tests.yml
-name: PromptPack Tests
-on:
-  pull_request:
-    paths: ['**/*.promptpack.yml']
-    
+apiVersion: promptkit.altairalabs.ai/v1alpha1
+kind: Scenario
+metadata:
+  name: customer-support
+spec:
+  task_type: support
+  turns:
+    - role: user
+      parts:
+        - type: text
+          text: "I need help with my account"
+    - role: assistant
+      # Expected assistant response
+    - role: user
+      parts:
+        - type: text
+          text: "Can you reset my password?"
+```
+
+### Multimodal Content
+
+Test with images, audio, and video:
+
+```yaml
+turns:
+  - role: user
+    parts:
+      - type: text
+        text: "What's in this image?"
+      - type: image
+        media:
+          file_path: test-data/sample.jpg
+          detail: high
+```
+
+Supported media types:
+- Images: JPEG, PNG, GIF, WebP
+- Audio: MP3, WAV, OGG, M4A
+- Video: MP4, WebM, MOV
+
+### Self-Play Mode
+
+Simulate realistic conversations with configurable roles:
+
+```bash
+# Enable self-play testing
+promptarena run --selfplay
+
+# Self-play with specific roles
+promptarena run --selfplay --roles frustrated-customer,tech-support
+```
+
+### Mock Testing
+
+Fast, cost-free testing during development:
+
+```bash
+# Use mock provider instead of real APIs
+promptarena run --mock-provider
+
+# Use custom mock configuration
+promptarena run --mock-config mock-responses.yaml
+```
+
+## Output Formats
+
+Arena generates comprehensive reports in multiple formats:
+
+### HTML Reports
+
+Interactive HTML reports with:
+- Side-by-side provider comparison
+- Response times and token usage
+- Cost analysis
+- Media content visualization
+- Test assertions pass/fail status
+
+```bash
+promptarena run --format html
+open out/report-[timestamp].html
+```
+
+### JUnit XML
+
+Standard JUnit XML for CI/CD integration:
+
+```bash
+promptarena run --format junit --junit-file out/junit.xml
+```
+
+Properties include:
+- `media.images.total` - Count of images tested
+- `media.loaded.success` - Successfully loaded media
+- `media.loaded.errors` - Failed media loads
+- Test pass/fail status
+
+### JSON Reports
+
+Machine-readable JSON for programmatic analysis:
+
+```bash
+promptarena run --format json
+```
+
+### Markdown Reports
+
+Human-readable markdown summaries:
+
+```bash
+promptarena run --format markdown --markdown-file out/results.md
+```
+
+## Test Assertions
+
+Arena supports multiple assertion types:
+
+### Text Assertions
+
+```yaml
+assertions:
+  - type: content_includes
+    patterns: ["expected text", "another phrase"]
+  
+  - type: content_excludes
+    patterns: ["unwanted text"]
+```
+
+### Media Assertions
+
+Validate media outputs from generative models:
+
+```yaml
+# Image validation
+assertions:
+  - type: image_format
+    params:
+      formats: [png, jpeg]
+  
+  - type: image_dimensions
+    params:
+      width: 1920
+      height: 1080
+
+# Audio validation
+assertions:
+  - type: audio_format
+    params:
+      formats: [mp3, wav]
+  
+  - type: audio_duration
+    params:
+      min_seconds: 29
+      max_seconds: 31
+
+# Video validation
+assertions:
+  - type: video_resolution
+    params:
+      presets: [4k, uhd]
+  
+  - type: video_duration
+    params:
+      min_seconds: 59
+      max_seconds: 61
+```
+
+## CI/CD Integration
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/arena-tests.yml
+name: Arena Tests
+on: [push, pull_request]
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install Arena
-        run: npm install -g promptpack-arena
-        
-      - name: Run PromptPack Tests
-        run: arena test **/*.promptpack.yml --report junit --output test-results.xml
+      - name: Run Arena Tests
+        run: promptarena run --ci --format junit
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -394,112 +286,136 @@ jobs:
         if: always()
         with:
           name: Arena Test Results
-          path: test-results.xml
+          path: out/junit.xml
           reporter: java-junit
 ```
 
-### Jenkins Pipeline
+### CI Mode
 
-```groovy
-// Jenkinsfile
-pipeline {
-    agent any
-    
-    environment {
-        OPENAI_API_KEY = credentials('openai-api-key')
-        ANTHROPIC_API_KEY = credentials('anthropic-api-key')
-    }
-    
-    stages {
-        stage('Test PromptPacks') {
-            steps {
-                sh 'npm install -g promptpack-arena'
-                sh 'arena test **/*.promptpack.yml --report json --output results.json'
-            }
-            post {
-                always {
-                    publishTestResults testResultsPattern: 'results.json'
-                }
-            }
-        }
-        
-        stage('Performance Regression') {
-            when {
-                branch 'main'  
-            }
-            steps {
-                sh 'arena test **/*.promptpack.yml --suite performance --baseline-comparison'
-            }
-        }
-    }
-}
+Run in headless mode optimized for CI pipelines:
+
+```bash
+# Headless mode for CI pipelines
+promptarena run --ci --format junit,json
 ```
 
-## Monitoring and Alerts
+Exit codes:
+- `0` - Success, all tests passed
+- `1` - Failure, one or more tests failed
 
-### Quality Gates
+## Commands
 
-```yaml
-# quality-gates.yml
-gates:
-  - name: accuracy_threshold
-    metric: assertion_pass_rate
-    threshold: 0.95
-    action: fail_build
-    
-  - name: performance_regression  
-    metric: response_time_p95
-    max_degradation: 0.2  # 20% slower than baseline
-    action: warn
-    
-  - name: cost_control
-    metric: cost_per_request
-    max_cost: 0.10  # $0.10 per request
-    action: fail_build
+### `promptarena run`
+
+Run conversation simulations across multiple LLM providers.
+
+**Flags:**
+- `-c, --config` - Configuration file path (default: `arena.yaml`)
+- `-j, --concurrency` - Number of concurrent workers (default: `6`)
+- `--provider` - Providers to use (comma-separated)
+- `--scenario` - Scenarios to run (comma-separated)
+- `--temperature` - Override temperature for all scenarios
+- `--max-tokens` - Override max tokens for all scenarios
+- `--selfplay` - Enable self-play mode
+- `--mock-provider` - Replace all providers with MockProvider
+- `-o, --out` - Output directory (default: `out`)
+- `--format` - Output formats: `json`, `junit`, `html`, `markdown`
+- `-v, --verbose` - Enable verbose debug logging
+
+### `promptarena config-inspect`
+
+Inspect and validate arena configuration:
+
+```bash
+# Inspect default configuration
+promptarena config-inspect
+
+# Verbose output with details
+promptarena config-inspect --verbose
+
+# JSON output for programmatic use
+promptarena config-inspect --format json
 ```
 
-### Integration with Monitoring Tools
+### `promptarena prompt-debug`
 
-```yaml
-# monitoring.config.yml
-integrations:
-  datadog:
-    api_key: ${DATADOG_API_KEY}
-    metrics:
-      - test_pass_rate
-      - response_times
-      - error_counts
-      
-  prometheus:
-    endpoint: http://prometheus:9090
-    job_name: promptpack_arena
-    
-  slack:
-    webhook_url: ${SLACK_WEBHOOK}
-    channels:
-      - "#ai-quality"
-      - "#alerts"
+Test prompt generation with specific contexts:
+
+```bash
+# Test prompt generation for task type
+promptarena prompt-debug --task-type support
+
+# Test with region
+promptarena prompt-debug --task-type support --region us
+
+# Test with scenario file
+promptarena prompt-debug --scenario scenarios/customer-support.yaml
+```
+
+### `promptarena render`
+
+Generate HTML report from existing test results:
+
+```bash
+# Render from default location
+promptarena render out/index.json
+
+# Custom output path
+promptarena render out/index.json --output custom-report.html
 ```
 
 ## Best Practices
 
-### Test Organization
+### Performance
 
-- **Separate concerns** - Different test files for functionality vs. performance
-- **Use descriptive names** - Clear test case and assertion names
-- **Version control tests** - Commit test files with PromptPack changes
-- **Baseline management** - Maintain performance baselines for regression testing
+```bash
+# Increase concurrency for faster execution
+promptarena run --concurrency 10
 
-### Coverage Strategy
+# Reduce concurrency for stability
+promptarena run --concurrency 1
+```
 
-- **Functional coverage** - Test all prompts, tools, and workflows
-- **Edge case testing** - Test with invalid/boundary inputs
-- **Provider coverage** - Test across different LLM providers  
-- **Performance testing** - Regular performance regression testing
+### Cost Control
 
-### Maintenance
+```bash
+# Use mock provider during development
+promptarena run --mock-provider
 
-- **Regular updates** - Update test cases as requirements change
-- **Baseline refresh** - Periodically update performance baselines
-- **Test cleanup** - Remove obsolete tests and update assertions
-- **Documentation** - Document test intent and expected behaviors
+# Test with cheaper models first
+promptarena run --provider gpt-3.5-turbo
+```
+
+### Reproducibility
+
+```bash
+# Always use same seed for consistent results
+promptarena run --seed 42
+```
+
+### Debugging
+
+```bash
+# Always start with config validation
+promptarena config-inspect --verbose
+
+# Use verbose mode to see API calls
+promptarena run --verbose --scenario problematic-test
+
+# Test prompt generation separately
+promptarena prompt-debug --scenario scenarios/test.yaml
+```
+
+## Learn More
+
+- **Complete CLI Reference:** [Arena User Guide](https://github.com/AltairaLabs/PromptKit/blob/main/docs/guides/arena-user-guide.md)
+- **Configuration Reference:** [Config Documentation](https://github.com/AltairaLabs/PromptKit/blob/main/docs/promptarena/config-reference.md)
+- **Getting Started:** [First Project Walkthrough](https://github.com/AltairaLabs/PromptKit/blob/main/docs/promptarena/getting-started.md)
+- **CI/CD Integration:** [Pipeline Setup Guide](https://github.com/AltairaLabs/PromptKit/blob/main/docs/promptarena/ci-cd-integration.md)
+- **GitHub Repository:** [AltairaLabs/PromptKit](https://github.com/AltairaLabs/PromptKit)
+
+## Support
+
+For questions, issues, or feature requests:
+- **Issues:** [GitHub Issues](https://github.com/AltairaLabs/PromptKit/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/AltairaLabs/PromptKit/discussions)

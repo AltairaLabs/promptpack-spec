@@ -16,15 +16,29 @@ const sidebars: SidebarsConfig = {
   // By default, Docusaurus generates a sidebar from the docs folder structure
   tutorialSidebar: [
     'getting-started',
+    'why-promptpack',
     {
       type: 'category',
       label: 'Specification',
       items: [
+        'spec/versions',
         'spec/overview',
         'spec/examples',
         'spec/file-format',
         'spec/schema-reference',
         'spec/schema-guide',
+        {
+          type: 'category',
+          label: 'v1.0 (Archived)',
+          collapsed: true,
+          items: [
+            'spec/v1.0/overview',
+            'spec/v1.0/examples',
+            'spec/v1.0/file-format',
+            'spec/v1.0/schema-reference',
+            'spec/v1.0/schema-guide',
+          ],
+        },
       ],
     },
     {
@@ -37,16 +51,27 @@ const sidebars: SidebarsConfig = {
         'processes/contributing',
       ],
     },
-    // {
-    //   type: 'category',
-    //   label: 'Ecosystem',
-    //   items: [
-    //     'ecosystem/promptkit-runtime',
-    //     'ecosystem/arena-testing',
-    //     'ecosystem/community-tools',
-    //   ],
-    // },
-    // 'adopters',
+    {
+      type: 'category',
+      label: 'RFCs',
+      items: [
+        'rfcs/core-schema',
+        'rfcs/yaml-format',
+        'rfcs/template-variables',
+        'rfcs/multimodal-support',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Ecosystem',
+      items: [
+        'ecosystem/promptkit-runtime',
+        'ecosystem/arena-testing',
+        'ecosystem/integrations',
+        'ecosystem/community-tools',
+      ],
+    },
+    'adopters',
   ],
 };
 
