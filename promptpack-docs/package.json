@@ -5,9 +5,10 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "sync-rfcs": "node scripts/sync-rfcs.js",
-    "prestart": "npm run sync-rfcs",
+    "sync-schema": "node scripts/sync-schema.js",
+    "prestart": "npm run sync-rfcs && npm run sync-schema",
     "start": "docusaurus start",
-    "prebuild": "npm run sync-rfcs",
+    "prebuild": "npm run sync-rfcs && npm run sync-schema",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

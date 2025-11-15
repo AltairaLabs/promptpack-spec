@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
-  "description": "Schema for packaging, testing, and running multi-prompt conversational systems",
-  "version": "1.0.0",
+  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal support",
+  "version": "1.1.0",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
@@ -80,7 +80,7 @@
       "description": "Map of task_type to prompt configuration. Each key is a task type (e.g., 'support', 'sales') and each value is a complete prompt definition. A pack must contain at least one prompt.",
       "minProperties": 1,
       "additionalProperties": {
-        "$ref": "#/definitions/Prompt"
+        "$ref": "#/$defs/Prompt"
       },
       "examples": [{
         "support": {
@@ -108,7 +108,7 @@
       "type": "object",
       "description": "Tool definitions that can be referenced by prompts. Tools enable the LLM to call external functions. Keys are tool names, values are tool specifications following the JSON Schema for function calling.",
       "additionalProperties": {
-        "$ref": "#/definitions/Tool"
+        "$ref": "#/$defs/Tool"
       }
     },
     
@@ -190,7 +190,7 @@
     }
   },
   
-  "definitions": {
+  "$defs": {
     "Prompt": {
       "type": "object",
       "description": "A single prompt configuration within a pack. Each prompt represents a specific task type (e.g., 'support', 'sales') with its own template, variables, tools, and validation rules. Prompts within a pack can evolve independently with their own version numbers.",
@@ -238,7 +238,7 @@
           "type": "array",
           "description": "Variable definitions for this prompt. Variables are placeholders in the template that are replaced with actual values at runtime.",
           "items": {
-            "$ref": "#/definitions/Variable"
+            "$ref": "#/$defs/Variable"
           }
         },
         
@@ -252,17 +252,17 @@
         },
         
         "tool_policy": {
-          "$ref": "#/definitions/ToolPolicy",
+          "$ref": "#/$defs/ToolPolicy",
           "description": "Policy governing how tools can be used by this prompt"
         },
         
         "pipeline": {
-          "$ref": "#/definitions/PipelineConfig",
+          "$ref": "#/$defs/PipelineConfig",
           "description": "Pipeline configuration defining processing stages and middleware"
         },
         
         "parameters": {
-          "$ref": "#/definitions/Parameters",
+          "$ref": "#/$defs/Parameters",
           "description": "LLM generation parameters like temperature and max_tokens"
         },
         
@@ -270,7 +270,7 @@
           "type": "array",
           "description": "Validation rules (guardrails) applied to LLM responses",
           "items": {
-            "$ref": "#/definitions/Validator"
+            "$ref": "#/$defs/Validator"
           }
         },
         
@@ -278,7 +278,7 @@
           "type": "array",
           "description": "Model testing results documenting which models have been tested with this prompt and their performance",
           "items": {
-            "$ref": "#/definitions/TestedModel"
+            "$ref": "#/$defs/TestedModel"
           }
         },
         
@@ -286,8 +286,13 @@
           "type": "object",
           "description": "Model-specific template modifications. Keys are model names (e.g., 'claude-3-opus', 'gpt-4'), values are override configurations.",
           "additionalProperties": {
-            "$ref": "#/definitions/ModelOverride"
+            "$ref": "#/$defs/ModelOverride"
           }
+        },
+        
+        "media": {
+          "$ref": "#/$defs/MediaConfig",
+          "description": "Multimodal content configuration for this prompt. Defines supported media types and validation rules."
         }
       }
     },
@@ -487,7 +492,7 @@
           "type": "array",
           "description": "Middleware components with their configurations. Applied in order during pipeline execution.",
           "items": {
-            "$ref": "#/definitions/MiddlewareConfig"
+            "$ref": "#/$defs/MiddlewareConfig"
           }
         }
       }
@@ -696,8 +701,379 @@
         },
         
         "parameters": {
-          "$ref": "#/definitions/Parameters",
+          "$ref": "#/$defs/Parameters",
           "description": "Model-specific parameter overrides"
+        }
+      }
+    },
+    
+    "MediaConfig": {
+      "type": "object",
+      "description": "Configuration for multimodal content support. Defines which media types are supported and their validation rules. Well-known types (image, audio, video, document) have specific config schemas. Custom types use GenericMediaTypeConfig.",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether multimodal content is enabled for this prompt"
+        },
+        
+        "supported_types": {
+          "type": "array",
+          "description": "List of supported media types for this prompt. Common types include: image, audio, video, document, model3d, archive. Custom types are allowed - each type should have a corresponding configuration object (e.g., 'foo' type requires a 'foo' field with GenericMediaTypeConfig or a specific schema).",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "examples": [["image"], ["image", "audio"], ["image", "audio", "video"], ["document", "image"], ["model3d", "document"]]
+        },
+        
+        "image": {
+          "$ref": "#/$defs/ImageConfig",
+          "description": "Image-specific configuration and constraints"
+        },
+        
+        "audio": {
+          "$ref": "#/$defs/AudioConfig",
+          "description": "Audio-specific configuration and constraints"
+        },
+        
+        "video": {
+          "$ref": "#/$defs/VideoConfig",
+          "description": "Video-specific configuration and constraints"
+        },
+        
+        "document": {
+          "$ref": "#/$defs/DocumentConfig",
+          "description": "Document-specific configuration and constraints (PDFs, CAD files, spreadsheets, etc.)"
+        },
+        
+        "examples": {
+          "type": "array",
+          "description": "Example multimodal messages showing how to use media with this prompt",
+          "items": {
+            "$ref": "#/$defs/MultimodalExample"
+          }
+        }
+      },
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "oneOf": [
+            {"$ref": "#/$defs/ImageConfig"},
+            {"$ref": "#/$defs/AudioConfig"},
+            {"$ref": "#/$defs/VideoConfig"},
+            {"$ref": "#/$defs/DocumentConfig"},
+            {"$ref": "#/$defs/GenericMediaTypeConfig"}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "ImageConfig": {
+      "type": "object",
+      "description": "Configuration and validation rules for image content",
+      "additionalProperties": false,
+      "properties": {
+        "max_size_mb": {
+          "type": "integer",
+          "description": "Maximum file size in megabytes",
+          "minimum": 1,
+          "examples": [10, 20]
+        },
+        
+        "allowed_formats": {
+          "type": "array",
+          "description": "List of allowed image formats",
+          "items": {
+            "type": "string",
+            "enum": ["jpeg", "jpg", "png", "webp", "gif", "bmp"]
+          },
+          "examples": [["jpeg", "png", "webp"]]
+        },
+        
+        "default_detail": {
+          "type": "string",
+          "description": "Default detail level for image processing. 'low' uses fewer tokens, 'high' provides more detail, 'auto' lets the model decide.",
+          "enum": ["low", "high", "auto"],
+          "default": "auto",
+          "examples": ["high", "auto"]
+        },
+        
+        "require_caption": {
+          "type": "boolean",
+          "description": "Whether image captions are required",
+          "default": false
+        },
+        
+        "max_images_per_msg": {
+          "type": "integer",
+          "description": "Maximum number of images allowed per message",
+          "minimum": 1,
+          "examples": [1, 5, 10]
+        }
+      }
+    },
+    
+    "AudioConfig": {
+      "type": "object",
+      "description": "Configuration and validation rules for audio content",
+      "additionalProperties": false,
+      "properties": {
+        "max_size_mb": {
+          "type": "integer",
+          "description": "Maximum file size in megabytes",
+          "minimum": 1,
+          "examples": [25, 50]
+        },
+        
+        "allowed_formats": {
+          "type": "array",
+          "description": "List of allowed audio formats",
+          "items": {
+            "type": "string",
+            "enum": ["mp3", "wav", "opus", "flac", "m4a", "aac"]
+          },
+          "examples": [["mp3", "wav", "opus"]]
+        },
+        
+        "max_duration_sec": {
+          "type": "integer",
+          "description": "Maximum audio duration in seconds",
+          "minimum": 1,
+          "examples": [300, 600]
+        },
+        
+        "require_metadata": {
+          "type": "boolean",
+          "description": "Whether audio metadata (title, description) is required",
+          "default": false
+        }
+      }
+    },
+    
+    "VideoConfig": {
+      "type": "object",
+      "description": "Configuration and validation rules for video content",
+      "additionalProperties": false,
+      "properties": {
+        "max_size_mb": {
+          "type": "integer",
+          "description": "Maximum file size in megabytes",
+          "minimum": 1,
+          "examples": [100, 200]
+        },
+        
+        "allowed_formats": {
+          "type": "array",
+          "description": "List of allowed video formats",
+          "items": {
+            "type": "string",
+            "enum": ["mp4", "webm", "mov", "avi", "mkv"]
+          },
+          "examples": [["mp4", "webm"]]
+        },
+        
+        "max_duration_sec": {
+          "type": "integer",
+          "description": "Maximum video duration in seconds",
+          "minimum": 1,
+          "examples": [600, 1200]
+        },
+        
+        "require_metadata": {
+          "type": "boolean",
+          "description": "Whether video metadata (title, description) is required",
+          "default": false
+        }
+      }
+    },
+    
+    "DocumentConfig": {
+      "type": "object",
+      "description": "Configuration and validation rules for document content (PDFs, CAD files, spreadsheets, etc.)",
+      "additionalProperties": false,
+      "properties": {
+        "max_size_mb": {
+          "type": "integer",
+          "description": "Maximum file size in megabytes",
+          "minimum": 1,
+          "examples": [50, 100]
+        },
+        
+        "allowed_formats": {
+          "type": "array",
+          "description": "List of allowed document formats",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["pdf", "docx"], ["pdf", "step", "dwg"], ["csv", "xlsx", "ods"]]
+        },
+        
+        "max_pages": {
+          "type": "integer",
+          "description": "Maximum number of pages/sheets for paginated documents",
+          "minimum": 1,
+          "examples": [50, 100]
+        },
+        
+        "require_metadata": {
+          "type": "boolean",
+          "description": "Whether document metadata (title, author, description) is required",
+          "default": false
+        },
+        
+        "extraction_mode": {
+          "type": "string",
+          "description": "How to extract content from documents. 'text' extracts text only, 'structured' preserves formatting, 'raw' keeps original binary format.",
+          "enum": ["text", "structured", "raw"],
+          "default": "text",
+          "examples": ["text", "structured"]
+        }
+      }
+    },
+    
+    "GenericMediaTypeConfig": {
+      "type": "object",
+      "description": "Generic configuration for custom media types. Use this for types not covered by specific configs (ImageConfig, AudioConfig, etc.). Provides common validation properties that apply to most media types.",
+      "additionalProperties": true,
+      "properties": {
+        "max_size_mb": {
+          "type": "integer",
+          "description": "Maximum file size in megabytes",
+          "minimum": 1,
+          "examples": [10, 50, 100]
+        },
+        
+        "allowed_formats": {
+          "type": "array",
+          "description": "List of allowed file formats/extensions",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["obj", "fbx", "gltf"], ["zip", "tar"], ["stl", "ply"]]
+        },
+        
+        "require_metadata": {
+          "type": "boolean",
+          "description": "Whether metadata is required for this media type",
+          "default": false
+        },
+        
+        "validation_params": {
+          "type": "object",
+          "description": "Custom validation parameters specific to this media type. Structure depends on the type.",
+          "additionalProperties": true,
+          "examples": [
+            {"max_vertices": 100000, "require_textures": false},
+            {"compression": "gzip", "max_entries": 1000}
+          ]
+        }
+      }
+    },
+    
+    "MultimodalExample": {
+      "type": "object",
+      "description": "Example multimodal message demonstrating how to use media content with a prompt",
+      "required": ["name", "role", "parts"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name identifying this example",
+          "examples": ["image-analysis", "audio-transcription"]
+        },
+        
+        "description": {
+          "type": "string",
+          "description": "Description of what this example demonstrates"
+        },
+        
+        "role": {
+          "type": "string",
+          "description": "Message role (typically 'user' or 'assistant')",
+          "enum": ["user", "assistant", "system"],
+          "examples": ["user"]
+        },
+        
+        "parts": {
+          "type": "array",
+          "description": "Message content parts (text and/or media)",
+          "items": {
+            "$ref": "#/$defs/ContentPart"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    
+    "ContentPart": {
+      "type": "object",
+      "description": "A single content part within a multimodal message. Can be text or media.",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of content part. Common types include: text, image, audio, video, document. Custom types are allowed for extensibility.",
+          "pattern": "^[a-z0-9_]+$",
+          "examples": ["text", "image", "audio", "document"]
+        },
+        
+        "text": {
+          "type": "string",
+          "description": "Text content (required when type is 'text')",
+          "examples": ["What's in this image?", "Describe the scene"]
+        },
+        
+        "media": {
+          "$ref": "#/$defs/MediaReference",
+          "description": "Media reference (required when type is 'image', 'audio', or 'video')"
+        }
+      }
+    },
+    
+    "MediaReference": {
+      "type": "object",
+      "description": "Reference to a media file. Supports three loading methods: file path, URL, or base64 data.",
+      "required": ["mime_type"],
+      "additionalProperties": false,
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to media file (relative to pack or absolute). Validated at compile time.",
+          "examples": ["images/photo.jpg", "./media/audio.mp3"]
+        },
+        
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to media file. Must be publicly accessible or require authentication.",
+          "examples": ["https://example.com/image.jpg", "https://cdn.example.com/video.mp4"]
+        },
+        
+        "base64": {
+          "type": "string",
+          "description": "Base64-encoded media data. Use for small files or when embedding is preferred.",
+          "examples": ["iVBORw0KGgoAAAANSUhEUgAAAAUA..."]
+        },
+        
+        "mime_type": {
+          "type": "string",
+          "description": "MIME type of the media file",
+          "examples": ["image/jpeg", "image/png", "audio/mp3", "video/mp4"]
+        },
+        
+        "detail": {
+          "type": "string",
+          "description": "Detail level for image processing (images only). Overrides default_detail from ImageConfig.",
+          "enum": ["low", "high", "auto"],
+          "examples": ["high"]
+        },
+        
+        "caption": {
+          "type": "string",
+          "description": "Caption or description for the media",
+          "examples": ["Product photo", "Customer's voice recording"]
         }
       }
     }
@@ -751,6 +1127,63 @@
               }
             },
             "required": ["order_id"]
+          }
+        }
+      }
+    },
+    {
+      "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
+      "id": "image-analyzer",
+      "name": "Image Analysis Pack",
+      "version": "1.0.0",
+      "description": "Multimodal pack for analyzing images with vision models",
+      "template_engine": {
+        "version": "v1",
+        "syntax": "{{variable}}",
+        "features": ["basic_substitution"]
+      },
+      "prompts": {
+        "analyze": {
+          "id": "analyze",
+          "name": "Image Analyzer",
+          "description": "Analyzes images and provides detailed descriptions",
+          "version": "1.0.0",
+          "system_template": "You are an expert image analyst. Provide detailed, accurate descriptions of images.",
+          "parameters": {
+            "temperature": 0.7,
+            "max_tokens": 1000
+          },
+          "media": {
+            "enabled": true,
+            "supported_types": ["image"],
+            "image": {
+              "max_size_mb": 20,
+              "allowed_formats": ["jpeg", "png", "webp"],
+              "default_detail": "high",
+              "max_images_per_msg": 5
+            },
+            "examples": [
+              {
+                "name": "simple-image-analysis",
+                "description": "Basic image analysis with a single photo",
+                "role": "user",
+                "parts": [
+                  {
+                    "type": "text",
+                    "text": "What's in this image?"
+                  },
+                  {
+                    "type": "image",
+                    "media": {
+                      "file_path": "examples/photo.jpg",
+                      "mime_type": "image/jpeg",
+                      "detail": "high",
+                      "caption": "Sample photo for analysis"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         }
       }
