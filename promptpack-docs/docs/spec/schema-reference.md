@@ -585,7 +585,7 @@ Must be one of:
 | + [name](#prompts_additionalProperties_name )                       | No      | string          | No         | -                         | Human-readable name for this prompt                                                                                                                          |
 | - [description](#prompts_additionalProperties_description )         | No      | string          | No         | -                         | Detailed description of this prompt's purpose and behavior                                                                                                   |
 | + [version](#prompts_additionalProperties_version )                 | No      | string          | No         | -                         | Prompt version following Semantic Versioning 2.0.0. Independent from pack version, allowing individual prompts to evolve separately.                         |
-| + [system_template](#prompts_additionalProperties_system_template ) | No      | string          | No         | -                         | The system prompt template. Use template syntax (e.g., {{variable}}) for variable substitution. This is the core instruction that guides the LLM's behavior. |
+| + [system_template](#prompts_additionalProperties_system_template ) | No      | string          | No         | -                         | The system prompt template. Use template syntax (e.g., `{{variable}}`) for variable substitution. This is the core instruction that guides the LLM's behavior. |
 | - [variables](#prompts_additionalProperties_variables )             | No      | array           | No         | -                         | Variable definitions for this prompt. Variables are placeholders in the template that are replaced with actual values at runtime.                            |
 | - [tools](#prompts_additionalProperties_tools )                     | No      | array of string | No         | -                         | List of tool names that this prompt is allowed to use. Tools must be defined in the pack-level 'tools' object.                                               |
 | - [tool_policy](#prompts_additionalProperties_tool_policy )         | No      | object          | No         | In #/$defs/ToolPolicy     | Policy governing how tools can be used by this prompt                                                                                                        |
@@ -695,7 +695,7 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | Yes      |
 
-**Description:** The system prompt template. Use template syntax (e.g., {{variable}}) for variable substitution. This is the core instruction that guides the LLM's behavior.
+**Description:** The system prompt template. Use template syntax (e.g., `{{variable}}`) for variable substitution. This is the core instruction that guides the LLM's behavior.
 
 **Examples:**
 
@@ -745,7 +745,7 @@ Must be one of:
 
 | Property                                                                    | Pattern | Type             | Deprecated | Definition | Title/Description                                                                              |
 | --------------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------- |
-| + [name](#prompts_additionalProperties_variables_items_name )               | No      | string           | No         | -          | Variable name used in templates (e.g., {{name}})                                               |
+| + [name](#prompts_additionalProperties_variables_items_name )               | No      | string           | No         | -          | Variable name used in templates (e.g., `{{name}}`)                                               |
 | + [type](#prompts_additionalProperties_variables_items_type )               | No      | enum (of string) | No         | -          | Data type of the variable                                                                      |
 | + [required](#prompts_additionalProperties_variables_items_required )       | No      | boolean          | No         | -          | Whether this variable must be provided. Required variables without values will cause an error. |
 | - [default](#prompts_additionalProperties_variables_items_default )         | No      | object           | No         | -          | Default value used when variable is not provided. Cannot be set if required is true.           |
@@ -760,7 +760,7 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | Yes      |
 
-**Description:** Variable name used in templates (e.g., {{name}})
+**Description:** Variable name used in templates (e.g., `{{name}}`)
 
 **Examples:**
 
