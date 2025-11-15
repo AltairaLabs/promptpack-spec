@@ -146,7 +146,7 @@ Each prompt can have its own version:
 
 ### Complete Pack
 
-See [schema/promptpack.schema.json](../../schema/promptpack.schema.json) examples section.
+See the [JSON Schema examples](https://promptpack.org/schema/latest/promptpack.schema.json) for complete examples.
 
 ## Drawbacks
 
