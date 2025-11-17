@@ -38,7 +38,9 @@ Each RFC has one of the following statuses:
 
 ## Active RFCs
 
-*No RFCs currently in review.*
+| Number | Title | Status | Author | Created |
+|--------|-------|--------|--------|---------|
+| 0005 | [Workflow Specification Extension](0005-workflow-extension.md) | Draft | AltairaLabs | 2025-11-17 |
 
 ## Process
 
