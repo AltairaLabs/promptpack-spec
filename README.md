@@ -48,7 +48,7 @@ PromptPack is a JSON-based format that packages everything needed to run sophist
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.1/promptpack.schema.json`
 
 ## 🌟 Key Features
 

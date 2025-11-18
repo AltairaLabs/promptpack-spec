@@ -44,6 +44,11 @@ jobs:
         run: |
           cd promptpack-docs
           npm ci
+      
+      - name: Sync RFCs to docs
+        run: |
+          cd promptpack-docs
+          node scripts/sync-rfcs.js
           
       - name: Build website
         run: |

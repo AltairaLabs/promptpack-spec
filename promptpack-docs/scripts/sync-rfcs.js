@@ -3,6 +3,11 @@
 /**
  * Sync RFCs from /rfcs/ to /promptpack-docs/docs/rfcs/
  * Adds Docusaurus frontmatter to each RFC file
+ * 
+ * Automatically extracts RFC metadata from the file content:
+ * - RFC number from filename
+ * - Title from the first heading (# RFC XXXX: Title)
+ * - Description from the Summary section
  */
 
 const fs = require('fs');
@@ -12,29 +17,53 @@ const path = require('path');
 const RFC_SOURCE_DIR = path.join(__dirname, '../../rfcs');
 const RFC_DEST_DIR = path.join(__dirname, '../docs/rfcs');
 
-// RFC metadata mapping (extracted from first lines of each RFC)
-const RFC_METADATA = {
-  '0001-core-schema.md': {
-    position: 1,
-    title: 'RFC-0001: Core PromptPack Schema',
-    description: 'Foundational JSON schema structure for packaging conversational AI systems',
-  },
-  '0002-yaml-format.md': {
-    position: 2,
-    title: 'RFC-0002: YAML File Format',
-    description: 'Human-friendly YAML authoring format for PromptPack configurations',
-  },
-  '0003-template-variables.md': {
-    position: 3,
-    title: 'RFC-0003: Template Variable System',
-    description: 'Dynamic template variable substitution for PromptPack',
-  },
-  '0004-multimodal-support.md': {
-    position: 4,
-    title: 'RFC-0004: Multimodal Content Support',
-    description: 'Image, audio, video, document, and custom media type support for PromptPack',
-  },
-};
+/**
+ * Extract RFC metadata from file content
+ */
+function extractMetadata(filename, content) {
+  // Extract RFC number from filename (e.g., "0001-core-schema.md" -> 1)
+  const rfcNumberMatch = filename.match(/^(\d{4})-/);
+  const position = rfcNumberMatch ? parseInt(rfcNumberMatch[1], 10) : 999;
+  
+  // Extract title from first heading (# RFC XXXX: Title)
+  const titleMatch = content.match(/^#\s+(RFC\s+\d{4}:\s+.*?)$/m);
+  const titleFromHeading = titleMatch ? titleMatch[1] : null;
+  
+  // Fallback: extract from filename if heading not found
+  const titleFromFilename = filename
+    .replace(/\.md$/, '')
+    .replace(/^(\d{4})-/, 'RFC-$1: ')
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  
+  const title = titleFromHeading || titleFromFilename;
+  
+  // Extract description from Summary section
+  let description = '';
+  const summaryMatch = content.match(/##\s+Summary\s*\n\s*\n(.*?)(?=\n\n##|\n##|$)/s);
+  if (summaryMatch) {
+    // Take first sentence or first line of summary
+    description = summaryMatch[1]
+      .trim()
+      .split(/\.\s+|\n/)[0]
+      .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove markdown links
+      .replace(/[*_`]/g, '') // Remove markdown formatting
+      .trim();
+    
+    // Truncate if too long
+    if (description.length > 120) {
+      description = description.substring(0, 117) + '...';
+    }
+  }
+  
+  // Fallback description
+  if (!description) {
+    description = `RFC ${String(position).padStart(4, '0')} specification document`;
+  }
+  
+  return { position, title, description };
+}
 
 /**
  * Generate Docusaurus frontmatter for an RFC
@@ -57,21 +86,18 @@ function syncRFC(filename) {
   const destPath = path.join(RFC_DEST_DIR, filename);
   
   // Skip if not an RFC file or if it's the template
-  if (!filename.match(/^\d{4}-.*\.md$/) || filename === '0000-template.md') {
+  const rfcPattern = /^\d{4}-.*\.md$/;
+  if (!rfcPattern.test(filename) || filename === '0000-template.md') {
     console.log(`⏭️  Skipping: ${filename}`);
-    return;
-  }
-  
-  // Get metadata
-  const metadata = RFC_METADATA[filename];
-  if (!metadata) {
-    console.warn(`⚠️  No metadata found for ${filename}, skipping`);
     return;
   }
   
   try {
     // Read source file
     const content = fs.readFileSync(sourcePath, 'utf8');
+    
+    // Extract metadata from content
+    const metadata = extractMetadata(filename, content);
     
     // Generate frontmatter
     const frontmatter = generateFrontmatter(metadata);
@@ -81,7 +107,9 @@ function syncRFC(filename) {
     
     // Write to destination
     fs.writeFileSync(destPath, outputContent, 'utf8');
-    console.log(`✅ Synced: ${filename}`);
+    console.log(`✅ Synced: ${filename} (position: ${metadata.position})`);
+    console.log(`   Title: ${metadata.title}`);
+    console.log(`   Description: ${metadata.description}\n`);
   } catch (error) {
     console.error(`❌ Error syncing ${filename}:`, error.message);
     process.exit(1);
@@ -104,15 +132,17 @@ function syncAllRFCs() {
   const files = fs.readdirSync(RFC_SOURCE_DIR);
   
   // Sync each RFC
+  const rfcPattern = /^\d{4}-.*\.md$/;
   let syncedCount = 0;
-  files.forEach(filename => {
-    if (filename.match(/^\d{4}-.*\.md$/) && filename !== '0000-template.md') {
+  
+  for (const filename of files) {
+    if (rfcPattern.test(filename) && filename !== '0000-template.md') {
       syncRFC(filename);
       syncedCount++;
     }
-  });
+  }
   
-  console.log(`\n✨ Successfully synced ${syncedCount} RFC(s)`);
+  console.log(`✨ Successfully synced ${syncedCount} RFC(s)`);
 }
 
 // Run if called directly
