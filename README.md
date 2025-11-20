@@ -110,6 +110,7 @@ Track our progress and upcoming features:
 | **Core Specification** | ✅ v1 Draft | Complete JSON-based specification with examples |
 | **JSON Schema** | ✅ Available | Validation schema with automatic versioning |
 | **Documentation Site** | ✅ Live | Comprehensive docs at promptpack.org |
+| **LangChain.js Integration** | ✅ Available | [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) npm package |
 | **Reference Runtime** | 🚧 In Development | [PromptKit](https://promptpack.org/docs/ecosystem/promptkit-runtime) |
 | **Testing Framework** | 🚧 In Development | [Arena Testing](https://promptpack.org/docs/ecosystem/arena-testing) |
 

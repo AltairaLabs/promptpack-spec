@@ -59,6 +59,7 @@ const sidebars: SidebarsConfig = {
         'rfcs/yaml-format',
         'rfcs/template-variables',
         'rfcs/multimodal-support',
+        'rfcs/workflow-extension',
       ],
     },
     {

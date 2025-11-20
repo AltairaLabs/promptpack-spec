@@ -68,11 +68,15 @@ function extractMetadata(filename, content) {
 /**
  * Generate Docusaurus frontmatter for an RFC
  */
-function generateFrontmatter(metadata) {
+function generateFrontmatter(metadata, filename) {
+  // Generate clean slug without RFC number prefix (e.g., "0001-core-schema.md" -> "core-schema")
+  const slug = filename.replace(/^\d{4}-/, '').replace(/\.md$/, '');
+  
   return `---
 sidebar_position: ${metadata.position}
 title: "${metadata.title}"
 description: ${metadata.description}
+slug: ${slug}
 ---
 
 `;
@@ -100,7 +104,7 @@ function syncRFC(filename) {
     const metadata = extractMetadata(filename, content);
     
     // Generate frontmatter
-    const frontmatter = generateFrontmatter(metadata);
+    const frontmatter = generateFrontmatter(metadata, filename);
     
     // Combine frontmatter + content
     const outputContent = frontmatter + content;

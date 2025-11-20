@@ -88,10 +88,65 @@ These are **separate but related projects**:
 
 ## Community Tools
 
-As PromptPack adoption grows, we expect community-contributed tools including:
+As PromptPack adoption grows, the community is building compatible tools and integrations.
+
+### Official Integrations
+
+#### LangChain.js Integration
+
+**Status**: ✅ Available Now  
+**Package**: [`@promptpack/langchain`](https://www.npmjs.com/package/@promptpack/langchain)  
+**Repository**: [altairalabs/promptpack-langchainjs](https://github.com/AltairaLabs/promptpack-langchainjs)
+
+Native LangChain.js integration for loading and using PromptPacks with LangChain. Features:
+
+- 🎯 **Prompt Registry** - Load and manage PromptPacks from JSON/YAML
+- 🔧 **Tool Integration** - Built-in tool calling with governance policies
+- ✅ **Validation** - Response validation and guardrails
+- 🔄 **LangChain Native** - Seamless integration with LangChain templates
+- 📦 **Type Safe** - Full TypeScript support
+
+**Installation:**
+
+```bash
+npm install @promptpack/langchain
+```
+
+**Quick Example:**
+
+```typescript
+import { PromptPackRegistry, PromptPackTemplate } from '@promptpack/langchain';
+import { ChatOpenAI } from '@langchain/openai';
+
+// Load the pack
+const pack = PromptPackRegistry.loadFromFile('./customer-support.json');
+
+// Create a template
+const template = new PromptPackTemplate({
+  pack,
+  promptId: 'support',
+});
+
+// Use with LangChain
+const model = new ChatOpenAI({ modelName: 'gpt-4' });
+const chain = template.pipe(model);
+
+// Invoke with variables
+const response = await chain.invoke({
+  role: 'helpful support agent',
+  company: 'TechCorp',
+  issue_type: 'billing',
+});
+```
+
+[View Documentation →](https://github.com/AltairaLabs/promptpack-langchainjs)
+
+### Additional Community Tools
+
+As the ecosystem grows, we expect more community-contributed tools including:
 
 - Alternative runtimes in different languages
-- Framework integrations (LangChain, LlamaIndex, Transformers)
+- Framework integrations (LlamaIndex, Transformers)
 - IDE plugins and extensions
 - Deployment tools and platforms
 - Monitoring and observability solutions
@@ -110,7 +165,7 @@ As PromptPack adoption grows, we expect community-contributed tools including:
 
 ### Orchestration Frameworks
 
-- LangChain adapter (proposal in backlog)
+- ✅ LangChain.js adapter (available now - see above)
 - LlamaIndex adapter (proposal in backlog)
 - Transformers adapter (proposal in backlog)
 - Custom framework integrations

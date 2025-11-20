@@ -18,26 +18,47 @@ PromptPack is a specification for structuring prompts, tools, and workflows in Y
 
 ### Available Now
 
-✅ **PromptPack Specification** - The file format is defined and documented
+✅ **PromptPack Specification** - The file format is defined and documented  
 ✅ **JSON Schema** - For validation of `.promptpack.yml` files  
-✅ **PromptArena** - CLI testing tool (see [Arena Testing](./arena-testing))
+✅ **PromptArena** - CLI testing tool (see [Arena Testing](./arena-testing))  
+✅ **LangChain.js Integration** - [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) npm package  
 ✅ **Documentation** - This site and the specification docs
 
-### Everything Else is Future Work
+### LangChain.js Integration
 
-The following sections describe **potential tools** that could be built by the community. None of these currently exist.
+The first official integration is now available! Use PromptPacks directly with LangChain.js:
+
+```bash
+npm install @promptpack/langchain
+```
+
+**Key Features:**
+
+- Load PromptPacks from JSON/YAML files
+- Native LangChain template integration
+- Tool calling with governance policies
+- Response validation and guardrails
+- Full TypeScript support
+
+[View Integration →](https://github.com/AltairaLabs/promptpack-langchainjs) | [See Examples →](./integrations#langchainjs-integration)
+
+### Future Work
+
+The following sections describe **additional tools** that could be built by the community.
 
 ## Potential Development Tools
 
 ### Editors and IDE Support
 
 **Opportunities:**
+
 - VS Code extension for syntax highlighting and validation
 - IntelliJ/PyCharm plugin for YAML schema support
 - Vim/Neovide plugins for PromptPack files
 - Emacs modes with inline validation
 
 **How to Build:**
+
 1. Use the JSON Schema from this repository
 2. Implement YAML language server features
 3. Add PromptPack-specific linting rules
@@ -46,12 +67,14 @@ The following sections describe **potential tools** that could be built by the c
 ### CLI Utilities
 
 **Potential Features:**
+
 - Validate PromptPack files against schema
 - Lint for best practices and conventions
 - Generate boilerplate templates
 - Convert between formats
 
 **Example Implementation:**
+
 ```bash
 # What could exist (doesn't exist yet)
 promptpack validate my-file.promptpack.yml
@@ -59,30 +82,37 @@ promptpack lint --fix my-file.promptpack.yml
 promptpack init --template basic
 ```
 
-## Potential Runtime Implementations
+## Runtime Implementations
 
-### Language Libraries
+### JavaScript/TypeScript
 
-The specification could be implemented in any language:
+**Available Now:**  
+✅ **LangChain.js Integration** - [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs)
 
-**JavaScript/TypeScript**
-- Parse `.promptpack.yml` files
-- Execute prompts with any LLM SDK
-- Implement workflow logic
-- Handle tool definitions
+- Parses PromptPack JSON/YAML files
+- Integrates with LangChain's LLM providers
+- Implements tool calling and validation
+- Full TypeScript support
 
-**Python**
+### Potential Additional Implementations
+
+The specification could be implemented in other languages:
+
+#### Python
+
 - Integration with LangChain, LlamaIndex, etc.
 - Jupyter notebook support
 - FastAPI/Flask endpoints
 - CLI utilities
 
-**Other Languages**
+#### Other Languages
+
 - Go - High-performance runtime
 - Rust - Memory-safe implementation
 - Java/Kotlin - Enterprise integrations
 
 **Key Point:** Each implementation would need to:
+
 1. Parse the PromptPack YAML format
 2. Provide its own LLM provider integrations
 3. Implement workflow execution logic
@@ -147,17 +177,20 @@ If you want to build something for the PromptPack ecosystem:
 
 High-value contributions:
 
-**Validation & Linting**
+#### Validation & Linting
+
 - Pre-commit hooks for PromptPack files
 - CI/CD action for validation
 - Best practices linter
 
-**Developer Experience**
+#### Developer Experience
+
 - VS Code extension (most requested)
 - Schema generators from examples
 - File format converters
 
-**Reference Implementations**
+#### Reference Implementations
+
 - Python library for parsing PromptPack files
 - JavaScript/TypeScript parser
 - Example runtimes
@@ -187,6 +220,7 @@ PromptPack is a **file format specification**, not a framework. It:
 **Critical:** Provider integrations (OpenAI, Anthropic, etc.) are **outside the scope** of PromptPack.
 
 Each tool/library that uses PromptPack needs to:
+
 - Choose which providers to support
 - Implement its own API integrations
 - Handle authentication and rate limiting
