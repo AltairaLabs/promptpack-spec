@@ -93,7 +93,21 @@ When breaking changes occur, we provide:
 
 ## Version History
 
-### v1.0.0 (Current)
+### v1.2.0 (Current)
+
+- Evals extension ([RFC-0006](/docs/rfcs/evals-extension))
+- Pack-level and prompt-level eval definitions
+- Prometheus-style metric declarations (gauge, counter, histogram, boolean)
+- Eval triggers: every_turn, on_session_complete, sample_turns, sample_sessions
+- Prompt-level evals override pack-level evals by ID
+
+### v1.1.0
+
+- Multimodal content support ([RFC-0004](/docs/rfcs/multimodal-support))
+- Image, audio, video, and document media types
+- Extensible media types with GenericMediaTypeConfig
+
+### v1.0.0
 
 - Initial specification release
 - Core entities: prompts, tools, workflows, personas, fragments
@@ -101,13 +115,6 @@ When breaking changes occur, we provide:
 - Template variable system
 
 ### Planned Releases
-
-#### v1.1.0 (Planned)
-
-- Enhanced tool authentication options
-- Workflow error handling improvements
-- Additional validation rules
-- Performance optimization guidelines
 
 #### v2.0.0 (Future)
 

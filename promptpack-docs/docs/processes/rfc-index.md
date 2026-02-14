@@ -29,7 +29,7 @@ The RFC (Request for Comments) process is how the PromptPack community proposes,
 | [RFC-0003](/docs/rfcs/template-variables) | 🚀 Implemented | Template Variable System |
 | [RFC-0004](/docs/rfcs/multimodal-support) | 🚀 Implemented | Multimodal Content Support |
 | [RFC-0005](/docs/rfcs/workflow-extension) | 📝 Draft | PromptPack Workflow Specification Extension |
-| [RFC-0006](/docs/rfcs/evals-extension) | 📝 Draft | Evals Extension |
+| [RFC-0006](/docs/rfcs/evals-extension) | 🚀 Implemented | Evals Extension |
 <!-- RFC_TABLE_END -->
 
 ## Upcoming Considerations
@@ -125,9 +125,9 @@ Learn from implemented RFCs:
 | Metric | Count |
 |--------|-------|
 | **Total RFCs** | 6 |
-| **Implemented** | 4 |
+| **Implemented** | 5 |
 | **In Review** | 0 |
-| **Draft** | 2 |
+| **Draft** | 1 |
 | **Contributors** | 1+ |
 
 ---

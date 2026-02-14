@@ -6,23 +6,39 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.1
+## Current Version: v1.2
 
-**Status:** ✅ Current  
-**Released:** November 2024  
-**Schema:** `https://promptpack.org/schema/v1.1/promptpack.schema.json`
+**Status:** ✅ Current
+**Released:** February 2026
+**Schema:** `https://promptpack.org/schema/v1.2/promptpack.schema.json`
 
-### What's New in v1.1
+### What's New in v1.2
 
-- **Multimodal Support** - Image, audio, video, and document content
-- **Extensible Media Types** - Custom media types (3D models, archives, etc.)
-- **GenericMediaTypeConfig** - Flexible validation for custom media
+- **Evals Extension** ([RFC-0006](/docs/rfcs/evals-extension)) - Declare automated quality checks (evals) alongside prompts
+- **Pack-level and prompt-level evals** - Cross-cutting evals at pack level, prompt-specific overrides by ID
+- **Prometheus-style metrics** - Eval results exposed as gauge, counter, histogram, or boolean metrics
+- **Flexible eval types** - Runtime-defined types: deterministic (`contains`, `regex`, `json_valid`) and LLM judge
+- **Eval triggers** - `every_turn`, `on_session_complete`, `sample_turns`, `sample_sessions`
 
-[View v1.1 Spec →](./overview)
+[View v1.2 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.1
+
+**Status:** 📦 Stable
+**Released:** November 2024
+**Schema:** `https://promptpack.org/schema/v1.1/promptpack.schema.json`
+
+- Multimodal Support - Image, audio, video, and document content
+- Extensible Media Types - Custom media types (3D models, archives, etc.)
+- GenericMediaTypeConfig - Flexible validation for custom media
+
+[View v1.1 Spec →](./v1.1/overview)
+
+---
 
 ### v1.0
 
@@ -48,12 +64,58 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.1    | ✅ Current | Full support | - |
+| v1.2    | ✅ Current | Full support | - |
+| v1.1    | 📦 Stable | Security fixes only | TBD |
 | v1.0    | 📦 Stable | Security fixes only | TBD |
 
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.1 to v1.2
+
+v1.2 is **fully backward compatible** with v1.1. No breaking changes.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.2/promptpack.schema.json",
+     "version": "1.2.0"
+   }
+   ```
+
+2. **(Optional) Add evals** at the pack level or prompt level:
+   ```json
+   {
+     "evals": [
+       {
+         "id": "json_format",
+         "type": "json_valid",
+         "trigger": "every_turn",
+         "metric": {
+           "name": "promptpack_json_valid",
+           "type": "boolean"
+         }
+       }
+     ]
+   }
+   ```
+
+3. **Test and validate** - v1.1 packs continue to work without changes
+
+### New Features You Can Use
+
+- Add `evals` array at pack level for cross-cutting quality checks
+- Add `evals` array at prompt level for prompt-specific checks
+- Prompt-level evals override pack-level evals by `id`
+- Attach Prometheus-style `metric` declarations to evals
+- Use `trigger` to control when evals fire (`every_turn`, `on_session_complete`, `sample_turns`, `sample_sessions`)
+
+See [RFC-0006: Evals Extension](/docs/rfcs/evals-extension) for details.
 
 ---
 
@@ -99,17 +161,18 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.1 if:
+### Use v1.2 if:
 - ✅ Building new PromptPacks
-- ✅ Need multimodal support (images, audio, video)
+- ✅ Want automated quality checks (evals) alongside prompts
+- ✅ Need Prometheus metric integration for eval results
 - ✅ Want latest features
 
-### Stay on v1.0 if:
+### Stay on v1.1 if:
 - ✅ Existing packs work fine
-- ✅ Don't need multimodal features yet
+- ✅ Don't need eval definitions yet
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.1 for all new projects. It's backward compatible and adds valuable capabilities.
+**Recommendation:** Use v1.2 for all new projects. It's backward compatible and adds valuable capabilities.
 
 ---
 
@@ -117,6 +180,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.2    | Feb 2026    | Evals extension: pack/prompt-level evals, Prometheus metrics |
 | v1.1    | Nov 2024    | Multimodal support, extensible media types |
 | v1.0    | Oct 2024    | Initial release: core schema, YAML format, templates |
 
