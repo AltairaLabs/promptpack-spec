@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: "Pack Structure & Design (v1.1)"
 ---
 
 # Pack Structure & Design
@@ -210,25 +211,6 @@ This enables:
 - **Cost Optimization**: Balance performance vs. cost across different prompts
 - **Performance Monitoring**: Track how prompts perform over time
 - **Deployment Confidence**: Know before you deploy whether a prompt works well
-
-### Evals *(v1.2+)*
-
-PromptPacks can also declare **evals** — automated quality checks that run asynchronously and produce metrics. Evals can be defined at pack level (applying to all prompts) or prompt level (scoped to a specific prompt):
-
-```json
-{
-  "evals": [
-    {
-      "id": "json_format",
-      "type": "json_valid",
-      "trigger": "every_turn",
-      "metric": { "name": "promptpack_json_valid", "type": "boolean" }
-    }
-  ]
-}
-```
-
-Unlike validators (which block output), evals score and report — making them ideal for continuous quality monitoring with Prometheus-style metric export.
 
 ## Deployment Benefits
 

@@ -1,6 +1,6 @@
 # RFC 0006: Evals Extension
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** AltairaLabs Team
 - **Created:** 2026-02-14
 - **Updated:** 2026-02-14
@@ -52,7 +52,7 @@ The promptpack author who writes guardrails is the same person who writes eval r
   "Eval": {
     "type": "object",
     "description": "An eval definition that declares how to assess LLM output quality. Evals run asynchronously and produce scores or metrics, unlike validators which run inline and block.",
-    "required": ["id", "type", "trigger", "params"],
+    "required": ["id", "type", "trigger"],
     "additionalProperties": false,
     "properties": {
       "id": {
@@ -104,12 +104,19 @@ The promptpack author who writes guardrails is the same person who writes eval r
             "enum": ["gauge", "counter", "histogram", "boolean"]
           },
           "range": {
-            "type": "array",
-            "description": "Optional value bounds as [min, max]. Useful for gauge metrics with known ranges.",
-            "items": { "type": "number" },
-            "minItems": 2,
-            "maxItems": 2,
-            "examples": [[0, 1], [1, 5]]
+            "type": "object",
+            "description": "Optional value bounds. Useful for gauge metrics with known ranges.",
+            "properties": {
+              "min": {
+                "type": "number",
+                "description": "Minimum expected value"
+              },
+              "max": {
+                "type": "number",
+                "description": "Maximum expected value"
+              }
+            },
+            "examples": [{"min": 0, "max": 1}, {"min": 1, "max": 5}]
           }
         }
       },
@@ -185,7 +192,7 @@ Added to the top-level `properties` alongside `prompts`, `tools`, `workflow`, et
 
 3. **Metric Naming**
    - `metric.name` should follow Prometheus naming conventions: `snake_case`, with a namespace prefix (recommended, not enforced by schema)
-   - `metric.range` when present must be a two-element array where `range[0] < range[1]`
+   - `metric.range` when present must satisfy `range.min <= range.max`
 
 4. **Backward Compatibility**
    - `evals` is optional at both levels; existing PromptPacks remain valid
@@ -219,7 +226,9 @@ prompts:
         metric:
           name: promptpack_tone_score
           type: gauge
-          range: [1, 5]
+          range:
+            min: 1
+            max: 5
         params:
           judge_prompt: |
             Rate the following customer support response on a 1-5 scale:
@@ -247,7 +256,9 @@ evals:
     metric:
       name: promptpack_brand_consistency
       type: gauge
-      range: [0, 1]
+      range:
+        min: 0
+        max: 1
     params:
       reference_embeddings: acme_brand_voice_v2
       threshold: 0.85
@@ -380,7 +391,9 @@ evals:
       # --- spec-defined fields ---
       name: promptpack_response_quality
       type: gauge
-      range: [0, 1]
+      range:
+        min: 0
+        max: 1
       # --- runtime-added fields (additionalProperties) ---
       labels:
         team: customer-success
@@ -473,6 +486,7 @@ Runtimes that don't support evals will simply ignore the `evals` field.
 ## Revision History
 
 - **2026-02-14:** Initial draft
+- **2026-02-14:** Accepted — `range` changed from array `[min, max]` to object `{min, max}` for extensibility; `params` made optional (not all eval types need configuration); schema version bumped to 1.2.0
 
 ## References
 
