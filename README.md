@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.1-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.2-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -18,6 +18,7 @@ Production AI systems need more than a single prompt — they need specialized p
 - **Multiple specialized prompts** that outperform one-size-fits-all approaches
 - **Shared tools and fragments** — define once, reuse everywhere
 - **Multimodal support** — text, images, audio, and structured content in prompt templates
+- **Evals** — automated quality checks with Prometheus metric export, shipped alongside your prompts
 - **Built-in testing metadata** to track model performance across providers
 - **Portable format** that works with OpenAI, Anthropic, Google, and local models
 
@@ -54,7 +55,24 @@ Production AI systems need more than a single prompt — they need specialized p
         { "name": "company", "type": "string", "required": true }
       ]
     }
-  }
+  },
+  "evals": [
+    {
+      "id": "tone-check",
+      "type": "llm_judge",
+      "trigger": "sample_turns",
+      "sample_percentage": 10,
+      "params": {
+        "judge_prompt": "Rate the response tone 1-5 for professionalism.",
+        "passing_score": 4
+      },
+      "metric": {
+        "name": "promptpack_tone_score",
+        "type": "gauge",
+        "range": { "min": 1, "max": 5 }
+      }
+    }
+  ]
 }
 ```
 
@@ -63,12 +81,47 @@ Production AI systems need more than a single prompt — they need specialized p
 ## Key Features
 
 - **Multi-Prompt Architecture** — Specialized prompts for different scenarios instead of one-size-fits-all
-- **Complete Packaging** — Prompts, tools, fragments, and config in a single JSON file
+- **Complete Packaging** — Prompts, tools, fragments, evals, and config in a single JSON file
+- **Evals & Metrics** — Declare automated quality checks (deterministic or LLM judge) with Prometheus metric export
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
 - **Built-in Testing** — Testing metadata and quality assurance built into the spec
 - **Tool Integration** — Define external tools once, reference them across all prompts
 - **Template System** — Variable templating with reusable fragments for consistency
+
+## Evals *(v1.2)*
+
+PromptPack v1.2 lets you ship quality policy alongside your prompts. Evals are automated checks that run asynchronously and produce scores — unlike validators (guardrails) which block output inline.
+
+```json
+"evals": [
+  {
+    "id": "json_format",
+    "type": "json_valid",
+    "trigger": "every_turn",
+    "metric": { "name": "promptpack_json_valid", "type": "boolean" }
+  },
+  {
+    "id": "session-coverage",
+    "type": "contains_any",
+    "trigger": "on_session_complete",
+    "params": { "patterns": ["Paris", "capital"] },
+    "metric": { "name": "promptpack_session_coverage", "type": "boolean" }
+  }
+]
+```
+
+**Key concepts:**
+
+| Feature | Description |
+|---------|-------------|
+| **Two scopes** | Pack-level evals apply to all prompts; prompt-level evals override by `id` |
+| **Triggers** | `every_turn`, `on_session_complete`, `sample_turns`, `sample_sessions` |
+| **Eval types** | Runtime-defined — deterministic (`contains`, `regex`, `json_valid`, `tools_called`) or `llm_judge` |
+| **Prometheus metrics** | Each eval can declare a `metric` (gauge, counter, histogram, boolean) for monitoring |
+| **Sampling** | `sample_turns`/`sample_sessions` with `sample_percentage` for cost-effective evaluation |
+
+See [RFC-0006: Evals Extension](https://promptpack.org/docs/rfcs/evals-extension) for the full design.
 
 ## Documentation
 
@@ -80,13 +133,13 @@ Production AI systems need more than a single prompt — they need specialized p
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.1/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.2/promptpack.schema.json`
 
 ## Ecosystem
 
 | Component | Status | Links |
 |-----------|--------|-------|
-| **Core Specification** | v1.1 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
+| **Core Specification** | v1.2 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
 | **PromptKit** | Stable | [CLI, validation, SDK](https://promptpack.org/docs/ecosystem/promptkit-runtime) |
 | **PromptArena** | Stable | [Multi-provider testing, CI/CD](https://promptpack.org/docs/ecosystem/arena-testing) |
 | **LangChain.js** | Available | [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) |
