@@ -316,7 +316,7 @@
 | - [metadata](#metadata )               | No      | object | No         | -          | Optional pack-level metadata for categorization, discovery, and operational planning.                                                                                                                                                                                                  |
 | - [compilation](#compilation )         | No      | object | No         | -          | Information about when and how this pack was compiled. Generated automatically by the packc compiler.                                                                                                                                                                                  |
 
-## <a name="schema"></a>1. Property `PromptPack Specification > $schema`
+## 1. Property `PromptPack Specification > $schema` {#schema}
 
 |              |                                                             |
 | ------------ | ----------------------------------------------------------- |
@@ -332,7 +332,7 @@
 "https://promptpack.org/schema/v1/promptpack.schema.json"
 ```
 
-## <a name="id"></a>2. Property `PromptPack Specification > id`
+## 2. Property `PromptPack Specification > id` {#id}
 
 |              |          |
 | ------------ | -------- |
@@ -361,7 +361,7 @@
 | **Max length**                    | 100                                                                                                                           |
 | **Must match regular expression** | ```^[a-z][a-z0-9-]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-z%5D%5Ba-z0-9-%5D%2A%24&testString=%22customer-support%22) |
 
-## <a name="name"></a>3. Property `PromptPack Specification > name`
+## 3. Property `PromptPack Specification > name` {#name}
 
 |              |          |
 | ------------ | -------- |
@@ -389,7 +389,7 @@
 | **Min length** | 1   |
 | **Max length** | 200 |
 
-## <a name="version"></a>4. Property `PromptPack Specification > version`
+## 4. Property `PromptPack Specification > version` {#version}
 
 |              |          |
 | ------------ | -------- |
@@ -420,7 +420,7 @@
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^v?(0\|[1-9]\d*)\.(0\|[1-9]\d*)\.(0\|[1-9]\d*)(?:-((?:0\|[1-9]\d*\|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0\|[1-9]\d*\|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$``` [Test](https://regex101.com/?regex=%5Ev%3F%280%7C%5B1-9%5D%5Cd%2A%29%5C.%280%7C%5B1-9%5D%5Cd%2A%29%5C.%280%7C%5B1-9%5D%5Cd%2A%29%28%3F%3A-%28%28%3F%3A0%7C%5B1-9%5D%5Cd%2A%7C%5Cd%2A%5Ba-zA-Z-%5D%5B0-9a-zA-Z-%5D%2A%29%28%3F%3A%5C.%28%3F%3A0%7C%5B1-9%5D%5Cd%2A%7C%5Cd%2A%5Ba-zA-Z-%5D%5B0-9a-zA-Z-%5D%2A%29%29%2A%29%29%3F%28%3F%3A%5C%2B%28%5B0-9a-zA-Z-%5D%2B%28%3F%3A%5C.%5B0-9a-zA-Z-%5D%2B%29%2A%29%29%3F%24&testString=%221.0.0%22) |
 
-## <a name="description"></a>5. Property `PromptPack Specification > description`
+## 5. Property `PromptPack Specification > description` {#description}
 
 |              |          |
 | ------------ | -------- |
@@ -439,7 +439,7 @@
 | -------------- | ---- |
 | **Max length** | 5000 |
 
-## <a name="template_engine"></a>6. Property `PromptPack Specification > template_engine`
+## 6. Property `PromptPack Specification > template_engine` {#template_engine}
 
 |                           |             |
 | ------------------------- | ----------- |
@@ -455,7 +455,7 @@
 | + [syntax](#template_engine_syntax )     | No      | string                    | No         | -          | Variable substitution syntax pattern. Defines how variables appear in templates. |
 | - [features](#template_engine_features ) | No      | array of enum (of string) | No         | -          | Optional list of supported template features beyond basic substitution.          |
 
-### <a name="template_engine_version"></a>6.1. Property `PromptPack Specification > template_engine > version`
+### 6.1. Property `PromptPack Specification > template_engine > version` {#template_engine_version}
 
 |              |          |
 | ------------ | -------- |
@@ -474,7 +474,7 @@
 "v2"
 ```
 
-### <a name="template_engine_syntax"></a>6.2. Property `PromptPack Specification > template_engine > syntax`
+### 6.2. Property `PromptPack Specification > template_engine > syntax` {#template_engine_syntax}
 
 |              |          |
 | ------------ | -------- |
@@ -497,7 +497,7 @@
 "{variable}"
 ```
 
-### <a name="template_engine_features"></a>6.3. Property `PromptPack Specification > template_engine > features`
+### 6.3. Property `PromptPack Specification > template_engine > features` {#template_engine_features}
 
 |              |                             |
 | ------------ | --------------------------- |
@@ -527,7 +527,7 @@
 | ------------------------------------------------- | ----------- |
 | [features items](#template_engine_features_items) | -           |
 
-#### <a name="template_engine_features_items"></a>6.3.1. PromptPack Specification > template_engine > features > features items
+#### 6.3.1. PromptPack Specification > template_engine > features > features items {#template_engine_features_items}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -541,7 +541,7 @@ Must be one of:
 * "loops"
 * "filters"
 
-## <a name="prompts"></a>7. Property `PromptPack Specification > prompts`
+## 7. Property `PromptPack Specification > prompts` {#prompts}
 
 |                           |                                                                                      |
 | ------------------------- | ------------------------------------------------------------------------------------ |
@@ -568,7 +568,7 @@ Must be one of:
 | ------------------------------------ | ------- | ------ | ---------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | - [](#prompts_additionalProperties ) | No      | object | No         | In #/$defs/Prompt | A single prompt configuration within a pack. Each prompt represents a specific task type (e.g., 'support', 'sales') with its own template, variables, tools, and validation rules. Prompts within a pack can evolve independently with their own version numbers. |
 
-### <a name="prompts_additionalProperties"></a>7.1. Property `PromptPack Specification > prompts > Prompt`
+### 7.1. Property `PromptPack Specification > prompts > Prompt` {#prompts_additionalProperties}
 
 |                           |                |
 | ------------------------- | -------------- |
@@ -596,7 +596,7 @@ Must be one of:
 | - [model_overrides](#prompts_additionalProperties_model_overrides ) | No      | object          | No         | -                         | Model-specific template modifications. Keys are model names (e.g., 'claude-3-opus', 'gpt-4'), values are override configurations.                            |
 | - [media](#prompts_additionalProperties_media )                     | No      | object          | No         | In #/$defs/MediaConfig    | Multimodal content configuration for this prompt. Defines supported media types and validation rules.                                                        |
 
-#### <a name="prompts_additionalProperties_id"></a>7.1.1. Property `PromptPack Specification > prompts > additionalProperties > id`
+#### 7.1.1. Property `PromptPack Specification > prompts > additionalProperties > id` {#prompts_additionalProperties_id}
 
 |              |          |
 | ------------ | -------- |
@@ -623,7 +623,7 @@ Must be one of:
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-z][a-z0-9_-]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-z%5D%5Ba-z0-9_-%5D%2A%24&testString=%22support%22) |
 
-#### <a name="prompts_additionalProperties_name"></a>7.1.2. Property `PromptPack Specification > prompts > additionalProperties > name`
+#### 7.1.2. Property `PromptPack Specification > prompts > additionalProperties > name` {#prompts_additionalProperties_name}
 
 |              |          |
 | ------------ | -------- |
@@ -646,7 +646,7 @@ Must be one of:
 | -------------- | - |
 | **Min length** | 1 |
 
-#### <a name="prompts_additionalProperties_description"></a>7.1.3. Property `PromptPack Specification > prompts > additionalProperties > description`
+#### 7.1.3. Property `PromptPack Specification > prompts > additionalProperties > description` {#prompts_additionalProperties_description}
 
 |              |          |
 | ------------ | -------- |
@@ -661,7 +661,7 @@ Must be one of:
 "General customer support assistant for handling inquiries"
 ```
 
-#### <a name="prompts_additionalProperties_version"></a>7.1.4. Property `PromptPack Specification > prompts > additionalProperties > version`
+#### 7.1.4. Property `PromptPack Specification > prompts > additionalProperties > version` {#prompts_additionalProperties_version}
 
 |              |          |
 | ------------ | -------- |
@@ -688,7 +688,7 @@ Must be one of:
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^v?(0\|[1-9]\d*)\.(0\|[1-9]\d*)\.(0\|[1-9]\d*)(?:-((?:0\|[1-9]\d*\|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0\|[1-9]\d*\|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$``` [Test](https://regex101.com/?regex=%5Ev%3F%280%7C%5B1-9%5D%5Cd%2A%29%5C.%280%7C%5B1-9%5D%5Cd%2A%29%5C.%280%7C%5B1-9%5D%5Cd%2A%29%28%3F%3A-%28%28%3F%3A0%7C%5B1-9%5D%5Cd%2A%7C%5Cd%2A%5Ba-zA-Z-%5D%5B0-9a-zA-Z-%5D%2A%29%28%3F%3A%5C.%28%3F%3A0%7C%5B1-9%5D%5Cd%2A%7C%5Cd%2A%5Ba-zA-Z-%5D%5B0-9a-zA-Z-%5D%2A%29%29%2A%29%29%3F%28%3F%3A%5C%2B%28%5B0-9a-zA-Z-%5D%2B%28%3F%3A%5C.%5B0-9a-zA-Z-%5D%2B%29%2A%29%29%3F%24&testString=%221.0.0%22) |
 
-#### <a name="prompts_additionalProperties_system_template"></a>7.1.5. Property `PromptPack Specification > prompts > additionalProperties > system_template`
+#### 7.1.5. Property `PromptPack Specification > prompts > additionalProperties > system_template` {#prompts_additionalProperties_system_template}
 
 |              |          |
 | ------------ | -------- |
@@ -711,7 +711,7 @@ Must be one of:
 | -------------- | - |
 | **Min length** | 1 |
 
-#### <a name="prompts_additionalProperties_variables"></a>7.1.6. Property `PromptPack Specification > prompts > additionalProperties > variables`
+#### 7.1.6. Property `PromptPack Specification > prompts > additionalProperties > variables` {#prompts_additionalProperties_variables}
 
 |              |         |
 | ------------ | ------- |
@@ -732,7 +732,7 @@ Must be one of:
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Variable](#prompts_additionalProperties_variables_items) | A template variable definition with type information and validation rules. Variables are replaced with actual values when the prompt is rendered. |
 
-##### <a name="prompts_additionalProperties_variables_items"></a>7.1.6.1. PromptPack Specification > prompts > additionalProperties > variables > Variable
+##### 7.1.6.1. PromptPack Specification > prompts > additionalProperties > variables > Variable {#prompts_additionalProperties_variables_items}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -753,7 +753,7 @@ Must be one of:
 | - [example](#prompts_additionalProperties_variables_items_example )         | No      | object           | No         | -          | Example value showing expected format and content                                              |
 | - [validation](#prompts_additionalProperties_variables_items_validation )   | No      | object           | No         | -          | Validation rules applied to the variable value at runtime                                      |
 
-###### <a name="prompts_additionalProperties_variables_items_name"></a>7.1.6.1.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > name`
+###### 7.1.6.1.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > name` {#prompts_additionalProperties_variables_items_name}
 
 |              |          |
 | ------------ | -------- |
@@ -780,7 +780,7 @@ Must be one of:
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-zA-Z_][a-zA-Z0-9_]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-zA-Z_%5D%5Ba-zA-Z0-9_%5D%2A%24&testString=%22role%22) |
 
-###### <a name="prompts_additionalProperties_variables_items_type"></a>7.1.6.1.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > type`
+###### 7.1.6.1.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > type` {#prompts_additionalProperties_variables_items_type}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -806,7 +806,7 @@ Must be one of:
 * "object"
 * "array"
 
-###### <a name="prompts_additionalProperties_variables_items_required"></a>7.1.6.1.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > required`
+###### 7.1.6.1.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > required` {#prompts_additionalProperties_variables_items_required}
 
 |              |           |
 | ------------ | --------- |
@@ -815,7 +815,7 @@ Must be one of:
 
 **Description:** Whether this variable must be provided. Required variables without values will cause an error.
 
-###### <a name="prompts_additionalProperties_variables_items_default"></a>7.1.6.1.4. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > default`
+###### 7.1.6.1.4. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > default` {#prompts_additionalProperties_variables_items_default}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -845,7 +845,7 @@ true
 }
 ```
 
-###### <a name="prompts_additionalProperties_variables_items_description"></a>7.1.6.1.5. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > description`
+###### 7.1.6.1.5. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > description` {#prompts_additionalProperties_variables_items_description}
 
 |              |          |
 | ------------ | -------- |
@@ -864,7 +864,7 @@ true
 "Customer's account ID"
 ```
 
-###### <a name="prompts_additionalProperties_variables_items_example"></a>7.1.6.1.6. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > example`
+###### 7.1.6.1.6. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > example` {#prompts_additionalProperties_variables_items_example}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -888,7 +888,7 @@ true
 "john@example.com"
 ```
 
-###### <a name="prompts_additionalProperties_variables_items_validation"></a>7.1.6.1.7. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation`
+###### 7.1.6.1.7. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation` {#prompts_additionalProperties_variables_items_validation}
 
 |                           |             |
 | ------------------------- | ----------- |
@@ -907,7 +907,7 @@ true
 | - [maximum](#prompts_additionalProperties_variables_items_validation_maximum )       | No      | number  | No         | -          | Maximum numeric value (for number types)      |
 | - [enum](#prompts_additionalProperties_variables_items_validation_enum )             | No      | array   | No         | -          | List of allowed values                        |
 
-###### <a name="prompts_additionalProperties_variables_items_validation_pattern"></a>7.1.6.1.7.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > pattern`
+###### 7.1.6.1.7.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > pattern` {#prompts_additionalProperties_variables_items_validation_pattern}
 
 |              |          |
 | ------------ | -------- |
@@ -930,7 +930,7 @@ true
 "^[a-z0-9._%+-]+@[a-z0-9.-]+\\\\.[a-z]{2,}$"
 ```
 
-###### <a name="prompts_additionalProperties_variables_items_validation_min_length"></a>7.1.6.1.7.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > min_length`
+###### 7.1.6.1.7.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > min_length` {#prompts_additionalProperties_variables_items_validation_min_length}
 
 |              |           |
 | ------------ | --------- |
@@ -953,7 +953,7 @@ true
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-###### <a name="prompts_additionalProperties_variables_items_validation_max_length"></a>7.1.6.1.7.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > max_length`
+###### 7.1.6.1.7.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > max_length` {#prompts_additionalProperties_variables_items_validation_max_length}
 
 |              |           |
 | ------------ | --------- |
@@ -976,7 +976,7 @@ true
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_variables_items_validation_minimum"></a>7.1.6.1.7.4. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > minimum`
+###### 7.1.6.1.7.4. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > minimum` {#prompts_additionalProperties_variables_items_validation_minimum}
 
 |              |          |
 | ------------ | -------- |
@@ -999,7 +999,7 @@ true
 100
 ```
 
-###### <a name="prompts_additionalProperties_variables_items_validation_maximum"></a>7.1.6.1.7.5. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > maximum`
+###### 7.1.6.1.7.5. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > maximum` {#prompts_additionalProperties_variables_items_validation_maximum}
 
 |              |          |
 | ------------ | -------- |
@@ -1018,7 +1018,7 @@ true
 1000
 ```
 
-###### <a name="prompts_additionalProperties_variables_items_validation_enum"></a>7.1.6.1.7.6. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > enum`
+###### 7.1.6.1.7.6. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > enum` {#prompts_additionalProperties_variables_items_validation_enum}
 
 |              |         |
 | ------------ | ------- |
@@ -1057,7 +1057,7 @@ true
 | --------------------------------------------------------------------------------- | ----------- |
 | [enum items](#prompts_additionalProperties_variables_items_validation_enum_items) | -           |
 
-###### <a name="prompts_additionalProperties_variables_items_validation_enum_items"></a>7.1.6.1.7.6.1. PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > enum > enum items
+###### 7.1.6.1.7.6.1. PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > enum > enum items {#prompts_additionalProperties_variables_items_validation_enum_items}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1065,7 +1065,7 @@ true
 | **Required**              | No               |
 | **Additional properties** | Any type allowed |
 
-#### <a name="prompts_additionalProperties_tools"></a>7.1.7. Property `PromptPack Specification > prompts > additionalProperties > tools`
+#### 7.1.7. Property `PromptPack Specification > prompts > additionalProperties > tools` {#prompts_additionalProperties_tools}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -1102,14 +1102,14 @@ true
 | -------------------------------------------------------- | ----------- |
 | [tools items](#prompts_additionalProperties_tools_items) | -           |
 
-##### <a name="prompts_additionalProperties_tools_items"></a>7.1.7.1. PromptPack Specification > prompts > additionalProperties > tools > tools items
+##### 7.1.7.1. PromptPack Specification > prompts > additionalProperties > tools > tools items {#prompts_additionalProperties_tools_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-#### <a name="prompts_additionalProperties_tool_policy"></a>7.1.8. Property `PromptPack Specification > prompts > additionalProperties > tool_policy`
+#### 7.1.8. Property `PromptPack Specification > prompts > additionalProperties > tool_policy` {#prompts_additionalProperties_tool_policy}
 
 |                           |                    |
 | ------------------------- | ------------------ |
@@ -1127,7 +1127,7 @@ true
 | - [max_tool_calls_per_turn](#prompts_additionalProperties_tool_policy_max_tool_calls_per_turn ) | No      | integer          | No         | -          | Maximum number of tool calls allowed in a single turn                                           |
 | - [blocklist](#prompts_additionalProperties_tool_policy_blocklist )                             | No      | array of string  | No         | -          | List of tool names that are not allowed for this prompt (overrides tools list)                  |
 
-##### <a name="prompts_additionalProperties_tool_policy_tool_choice"></a>7.1.8.1. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > tool_choice`
+##### 7.1.8.1. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > tool_choice` {#prompts_additionalProperties_tool_policy_tool_choice}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -1152,7 +1152,7 @@ Must be one of:
 * "required"
 * "none"
 
-##### <a name="prompts_additionalProperties_tool_policy_max_rounds"></a>7.1.8.2. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > max_rounds`
+##### 7.1.8.2. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > max_rounds` {#prompts_additionalProperties_tool_policy_max_rounds}
 
 |              |           |
 | ------------ | --------- |
@@ -1180,7 +1180,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-##### <a name="prompts_additionalProperties_tool_policy_max_tool_calls_per_turn"></a>7.1.8.3. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > max_tool_calls_per_turn`
+##### 7.1.8.3. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > max_tool_calls_per_turn` {#prompts_additionalProperties_tool_policy_max_tool_calls_per_turn}
 
 |              |           |
 | ------------ | --------- |
@@ -1208,7 +1208,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-##### <a name="prompts_additionalProperties_tool_policy_blocklist"></a>7.1.8.4. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > blocklist`
+##### 7.1.8.4. Property `PromptPack Specification > prompts > additionalProperties > tool_policy > blocklist` {#prompts_additionalProperties_tool_policy_blocklist}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -1238,14 +1238,14 @@ Must be one of:
 | ---------------------------------------------------------------------------- | ----------- |
 | [blocklist items](#prompts_additionalProperties_tool_policy_blocklist_items) | -           |
 
-###### <a name="prompts_additionalProperties_tool_policy_blocklist_items"></a>7.1.8.4.1. PromptPack Specification > prompts > additionalProperties > tool_policy > blocklist > blocklist items
+###### 7.1.8.4.1. PromptPack Specification > prompts > additionalProperties > tool_policy > blocklist > blocklist items {#prompts_additionalProperties_tool_policy_blocklist_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-#### <a name="prompts_additionalProperties_pipeline"></a>7.1.9. Property `PromptPack Specification > prompts > additionalProperties > pipeline`
+#### 7.1.9. Property `PromptPack Specification > prompts > additionalProperties > pipeline` {#prompts_additionalProperties_pipeline}
 
 |                           |                        |
 | ------------------------- | ---------------------- |
@@ -1261,7 +1261,7 @@ Must be one of:
 | + [stages](#prompts_additionalProperties_pipeline_stages )         | No      | array of string | No         | -          | Ordered list of pipeline stages. Common stages: 'template', 'provider', 'validator'          |
 | - [middleware](#prompts_additionalProperties_pipeline_middleware ) | No      | array           | No         | -          | Middleware components with their configurations. Applied in order during pipeline execution. |
 
-##### <a name="prompts_additionalProperties_pipeline_stages"></a>7.1.9.1. Property `PromptPack Specification > prompts > additionalProperties > pipeline > stages`
+##### 7.1.9.1. Property `PromptPack Specification > prompts > additionalProperties > pipeline > stages` {#prompts_additionalProperties_pipeline_stages}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -1292,14 +1292,14 @@ Must be one of:
 | ------------------------------------------------------------------- | ----------- |
 | [stages items](#prompts_additionalProperties_pipeline_stages_items) | -           |
 
-###### <a name="prompts_additionalProperties_pipeline_stages_items"></a>7.1.9.1.1. PromptPack Specification > prompts > additionalProperties > pipeline > stages > stages items
+###### 7.1.9.1.1. PromptPack Specification > prompts > additionalProperties > pipeline > stages > stages items {#prompts_additionalProperties_pipeline_stages_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-##### <a name="prompts_additionalProperties_pipeline_middleware"></a>7.1.9.2. Property `PromptPack Specification > prompts > additionalProperties > pipeline > middleware`
+##### 7.1.9.2. Property `PromptPack Specification > prompts > additionalProperties > pipeline > middleware` {#prompts_additionalProperties_pipeline_middleware}
 
 |              |         |
 | ------------ | ------- |
@@ -1320,7 +1320,7 @@ Must be one of:
 | --------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | [MiddlewareConfig](#prompts_additionalProperties_pipeline_middleware_items) | Configuration for a single middleware component in the pipeline |
 
-###### <a name="prompts_additionalProperties_pipeline_middleware_items"></a>7.1.9.2.1. PromptPack Specification > prompts > additionalProperties > pipeline > middleware > MiddlewareConfig
+###### 7.1.9.2.1. PromptPack Specification > prompts > additionalProperties > pipeline > middleware > MiddlewareConfig {#prompts_additionalProperties_pipeline_middleware_items}
 
 |                           |                          |
 | ------------------------- | ------------------------ |
@@ -1336,7 +1336,7 @@ Must be one of:
 | + [type](#prompts_additionalProperties_pipeline_middleware_items_type )     | No      | string | No         | -          | Middleware type identifier                     |
 | - [config](#prompts_additionalProperties_pipeline_middleware_items_config ) | No      | object | No         | -          | Type-specific configuration for the middleware |
 
-###### <a name="prompts_additionalProperties_pipeline_middleware_items_type"></a>7.1.9.2.1.1. Property `PromptPack Specification > prompts > additionalProperties > pipeline > middleware > middleware items > type`
+###### 7.1.9.2.1.1. Property `PromptPack Specification > prompts > additionalProperties > pipeline > middleware > middleware items > type` {#prompts_additionalProperties_pipeline_middleware_items_type}
 
 |              |          |
 | ------------ | -------- |
@@ -1363,7 +1363,7 @@ Must be one of:
 "custom"
 ```
 
-###### <a name="prompts_additionalProperties_pipeline_middleware_items_config"></a>7.1.9.2.1.2. Property `PromptPack Specification > prompts > additionalProperties > pipeline > middleware > middleware items > config`
+###### 7.1.9.2.1.2. Property `PromptPack Specification > prompts > additionalProperties > pipeline > middleware > middleware items > config` {#prompts_additionalProperties_pipeline_middleware_items_config}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1375,9 +1375,9 @@ Must be one of:
 
 | Property                                                                                   | Pattern | Type   | Deprecated | Definition | Title/Description |
 | ------------------------------------------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ----------------- |
-| - [](#prompts_additionalProperties_pipeline_middleware_items_config_additionalProperties ) | No      | object | No         | -          | -                 |
+| - additionalProperties | No      | object | No         | -          | -                 |
 
-#### <a name="prompts_additionalProperties_parameters"></a>7.1.10. Property `PromptPack Specification > prompts > additionalProperties > parameters`
+#### 7.1.10. Property `PromptPack Specification > prompts > additionalProperties > parameters` {#prompts_additionalProperties_parameters}
 
 |                           |                    |
 | ------------------------- | ------------------ |
@@ -1397,7 +1397,7 @@ Must be one of:
 | - [frequency_penalty](#prompts_additionalProperties_parameters_frequency_penalty ) | No      | number          | No         | -          | Penalty for token frequency (-2 to 2). Positive values reduce repetition.                           |
 | - [presence_penalty](#prompts_additionalProperties_parameters_presence_penalty )   | No      | number          | No         | -          | Penalty for token presence (-2 to 2). Positive values encourage new topics.                         |
 
-##### <a name="prompts_additionalProperties_parameters_temperature"></a>7.1.10.1. Property `PromptPack Specification > prompts > additionalProperties > parameters > temperature`
+##### 7.1.10.1. Property `PromptPack Specification > prompts > additionalProperties > parameters > temperature` {#prompts_additionalProperties_parameters_temperature}
 
 |              |          |
 | ------------ | -------- |
@@ -1421,7 +1421,7 @@ Must be one of:
 | **Minimum**  | &ge; 0 |
 | **Maximum**  | &le; 2 |
 
-##### <a name="prompts_additionalProperties_parameters_max_tokens"></a>7.1.10.2. Property `PromptPack Specification > prompts > additionalProperties > parameters > max_tokens`
+##### 7.1.10.2. Property `PromptPack Specification > prompts > additionalProperties > parameters > max_tokens` {#prompts_additionalProperties_parameters_max_tokens}
 
 |              |           |
 | ------------ | --------- |
@@ -1448,7 +1448,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-##### <a name="prompts_additionalProperties_parameters_top_p"></a>7.1.10.3. Property `PromptPack Specification > prompts > additionalProperties > parameters > top_p`
+##### 7.1.10.3. Property `PromptPack Specification > prompts > additionalProperties > parameters > top_p` {#prompts_additionalProperties_parameters_top_p}
 
 |              |          |
 | ------------ | -------- |
@@ -1472,7 +1472,7 @@ Must be one of:
 | **Minimum**  | &ge; 0 |
 | **Maximum**  | &le; 1 |
 
-##### <a name="prompts_additionalProperties_parameters_top_k"></a>7.1.10.4. Property `PromptPack Specification > prompts > additionalProperties > parameters > top_k`
+##### 7.1.10.4. Property `PromptPack Specification > prompts > additionalProperties > parameters > top_k` {#prompts_additionalProperties_parameters_top_k}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -1499,7 +1499,7 @@ null
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-##### <a name="prompts_additionalProperties_parameters_frequency_penalty"></a>7.1.10.5. Property `PromptPack Specification > prompts > additionalProperties > parameters > frequency_penalty`
+##### 7.1.10.5. Property `PromptPack Specification > prompts > additionalProperties > parameters > frequency_penalty` {#prompts_additionalProperties_parameters_frequency_penalty}
 
 |              |          |
 | ------------ | -------- |
@@ -1523,7 +1523,7 @@ null
 | **Minimum**  | &ge; -2 |
 | **Maximum**  | &le; 2  |
 
-##### <a name="prompts_additionalProperties_parameters_presence_penalty"></a>7.1.10.6. Property `PromptPack Specification > prompts > additionalProperties > parameters > presence_penalty`
+##### 7.1.10.6. Property `PromptPack Specification > prompts > additionalProperties > parameters > presence_penalty` {#prompts_additionalProperties_parameters_presence_penalty}
 
 |              |          |
 | ------------ | -------- |
@@ -1547,7 +1547,7 @@ null
 | **Minimum**  | &ge; -2 |
 | **Maximum**  | &le; 2  |
 
-#### <a name="prompts_additionalProperties_validators"></a>7.1.11. Property `PromptPack Specification > prompts > additionalProperties > validators`
+#### 7.1.11. Property `PromptPack Specification > prompts > additionalProperties > validators` {#prompts_additionalProperties_validators}
 
 |              |         |
 | ------------ | ------- |
@@ -1568,7 +1568,7 @@ null
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Validator](#prompts_additionalProperties_validators_items) | A validation rule (guardrail) applied to LLM responses. Validators can check content, length, format, and other constraints to ensure response quality and safety. |
 
-##### <a name="prompts_additionalProperties_validators_items"></a>7.1.11.1. PromptPack Specification > prompts > additionalProperties > validators > Validator
+##### 7.1.11.1. PromptPack Specification > prompts > additionalProperties > validators > Validator {#prompts_additionalProperties_validators_items}
 
 |                           |                   |
 | ------------------------- | ----------------- |
@@ -1586,7 +1586,7 @@ null
 | - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean          | No         | -          | If true, validation failures cause an error. If false, violations are logged but allowed.        |
 | - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object           | No         | -          | Validator-specific parameters                                                                    |
 
-###### <a name="prompts_additionalProperties_validators_items_type"></a>7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`
+###### 7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type` {#prompts_additionalProperties_validators_items_type}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -1616,7 +1616,7 @@ Must be one of:
 * "pii_detection"
 * "custom"
 
-###### <a name="prompts_additionalProperties_validators_items_enabled"></a>7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`
+###### 7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled` {#prompts_additionalProperties_validators_items_enabled}
 
 |              |           |
 | ------------ | --------- |
@@ -1625,7 +1625,7 @@ Must be one of:
 
 **Description:** Whether this validator is active. Allows temporarily disabling validators without removing them.
 
-###### <a name="prompts_additionalProperties_validators_items_fail_on_violation"></a>7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`
+###### 7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation` {#prompts_additionalProperties_validators_items_fail_on_violation}
 
 |              |           |
 | ------------ | --------- |
@@ -1635,7 +1635,7 @@ Must be one of:
 
 **Description:** If true, validation failures cause an error. If false, violations are logged but allowed.
 
-###### <a name="prompts_additionalProperties_validators_items_params"></a>7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`
+###### 7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params` {#prompts_additionalProperties_validators_items_params}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1665,9 +1665,9 @@ Must be one of:
 
 | Property                                                                          | Pattern | Type   | Deprecated | Definition | Title/Description |
 | --------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
-| - [](#prompts_additionalProperties_validators_items_params_additionalProperties ) | No      | object | No         | -          | -                 |
+| - additionalProperties | No      | object | No         | -          | -                 |
 
-#### <a name="prompts_additionalProperties_tested_models"></a>7.1.12. Property `PromptPack Specification > prompts > additionalProperties > tested_models`
+#### 7.1.12. Property `PromptPack Specification > prompts > additionalProperties > tested_models` {#prompts_additionalProperties_tested_models}
 
 |              |         |
 | ------------ | ------- |
@@ -1688,7 +1688,7 @@ Must be one of:
 | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | [TestedModel](#prompts_additionalProperties_tested_models_items) | Testing results for a specific model. Documents which models have been tested with this prompt and their performance metrics. |
 
-##### <a name="prompts_additionalProperties_tested_models_items"></a>7.1.12.1. PromptPack Specification > prompts > additionalProperties > tested_models > TestedModel
+##### 7.1.12.1. PromptPack Specification > prompts > additionalProperties > tested_models > TestedModel {#prompts_additionalProperties_tested_models_items}
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -1710,7 +1710,7 @@ Must be one of:
 | - [avg_latency_ms](#prompts_additionalProperties_tested_models_items_avg_latency_ms ) | No      | number | No         | -          | Average response latency in milliseconds                 |
 | - [notes](#prompts_additionalProperties_tested_models_items_notes )                   | No      | string | No         | -          | Additional notes about model performance or observations |
 
-###### <a name="prompts_additionalProperties_tested_models_items_provider"></a>7.1.12.1.1. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > provider`
+###### 7.1.12.1.1. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > provider` {#prompts_additionalProperties_tested_models_items_provider}
 
 |              |          |
 | ------------ | -------- |
@@ -1737,7 +1737,7 @@ Must be one of:
 "bedrock"
 ```
 
-###### <a name="prompts_additionalProperties_tested_models_items_model"></a>7.1.12.1.2. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > model`
+###### 7.1.12.1.2. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > model` {#prompts_additionalProperties_tested_models_items_model}
 
 |              |          |
 | ------------ | -------- |
@@ -1764,7 +1764,7 @@ Must be one of:
 "claude-3-sonnet"
 ```
 
-###### <a name="prompts_additionalProperties_tested_models_items_date"></a>7.1.12.1.3. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > date`
+###### 7.1.12.1.3. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > date` {#prompts_additionalProperties_tested_models_items_date}
 
 |              |          |
 | ------------ | -------- |
@@ -1784,7 +1784,7 @@ Must be one of:
 "2025-12-01"
 ```
 
-###### <a name="prompts_additionalProperties_tested_models_items_success_rate"></a>7.1.12.1.4. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > success_rate`
+###### 7.1.12.1.4. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > success_rate` {#prompts_additionalProperties_tested_models_items_success_rate}
 
 |              |          |
 | ------------ | -------- |
@@ -1808,7 +1808,7 @@ Must be one of:
 | **Minimum**  | &ge; 0 |
 | **Maximum**  | &le; 1 |
 
-###### <a name="prompts_additionalProperties_tested_models_items_avg_tokens"></a>7.1.12.1.5. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > avg_tokens`
+###### 7.1.12.1.5. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > avg_tokens` {#prompts_additionalProperties_tested_models_items_avg_tokens}
 
 |              |          |
 | ------------ | -------- |
@@ -1831,7 +1831,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-###### <a name="prompts_additionalProperties_tested_models_items_avg_cost"></a>7.1.12.1.6. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > avg_cost`
+###### 7.1.12.1.6. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > avg_cost` {#prompts_additionalProperties_tested_models_items_avg_cost}
 
 |              |          |
 | ------------ | -------- |
@@ -1854,7 +1854,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-###### <a name="prompts_additionalProperties_tested_models_items_avg_latency_ms"></a>7.1.12.1.7. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > avg_latency_ms`
+###### 7.1.12.1.7. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > avg_latency_ms` {#prompts_additionalProperties_tested_models_items_avg_latency_ms}
 
 |              |          |
 | ------------ | -------- |
@@ -1877,7 +1877,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-###### <a name="prompts_additionalProperties_tested_models_items_notes"></a>7.1.12.1.8. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > notes`
+###### 7.1.12.1.8. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > notes` {#prompts_additionalProperties_tested_models_items_notes}
 
 |              |          |
 | ------------ | -------- |
@@ -1886,7 +1886,7 @@ Must be one of:
 
 **Description:** Additional notes about model performance or observations
 
-#### <a name="prompts_additionalProperties_model_overrides"></a>7.1.13. Property `PromptPack Specification > prompts > additionalProperties > model_overrides`
+#### 7.1.13. Property `PromptPack Specification > prompts > additionalProperties > model_overrides` {#prompts_additionalProperties_model_overrides}
 
 |                           |                                                                                                                           |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
@@ -1900,7 +1900,7 @@ Must be one of:
 | ------------------------------------------------------------------------- | ------- | ------ | ---------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | - [](#prompts_additionalProperties_model_overrides_additionalProperties ) | No      | object | No         | In #/$defs/ModelOverride | Model-specific template modifications. Allows customizing prompts for specific models without changing the base template. |
 
-##### <a name="prompts_additionalProperties_model_overrides_additionalProperties"></a>7.1.13.1. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > ModelOverride`
+##### 7.1.13.1. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > ModelOverride` {#prompts_additionalProperties_model_overrides_additionalProperties}
 
 |                           |                       |
 | ------------------------- | --------------------- |
@@ -1918,7 +1918,7 @@ Must be one of:
 | - [system_template](#prompts_additionalProperties_model_overrides_additionalProperties_system_template )               | No      | string | No         | -                                                               | Complete replacement system template for this model (overrides the base template entirely) |
 | - [parameters](#prompts_additionalProperties_model_overrides_additionalProperties_parameters )                         | No      | object | No         | Same as [parameters](#prompts_additionalProperties_parameters ) | Model-specific parameter overrides                                                         |
 
-###### <a name="prompts_additionalProperties_model_overrides_additionalProperties_system_template_prefix"></a>7.1.13.1.1. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > system_template_prefix`
+###### 7.1.13.1.1. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > system_template_prefix` {#prompts_additionalProperties_model_overrides_additionalProperties_system_template_prefix}
 
 |              |          |
 | ------------ | -------- |
@@ -1937,7 +1937,7 @@ Must be one of:
 "[Task]\\n"
 ```
 
-###### <a name="prompts_additionalProperties_model_overrides_additionalProperties_system_template_suffix"></a>7.1.13.1.2. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > system_template_suffix`
+###### 7.1.13.1.2. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > system_template_suffix` {#prompts_additionalProperties_model_overrides_additionalProperties_system_template_suffix}
 
 |              |          |
 | ------------ | -------- |
@@ -1956,7 +1956,7 @@ Must be one of:
 "\\n</thinking>"
 ```
 
-###### <a name="prompts_additionalProperties_model_overrides_additionalProperties_system_template"></a>7.1.13.1.3. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > system_template`
+###### 7.1.13.1.3. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > system_template` {#prompts_additionalProperties_model_overrides_additionalProperties_system_template}
 
 |              |          |
 | ------------ | -------- |
@@ -1965,7 +1965,7 @@ Must be one of:
 
 **Description:** Complete replacement system template for this model (overrides the base template entirely)
 
-###### <a name="prompts_additionalProperties_model_overrides_additionalProperties_parameters"></a>7.1.13.1.4. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > parameters`
+###### 7.1.13.1.4. Property `PromptPack Specification > prompts > additionalProperties > model_overrides > additionalProperties > parameters` {#prompts_additionalProperties_model_overrides_additionalProperties_parameters}
 
 |                           |                                                        |
 | ------------------------- | ------------------------------------------------------ |
@@ -1976,7 +1976,7 @@ Must be one of:
 
 **Description:** Model-specific parameter overrides
 
-#### <a name="prompts_additionalProperties_media"></a>7.1.14. Property `PromptPack Specification > prompts > additionalProperties > media`
+#### 7.1.14. Property `PromptPack Specification > prompts > additionalProperties > media` {#prompts_additionalProperties_media}
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -1998,7 +1998,7 @@ Must be one of:
 | - [examples](#prompts_additionalProperties_media_examples )               | No      | array           | No         | -                         | Example multimodal messages showing how to use media with this prompt                                                                                                                                                                                                                                   |
 | - [^[a-z0-9_]+$](#prompts_additionalProperties_media_pattern1 )           | Yes     | Combination     | No         | -                         | -                                                                                                                                                                                                                                                                                                       |
 
-##### <a name="prompts_additionalProperties_media_enabled"></a>7.1.14.1. Property `PromptPack Specification > prompts > additionalProperties > media > enabled`
+##### 7.1.14.1. Property `PromptPack Specification > prompts > additionalProperties > media > enabled` {#prompts_additionalProperties_media_enabled}
 
 |              |           |
 | ------------ | --------- |
@@ -2007,7 +2007,7 @@ Must be one of:
 
 **Description:** Whether multimodal content is enabled for this prompt
 
-##### <a name="prompts_additionalProperties_media_supported_types"></a>7.1.14.2. Property `PromptPack Specification > prompts > additionalProperties > media > supported_types`
+##### 7.1.14.2. Property `PromptPack Specification > prompts > additionalProperties > media > supported_types` {#prompts_additionalProperties_media_supported_types}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -2065,7 +2065,7 @@ Must be one of:
 | ---------------------------------------------------------------------------------- | ----------- |
 | [supported_types items](#prompts_additionalProperties_media_supported_types_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_supported_types_items"></a>7.1.14.2.1. PromptPack Specification > prompts > additionalProperties > media > supported_types > supported_types items
+###### 7.1.14.2.1. PromptPack Specification > prompts > additionalProperties > media > supported_types > supported_types items {#prompts_additionalProperties_media_supported_types_items}
 
 |              |          |
 | ------------ | -------- |
@@ -2076,7 +2076,7 @@ Must be one of:
 | --------------------------------- | ----------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-z0-9_]+$``` [Test](https://regex101.com/?regex=%5E%5Ba-z0-9_%5D%2B%24) |
 
-##### <a name="prompts_additionalProperties_media_image"></a>7.1.14.3. Property `PromptPack Specification > prompts > additionalProperties > media > image`
+##### 7.1.14.3. Property `PromptPack Specification > prompts > additionalProperties > media > image` {#prompts_additionalProperties_media_image}
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -2095,7 +2095,7 @@ Must be one of:
 | - [require_caption](#prompts_additionalProperties_media_image_require_caption )       | No      | boolean                   | No         | -          | Whether image captions are required                                                                                            |
 | - [max_images_per_msg](#prompts_additionalProperties_media_image_max_images_per_msg ) | No      | integer                   | No         | -          | Maximum number of images allowed per message                                                                                   |
 
-###### <a name="prompts_additionalProperties_media_image_max_size_mb"></a>7.1.14.3.1. Property `PromptPack Specification > prompts > additionalProperties > media > image > max_size_mb`
+###### 7.1.14.3.1. Property `PromptPack Specification > prompts > additionalProperties > media > image > max_size_mb` {#prompts_additionalProperties_media_image_max_size_mb}
 
 |              |           |
 | ------------ | --------- |
@@ -2118,7 +2118,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_image_allowed_formats"></a>7.1.14.3.2. Property `PromptPack Specification > prompts > additionalProperties > media > image > allowed_formats`
+###### 7.1.14.3.2. Property `PromptPack Specification > prompts > additionalProperties > media > image > allowed_formats` {#prompts_additionalProperties_media_image_allowed_formats}
 
 |              |                             |
 | ------------ | --------------------------- |
@@ -2149,7 +2149,7 @@ Must be one of:
 | ---------------------------------------------------------------------------------------- | ----------- |
 | [allowed_formats items](#prompts_additionalProperties_media_image_allowed_formats_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_image_allowed_formats_items"></a>7.1.14.3.2.1. PromptPack Specification > prompts > additionalProperties > media > image > allowed_formats > allowed_formats items
+###### 7.1.14.3.2.1. PromptPack Specification > prompts > additionalProperties > media > image > allowed_formats > allowed_formats items {#prompts_additionalProperties_media_image_allowed_formats_items}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2164,7 +2164,7 @@ Must be one of:
 * "gif"
 * "bmp"
 
-###### <a name="prompts_additionalProperties_media_image_default_detail"></a>7.1.14.3.3. Property `PromptPack Specification > prompts > additionalProperties > media > image > default_detail`
+###### 7.1.14.3.3. Property `PromptPack Specification > prompts > additionalProperties > media > image > default_detail` {#prompts_additionalProperties_media_image_default_detail}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2189,7 +2189,7 @@ Must be one of:
 * "high"
 * "auto"
 
-###### <a name="prompts_additionalProperties_media_image_require_caption"></a>7.1.14.3.4. Property `PromptPack Specification > prompts > additionalProperties > media > image > require_caption`
+###### 7.1.14.3.4. Property `PromptPack Specification > prompts > additionalProperties > media > image > require_caption` {#prompts_additionalProperties_media_image_require_caption}
 
 |              |           |
 | ------------ | --------- |
@@ -2199,7 +2199,7 @@ Must be one of:
 
 **Description:** Whether image captions are required
 
-###### <a name="prompts_additionalProperties_media_image_max_images_per_msg"></a>7.1.14.3.5. Property `PromptPack Specification > prompts > additionalProperties > media > image > max_images_per_msg`
+###### 7.1.14.3.5. Property `PromptPack Specification > prompts > additionalProperties > media > image > max_images_per_msg` {#prompts_additionalProperties_media_image_max_images_per_msg}
 
 |              |           |
 | ------------ | --------- |
@@ -2226,7 +2226,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-##### <a name="prompts_additionalProperties_media_audio"></a>7.1.14.4. Property `PromptPack Specification > prompts > additionalProperties > media > audio`
+##### 7.1.14.4. Property `PromptPack Specification > prompts > additionalProperties > media > audio` {#prompts_additionalProperties_media_audio}
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -2244,7 +2244,7 @@ Must be one of:
 | - [max_duration_sec](#prompts_additionalProperties_media_audio_max_duration_sec ) | No      | integer                   | No         | -          | Maximum audio duration in seconds                       |
 | - [require_metadata](#prompts_additionalProperties_media_audio_require_metadata ) | No      | boolean                   | No         | -          | Whether audio metadata (title, description) is required |
 
-###### <a name="prompts_additionalProperties_media_audio_max_size_mb"></a>7.1.14.4.1. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_size_mb`
+###### 7.1.14.4.1. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_size_mb` {#prompts_additionalProperties_media_audio_max_size_mb}
 
 |              |           |
 | ------------ | --------- |
@@ -2267,7 +2267,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_audio_allowed_formats"></a>7.1.14.4.2. Property `PromptPack Specification > prompts > additionalProperties > media > audio > allowed_formats`
+###### 7.1.14.4.2. Property `PromptPack Specification > prompts > additionalProperties > media > audio > allowed_formats` {#prompts_additionalProperties_media_audio_allowed_formats}
 
 |              |                             |
 | ------------ | --------------------------- |
@@ -2298,7 +2298,7 @@ Must be one of:
 | ---------------------------------------------------------------------------------------- | ----------- |
 | [allowed_formats items](#prompts_additionalProperties_media_audio_allowed_formats_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_audio_allowed_formats_items"></a>7.1.14.4.2.1. PromptPack Specification > prompts > additionalProperties > media > audio > allowed_formats > allowed_formats items
+###### 7.1.14.4.2.1. PromptPack Specification > prompts > additionalProperties > media > audio > allowed_formats > allowed_formats items {#prompts_additionalProperties_media_audio_allowed_formats_items}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2313,7 +2313,7 @@ Must be one of:
 * "m4a"
 * "aac"
 
-###### <a name="prompts_additionalProperties_media_audio_max_duration_sec"></a>7.1.14.4.3. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_duration_sec`
+###### 7.1.14.4.3. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_duration_sec` {#prompts_additionalProperties_media_audio_max_duration_sec}
 
 |              |           |
 | ------------ | --------- |
@@ -2336,7 +2336,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_audio_require_metadata"></a>7.1.14.4.4. Property `PromptPack Specification > prompts > additionalProperties > media > audio > require_metadata`
+###### 7.1.14.4.4. Property `PromptPack Specification > prompts > additionalProperties > media > audio > require_metadata` {#prompts_additionalProperties_media_audio_require_metadata}
 
 |              |           |
 | ------------ | --------- |
@@ -2346,7 +2346,7 @@ Must be one of:
 
 **Description:** Whether audio metadata (title, description) is required
 
-##### <a name="prompts_additionalProperties_media_video"></a>7.1.14.5. Property `PromptPack Specification > prompts > additionalProperties > media > video`
+##### 7.1.14.5. Property `PromptPack Specification > prompts > additionalProperties > media > video` {#prompts_additionalProperties_media_video}
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -2364,7 +2364,7 @@ Must be one of:
 | - [max_duration_sec](#prompts_additionalProperties_media_video_max_duration_sec ) | No      | integer                   | No         | -          | Maximum video duration in seconds                       |
 | - [require_metadata](#prompts_additionalProperties_media_video_require_metadata ) | No      | boolean                   | No         | -          | Whether video metadata (title, description) is required |
 
-###### <a name="prompts_additionalProperties_media_video_max_size_mb"></a>7.1.14.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > video > max_size_mb`
+###### 7.1.14.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > video > max_size_mb` {#prompts_additionalProperties_media_video_max_size_mb}
 
 |              |           |
 | ------------ | --------- |
@@ -2387,7 +2387,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_video_allowed_formats"></a>7.1.14.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > video > allowed_formats`
+###### 7.1.14.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > video > allowed_formats` {#prompts_additionalProperties_media_video_allowed_formats}
 
 |              |                             |
 | ------------ | --------------------------- |
@@ -2417,7 +2417,7 @@ Must be one of:
 | ---------------------------------------------------------------------------------------- | ----------- |
 | [allowed_formats items](#prompts_additionalProperties_media_video_allowed_formats_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_video_allowed_formats_items"></a>7.1.14.5.2.1. PromptPack Specification > prompts > additionalProperties > media > video > allowed_formats > allowed_formats items
+###### 7.1.14.5.2.1. PromptPack Specification > prompts > additionalProperties > media > video > allowed_formats > allowed_formats items {#prompts_additionalProperties_media_video_allowed_formats_items}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2431,7 +2431,7 @@ Must be one of:
 * "avi"
 * "mkv"
 
-###### <a name="prompts_additionalProperties_media_video_max_duration_sec"></a>7.1.14.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > video > max_duration_sec`
+###### 7.1.14.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > video > max_duration_sec` {#prompts_additionalProperties_media_video_max_duration_sec}
 
 |              |           |
 | ------------ | --------- |
@@ -2454,7 +2454,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_video_require_metadata"></a>7.1.14.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > video > require_metadata`
+###### 7.1.14.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > video > require_metadata` {#prompts_additionalProperties_media_video_require_metadata}
 
 |              |           |
 | ------------ | --------- |
@@ -2464,7 +2464,7 @@ Must be one of:
 
 **Description:** Whether video metadata (title, description) is required
 
-##### <a name="prompts_additionalProperties_media_document"></a>7.1.14.6. Property `PromptPack Specification > prompts > additionalProperties > media > document`
+##### 7.1.14.6. Property `PromptPack Specification > prompts > additionalProperties > media > document` {#prompts_additionalProperties_media_document}
 
 |                           |                        |
 | ------------------------- | ---------------------- |
@@ -2483,7 +2483,7 @@ Must be one of:
 | - [require_metadata](#prompts_additionalProperties_media_document_require_metadata ) | No      | boolean          | No         | -          | Whether document metadata (title, author, description) is required                                                                       |
 | - [extraction_mode](#prompts_additionalProperties_media_document_extraction_mode )   | No      | enum (of string) | No         | -          | How to extract content from documents. 'text' extracts text only, 'structured' preserves formatting, 'raw' keeps original binary format. |
 
-###### <a name="prompts_additionalProperties_media_document_max_size_mb"></a>7.1.14.6.1. Property `PromptPack Specification > prompts > additionalProperties > media > document > max_size_mb`
+###### 7.1.14.6.1. Property `PromptPack Specification > prompts > additionalProperties > media > document > max_size_mb` {#prompts_additionalProperties_media_document_max_size_mb}
 
 |              |           |
 | ------------ | --------- |
@@ -2506,7 +2506,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_document_allowed_formats"></a>7.1.14.6.2. Property `PromptPack Specification > prompts > additionalProperties > media > document > allowed_formats`
+###### 7.1.14.6.2. Property `PromptPack Specification > prompts > additionalProperties > media > document > allowed_formats` {#prompts_additionalProperties_media_document_allowed_formats}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -2552,14 +2552,14 @@ Must be one of:
 | ------------------------------------------------------------------------------------------- | ----------- |
 | [allowed_formats items](#prompts_additionalProperties_media_document_allowed_formats_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_document_allowed_formats_items"></a>7.1.14.6.2.1. PromptPack Specification > prompts > additionalProperties > media > document > allowed_formats > allowed_formats items
+###### 7.1.14.6.2.1. PromptPack Specification > prompts > additionalProperties > media > document > allowed_formats > allowed_formats items {#prompts_additionalProperties_media_document_allowed_formats_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-###### <a name="prompts_additionalProperties_media_document_max_pages"></a>7.1.14.6.3. Property `PromptPack Specification > prompts > additionalProperties > media > document > max_pages`
+###### 7.1.14.6.3. Property `PromptPack Specification > prompts > additionalProperties > media > document > max_pages` {#prompts_additionalProperties_media_document_max_pages}
 
 |              |           |
 | ------------ | --------- |
@@ -2582,7 +2582,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_document_require_metadata"></a>7.1.14.6.4. Property `PromptPack Specification > prompts > additionalProperties > media > document > require_metadata`
+###### 7.1.14.6.4. Property `PromptPack Specification > prompts > additionalProperties > media > document > require_metadata` {#prompts_additionalProperties_media_document_require_metadata}
 
 |              |           |
 | ------------ | --------- |
@@ -2592,7 +2592,7 @@ Must be one of:
 
 **Description:** Whether document metadata (title, author, description) is required
 
-###### <a name="prompts_additionalProperties_media_document_extraction_mode"></a>7.1.14.6.5. Property `PromptPack Specification > prompts > additionalProperties > media > document > extraction_mode`
+###### 7.1.14.6.5. Property `PromptPack Specification > prompts > additionalProperties > media > document > extraction_mode` {#prompts_additionalProperties_media_document_extraction_mode}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2617,7 +2617,7 @@ Must be one of:
 * "structured"
 * "raw"
 
-##### <a name="prompts_additionalProperties_media_examples"></a>7.1.14.7. Property `PromptPack Specification > prompts > additionalProperties > media > examples`
+##### 7.1.14.7. Property `PromptPack Specification > prompts > additionalProperties > media > examples` {#prompts_additionalProperties_media_examples}
 
 |              |         |
 | ------------ | ------- |
@@ -2638,7 +2638,7 @@ Must be one of:
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | [MultimodalExample](#prompts_additionalProperties_media_examples_items) | Example multimodal message demonstrating how to use media content with a prompt |
 
-###### <a name="prompts_additionalProperties_media_examples_items"></a>7.1.14.7.1. PromptPack Specification > prompts > additionalProperties > media > examples > MultimodalExample
+###### 7.1.14.7.1. PromptPack Specification > prompts > additionalProperties > media > examples > MultimodalExample {#prompts_additionalProperties_media_examples_items}
 
 |                           |                           |
 | ------------------------- | ------------------------- |
@@ -2656,7 +2656,7 @@ Must be one of:
 | + [role](#prompts_additionalProperties_media_examples_items_role )               | No      | enum (of string) | No         | -          | Message role (typically 'user' or 'assistant') |
 | + [parts](#prompts_additionalProperties_media_examples_items_parts )             | No      | array            | No         | -          | Message content parts (text and/or media)      |
 
-###### <a name="prompts_additionalProperties_media_examples_items_name"></a>7.1.14.7.1.1. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > name`
+###### 7.1.14.7.1.1. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > name` {#prompts_additionalProperties_media_examples_items_name}
 
 |              |          |
 | ------------ | -------- |
@@ -2675,7 +2675,7 @@ Must be one of:
 "audio-transcription"
 ```
 
-###### <a name="prompts_additionalProperties_media_examples_items_description"></a>7.1.14.7.1.2. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > description`
+###### 7.1.14.7.1.2. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > description` {#prompts_additionalProperties_media_examples_items_description}
 
 |              |          |
 | ------------ | -------- |
@@ -2684,7 +2684,7 @@ Must be one of:
 
 **Description:** Description of what this example demonstrates
 
-###### <a name="prompts_additionalProperties_media_examples_items_role"></a>7.1.14.7.1.3. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > role`
+###### 7.1.14.7.1.3. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > role` {#prompts_additionalProperties_media_examples_items_role}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2704,7 +2704,7 @@ Must be one of:
 * "assistant"
 * "system"
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts"></a>7.1.14.7.1.4. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts`
+###### 7.1.14.7.1.4. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts` {#prompts_additionalProperties_media_examples_items_parts}
 
 |              |         |
 | ------------ | ------- |
@@ -2725,7 +2725,7 @@ Must be one of:
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | [ContentPart](#prompts_additionalProperties_media_examples_items_parts_items) | A single content part within a multimodal message. Can be text or media. |
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items"></a>7.1.14.7.1.4.1. PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > ContentPart
+###### 7.1.14.7.1.4.1. PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > ContentPart {#prompts_additionalProperties_media_examples_items_parts_items}
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -2742,7 +2742,7 @@ Must be one of:
 | - [text](#prompts_additionalProperties_media_examples_items_parts_items_text )   | No      | string | No         | -                         | Text content (required when type is 'text')                                                                                  |
 | - [media](#prompts_additionalProperties_media_examples_items_parts_items_media ) | No      | object | No         | In #/$defs/MediaReference | Media reference (required when type is 'image', 'audio', or 'video')                                                         |
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_type"></a>7.1.14.7.1.4.1.1. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > type`
+###### 7.1.14.7.1.4.1.1. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > type` {#prompts_additionalProperties_media_examples_items_parts_items_type}
 
 |              |          |
 | ------------ | -------- |
@@ -2773,7 +2773,7 @@ Must be one of:
 | --------------------------------- | --------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-z0-9_]+$``` [Test](https://regex101.com/?regex=%5E%5Ba-z0-9_%5D%2B%24&testString=%22text%22) |
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_text"></a>7.1.14.7.1.4.1.2. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > text`
+###### 7.1.14.7.1.4.1.2. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > text` {#prompts_additionalProperties_media_examples_items_parts_items_text}
 
 |              |          |
 | ------------ | -------- |
@@ -2792,7 +2792,7 @@ Must be one of:
 "Describe the scene"
 ```
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media"></a>7.1.14.7.1.4.1.3. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media`
+###### 7.1.14.7.1.4.1.3. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media` {#prompts_additionalProperties_media_examples_items_parts_items_media}
 
 |                           |                        |
 | ------------------------- | ---------------------- |
@@ -2812,7 +2812,7 @@ Must be one of:
 | - [detail](#prompts_additionalProperties_media_examples_items_parts_items_media_detail )       | No      | enum (of string) | No         | -          | Detail level for image processing (images only). Overrides default_detail from ImageConfig. |
 | - [caption](#prompts_additionalProperties_media_examples_items_parts_items_media_caption )     | No      | string           | No         | -          | Caption or description for the media                                                        |
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media_file_path"></a>7.1.14.7.1.4.1.3.1. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > file_path`
+###### 7.1.14.7.1.4.1.3.1. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > file_path` {#prompts_additionalProperties_media_examples_items_parts_items_media_file_path}
 
 |              |          |
 | ------------ | -------- |
@@ -2831,7 +2831,7 @@ Must be one of:
 "./media/audio.mp3"
 ```
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media_url"></a>7.1.14.7.1.4.1.3.2. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > url`
+###### 7.1.14.7.1.4.1.3.2. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > url` {#prompts_additionalProperties_media_examples_items_parts_items_media_url}
 
 |              |          |
 | ------------ | -------- |
@@ -2851,7 +2851,7 @@ Must be one of:
 "https://cdn.example.com/video.mp4"
 ```
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media_base64"></a>7.1.14.7.1.4.1.3.3. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > base64`
+###### 7.1.14.7.1.4.1.3.3. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > base64` {#prompts_additionalProperties_media_examples_items_parts_items_media_base64}
 
 |              |          |
 | ------------ | -------- |
@@ -2866,7 +2866,7 @@ Must be one of:
 "iVBORw0KGgoAAAANSUhEUgAAAAUA..."
 ```
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media_mime_type"></a>7.1.14.7.1.4.1.3.4. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > mime_type`
+###### 7.1.14.7.1.4.1.3.4. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > mime_type` {#prompts_additionalProperties_media_examples_items_parts_items_media_mime_type}
 
 |              |          |
 | ------------ | -------- |
@@ -2893,7 +2893,7 @@ Must be one of:
 "video/mp4"
 ```
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media_detail"></a>7.1.14.7.1.4.1.3.5. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > detail`
+###### 7.1.14.7.1.4.1.3.5. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > detail` {#prompts_additionalProperties_media_examples_items_parts_items_media_detail}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -2913,7 +2913,7 @@ Must be one of:
 * "high"
 * "auto"
 
-###### <a name="prompts_additionalProperties_media_examples_items_parts_items_media_caption"></a>7.1.14.7.1.4.1.3.6. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > caption`
+###### 7.1.14.7.1.4.1.3.6. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > caption` {#prompts_additionalProperties_media_examples_items_parts_items_media_caption}
 
 |              |          |
 | ------------ | -------- |
@@ -2932,7 +2932,7 @@ Must be one of:
 "Customer's voice recording"
 ```
 
-##### <a name="prompts_additionalProperties_media_pattern1"></a>7.1.14.8. Pattern Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$`
+##### 7.1.14.8. Pattern Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$` {#prompts_additionalProperties_media_pattern1}
 > All properties whose name matches the regular expression
 ```^[a-z0-9_]+$``` ([Test](https://regex101.com/?regex=%5E%5Ba-z0-9_%5D%2B%24))
 must respect the following conditions
@@ -2951,7 +2951,7 @@ must respect the following conditions
 | [DocumentConfig](#prompts_additionalProperties_media_pattern1_pattern1_i3)         |
 | [GenericMediaTypeConfig](#prompts_additionalProperties_media_pattern1_pattern1_i4) |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i0"></a>7.1.14.8.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > ImageConfig`
+###### 7.1.14.8.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > ImageConfig` {#prompts_additionalProperties_media_pattern1_pattern1_i0}
 
 |                           |                                                    |
 | ------------------------- | -------------------------------------------------- |
@@ -2962,7 +2962,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for image content
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i1"></a>7.1.14.8.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > AudioConfig`
+###### 7.1.14.8.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > AudioConfig` {#prompts_additionalProperties_media_pattern1_pattern1_i1}
 
 |                           |                                                    |
 | ------------------------- | -------------------------------------------------- |
@@ -2973,7 +2973,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for audio content
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i2"></a>7.1.14.8.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > VideoConfig`
+###### 7.1.14.8.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > VideoConfig` {#prompts_additionalProperties_media_pattern1_pattern1_i2}
 
 |                           |                                                    |
 | ------------------------- | -------------------------------------------------- |
@@ -2984,7 +2984,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for video content
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i3"></a>7.1.14.8.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > DocumentConfig`
+###### 7.1.14.8.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > DocumentConfig` {#prompts_additionalProperties_media_pattern1_pattern1_i3}
 
 |                           |                                                          |
 | ------------------------- | -------------------------------------------------------- |
@@ -2995,7 +2995,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for document content (PDFs, CAD files, spreadsheets, etc.)
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4"></a>7.1.14.8.5. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > GenericMediaTypeConfig`
+###### 7.1.14.8.5. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > GenericMediaTypeConfig` {#prompts_additionalProperties_media_pattern1_pattern1_i4}
 
 |                           |                                |
 | ------------------------- | ------------------------------ |
@@ -3012,9 +3012,9 @@ must respect the following conditions
 | - [allowed_formats](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats )     | No      | array of string | No         | -          | List of allowed file formats/extensions                                                  |
 | - [require_metadata](#prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata )   | No      | boolean         | No         | -          | Whether metadata is required for this media type                                         |
 | - [validation_params](#prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params ) | No      | object          | No         | -          | Custom validation parameters specific to this media type. Structure depends on the type. |
-| - [](#prompts_additionalProperties_media_pattern1_pattern1_i4_additionalProperties )               | No      | object          | No         | -          | -                                                                                        |
+| - additionalProperties               | No      | object          | No         | -          | -                                                                                        |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_max_size_mb"></a>7.1.14.8.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > max_size_mb`
+###### 7.1.14.8.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > max_size_mb` {#prompts_additionalProperties_media_pattern1_pattern1_i4_max_size_mb}
 
 |              |           |
 | ------------ | --------- |
@@ -3041,7 +3041,7 @@ must respect the following conditions
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats"></a>7.1.14.8.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats`
+###### 7.1.14.8.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats` {#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -3086,14 +3086,14 @@ must respect the following conditions
 | ------------------------------------------------------------------------------------------------------- | ----------- |
 | [allowed_formats items](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items"></a>7.1.14.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats > allowed_formats items
+###### 7.1.14.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats > allowed_formats items {#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata"></a>7.1.14.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > require_metadata`
+###### 7.1.14.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > require_metadata` {#prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata}
 
 |              |           |
 | ------------ | --------- |
@@ -3103,7 +3103,7 @@ must respect the following conditions
 
 **Description:** Whether metadata is required for this media type
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params"></a>7.1.14.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > validation_params`
+###### 7.1.14.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > validation_params` {#prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -3131,9 +3131,9 @@ must respect the following conditions
 
 | Property                                                                                               | Pattern | Type   | Deprecated | Definition | Title/Description |
 | ------------------------------------------------------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ----------------- |
-| - [](#prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params_additionalProperties ) | No      | object | No         | -          | -                 |
+| - additionalProperties | No      | object | No         | -          | -                 |
 
-## <a name="fragments"></a>8. Property `PromptPack Specification > fragments`
+## 8. Property `PromptPack Specification > fragments` {#fragments}
 
 |                           |                                                                                        |
 | ------------------------- | -------------------------------------------------------------------------------------- |
@@ -3156,14 +3156,14 @@ must respect the following conditions
 | -------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - [](#fragments_additionalProperties ) | No      | string | No         | -          | -                 |
 
-### <a name="fragments_additionalProperties"></a>8.1. Property `PromptPack Specification > fragments > additionalProperties`
+### 8.1. Property `PromptPack Specification > fragments > additionalProperties` {#fragments_additionalProperties}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-## <a name="tools"></a>9. Property `PromptPack Specification > tools`
+## 9. Property `PromptPack Specification > tools` {#tools}
 
 |                           |                                                                                    |
 | ------------------------- | ---------------------------------------------------------------------------------- |
@@ -3177,7 +3177,7 @@ must respect the following conditions
 | ---------------------------------- | ------- | ------ | ---------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | - [](#tools_additionalProperties ) | No      | object | No         | In #/$defs/Tool | A tool definition following OpenAI's function calling format. Tools enable the LLM to call external functions to retrieve data or perform actions. |
 
-### <a name="tools_additionalProperties"></a>9.1. Property `PromptPack Specification > tools > Tool`
+### 9.1. Property `PromptPack Specification > tools > Tool` {#tools_additionalProperties}
 
 |                           |              |
 | ------------------------- | ------------ |
@@ -3194,7 +3194,7 @@ must respect the following conditions
 | + [description](#tools_additionalProperties_description ) | No      | string | No         | -          | Clear description of what the tool does. The LLM uses this to decide when to call the tool. |
 | - [parameters](#tools_additionalProperties_parameters )   | No      | object | No         | -          | JSON Schema defining the tool's parameters. Follows JSON Schema specification.              |
 
-#### <a name="tools_additionalProperties_name"></a>9.1.1. Property `PromptPack Specification > tools > additionalProperties > name`
+#### 9.1.1. Property `PromptPack Specification > tools > additionalProperties > name` {#tools_additionalProperties_name}
 
 |              |          |
 | ------------ | -------- |
@@ -3221,7 +3221,7 @@ must respect the following conditions
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-zA-Z_][a-zA-Z0-9_]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-zA-Z_%5D%5Ba-zA-Z0-9_%5D%2A%24&testString=%22lookup_order%22) |
 
-#### <a name="tools_additionalProperties_description"></a>9.1.2. Property `PromptPack Specification > tools > additionalProperties > description`
+#### 9.1.2. Property `PromptPack Specification > tools > additionalProperties > description` {#tools_additionalProperties_description}
 
 |              |          |
 | ------------ | -------- |
@@ -3244,7 +3244,7 @@ must respect the following conditions
 | -------------- | - |
 | **Min length** | 1 |
 
-#### <a name="tools_additionalProperties_parameters"></a>9.1.3. Property `PromptPack Specification > tools > additionalProperties > parameters`
+#### 9.1.3. Property `PromptPack Specification > tools > additionalProperties > parameters` {#tools_additionalProperties_parameters}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -3260,7 +3260,7 @@ must respect the following conditions
 | + [properties](#tools_additionalProperties_parameters_properties ) | No      | object           | No         | -          | Parameter definitions                |
 | - [required](#tools_additionalProperties_parameters_required )     | No      | array of string  | No         | -          | List of required parameter names     |
 
-##### <a name="tools_additionalProperties_parameters_type"></a>9.1.3.1. Property `PromptPack Specification > tools > additionalProperties > parameters > type`
+##### 9.1.3.1. Property `PromptPack Specification > tools > additionalProperties > parameters > type` {#tools_additionalProperties_parameters_type}
 
 |              |                    |
 | ------------ | ------------------ |
@@ -3272,7 +3272,7 @@ must respect the following conditions
 Must be one of:
 * "object"
 
-##### <a name="tools_additionalProperties_parameters_properties"></a>9.1.3.2. Property `PromptPack Specification > tools > additionalProperties > parameters > properties`
+##### 9.1.3.2. Property `PromptPack Specification > tools > additionalProperties > parameters > properties` {#tools_additionalProperties_parameters_properties}
 
 |                           |                                                                                                                               |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -3286,7 +3286,7 @@ Must be one of:
 | ----------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - [](#tools_additionalProperties_parameters_properties_additionalProperties ) | No      | object | No         | -          | -                 |
 
-###### <a name="tools_additionalProperties_parameters_properties_additionalProperties"></a>9.1.3.2.1. Property `PromptPack Specification > tools > additionalProperties > parameters > properties > additionalProperties`
+###### 9.1.3.2.1. Property `PromptPack Specification > tools > additionalProperties > parameters > properties > additionalProperties` {#tools_additionalProperties_parameters_properties_additionalProperties}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -3294,7 +3294,7 @@ Must be one of:
 | **Required**              | No               |
 | **Additional properties** | Any type allowed |
 
-##### <a name="tools_additionalProperties_parameters_required"></a>9.1.3.3. Property `PromptPack Specification > tools > additionalProperties > parameters > required`
+##### 9.1.3.3. Property `PromptPack Specification > tools > additionalProperties > parameters > required` {#tools_additionalProperties_parameters_required}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -3315,14 +3315,14 @@ Must be one of:
 | ----------------------------------------------------------------------- | ----------- |
 | [required items](#tools_additionalProperties_parameters_required_items) | -           |
 
-###### <a name="tools_additionalProperties_parameters_required_items"></a>9.1.3.3.1. PromptPack Specification > tools > additionalProperties > parameters > required > required items
+###### 9.1.3.3.1. PromptPack Specification > tools > additionalProperties > parameters > required > required items {#tools_additionalProperties_parameters_required_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-## <a name="metadata"></a>10. Property `PromptPack Specification > metadata`
+## 10. Property `PromptPack Specification > metadata` {#metadata}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -3338,9 +3338,9 @@ Must be one of:
 | - [language](#metadata_language )           | No      | string          | No         | -          | Primary language code (ISO 639-1)     |
 | - [tags](#metadata_tags )                   | No      | array of string | No         | -          | Tags for categorization and discovery |
 | - [cost_estimate](#metadata_cost_estimate ) | No      | object          | No         | -          | Cost estimation for using this pack   |
-| - [](#metadata_additionalProperties )       | No      | object          | No         | -          | -                                     |
+| - additionalProperties       | No      | object          | No         | -          | -                                     |
 
-### <a name="metadata_domain"></a>10.1. Property `PromptPack Specification > metadata > domain`
+### 10.1. Property `PromptPack Specification > metadata > domain` {#metadata_domain}
 
 |              |          |
 | ------------ | -------- |
@@ -3363,7 +3363,7 @@ Must be one of:
 "finance"
 ```
 
-### <a name="metadata_language"></a>10.2. Property `PromptPack Specification > metadata > language`
+### 10.2. Property `PromptPack Specification > metadata > language` {#metadata_language}
 
 |              |          |
 | ------------ | -------- |
@@ -3390,7 +3390,7 @@ Must be one of:
 | --------------------------------- | ----------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-z]{2}$``` [Test](https://regex101.com/?regex=%5E%5Ba-z%5D%7B2%7D%24&testString=%22en%22) |
 
-### <a name="metadata_tags"></a>10.3. Property `PromptPack Specification > metadata > tags`
+### 10.3. Property `PromptPack Specification > metadata > tags` {#metadata_tags}
 
 |              |                   |
 | ------------ | ----------------- |
@@ -3421,14 +3421,14 @@ Must be one of:
 | ---------------------------------- | ----------- |
 | [tags items](#metadata_tags_items) | -           |
 
-#### <a name="metadata_tags_items"></a>10.3.1. PromptPack Specification > metadata > tags > tags items
+#### 10.3.1. PromptPack Specification > metadata > tags > tags items {#metadata_tags_items}
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-### <a name="metadata_cost_estimate"></a>10.4. Property `PromptPack Specification > metadata > cost_estimate`
+### 10.4. Property `PromptPack Specification > metadata > cost_estimate` {#metadata_cost_estimate}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -3444,7 +3444,7 @@ Must be one of:
 | - [max_cost_usd](#metadata_cost_estimate_max_cost_usd ) | No      | number | No         | -          | Maximum cost per execution in USD |
 | - [avg_cost_usd](#metadata_cost_estimate_avg_cost_usd ) | No      | number | No         | -          | Average cost per execution in USD |
 
-#### <a name="metadata_cost_estimate_min_cost_usd"></a>10.4.1. Property `PromptPack Specification > metadata > cost_estimate > min_cost_usd`
+#### 10.4.1. Property `PromptPack Specification > metadata > cost_estimate > min_cost_usd` {#metadata_cost_estimate_min_cost_usd}
 
 |              |          |
 | ------------ | -------- |
@@ -3457,7 +3457,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-#### <a name="metadata_cost_estimate_max_cost_usd"></a>10.4.2. Property `PromptPack Specification > metadata > cost_estimate > max_cost_usd`
+#### 10.4.2. Property `PromptPack Specification > metadata > cost_estimate > max_cost_usd` {#metadata_cost_estimate_max_cost_usd}
 
 |              |          |
 | ------------ | -------- |
@@ -3470,7 +3470,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-#### <a name="metadata_cost_estimate_avg_cost_usd"></a>10.4.3. Property `PromptPack Specification > metadata > cost_estimate > avg_cost_usd`
+#### 10.4.3. Property `PromptPack Specification > metadata > cost_estimate > avg_cost_usd` {#metadata_cost_estimate_avg_cost_usd}
 
 |              |          |
 | ------------ | -------- |
@@ -3483,7 +3483,7 @@ Must be one of:
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
 
-## <a name="compilation"></a>11. Property `PromptPack Specification > compilation`
+## 11. Property `PromptPack Specification > compilation` {#compilation}
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -3500,7 +3500,7 @@ Must be one of:
 | + [schema](#compilation_schema )               | No      | string | No         | -          | Pack format schema version used                        |
 | - [source](#compilation_source )               | No      | string | No         | -          | Optional source configuration file path                |
 
-### <a name="compilation_compiled_with"></a>11.1. Property `PromptPack Specification > compilation > compiled_with`
+### 11.1. Property `PromptPack Specification > compilation > compiled_with` {#compilation_compiled_with}
 
 |              |          |
 | ------------ | -------- |
@@ -3519,7 +3519,7 @@ Must be one of:
 "packc-v1.2.3"
 ```
 
-### <a name="compilation_created_at"></a>11.2. Property `PromptPack Specification > compilation > created_at`
+### 11.2. Property `PromptPack Specification > compilation > created_at` {#compilation_created_at}
 
 |              |             |
 | ------------ | ----------- |
@@ -3535,7 +3535,7 @@ Must be one of:
 "2025-10-31T12:00:00Z"
 ```
 
-### <a name="compilation_schema"></a>11.3. Property `PromptPack Specification > compilation > schema`
+### 11.3. Property `PromptPack Specification > compilation > schema` {#compilation_schema}
 
 |              |          |
 | ------------ | -------- |
@@ -3554,7 +3554,7 @@ Must be one of:
 "v2"
 ```
 
-### <a name="compilation_source"></a>11.4. Property `PromptPack Specification > compilation > source`
+### 11.4. Property `PromptPack Specification > compilation > source` {#compilation_source}
 
 |              |          |
 | ------------ | -------- |

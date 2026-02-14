@@ -21,26 +21,16 @@ The RFC (Request for Comments) process is how the PromptPack community proposes,
 
 ## Active RFCs
 
-### v1 Specification Development
-
-| RFC | Status | Title | Author | Date |
-|-----|--------|-------|--------|------|
-| [RFC-0001](/docs/rfcs/core-schema) | 🚀 Implemented | Core PromptPack Schema | AltairaLabs | Oct 2025 |
-| [RFC-0002](/docs/rfcs/yaml-format) | 🚀 Implemented | YAML File Format | AltairaLabs | Oct 2025 |
-| [RFC-0003](/docs/rfcs/template-variables) | 🚀 Implemented | Template Variable System | AltairaLabs | Oct 2025 |
-
-### v1.1 Enhancements
-
-| RFC | Status | Title | Author | Date |
-|-----|--------|-------|--------|------|
-| [RFC-0004](/docs/rfcs/multimodal-support) | 🚀 Implemented | Multimodal Content Support | AltairaLabs | Nov 2025 |
-
-### Extensions
-
-| RFC | Status | Title | Author | Date |
-|-----|--------|-------|--------|------|
-| [RFC-0005](/docs/rfcs/workflow-extension) | 📝 Draft | Workflow Specification Extension | AltairaLabs | Nov 2025 |
-| RFC-0006 | 📝 Draft | Evals Extension | AltairaLabs | Feb 2026 |
+<!-- RFC_TABLE_START -->
+| RFC | Status | Title |
+|-----|--------|-------|
+| [RFC-0001](/docs/rfcs/core-schema) | 🚀 Implemented | Core PromptPack Schema |
+| [RFC-0002](/docs/rfcs/yaml-format) | 🚀 Implemented | YAML File Format |
+| [RFC-0003](/docs/rfcs/template-variables) | 🚀 Implemented | Template Variable System |
+| [RFC-0004](/docs/rfcs/multimodal-support) | 🚀 Implemented | Multimodal Content Support |
+| [RFC-0005](/docs/rfcs/workflow-extension) | 📝 Draft | PromptPack Workflow Specification Extension |
+| [RFC-0006](/docs/rfcs/evals-extension) | 📝 Draft | Evals Extension |
+<!-- RFC_TABLE_END -->
 
 ## Upcoming Considerations
 

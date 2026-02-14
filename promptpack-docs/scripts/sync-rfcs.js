@@ -16,6 +16,7 @@ const path = require('path');
 // Paths
 const RFC_SOURCE_DIR = path.join(__dirname, '../../rfcs');
 const RFC_DEST_DIR = path.join(__dirname, '../docs/rfcs');
+const RFC_INDEX_PATH = path.join(__dirname, '../docs/processes/rfc-index.md');
 
 /**
  * Extract RFC metadata from file content
@@ -62,7 +63,11 @@ function extractMetadata(filename, content) {
     description = `RFC ${String(position).padStart(4, '0')} specification document`;
   }
   
-  return { position, title, description };
+  // Extract status from metadata line (e.g., "- **Status:** Implemented")
+  const statusMatch = content.match(/[-*]\s*\*\*Status[:]?\*\*[:\s]*(.*)/i);
+  const status = statusMatch ? statusMatch[1].trim() : 'Draft';
+
+  return { position, title, description, status };
 }
 
 /**
@@ -121,31 +126,90 @@ function syncRFC(filename) {
 }
 
 /**
+ * Map status text to an emoji
+ */
+const STATUS_EMOJI = {
+  'draft': '📝 Draft',
+  'review': '🔍 Review',
+  'accepted': '✅ Accepted',
+  'implemented': '🚀 Implemented',
+  'rejected': '❌ Rejected',
+  'deferred': '⏸️ Deferred',
+};
+
+function formatStatus(status) {
+  return STATUS_EMOJI[status.toLowerCase()] || `📝 ${status}`;
+}
+
+/**
+ * Update the RFC index table in rfc-index.md
+ */
+function updateRfcIndex(rfcEntries) {
+  if (!fs.existsSync(RFC_INDEX_PATH)) {
+    console.log('⚠️  rfc-index.md not found, skipping index update');
+    return;
+  }
+
+  const indexContent = fs.readFileSync(RFC_INDEX_PATH, 'utf8');
+
+  // Build the table
+  const header = '| RFC | Status | Title |\n|-----|--------|-------|';
+  const rows = rfcEntries
+    .sort((a, b) => a.position - b.position)
+    .map(e => {
+      const slug = e.filename.replace(/^\d{4}-/, '').replace(/\.md$/, '');
+      const rfcNum = String(e.position).padStart(4, '0');
+      // Strip "RFC NNNN: " prefix from title for cleaner display
+      const shortTitle = e.title.replace(/^RFC\s+\d{4}:\s*/, '');
+      return `| [RFC-${rfcNum}](/docs/rfcs/${slug}) | ${formatStatus(e.status)} | ${shortTitle} |`;
+    });
+
+  const table = [header, ...rows].join('\n');
+  const newContent = indexContent.replace(
+    /<!-- RFC_TABLE_START -->[\s\S]*?<!-- RFC_TABLE_END -->/,
+    `<!-- RFC_TABLE_START -->\n${table}\n<!-- RFC_TABLE_END -->`
+  );
+
+  fs.writeFileSync(RFC_INDEX_PATH, newContent, 'utf8');
+  console.log(`📋 Updated RFC index table with ${rfcEntries.length} entries\n`);
+}
+
+/**
  * Main sync function
  */
 function syncAllRFCs() {
   console.log('🔄 Syncing RFCs from /rfcs/ to /promptpack-docs/docs/rfcs/\n');
-  
+
   // Ensure destination directory exists
   if (!fs.existsSync(RFC_DEST_DIR)) {
     fs.mkdirSync(RFC_DEST_DIR, { recursive: true });
     console.log(`📁 Created directory: ${RFC_DEST_DIR}\n`);
   }
-  
+
   // Read all files from source directory
   const files = fs.readdirSync(RFC_SOURCE_DIR);
-  
-  // Sync each RFC
+
+  // Sync each RFC and collect metadata for index
   const rfcPattern = /^\d{4}-.*\.md$/;
+  const rfcEntries = [];
   let syncedCount = 0;
-  
+
   for (const filename of files) {
     if (rfcPattern.test(filename) && filename !== '0000-template.md') {
       syncRFC(filename);
+
+      // Read source content to collect metadata for the index
+      const content = fs.readFileSync(path.join(RFC_SOURCE_DIR, filename), 'utf8');
+      const metadata = extractMetadata(filename, content);
+      rfcEntries.push({ filename, ...metadata });
+
       syncedCount++;
     }
   }
-  
+
+  // Update the RFC index table
+  updateRfcIndex(rfcEntries);
+
   console.log(`✨ Successfully synced ${syncedCount} RFC(s)`);
 }
 
