@@ -12,7 +12,7 @@ sidebar_position: 2
 
 **PromptArena** (`promptarena`) is a CLI tool for running multi-turn conversation simulations across multiple LLM providers, validating conversation flows, and generating comprehensive test reports.
 
-Arena enables systematic testing of conversational AI systems with support for:
+PromptArena enables systematic testing of conversational AI systems with support for:
 
 - **Multi-Provider Testing** - Run the same tests across OpenAI, Anthropic, Google, and more
 - **Multi-Turn Conversations** - Test complex conversation flows and state management
@@ -160,7 +160,7 @@ promptarena run --mock-config mock-responses.yaml
 
 ## Output Formats
 
-Arena generates comprehensive reports in multiple formats:
+PromptArena generates comprehensive reports in multiple formats:
 
 ### HTML Reports
 
@@ -208,7 +208,7 @@ promptarena run --format markdown --markdown-file out/results.md
 
 ## Test Assertions
 
-Arena supports multiple assertion types:
+PromptArena supports multiple assertion types:
 
 ### Text Assertions
 

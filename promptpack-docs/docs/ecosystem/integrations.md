@@ -51,7 +51,7 @@ CLI tool for systematic testing of conversational AI across multiple providers:
 - Comprehensive reporting (HTML, JSON, JUnit, Markdown)
 - CI/CD integration
 
-[Get Started with Arena →](/docs/ecosystem/arena-testing)
+[Get Started with PromptArena →](/docs/ecosystem/arena-testing)
 
 ## Relationship Between Components
 

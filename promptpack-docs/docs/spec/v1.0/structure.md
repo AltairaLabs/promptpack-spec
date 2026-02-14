@@ -104,14 +104,14 @@ While sharing common resources, each prompt has its own specialized configuratio
   "prompts": {
     "support": {
       "parameters": {
-        "temperature": 0.7,  // More creative for problem-solving
-        "max_tokens": 1500   // Longer responses for explanations
+        "temperature": 0.7,
+        "max_tokens": 1500
       }
     },
     "sales": {
       "parameters": {
-        "temperature": 0.9,  // More engaging and persuasive
-        "max_tokens": 800    // Concise, focused responses
+        "temperature": 0.9,
+        "max_tokens": 800
       }
     }
   }
@@ -163,13 +163,13 @@ PromptPacks support both pack-level and prompt-level versioning:
 
 ```json
 {
-  "version": "2.1.0",  // Pack version - overall bundle version
+  "version": "2.1.0",
   "prompts": {
     "support": {
-      "version": "1.5.2"  // Individual prompt version
+      "version": "1.5.2"
     },
     "sales": {
-      "version": "2.0.1"  // Can evolve independently
+      "version": "2.0.1"
     }
   }
 }
