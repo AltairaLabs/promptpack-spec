@@ -9,7 +9,7 @@ Organizations and projects using PromptPack to build conversational AI systems.
 ## Early Adopters
 
 :::info
-PromptPack is in v1 Draft. If you're using PromptPack in your organization, [let us know](https://github.com/altairalabs/promptpack-spec/discussions) to be featured here!
+PromptPack v1.1 is available. If you're using PromptPack in your organization, [let us know](https://github.com/altairalabs/promptpack-spec/discussions) to be featured here!
 :::
 
 ### AltairaLabs
@@ -33,7 +33,7 @@ AltairaLabs is the original creator of PromptPack and uses it extensively for:
 The reference implementation of PromptPack, providing a TypeScript/JavaScript runtime for executing PromptPack files.
 
 **Features:**
-- Full PromptPack v1 specification support
+- Full PromptPack v1.1 specification support
 - Multiple LLM provider integrations
 - Testing and validation framework
 - CLI and programmatic interfaces
@@ -57,7 +57,7 @@ Want to be featured as a PromptPack adopter? We'd love to hear from you!
 
 ### Criteria
 
-- Using PromptPack v1 specification
+- Using PromptPack v1.1 specification
 - Production or significant development usage  
 - Willing to share basic implementation details
 - Open to community engagement
@@ -78,22 +78,20 @@ Want to be featured as a PromptPack adopter? We'd love to hear from you!
 
 ## Success Stories
 
-> *"PromptPack helped us standardize our prompt engineering process across teams. The testing framework caught issues that would have been expensive to fix in production."*  
-> — Early Adopter (Coming Soon)
+> *"PromptPack helped us standardize our prompt engineering process across teams. The testing framework caught issues that would have been expensive to fix in production."*
+> — Early Adopter
 
-> *"The interoperability features let us switch between different LLM providers without rewriting our entire conversational system."*  
-> — Community Member (Coming Soon)
+> *"The interoperability features let us switch between different LLM providers without rewriting our entire conversational system."*
+> — Community Member
 
 ## Implementation Stats
 
 | Metric | Count |
 |--------|-------|
 | **Known Implementations** | 1+ |
-| **GitHub Stars** | TBD |
 | **Community Members** | Growing |
-| **Production Deployments** | TBD |
 
-*Statistics updated as of October 2024*
+*Statistics updated as of February 2026*
 
 ---
 

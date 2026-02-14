@@ -85,8 +85,8 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
       ],
       "tools": ["run_diagnostic", "access_knowledge_base"],
       "parameters": {
-        "temperature": 0.5,  // More deterministic for technical accuracy
-        "max_tokens": 800    // Longer responses for detailed steps
+        "temperature": 0.5,
+        "max_tokens": 800
       }
     },
     
@@ -244,7 +244,7 @@ Marketing teams need to create various content types (blogs, social media, email
           "type": "max_length",
           "enabled": true, 
           "params": {
-            "max_characters": 280  // Twitter limit
+            "max_characters": 280
           }
         }
       ]
@@ -426,7 +426,7 @@ Educational institutions need AI assistants that can tutor students, help with r
         }
       ],
       "parameters": {
-        "temperature": 0.4  // More consistent, objective feedback
+        "temperature": 0.4
       }
     }
   },

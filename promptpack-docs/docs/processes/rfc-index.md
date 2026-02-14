@@ -25,17 +25,22 @@ The RFC (Request for Comments) process is how the PromptPack community proposes,
 
 | RFC | Status | Title | Author | Date |
 |-----|--------|-------|--------|------|
-| [RFC-0001](/docs/rfcs/core-schema) | 🚀 Implemented | Core PromptPack Schema | AltairaLabs | Oct 2024 |
-| [RFC-0002](/docs/rfcs/yaml-format) | 🚀 Implemented | YAML File Format | AltairaLabs | Oct 2024 |
-| [RFC-0003](/docs/rfcs/template-variables) | 🚀 Implemented | Template Variable System | AltairaLabs | Oct 2024 |
+| [RFC-0001](/docs/rfcs/core-schema) | 🚀 Implemented | Core PromptPack Schema | AltairaLabs | Oct 2025 |
+| [RFC-0002](/docs/rfcs/yaml-format) | 🚀 Implemented | YAML File Format | AltairaLabs | Oct 2025 |
+| [RFC-0003](/docs/rfcs/template-variables) | 🚀 Implemented | Template Variable System | AltairaLabs | Oct 2025 |
 
 ### v1.1 Enhancements
 
 | RFC | Status | Title | Author | Date |
 |-----|--------|-------|--------|------|
-| [RFC-0004](/docs/rfcs/multimodal-support) | 🚀 Implemented | Multimodal Content Support | AltairaLabs | Nov 2024 |
+| [RFC-0004](/docs/rfcs/multimodal-support) | 🚀 Implemented | Multimodal Content Support | AltairaLabs | Nov 2025 |
 
-*No active RFCs currently in review.*
+### Extensions
+
+| RFC | Status | Title | Author | Date |
+|-----|--------|-------|--------|------|
+| [RFC-0005](/docs/rfcs/workflow-extension) | 📝 Draft | Workflow Specification Extension | AltairaLabs | Nov 2025 |
+| RFC-0006 | 📝 Draft | Evals Extension | AltairaLabs | Feb 2026 |
 
 ## Upcoming Considerations
 
@@ -129,10 +134,10 @@ Learn from implemented RFCs:
 
 | Metric | Count |
 |--------|-------|
-| **Total RFCs** | 4 |
+| **Total RFCs** | 6 |
 | **Implemented** | 4 |
 | **In Review** | 0 |
-| **Draft** | 0 |
+| **Draft** | 2 |
 | **Contributors** | 1+ |
 
 ---

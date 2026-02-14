@@ -95,5 +95,3 @@ See our [Contributing Guide](/docs/processes/contributing) to get started.
 ---
 
 **Note:** This page describes the PromptKit reference implementation. The PromptPack specification is open, and anyone can build compatible tools and runtimes. See [Community Tools](./community-tools) for other implementations.
-
-### Provider Setup
