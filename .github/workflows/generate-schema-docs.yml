@@ -21,6 +21,8 @@ jobs:
         run: |
           pip install json-schema-for-humans
           generate-schema-doc schema/promptpack.schema.json promptpack-docs/docs/spec/schema-reference.md --config template_name=md
+      - name: Post-process for Docusaurus MDX compatibility
+        run: python3 scripts/fix-schema-docs.py promptpack-docs/docs/spec/schema-reference.md
       - name: Commit and push docs
         run: |
           git config user.name "github-actions[bot]"
