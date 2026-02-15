@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.2-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.3-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -19,6 +19,8 @@ Production AI systems need more than a single prompt — they need specialized p
 - **Shared tools and fragments** — define once, reuse everywhere
 - **Multimodal support** — text, images, audio, and structured content in prompt templates
 - **Evals** — automated quality checks with Prometheus metric export, shipped alongside your prompts
+- **Workflows** — state-machine orchestration over prompts with event-driven transitions
+- **Agents** — A2A-compatible agent definitions for multi-agent orchestration
 - **Built-in testing metadata** to track model performance across providers
 - **Portable format** that works with OpenAI, Anthropic, Google, and local models
 
@@ -83,6 +85,8 @@ Production AI systems need more than a single prompt — they need specialized p
 - **Multi-Prompt Architecture** — Specialized prompts for different scenarios instead of one-size-fits-all
 - **Complete Packaging** — Prompts, tools, fragments, evals, and config in a single JSON file
 - **Evals & Metrics** — Declare automated quality checks (deterministic or LLM judge) with Prometheus metric export
+- **Workflows** — State-machine orchestration with event-driven transitions between prompts
+- **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
 - **Built-in Testing** — Testing metadata and quality assurance built into the spec
@@ -123,6 +127,44 @@ PromptPack v1.2 lets you ship quality policy alongside your prompts. Evals are a
 
 See [RFC-0006: Evals Extension](https://promptpack.org/docs/rfcs/evals-extension) for the full design.
 
+## Workflows & Agents *(v1.3)*
+
+PromptPack v1.3 adds two new top-level sections for orchestration:
+
+**Workflows** define a state machine over your prompts — each state references a prompt key and declares event-driven transitions:
+
+```json
+"workflow": {
+  "version": 1,
+  "entry": "greeting",
+  "states": {
+    "greeting": {
+      "prompt_task": "greet",
+      "on_event": { "need_support": "triage", "bye": "closing" }
+    },
+    "triage": {
+      "prompt_task": "support",
+      "on_event": { "escalate": "human_handoff", "resolved": "closing" }
+    }
+  }
+}
+```
+
+**Agents** map prompts to A2A-compatible agent definitions for multi-agent discovery and orchestration:
+
+```json
+"agents": {
+  "entry": "router",
+  "members": {
+    "router":  { "tags": ["triage"], "description": "Routes requests to specialists" },
+    "billing": { "tags": ["billing"], "input_modes": ["text/plain"] },
+    "tech":    { "tags": ["technical"], "output_modes": ["text/plain", "application/json"] }
+  }
+}
+```
+
+See [RFC-0005: Workflow Extension](https://promptpack.org/docs/rfcs/workflow-extension) and [RFC-0007: Agents Extension](https://promptpack.org/docs/rfcs/agents-extension) for the full designs.
+
 ## Documentation
 
 - [Specification](https://promptpack.org/docs/spec/overview) — Complete PromptPack spec
@@ -133,13 +175,13 @@ See [RFC-0006: Evals Extension](https://promptpack.org/docs/rfcs/evals-extension
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.2/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.3/promptpack.schema.json`
 
 ## Ecosystem
 
 | Component | Status | Links |
 |-----------|--------|-------|
-| **Core Specification** | v1.2 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
+| **Core Specification** | v1.3 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
 | **PromptKit** | Stable | [CLI, validation, SDK](https://promptpack.org/docs/ecosystem/promptkit-runtime) |
 | **PromptArena** | Stable | [Multi-provider testing, CI/CD](https://promptpack.org/docs/ecosystem/arena-testing) |
 | **LangChain.js** | Available | [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) |

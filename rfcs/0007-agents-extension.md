@@ -1,6 +1,6 @@
 # RFC 0007: Agents Extension
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** AltairaLabs Team
 - **Created:** 2026-02-15
 - **Updated:** 2026-02-15

@@ -35,14 +35,14 @@ Each RFC has one of the following statuses:
 | 0002 | [YAML File Format](0002-yaml-format.md) | Implemented | AltairaLabs | 2024-10-05 |
 | 0003 | [Template Variable System](0003-template-variables.md) | Implemented | AltairaLabs | 2024-10-10 |
 | 0004 | [Multimodal Content Support](0004-multimodal-support.md) | Implemented | AltairaLabs | 2024-11-06 |
+| 0005 | [Workflow Specification Extension](0005-workflow-extension.md) | Implemented | AltairaLabs | 2025-11-17 |
+| 0007 | [Agents Extension](0007-agents-extension.md) | Implemented | AltairaLabs | 2026-02-15 |
 
 ## Active RFCs
 
 | Number | Title | Status | Author | Created |
 |--------|-------|--------|--------|---------|
-| 0005 | [Workflow Specification Extension](0005-workflow-extension.md) | Draft | AltairaLabs | 2025-11-17 |
 | 0006 | [Evals Extension](0006-evals-extension.md) | Draft | AltairaLabs | 2026-02-14 |
-| 0007 | [Agents Extension](0007-agents-extension.md) | Draft | AltairaLabs | 2026-02-15 |
 
 ## Process
 

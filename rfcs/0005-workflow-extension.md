@@ -1,6 +1,6 @@
 # RFC 0005: PromptPack Workflow Specification Extension
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** AltairaLabs Team
 - **Created:** 2025-11-17
 - **Updated:** 2025-11-17

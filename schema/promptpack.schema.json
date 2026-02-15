@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
-  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal support",
-  "version": "1.2.0",
+  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, and agent support",
+  "version": "1.3.0",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
@@ -195,6 +195,16 @@
       "items": {
         "$ref": "#/$defs/Eval"
       }
+    },
+
+    "workflow": {
+      "$ref": "#/$defs/WorkflowConfig",
+      "description": "Workflow configuration defining a state machine over the pack's prompts. Each state references a prompt key and declares event-driven transitions."
+    },
+
+    "agents": {
+      "$ref": "#/$defs/AgentsConfig",
+      "description": "Agent configuration mapping prompts to A2A-compatible agent definitions. Enables multi-agent orchestration via the Agent-to-Agent protocol."
     }
   },
   
@@ -1186,6 +1196,135 @@
               "description": "Maximum expected value"
             }
           }
+        }
+      }
+    },
+
+    "WorkflowConfig": {
+      "type": "object",
+      "description": "State-machine workflow over the pack's prompts. Defines an entry state and event-driven transitions between states, where each state references a prompt key.",
+      "required": ["version", "entry", "states"],
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "integer",
+          "description": "Workflow schema version. Use 1 for the current stable format.",
+          "minimum": 1,
+          "examples": [1]
+        },
+        "entry": {
+          "type": "string",
+          "description": "Name of the initial state. Must match a key in the states object.",
+          "examples": ["greeting", "triage"]
+        },
+        "states": {
+          "type": "object",
+          "description": "Map of state name to state definition. Each state references a prompt and declares transitions.",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/WorkflowState"
+          }
+        },
+        "engine": {
+          "type": "object",
+          "description": "Optional runtime engine hints for workflow execution (e.g., timeout, concurrency settings).",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "WorkflowState": {
+      "type": "object",
+      "description": "A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states.",
+      "required": ["prompt_task", "on_event"],
+      "additionalProperties": false,
+      "properties": {
+        "prompt_task": {
+          "type": "string",
+          "description": "Reference to a prompt key defined in the pack's prompts object.",
+          "examples": ["support", "sales", "triage"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of this state's purpose."
+        },
+        "on_event": {
+          "type": "object",
+          "description": "Map of event name to target state name. When the named event fires, the workflow transitions to the target state.",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "examples": [{"escalate": "human_handoff", "resolved": "closing"}]
+        },
+        "persistence": {
+          "type": "string",
+          "description": "Whether conversation context is kept (persistent) or reset (transient) on entry.",
+          "enum": ["transient", "persistent"]
+        },
+        "orchestration": {
+          "type": "string",
+          "description": "How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.",
+          "enum": ["internal", "external", "hybrid"]
+        }
+      }
+    },
+
+    "AgentsConfig": {
+      "type": "object",
+      "description": "Agent configuration that maps prompts to A2A-compatible agent definitions. Enables multi-agent orchestration via the Agent-to-Agent protocol.",
+      "required": ["entry", "members"],
+      "additionalProperties": false,
+      "properties": {
+        "entry": {
+          "type": "string",
+          "description": "Prompt key of the entry agent — the default agent that receives incoming requests.",
+          "examples": ["triage", "router", "main"]
+        },
+        "members": {
+          "type": "object",
+          "description": "Map of prompt key to agent definition. Each key must match a prompt defined in the pack's prompts object.",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/AgentDef"
+          }
+        }
+      }
+    },
+
+    "AgentDef": {
+      "type": "object",
+      "description": "Agent definition for a single prompt, providing A2A Agent Card metadata. Overrides or extends the prompt's own metadata for agent discovery.",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Agent description published in the A2A Agent Card. Overrides the prompt's description if set."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Discovery tags for the agent, used by A2A registries and routers.",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["support", "billing"], ["sales", "enterprise"]]
+        },
+        "input_modes": {
+          "type": "array",
+          "description": "MIME types the agent accepts as input. Defaults to [\"text/plain\"] if omitted.",
+          "items": {
+            "type": "string"
+          },
+          "default": ["text/plain"],
+          "examples": [["text/plain"], ["text/plain", "image/png"]]
+        },
+        "output_modes": {
+          "type": "array",
+          "description": "MIME types the agent can produce as output. Defaults to [\"text/plain\"] if omitted.",
+          "items": {
+            "type": "string"
+          },
+          "default": ["text/plain"],
+          "examples": [["text/plain"], ["text/plain", "application/json"]]
         }
       }
     }
