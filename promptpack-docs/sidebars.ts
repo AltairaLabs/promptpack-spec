@@ -23,10 +23,37 @@ const sidebars: SidebarsConfig = {
       items: [
         'spec/versions',
         'spec/overview',
+        'spec/structure',
         'spec/examples',
         'spec/file-format',
         'spec/schema-reference',
         'spec/schema-guide',
+        {
+          type: 'category',
+          label: 'v1.2 (Archived)',
+          collapsed: true,
+          items: [
+            'spec/v1.2/overview',
+            'spec/v1.2/structure',
+            'spec/v1.2/examples',
+            'spec/v1.2/file-format',
+            'spec/v1.2/schema-reference',
+            'spec/v1.2/schema-guide',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'v1.1 (Archived)',
+          collapsed: true,
+          items: [
+            'spec/v1.1/overview',
+            'spec/v1.1/structure',
+            'spec/v1.1/examples',
+            'spec/v1.1/file-format',
+            'spec/v1.1/schema-reference',
+            'spec/v1.1/schema-guide',
+          ],
+        },
         {
           type: 'category',
           label: 'v1.0 (Archived)',

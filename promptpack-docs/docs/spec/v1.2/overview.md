@@ -1,27 +1,27 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
+title: "Specification Overview (v1.2)"
 ---
 
 # Specification Overview
 
 <div style={{
   padding: '8px 16px',
-  backgroundColor: '#10b981',
+  backgroundColor: '#6b7280',
   color: 'white',
   borderRadius: '6px',
   display: 'inline-block',
   marginBottom: '24px',
   fontWeight: 'bold'
 }}>
-  📘 v1.3 (Current)
+  📦 v1.2 (Stable)
 </div>
 
-PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
-
-:::info Version Information
-This documentation covers **v1.3** of the PromptPack specification, which adds workflow orchestration and agent definitions.
-Looking for the previous version? [View v1.2 docs →](./v1.2/overview) | [Version History →](./versions)
+:::warning Archived Version
+This is the **v1.2** documentation (February 2026). For the latest features, see [v1.3 docs →](../overview)
 :::
+
+PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
 
 ## Why PromptPacks?
 
@@ -45,7 +45,7 @@ PromptPacks solve this by providing a **single JSON file** that contains everyth
 ```json
 {
   "id": "customer-support",
-  "name": "Customer Support Pack", 
+  "name": "Customer Support Pack",
   "version": "1.0.0",
   "prompts": {
     "support": { /* specialized for general support */ },
@@ -54,41 +54,35 @@ PromptPacks solve this by providing a **single JSON file** that contains everyth
   },
   "tools": { /* shared external functions */ },
   "fragments": { /* reusable text components */ },
-  "evals": [ /* automated quality checks (v1.2+) */ ],
-  "workflow": { /* state-machine orchestration (v1.3+) */ },
-  "agents": { /* A2A agent definitions (v1.3+) */ }
+  "evals": [ /* automated quality checks (v1.2+) */ ]
 }
 ```
 
 ## Core Benefits
 
-### 🎯 **Multi-Prompt Architecture**
+### Multi-Prompt Architecture
 
 Instead of one generic prompt trying to handle everything, PromptPacks let you create **specialized prompts for specific tasks**. A customer service pack might have separate prompts for billing questions, technical support, and sales inquiries—each optimized for its specific purpose while sharing common tools and configuration.
 
-### 📦 **Complete Packaging**
+### Complete Packaging
 
 Everything needed to run your AI system is in one file. No more hunting for prompt templates, tool definitions, or configuration scattered across multiple files. Deploy once, run anywhere.
 
-### 🔄 **Reusability & Sharing**
+### Reusability & Sharing
 
 PromptPacks are portable. Build a customer support pack once, then use it across different applications, teams, or even organizations. Share best practices through standardized, tested packages.
 
-### 🛡️ **Built-in Safety**
+### Built-in Safety
 
 Each prompt can have its own validators (guardrails) to ensure safe, appropriate responses. Define content filters, length limits, and custom validation rules that travel with your prompts.
 
-### 🧪 **Testability**
+### Testability
 
 PromptPacks include testing metadata—which models have been tested, success rates, performance metrics. Know before you deploy whether your pack works well with different AI providers.
 
-### ⚡ **Tool Integration**
+### Tool Integration
 
 Define external tools once, reference them from any prompt in the pack. Whether it's looking up customer data, performing calculations, or calling external APIs, tools are reusable across all prompts.
-
-### 🔀 **Orchestration** *(v1.3+)*
-
-Define state-machine workflows over your prompts with event-driven transitions. Combine with A2A-compatible agent definitions to enable multi-agent orchestration — route conversations between specialized prompts based on events, with configurable persistence and orchestration modes.
 
 ## Real-World Use Cases
 
@@ -125,7 +119,7 @@ PromptPacks follow key principles that make them powerful and practical:
 
 **Modularity**: Each prompt handles one domain well rather than trying to do everything
 
-**Composability**: Shared tools, fragments, and configuration reduce duplication  
+**Composability**: Shared tools, fragments, and configuration reduce duplication
 
 **Portability**: Works across different AI providers and runtime environments
 

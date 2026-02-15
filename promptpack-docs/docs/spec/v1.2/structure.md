@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: "Pack Structure & Design (v1.2)"
 ---
 
 # Pack Structure & Design
@@ -229,67 +230,6 @@ PromptPacks can also declare **evals** — automated quality checks that run asy
 ```
 
 Unlike validators (which block output), evals score and report — making them ideal for continuous quality monitoring with Prometheus-style metric export.
-
-## Workflow Orchestration *(v1.3+)*
-
-PromptPack v1.3 introduces a state-machine workflow that orchestrates transitions between prompts based on events. Instead of a caller manually choosing which prompt to invoke, the workflow defines an entry state and event-driven transitions:
-
-```json
-{
-  "workflow": {
-    "version": 1,
-    "entry": "triage",
-    "states": {
-      "triage": {
-        "prompt_task": "triage",
-        "on_event": { "billing": "billing_support", "technical": "tech_support" }
-      },
-      "billing_support": {
-        "prompt_task": "billing",
-        "on_event": { "resolved": "closing" },
-        "persistence": "persistent"
-      },
-      "tech_support": {
-        "prompt_task": "technical",
-        "on_event": { "resolved": "closing" },
-        "persistence": "persistent"
-      },
-      "closing": {
-        "prompt_task": "closing",
-        "on_event": {}
-      }
-    }
-  }
-}
-```
-
-Each state references a prompt key and declares which events trigger transitions to other states. States can be `transient` (context reset on entry) or `persistent` (context preserved), and orchestration can be `internal`, `external`, or `hybrid`.
-
-## Agent Definitions *(v1.3+)*
-
-The `agents` section maps prompts to A2A (Agent-to-Agent) protocol compatible agent cards, enabling multi-agent discovery and orchestration:
-
-```json
-{
-  "agents": {
-    "entry": "triage",
-    "members": {
-      "triage": {
-        "description": "Routes requests to specialists",
-        "tags": ["router"],
-        "input_modes": ["text/plain"],
-        "output_modes": ["text/plain"]
-      },
-      "billing": {
-        "description": "Handles billing inquiries",
-        "tags": ["billing", "payments"]
-      }
-    }
-  }
-}
-```
-
-Each agent definition provides metadata for the A2A Agent Card — description, discovery tags, and supported MIME types. The `entry` field identifies which agent receives incoming requests by default.
 
 ## Deployment Benefits
 

@@ -6,25 +6,38 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.2
+## Current Version: v1.3
 
 **Status:** ✅ Current
 **Released:** February 2026
-**Schema:** `https://promptpack.org/schema/v1.2/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.3/promptpack.schema.json`
 
-### What's New in v1.2
+### What's New in v1.3
 
-- **Evals Extension** ([RFC-0006](/docs/rfcs/evals-extension)) - Declare automated quality checks (evals) alongside prompts
-- **Pack-level and prompt-level evals** - Cross-cutting evals at pack level, prompt-specific overrides by ID
-- **Prometheus-style metrics** - Eval results exposed as gauge, counter, histogram, or boolean metrics
-- **Flexible eval types** - Runtime-defined types: deterministic (`contains`, `regex`, `json_valid`) and LLM judge
-- **Eval triggers** - `every_turn`, `on_session_complete`, `sample_turns`, `sample_sessions`
+- **Workflow Orchestration** ([RFC-0005](/docs/rfcs/workflow-extension)) - Define state-machine workflows over prompts with event-driven transitions
+- **Agent Definitions** ([RFC-0007](/docs/rfcs/agents-extension)) - Map prompts to A2A-compatible agent cards for multi-agent orchestration
+- **WorkflowState** - Per-state persistence (`transient`/`persistent`) and orchestration mode (`internal`/`external`/`hybrid`)
+- **AgentDef** - Discovery tags, input/output MIME types for A2A protocol interoperability
 
-[View v1.2 Spec →](./overview)
+[View v1.3 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.2
+
+**Status:** 📦 Stable
+**Released:** February 2026
+**Schema:** `https://promptpack.org/schema/v1.2/promptpack.schema.json`
+
+- Evals Extension - Declare automated quality checks (evals) alongside prompts
+- Pack-level and prompt-level evals with Prometheus-style metrics
+- Flexible eval types and triggers
+
+[View v1.2 Spec →](./v1.2/overview)
+
+---
 
 ### v1.1
 
@@ -42,8 +55,8 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.0
 
-**Status:** 📦 Stable  
-**Released:** October 2024  
+**Status:** 📦 Stable
+**Released:** October 2024
 **Schema:** `https://promptpack.org/schema/v1.0/promptpack.schema.json`
 
 The foundational release of PromptPack.
@@ -64,13 +77,74 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.2    | ✅ Current | Full support | - |
+| v1.3    | ✅ Current | Full support | - |
+| v1.2    | 📦 Stable | Security fixes only | TBD |
 | v1.1    | 📦 Stable | Security fixes only | TBD |
 | v1.0    | 📦 Stable | Security fixes only | TBD |
 
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.2 to v1.3
+
+v1.3 is **fully backward compatible** with v1.2. No breaking changes.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.3/promptpack.schema.json",
+     "version": "1.3.0"
+   }
+   ```
+
+2. **(Optional) Add workflow** to orchestrate transitions between prompts:
+   ```json
+   {
+     "workflow": {
+       "version": 1,
+       "entry": "triage",
+       "states": {
+         "triage": {
+           "prompt_task": "triage",
+           "on_event": { "billing": "billing_support", "technical": "tech_support" }
+         }
+       }
+     }
+   }
+   ```
+
+3. **(Optional) Add agents** for A2A protocol interoperability:
+   ```json
+   {
+     "agents": {
+       "entry": "triage",
+       "members": {
+         "triage": {
+           "description": "Routes requests to specialists",
+           "tags": ["router"]
+         }
+       }
+     }
+   }
+   ```
+
+4. **Test and validate** - v1.2 packs continue to work without changes
+
+### New Features You Can Use
+
+- Add `workflow` object to define state-machine orchestration over prompts
+- Each state references a prompt key and declares event-driven transitions
+- Control context persistence per state (`transient` or `persistent`)
+- Choose orchestration mode per state (`internal`, `external`, `hybrid`)
+- Add `agents` object to publish A2A Agent Cards for each prompt
+- Define discovery tags and supported MIME types per agent
+
+See [RFC-0005: Workflow Extension](/docs/rfcs/workflow-extension) and [RFC-0007: Agents Extension](/docs/rfcs/agents-extension) for details.
 
 ---
 
@@ -161,18 +235,18 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.2 if:
+### Use v1.3 if:
 - ✅ Building new PromptPacks
-- ✅ Want automated quality checks (evals) alongside prompts
-- ✅ Need Prometheus metric integration for eval results
+- ✅ Need workflow orchestration between prompts
+- ✅ Want A2A protocol interoperability for multi-agent systems
 - ✅ Want latest features
 
-### Stay on v1.1 if:
+### Stay on v1.2 if:
 - ✅ Existing packs work fine
-- ✅ Don't need eval definitions yet
+- ✅ Don't need workflow or agent definitions yet
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.2 for all new projects. It's backward compatible and adds valuable capabilities.
+**Recommendation:** Use v1.3 for all new projects. It's backward compatible and adds powerful orchestration capabilities.
 
 ---
 
@@ -180,6 +254,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.3    | Feb 2026    | Workflow orchestration, A2A agent definitions |
 | v1.2    | Feb 2026    | Evals extension: pack/prompt-level evals, Prometheus metrics |
 | v1.1    | Nov 2024    | Multimodal support, extensible media types |
 | v1.0    | Oct 2024    | Initial release: core schema, YAML format, templates |
