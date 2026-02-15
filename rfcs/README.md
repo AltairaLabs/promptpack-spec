@@ -42,6 +42,7 @@ Each RFC has one of the following statuses:
 |--------|-------|--------|--------|---------|
 | 0005 | [Workflow Specification Extension](0005-workflow-extension.md) | Draft | AltairaLabs | 2025-11-17 |
 | 0006 | [Evals Extension](0006-evals-extension.md) | Draft | AltairaLabs | 2026-02-14 |
+| 0007 | [Agents Extension](0007-agents-extension.md) | Draft | AltairaLabs | 2026-02-15 |
 
 ## Process
 
