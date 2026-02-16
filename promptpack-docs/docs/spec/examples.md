@@ -662,14 +662,449 @@ In the earlier Customer Support example, a caller must decide which prompt to in
 
 **Composable Architecture**: Workflow and agents are independent — use workflow alone for internal orchestration, or agents alone for A2A interop
 
+## Document Review Pipeline with Evals *(v1.2+)*
+
+This pack demonstrates how evals and validators work together to monitor quality in a document-processing pipeline.
+
+### The Quality Challenge
+
+Legal and compliance teams generate high volumes of document summaries, risk analyses, and draft responses. Validators catch obvious problems inline, but teams also need ongoing quality metrics — brand voice consistency, structural compliance, and accuracy trends — without blocking every response.
+
+### Evals + Validators Solution
+
+```json
+{
+  "id": "document-review-pipeline",
+  "name": "Document Review Pipeline",
+  "version": "1.2.0",
+  "description": "Document processing with validators for safety and evals for quality monitoring",
+
+  "template_engine": {
+    "version": "v1",
+    "syntax": "{{variable}}",
+    "features": ["basic_substitution", "fragments"]
+  },
+
+  "evals": [
+    {
+      "id": "brand-voice",
+      "description": "Checks that all outputs align with corporate communication guidelines",
+      "type": "cosine_similarity",
+      "trigger": "on_session_complete",
+      "metric": {
+        "name": "promptpack_brand_voice_score",
+        "type": "gauge",
+        "range": { "min": 0, "max": 1 }
+      },
+      "params": {
+        "reference_embeddings": "corporate_style_guide_v3",
+        "threshold": 0.85
+      }
+    },
+    {
+      "id": "structure-check",
+      "description": "Validates that outputs conform to expected JSON structure",
+      "type": "json_valid",
+      "trigger": "every_turn",
+      "metric": {
+        "name": "promptpack_structure_valid",
+        "type": "boolean"
+      }
+    }
+  ],
+
+  "prompts": {
+    "summarizer": {
+      "id": "summarizer",
+      "name": "Document Summarizer",
+      "version": "1.0.0",
+      "system_template": "You are a document summarizer for {{company}}.\n\nSummarize the following document in {{format}} format.\n\n{{fragments.output_standards}}",
+      "variables": [
+        { "name": "company", "type": "string", "required": true },
+        { "name": "format", "type": "string", "required": true, "example": "bullet-point" }
+      ],
+      "parameters": { "temperature": 0.3, "max_tokens": 1000 },
+      "validators": [
+        {
+          "type": "max_length",
+          "enabled": true,
+          "fail_on_violation": true,
+          "params": { "max_characters": 5000 }
+        }
+      ]
+    },
+    "risk_analyzer": {
+      "id": "risk_analyzer",
+      "name": "Risk Analyzer",
+      "version": "1.1.0",
+      "system_template": "You are a risk analysis specialist for {{company}}.\n\nAnalyze the document for regulatory, financial, and operational risks.\n\nReturn a JSON object with risk_level, findings, and recommendations.\n\n{{fragments.output_standards}}",
+      "variables": [
+        { "name": "company", "type": "string", "required": true }
+      ],
+      "tools": ["compliance_db_lookup", "precedent_search"],
+      "parameters": { "temperature": 0.2, "max_tokens": 2000 },
+      "validators": [
+        {
+          "type": "pii_detection",
+          "enabled": true,
+          "fail_on_violation": true
+        }
+      ],
+      "evals": [
+        {
+          "id": "risk-accuracy",
+          "description": "LLM judge checks whether identified risks are substantiated by the source document",
+          "type": "llm_judge",
+          "trigger": "every_turn",
+          "metric": {
+            "name": "promptpack_risk_accuracy",
+            "type": "gauge",
+            "range": { "min": 1, "max": 5 }
+          },
+          "params": {
+            "judge_prompt": "Rate 1-5 whether each identified risk is clearly supported by evidence in the source document.",
+            "model": "gpt-4o",
+            "passing_score": 4
+          }
+        }
+      ]
+    },
+    "drafter": {
+      "id": "drafter",
+      "name": "Response Drafter",
+      "version": "1.0.0",
+      "system_template": "You are a professional response drafter for {{company}}.\n\nDraft a {{response_type}} based on the analysis provided.\n\n{{fragments.output_standards}}",
+      "variables": [
+        { "name": "company", "type": "string", "required": true },
+        { "name": "response_type", "type": "string", "required": true, "example": "client letter" }
+      ],
+      "parameters": { "temperature": 0.5, "max_tokens": 3000 }
+    }
+  },
+
+  "tools": {
+    "compliance_db_lookup": {
+      "name": "compliance_db_lookup",
+      "description": "Search the regulatory compliance database",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "regulation": { "type": "string" },
+          "jurisdiction": { "type": "string" }
+        },
+        "required": ["regulation"]
+      }
+    },
+    "precedent_search": {
+      "name": "precedent_search",
+      "description": "Search for relevant legal precedents",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "date_range": { "type": "string" }
+        },
+        "required": ["query"]
+      }
+    }
+  },
+
+  "fragments": {
+    "output_standards": "Follow corporate communication standards. Be precise, cite sources, and avoid speculation."
+  }
+}
+```
+
+### Quality Monitoring Benefits
+
+**Layered Quality**: Validators block bad output immediately (PII leaks, oversized responses), while evals track quality trends over time (brand voice drift, risk accuracy)
+
+**Pack-Level + Prompt-Level Evals**: The `brand-voice` and `structure-check` evals apply to all prompts. The `risk_analyzer` adds its own `risk-accuracy` eval that runs `every_turn` because accuracy is critical for risk analysis
+
+**Prometheus Metrics**: Each eval declares a metric with name, type, and range — runtimes export these directly to monitoring dashboards
+
+**Override Semantics**: If the `risk_analyzer` needed different brand-voice thresholds, it could declare a prompt-level eval with the same `id` to override the pack-level default
+
+## Visual Product Catalog Assistant *(v1.1+)*
+
+This pack demonstrates multimodal capabilities — handling images alongside text in a product catalog context.
+
+### The Multimodal Challenge
+
+E-commerce teams need AI assistants that can look at product photos, understand visual details, and generate accurate catalog descriptions. A text-only prompt can't interpret product images, leading to generic descriptions that miss visual selling points.
+
+### Multimodal Solution
+
+```json
+{
+  "id": "product-catalog-assistant",
+  "name": "Visual Product Catalog Assistant",
+  "version": "1.1.0",
+  "description": "Image-aware product assistant with text-only catalog writer",
+
+  "template_engine": {
+    "version": "v1",
+    "syntax": "{{variable}}",
+    "features": ["basic_substitution", "fragments"]
+  },
+
+  "prompts": {
+    "product_lookup": {
+      "id": "product_lookup",
+      "name": "Visual Product Lookup",
+      "version": "1.0.0",
+      "system_template": "You are a product specialist for {{brand}}.\n\nAnalyze the product image and provide:\n- Product category and type\n- Key visual features (color, material, style)\n- Condition assessment\n- Suggested catalog tags\n\n{{fragments.brand_standards}}",
+      "variables": [
+        { "name": "brand", "type": "string", "required": true, "example": "ModernHome" }
+      ],
+      "tools": ["product_db_search", "price_lookup"],
+      "parameters": { "temperature": 0.3, "max_tokens": 800 },
+      "media": {
+        "enabled": true,
+        "supported_types": ["image"],
+        "image": {
+          "max_size_mb": 10,
+          "allowed_formats": ["jpeg", "png", "webp"],
+          "default_detail": "high",
+          "require_caption": false,
+          "max_images_per_msg": 4
+        },
+        "examples": [
+          {
+            "name": "product-analysis",
+            "description": "Analyzing a product image to extract catalog information",
+            "role": "user",
+            "parts": [
+              { "type": "text", "text": "Analyze this product for our catalog:" },
+              {
+                "type": "media",
+                "media": {
+                  "url": "https://example.com/sample-product.jpg",
+                  "mime_type": "image/jpeg",
+                  "detail": "high",
+                  "caption": "Blue ceramic vase, 12 inches tall"
+                }
+              }
+            ]
+          },
+          {
+            "name": "product-analysis-response",
+            "description": "Expected analysis output format",
+            "role": "assistant",
+            "parts": [
+              {
+                "type": "text",
+                "text": "**Category:** Home Decor > Vases\n**Features:** Ceramic, cobalt blue glaze, cylindrical form, 12\" height\n**Condition:** New\n**Tags:** ceramic, vase, blue, home-decor, modern"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "catalog_writer": {
+      "id": "catalog_writer",
+      "name": "Catalog Description Writer",
+      "version": "1.0.0",
+      "system_template": "You are a catalog copywriter for {{brand}}.\n\nWrite a compelling product description based on the product details provided.\n\nTone: {{tone}}\n\n{{fragments.brand_standards}}",
+      "variables": [
+        { "name": "brand", "type": "string", "required": true },
+        { "name": "tone", "type": "string", "required": true, "example": "warm and aspirational" }
+      ],
+      "parameters": { "temperature": 0.7, "max_tokens": 500 },
+      "validators": [
+        {
+          "type": "max_length",
+          "enabled": true,
+          "fail_on_violation": true,
+          "params": { "max_characters": 2000 }
+        }
+      ]
+    }
+  },
+
+  "tools": {
+    "product_db_search": {
+      "name": "product_db_search",
+      "description": "Search the product database by visual features or text query",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "category": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["query"]
+      }
+    },
+    "price_lookup": {
+      "name": "price_lookup",
+      "description": "Look up current pricing for a product",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_id": { "type": "string" }
+        },
+        "required": ["product_id"]
+      }
+    }
+  },
+
+  "fragments": {
+    "brand_standards": "Follow ModernHome brand guidelines: premium but accessible, emphasize craftsmanship and design intent."
+  }
+}
+```
+
+### Multimodal Benefits
+
+**Image-Aware Analysis**: The `product_lookup` prompt accepts up to 4 images per message with high-detail processing, extracting visual features that text-only prompts would miss
+
+**Multimodal Examples**: The `media.examples` array uses `parts` with mixed `text` and `media` content types, showing the model exactly what input/output format to expect
+
+**Text + Multimodal Coexistence**: The `catalog_writer` prompt is text-only — it receives the analyzed product details and writes copy. Not every prompt in a pack needs multimodal support
+
+**Format Control**: The `image` config restricts formats to `jpeg`, `png`, and `webp`, limits file size to 10 MB, and sets `default_detail: "high"` for accurate product analysis
+
+## Research Crew — Agents Without Workflow *(v1.3+)*
+
+This pack demonstrates standalone agents that collaborate via A2A discovery without a workflow state machine.
+
+### The Collaboration Challenge
+
+Research teams need multiple AI specialists — a researcher who gathers information, a fact-checker who verifies claims, and a writer who produces the final output. These agents don't follow a rigid sequence; the researcher might call the fact-checker multiple times, and the writer might loop back to the researcher for more detail.
+
+### Standalone Agents Solution
+
+```json
+{
+  "id": "research-crew",
+  "name": "Research Crew",
+  "version": "1.3.0",
+  "description": "Collaborative research agents using A2A discovery without workflow orchestration",
+
+  "template_engine": {
+    "version": "v1",
+    "syntax": "{{variable}}",
+    "features": ["basic_substitution", "fragments"]
+  },
+
+  "prompts": {
+    "researcher": {
+      "id": "researcher",
+      "name": "Research Specialist",
+      "version": "1.0.0",
+      "system_template": "You are a research specialist.\n\nGather comprehensive information on {{topic}} from available sources.\n\nWhen you find claims that need verification, use the fact_checker tool.\nWhen your research is complete, use the writer tool to produce the final output.\n\n{{fragments.quality_standards}}",
+      "variables": [
+        { "name": "topic", "type": "string", "required": true }
+      ],
+      "tools": ["web_search", "academic_search", "fact_checker", "writer"],
+      "parameters": { "temperature": 0.5, "max_tokens": 2000 }
+    },
+    "fact_checker": {
+      "id": "fact_checker",
+      "name": "Fact Checker",
+      "version": "1.0.0",
+      "system_template": "You are a fact-checking specialist.\n\nVerify the accuracy of claims by cross-referencing multiple sources.\n\nReturn a JSON object with: claim, verdict (confirmed/unconfirmed/disputed), confidence, and sources.\n\n{{fragments.quality_standards}}",
+      "tools": ["web_search", "academic_search"],
+      "parameters": { "temperature": 0.2, "max_tokens": 1000 }
+    },
+    "writer": {
+      "id": "writer",
+      "name": "Research Writer",
+      "version": "1.0.0",
+      "system_template": "You are a research writer.\n\nProduce a well-structured {{output_format}} based on the research and fact-check results provided.\n\nIf you need additional information, use the researcher tool.\n\n{{fragments.quality_standards}}",
+      "variables": [
+        { "name": "output_format", "type": "string", "required": true, "example": "executive briefing" }
+      ],
+      "tools": ["researcher"],
+      "parameters": { "temperature": 0.6, "max_tokens": 3000 },
+      "validators": [
+        {
+          "type": "max_length",
+          "enabled": true,
+          "fail_on_violation": false,
+          "params": { "max_characters": 15000 }
+        }
+      ]
+    }
+  },
+
+  "agents": {
+    "entry": "researcher",
+    "members": {
+      "researcher": {
+        "description": "Gathers and synthesizes information from multiple sources on a given topic",
+        "tags": ["research", "information-gathering"],
+        "input_modes": ["text/plain"],
+        "output_modes": ["text/plain", "application/json"]
+      },
+      "fact_checker": {
+        "description": "Verifies factual claims by cross-referencing sources and returns confidence scores",
+        "tags": ["verification", "fact-checking"],
+        "input_modes": ["text/plain", "application/json"],
+        "output_modes": ["application/json"]
+      },
+      "writer": {
+        "description": "Produces polished research documents from gathered information and verified facts",
+        "tags": ["writing", "content-creation"],
+        "input_modes": ["text/plain", "application/json"],
+        "output_modes": ["text/plain"]
+      }
+    }
+  },
+
+  "tools": {
+    "web_search": {
+      "name": "web_search",
+      "description": "Search the web for current information",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "max_results": { "type": "integer" }
+        },
+        "required": ["query"]
+      }
+    },
+    "academic_search": {
+      "name": "academic_search",
+      "description": "Search academic databases for peer-reviewed sources",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "subject_area": { "type": "string" }
+        },
+        "required": ["query"]
+      }
+    }
+  },
+
+  "fragments": {
+    "quality_standards": "Cite all sources. Distinguish between established facts and emerging research. Flag any claims with low confidence."
+  }
+}
+```
+
+### Standalone Agents Benefits
+
+**No Workflow Needed**: The agents collaborate through tool references — `researcher` calls `fact_checker` and `writer` as tools, `writer` can call `researcher` back. The interaction topology emerges from tool references, not a rigid state machine
+
+**A2A Discovery**: Each agent declares `description`, `tags`, `input_modes`, and `output_modes` — enough for external systems to discover and invoke them via the A2A protocol
+
+**Flexible Topology**: Unlike workflow (which enforces a fixed sequence), the agent mesh allows dynamic collaboration. The researcher might call fact-checker zero times or ten times depending on the topic
+
+**Entry Point**: `agents.entry: "researcher"` tells external systems which agent receives the initial request by default, but any agent can be invoked directly
+
 ## Why These Examples Matter
 
 Each example shows how PromptPacks solve real business problems:
 
 1. **Specialization Over Generalization**: Multiple focused prompts outperform single generic ones
-2. **Operational Efficiency**: Shared resources eliminate duplication while ensuring consistency  
-3. **Quality Assurance**: Built-in validation and testing prevent common problems
+2. **Operational Efficiency**: Shared resources eliminate duplication while ensuring consistency
+3. **Quality Assurance**: Built-in validation, evals, and testing prevent common problems and enable continuous quality monitoring
 4. **Maintainable Complexity**: Complex systems remain manageable through clear organization
 5. **Business Alignment**: Each prompt can optimize for its specific business outcomes
+6. **Flexible Architecture**: Choose the right orchestration pattern — workflow for rigid sequences, agents for dynamic collaboration, or both together
 
 PromptPacks transform conversational AI from experimental prototypes into production-ready business solutions.

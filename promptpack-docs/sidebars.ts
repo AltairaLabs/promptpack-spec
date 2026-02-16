@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
         'spec/versions',
         'spec/overview',
         'spec/structure',
+        'spec/architecture-patterns',
         'spec/examples',
         'spec/file-format',
         'spec/schema-reference',
@@ -66,6 +67,15 @@ const sidebars: SidebarsConfig = {
             'spec/v1.0/schema-guide',
           ],
         },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Guides',
+      items: [
+        'guides/add-workflow',
+        'guides/setup-agents',
+        'guides/add-evals',
       ],
     },
     {
