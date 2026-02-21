@@ -188,6 +188,7 @@
         - [13.3.1.3.1. Property `PromptPack Specification > workflow > states > additionalProperties > on_event > additionalProperties`](#workflow_states_additionalProperties_on_event_additionalProperties)
       - [13.3.1.4. Property `PromptPack Specification > workflow > states > additionalProperties > persistence`](#workflow_states_additionalProperties_persistence)
       - [13.3.1.5. Property `PromptPack Specification > workflow > states > additionalProperties > orchestration`](#workflow_states_additionalProperties_orchestration)
+      - [13.3.1.6. Property `PromptPack Specification > workflow > states > additionalProperties > skills`](#workflow_states_additionalProperties_skills)
   - [13.4. Property `PromptPack Specification > workflow > engine`](#workflow_engine)
 - [14. Property `PromptPack Specification > agents`](#agents)
   - [14.1. Property `PromptPack Specification > agents > entry`](#agents_entry)
@@ -200,6 +201,16 @@
         - [14.2.1.3.1. PromptPack Specification > agents > members > additionalProperties > input_modes > input_modes items](#agents_members_additionalProperties_input_modes_items)
       - [14.2.1.4. Property `PromptPack Specification > agents > members > additionalProperties > output_modes`](#agents_members_additionalProperties_output_modes)
         - [14.2.1.4.1. PromptPack Specification > agents > members > additionalProperties > output_modes > output_modes items](#agents_members_additionalProperties_output_modes_items)
+- [15. Property `PromptPack Specification > skills`](#skills)
+  - [15.1. PromptPack Specification > skills > SkillSource](#skills_items)
+    - [15.1.1. Property `PromptPack Specification > skills > skills items > oneOf > item 0`](#skills_items_oneOf_i0)
+    - [15.1.2. Property `PromptPack Specification > skills > skills items > oneOf > SkillPathSource`](#skills_items_oneOf_i1)
+      - [15.1.2.1. Property `PromptPack Specification > skills > skills items > oneOf > item 1 > path`](#skills_items_oneOf_i1_path)
+      - [15.1.2.2. Property `PromptPack Specification > skills > skills items > oneOf > item 1 > preload`](#skills_items_oneOf_i1_preload)
+    - [15.1.3. Property `PromptPack Specification > skills > skills items > oneOf > InlineSkill`](#skills_items_oneOf_i2)
+      - [15.1.3.1. Property `PromptPack Specification > skills > skills items > oneOf > item 2 > name`](#skills_items_oneOf_i2_name)
+      - [15.1.3.2. Property `PromptPack Specification > skills > skills items > oneOf > item 2 > description`](#skills_items_oneOf_i2_description)
+      - [15.1.3.3. Property `PromptPack Specification > skills > skills items > oneOf > item 2 > instructions`](#skills_items_oneOf_i2_instructions)
 
 **Title:** PromptPack Specification
 
@@ -209,7 +220,7 @@
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, and agent support
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, and skills support
 
 **Examples:**
 
@@ -358,6 +369,7 @@
 | - [evals](#evals )                     | No      | array  | No         | -                         | Pack-level eval definitions that apply across all prompts. Useful for cross-cutting quality concerns like brand consistency or safety checks. Prompt-level evals with the same id override pack-level evals.                                                                           |
 | - [workflow](#workflow )               | No      | object | No         | In #/$defs/WorkflowConfig | Workflow configuration defining a state machine over the pack's prompts. Each state references a prompt key and declares event-driven transitions.                                                                                                                                     |
 | - [agents](#agents )                   | No      | object | No         | In #/$defs/AgentsConfig   | Agent configuration mapping prompts to A2A-compatible agent definitions. Enables multi-agent orchestration via the Agent-to-Agent protocol.                                                                                                                                            |
+| - [skills](#skills )                   | No      | array  | No         | -                         | Skill sources for progressive-disclosure knowledge loading. Each entry is either a string (path or package reference), a SkillPathSource object, or an InlineSkill object.                                                                                                             |
 
 ## <a name="schema"></a>1. Property `PromptPack Specification > $schema`
 
@@ -4028,13 +4040,14 @@ Must be one of:
 
 **Description:** A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states.
 
-| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                 |
-| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------- |
-| + [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object.                                                   |
-| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                               |
-| + [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. |
-| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | enum (of string) | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                  |
-| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.                 |
+| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                     |
+| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object.                                                                                                       |
+| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                                                                                   |
+| + [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                     |
+| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | enum (of string) | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                      |
+| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.                                                                     |
+| - [skills](#workflow_states_additionalProperties_skills )               | No      | string           | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills. |
 
 ##### <a name="workflow_states_additionalProperties_prompt_task"></a>13.3.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > prompt_task`
 
@@ -4124,6 +4137,25 @@ Must be one of:
 * "internal"
 * "external"
 * "hybrid"
+
+##### <a name="workflow_states_additionalProperties_skills"></a>13.3.1.6. Property `PromptPack Specification > workflow > states > additionalProperties > skills`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.
+
+**Examples:**
+
+```json
+"./skills/billing"
+```
+
+```json
+"none"
+```
 
 ### <a name="workflow_engine"></a>13.4. Property `PromptPack Specification > workflow > engine`
 
@@ -4351,5 +4383,185 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | No       |
 
+## <a name="skills"></a>15. Property `PromptPack Specification > skills`
+
+|              |         |
+| ------------ | ------- |
+| **Type**     | `array` |
+| **Required** | No      |
+
+**Description:** Skill sources for progressive-disclosure knowledge loading. Each entry is either a string (path or package reference), a SkillPathSource object, or an InlineSkill object.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be | Description                                                                                                                                                 |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [SkillSource](#skills_items)    | A skill source for progressive-disclosure knowledge loading. Can be a simple string path, a path object with preload config, or an inline skill definition. |
+
+### <a name="skills_items"></a>15.1. PromptPack Specification > skills > SkillSource
+
+|                           |                     |
+| ------------------------- | ------------------- |
+| **Type**                  | `combining`         |
+| **Required**              | No                  |
+| **Additional properties** | Any type allowed    |
+| **Defined in**            | #/$defs/SkillSource |
+
+**Description:** A skill source for progressive-disclosure knowledge loading. Can be a simple string path, a path object with preload config, or an inline skill definition.
+
+| One of(Option)                            |
+| ----------------------------------------- |
+| [item 0](#skills_items_oneOf_i0)          |
+| [SkillPathSource](#skills_items_oneOf_i1) |
+| [InlineSkill](#skills_items_oneOf_i2)     |
+
+#### <a name="skills_items_oneOf_i0"></a>15.1.1. Property `PromptPack Specification > skills > skills items > oneOf > item 0`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Path to a skill directory/file or a package reference (e.g., './skills', '@acme/billing-skills').
+
+#### <a name="skills_items_oneOf_i1"></a>15.1.2. Property `PromptPack Specification > skills > skills items > oneOf > SkillPathSource`
+
+|                           |                         |
+| ------------------------- | ----------------------- |
+| **Type**                  | `object`                |
+| **Required**              | No                      |
+| **Additional properties** | Not allowed             |
+| **Defined in**            | #/$defs/SkillPathSource |
+
+**Description:** A skill source with a path and optional preload configuration.
+
+| Property                                     | Pattern | Type    | Deprecated | Definition | Title/Description                                                                     |
+| -------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------- |
+| + [path](#skills_items_oneOf_i1_path )       | No      | string  | No         | -          | Path to a skill directory, file, or package reference.                                |
+| - [preload](#skills_items_oneOf_i1_preload ) | No      | boolean | No         | -          | If true, load this skill source eagerly at pack initialization rather than on demand. |
+
+##### <a name="skills_items_oneOf_i1_path"></a>15.1.2.1. Property `PromptPack Specification > skills > skills items > oneOf > item 1 > path`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** Path to a skill directory, file, or package reference.
+
+**Examples:**
+
+```json
+"./skills/billing"
+```
+
+```json
+"@acme/billing-skills"
+```
+
+##### <a name="skills_items_oneOf_i1_preload"></a>15.1.2.2. Property `PromptPack Specification > skills > skills items > oneOf > item 1 > preload`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `boolean` |
+| **Required** | No        |
+| **Default**  | `false`   |
+
+**Description:** If true, load this skill source eagerly at pack initialization rather than on demand.
+
+**Examples:**
+
+```json
+true
+```
+
+```json
+false
+```
+
+#### <a name="skills_items_oneOf_i2"></a>15.1.3. Property `PromptPack Specification > skills > skills items > oneOf > InlineSkill`
+
+|                           |                     |
+| ------------------------- | ------------------- |
+| **Type**                  | `object`            |
+| **Required**              | No                  |
+| **Additional properties** | Not allowed         |
+| **Defined in**            | #/$defs/InlineSkill |
+
+**Description:** A skill defined inline within the pack. Useful for small, pack-specific skills that don't warrant a separate file.
+
+| Property                                               | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                           |
+| ------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------- |
+| + [name](#skills_items_oneOf_i2_name )                 | No      | string | No         | -          | Human-readable name for this skill.                                                                         |
+| + [description](#skills_items_oneOf_i2_description )   | No      | string | No         | -          | Brief description of what this skill provides.                                                              |
+| + [instructions](#skills_items_oneOf_i2_instructions ) | No      | string | No         | -          | The skill's instructions or knowledge content. Loaded into the agent's context when the skill is activated. |
+
+##### <a name="skills_items_oneOf_i2_name"></a>15.1.3.1. Property `PromptPack Specification > skills > skills items > oneOf > item 2 > name`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** Human-readable name for this skill.
+
+**Examples:**
+
+```json
+"escalation-protocol"
+```
+
+```json
+"refund-policy"
+```
+
+| Restrictions   |   |
+| -------------- | - |
+| **Min length** | 1 |
+
+##### <a name="skills_items_oneOf_i2_description"></a>15.1.3.2. Property `PromptPack Specification > skills > skills items > oneOf > item 2 > description`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** Brief description of what this skill provides.
+
+**Example:**
+
+```json
+"Steps for escalating unresolved customer issues"
+```
+
+| Restrictions   |   |
+| -------------- | - |
+| **Min length** | 1 |
+
+##### <a name="skills_items_oneOf_i2_instructions"></a>15.1.3.3. Property `PromptPack Specification > skills > skills items > oneOf > item 2 > instructions`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** The skill's instructions or knowledge content. Loaded into the agent's context when the skill is activated.
+
+**Example:**
+
+```json
+"When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket"
+```
+
+| Restrictions   |   |
+| -------------- | - |
+| **Min length** | 1 |
+
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-02-15 at 22:39:59 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-02-21 at 08:44:18 +0000
