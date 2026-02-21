@@ -1,5 +1,6 @@
 ---
 sidebar_position: 5
+title: "Schema Guide (v1.3)"
 ---
 
 # Schema Guide
@@ -26,7 +27,6 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 | `evals` | [Eval](#eval)[] | No | Pack-level eval definitions. Cross-cutting quality checks that apply to all prompts. *(v1.2+)* |
 | `workflow` | [WorkflowConfig](#workflowconfig) | No | State-machine workflow over the pack's prompts with event-driven transitions. *(v1.3+)* |
 | `agents` | [AgentsConfig](#agentsconfig) | No | Agent configuration mapping prompts to A2A-compatible agent definitions. *(v1.3+)* |
-| `skills` | [SkillSource](#skillsource)[] | No | Skill sources for progressive-disclosure knowledge loading. *(v1.3.1+)* |
 
 :::info Collections are keyed maps, not arrays
 `prompts`, `fragments`, and `tools` are all **objects** (keyed maps), not arrays. Each key serves as the identifier for the entry. For example, `prompts` maps task type strings like `"support"` or `"billing"` to their Prompt definitions.
@@ -564,7 +564,6 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 | `on_event` | object&lt;string, string&gt; | **Yes** | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. |
 | `persistence` | string | No | Whether conversation context is kept (`persistent`) or reset (`transient`) on entry. |
 | `orchestration` | string | No | How this state is orchestrated: `internal` (runtime manages), `external` (caller manages), or `hybrid`. |
-| `skills` | string | No | Skill filter for this state. A path scoping which skills are available, or `"none"` to disable skills. *(v1.3.1+)* |
 
 ```json
 "workflow": {
@@ -652,53 +651,6 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 
 :::info Workflow + Agents
 `workflow` and `agents` are independent features — you can use either or both. When used together, the workflow drives state transitions while agent definitions provide A2A discoverability metadata for each prompt.
-:::
-
----
-
-## Skills *(v1.3.1+)*
-
-PromptPack v1.3.1 adds skills for progressive-disclosure knowledge loading. Skills are modular knowledge sources that agents load on demand, keeping system templates lean while providing access to deep domain expertise.
-
-### SkillSource
-
-Each entry in the top-level `skills` array is one of three forms:
-
-| Form | Type | Description |
-|------|------|-------------|
-| **String** | string | Path to a skill directory/file or a package reference (e.g., `"./skills/billing"`, `"@acme/support-skills"`). |
-| **SkillPathSource** | [SkillPathSource](#skillpathsource) | Path object with optional `preload` flag. |
-| **InlineSkill** | [InlineSkill](#inlineskill) | Skill defined directly in the pack. |
-
-### SkillPathSource
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `path` | string | **Yes** | Path to a skill directory, file, or package reference. |
-| `preload` | boolean | No | If true, load eagerly at pack initialization. Default: `false`. |
-
-### InlineSkill
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | string | **Yes** | Human-readable name for this skill. |
-| `description` | string | **Yes** | Brief description of what this skill provides. |
-| `instructions` | string | **Yes** | The skill's instructions or knowledge content. Loaded into the agent's context when activated. |
-
-```json
-"skills": [
-  "./skills/billing",
-  { "path": "./skills/compliance", "preload": true },
-  {
-    "name": "escalation-protocol",
-    "description": "Steps for escalating unresolved customer issues",
-    "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket\n4. Provide the ticket reference to the customer"
-  }
-]
-```
-
-:::info Skills + Workflow
-When a `WorkflowState` declares a `skills` field, it scopes which skills are available in that state. Use `"none"` to disable skills for a state. Without a `skills` field, all pack-level skills are available.
 :::
 
 ---

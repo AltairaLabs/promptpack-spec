@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: "Pack Structure & Design (v1.3)"
 ---
 
 # Pack Structure & Design
@@ -27,7 +28,7 @@ The defining characteristic of PromptPacks is that **each pack contains multiple
   "id": "customer-support",
   "name": "Customer Support Pack",
   "version": "1.0.0",
-  
+
   "prompts": {
     "support": { /* optimized for general support */ },
     "sales": { /* tuned for sales conversations */ },
@@ -291,32 +292,6 @@ The `agents` section maps prompts to A2A (Agent-to-Agent) protocol compatible ag
 
 Each agent definition provides metadata for the A2A Agent Card — description, discovery tags, and supported MIME types. The `entry` field identifies which agent receives incoming requests by default.
 
-## Skills *(v1.3.1+)*
-
-The `skills` section declares external knowledge sources that agents can load progressively on demand. Instead of embedding all domain knowledge in system templates, skills let you keep templates lean and load expertise when it's relevant.
-
-```json
-{
-  "skills": [
-    "./skills/billing",
-    { "path": "./skills/compliance", "preload": true },
-    {
-      "name": "escalation-protocol",
-      "description": "Steps for escalating unresolved customer issues",
-      "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket"
-    }
-  ]
-}
-```
-
-Skills come in three forms:
-
-- **String paths** — reference a directory or package (`"./skills/billing"`, `"@acme/support-skills"`)
-- **Path objects** — provide a path with optional `preload: true` for eager loading
-- **Inline skills** — define `name`, `description`, and `instructions` directly in the pack
-
-When combined with workflows, each state can declare a `skills` field to scope which skills are available in that context, or use `"none"` to disable skills entirely for a state.
-
 ## Deployment Benefits
 
 The pack structure provides significant operational advantages:
@@ -353,7 +328,7 @@ PromptPacks enable GitOps workflows:
 The pack structure follows key principles that make conversational AI more manageable:
 
 **Modularity**: Break complex AI behavior into focused, manageable pieces
-**Composability**: Combine specialized prompts with shared resources efficiently  
+**Composability**: Combine specialized prompts with shared resources efficiently
 **Portability**: Work consistently across different environments and providers
 **Observability**: Built-in testing and performance tracking for continuous improvement
 **Maintainability**: Clear separation makes updates safer and easier

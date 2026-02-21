@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: Architecture Patterns
+title: "Architecture Patterns (v1.3)"
 ---
 
 # Architecture Patterns
@@ -13,8 +13,6 @@ A PromptPack is organized in layers. Lower layers are simpler and more universal
 
 ```
 ┌─────────────────────────────────────────────┐
-│  Skills       Progressive knowledge loading │  v1.3.1
-├─────────────────────────────────────────────┤
 │  Agents       Inter-system discovery (A2A)  │  v1.3
 ├─────────────────────────────────────────────┤
 │  Workflow     Intra-pack state machine      │  v1.3
@@ -29,7 +27,7 @@ A PromptPack is organized in layers. Lower layers are simpler and more universal
 └─────────────────────────────────────────────┘
 ```
 
-**Prompts** define what the LLM does. **Tools & Fragments** provide shared resources that prompts reference. **Validators** add inline guardrails that block bad output. **Evals** add async quality measurement that scores and reports. **Workflow** orchestrates transitions between prompts via a state machine. **Agents** expose prompts as discoverable services via the A2A protocol. **Skills** provide progressive-disclosure knowledge that agents load on demand.
+**Prompts** define what the LLM does. **Tools & Fragments** provide shared resources that prompts reference. **Validators** add inline guardrails that block bad output. **Evals** add async quality measurement that scores and reports. **Workflow** orchestrates transitions between prompts via a state machine. **Agents** expose prompts as discoverable services via the A2A protocol.
 
 Each layer is optional — a valid PromptPack only requires `id`, `name`, `version`, `template_engine`, and at least one prompt. You adopt higher layers only when you need them.
 
@@ -152,35 +150,6 @@ The `media` configuration (v1.1+) composes with all other features:
 Multimodal and text-only prompts can coexist in the same pack. A pack might have an image-aware `product_lookup` prompt and a text-only `catalog_writer` prompt — the media config is per-prompt, not per-pack.
 :::
 
-## Skills Integration *(v1.3.1+)*
-
-Skills provide progressive-disclosure knowledge loading — modular expertise that agents activate on demand rather than embedding everything in system templates.
-
-### Skills vs Fragments
-
-| Aspect | Fragments | Skills |
-|--------|-----------|--------|
-| **Resolved when?** | Compile time (template substitution) | Runtime (on demand) |
-| **Content** | Static text strings | Instructions, knowledge, behavioral patterns |
-| **Loading** | Always included in rendered template | Loaded progressively when relevant |
-| **Scoping** | Referenced explicitly in templates | Available to all prompts, filterable per workflow state |
-| **Version introduced** | v1.0 | v1.3.1 |
-
-### When to Use Skills
-
-| Scenario | Use Fragments? | Use Skills? |
-|----------|:---:|:---:|
-| Shared text like company intro or disclaimers | Yes | — |
-| Domain expertise loaded on demand | — | Yes |
-| Static template sections | Yes | — |
-| Context-specific behavioral instructions | — | Yes |
-| Small reusable text blocks | Yes | — |
-| Large knowledge bases scoped per workflow state | — | Yes |
-
-:::info
-Fragments and skills are complementary. Use fragments for compile-time text substitution and skills for runtime knowledge loading. A pack can use both.
-:::
-
 ## Feature Compatibility Matrix
 
 | Feature | Version | Combines With |
@@ -193,15 +162,13 @@ Fragments and skills are complementary. Use fragments for compile-time text subs
 | Model Overrides | v1.0 | Prompts |
 | Media (multimodal) | v1.1 | Prompts, Agents (MIME types) |
 | Evals | v1.2 | Prompts (prompt-level), Pack (pack-level) |
-| Workflow | v1.3 | Prompts (via `prompt_task`), Agents, Skills (state scoping) |
+| Workflow | v1.3 | Prompts (via `prompt_task`), Agents |
 | Agents | v1.3 | Prompts (via `members`), Workflow |
-| Skills | v1.3.1 | Workflow (state-scoped filtering), Agents |
 
 ## Next Steps
 
 - **Build your first workflow**: [How to Add a Workflow](/docs/guides/add-workflow)
 - **Set up agents**: [How to Set Up Agents](/docs/guides/setup-agents)
-- **Add skills**: [How to Add Skills](/docs/guides/add-skills)
 - **Add quality monitoring**: [How to Add Evals](/docs/guides/add-evals)
 - **See full examples**: [Real-World Examples](/docs/spec/examples)
 - **Design rationale**: [RFC 0005: Workflow Extension](/docs/rfcs/workflow-extension) · [RFC 0007: Agents Extension](/docs/rfcs/agents-extension) · [RFC 0006: Evals Extension](/docs/rfcs/evals-extension)

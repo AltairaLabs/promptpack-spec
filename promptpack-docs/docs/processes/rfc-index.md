@@ -31,6 +31,7 @@ The RFC (Request for Comments) process is how the PromptPack community proposes,
 | [RFC-0005](/docs/rfcs/workflow-extension) | 🚀 Implemented | PromptPack Workflow Specification Extension |
 | [RFC-0006](/docs/rfcs/evals-extension) | 🚀 Implemented | Evals Extension |
 | [RFC-0007](/docs/rfcs/agents-extension) | 🚀 Implemented | Agents Extension |
+| [RFC-0008](/docs/rfcs/skills-extension) | 🚀 Implemented | Skills Extension |
 <!-- RFC_TABLE_END -->
 
 ## Upcoming Considerations
@@ -125,8 +126,8 @@ Learn from implemented RFCs:
 
 | Metric | Count |
 |--------|-------|
-| **Total RFCs** | 7 |
-| **Implemented** | 7 |
+| **Total RFCs** | 8 |
+| **Implemented** | 8 |
 | **In Review** | 0 |
 | **Draft** | 0 |
 | **Contributors** | 1+ |

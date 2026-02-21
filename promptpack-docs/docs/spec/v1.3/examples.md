@@ -1,5 +1,6 @@
 ---
 sidebar_position: 3
+title: "Real-World Examples (v1.3)"
 ---
 
 # Real-World Examples
@@ -22,16 +23,16 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
   "name": "Customer Support Pack",
   "version": "1.2.0",
   "description": "Complete customer service solution with specialized prompts",
-  
+
   "template_engine": {
     "version": "v1",
     "syntax": "{{variable}}",
     "features": ["basic_substitution", "fragments"]
   },
-  
+
   "prompts": {
     "support": {
-      "id": "support", 
+      "id": "support",
       "name": "General Support",
       "version": "1.0.0",
       "system_template": "You are a {{role}} for {{company}}.\n\n{{customer_context}}\n\nHelp resolve their issue professionally and empathetically.",
@@ -43,7 +44,7 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
           "example": "customer support specialist"
         },
         {
-          "name": "company", 
+          "name": "company",
           "type": "string",
           "required": true,
           "example": "TechCorp"
@@ -64,16 +65,16 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
         }
       ]
     },
-    
+
     "technical": {
       "id": "technical",
-      "name": "Technical Support", 
+      "name": "Technical Support",
       "version": "1.1.0",
       "system_template": "You are a {{role}} for {{company}}.\n\nCustomer's technical issue: {{issue_description}}\n\nProvide step-by-step troubleshooting guidance.",
       "variables": [
         {
           "name": "role",
-          "type": "string", 
+          "type": "string",
           "required": true,
           "example": "technical support engineer"
         },
@@ -89,15 +90,15 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
         "max_tokens": 800
       }
     },
-    
+
     "billing": {
       "id": "billing",
       "name": "Billing Support",
-      "version": "1.0.1", 
+      "version": "1.0.1",
       "system_template": "You are a {{role}} for {{company}}.\n\nCustomer billing inquiry: {{billing_question}}\n\nProvide accurate billing information and assistance.",
       "variables": [
         {
-          "name": "role", 
+          "name": "role",
           "type": "string",
           "required": true,
           "example": "billing specialist"
@@ -118,7 +119,7 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
       ]
     }
   },
-  
+
   "tools": {
     "lookup_customer": {
       "name": "lookup_customer",
@@ -134,9 +135,9 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
         "required": ["customer_id"]
       }
     },
-    
+
     "create_ticket": {
-      "name": "create_ticket", 
+      "name": "create_ticket",
       "description": "Create support ticket for complex issues",
       "parameters": {
         "type": "object",
@@ -152,7 +153,7 @@ Customer service teams need to handle diverse inquiries—from simple billing qu
       }
     }
   },
-  
+
   "fragments": {
     "customer_context": "Customer: {{customer_name}}\nAccount Type: {{account_type}}\nIssue Category: {{category}}",
     "escalation_notice": "I'm going to connect you with a specialist who can provide more detailed assistance."
@@ -182,16 +183,16 @@ Marketing teams need to create various content types (blogs, social media, email
 
 ```json
 {
-  "id": "content-marketing", 
+  "id": "content-marketing",
   "name": "Content Marketing Suite",
   "version": "2.0.0",
   "description": "Brand-consistent content generation across all channels",
-  
+
   "prompts": {
     "blog": {
       "id": "blog",
       "name": "Blog Writer",
-      "version": "2.1.0", 
+      "version": "2.1.0",
       "system_template": "{{fragments.brand_voice}}\n\nWrite a {{post_type}} blog post about {{topic}} for {{audience}}.\n\n{{fragments.blog_guidelines}}",
       "variables": [
         {
@@ -202,7 +203,7 @@ Marketing teams need to create various content types (blogs, social media, email
           }
         },
         {
-          "name": "topic", 
+          "name": "topic",
           "type": "string",
           "required": true
         },
@@ -219,9 +220,9 @@ Marketing teams need to create various content types (blogs, social media, email
         "max_tokens": 2000
       }
     },
-    
+
     "social": {
-      "id": "social", 
+      "id": "social",
       "name": "Social Media",
       "version": "1.5.0",
       "system_template": "{{fragments.brand_voice}}\n\nCreate a {{platform}} post about {{topic}}.\n\n{{fragments.social_guidelines}}",
@@ -235,21 +236,21 @@ Marketing teams need to create various content types (blogs, social media, email
         },
         {
           "name": "topic",
-          "type": "string", 
+          "type": "string",
           "required": true
         }
       ],
       "validators": [
         {
           "type": "max_length",
-          "enabled": true, 
+          "enabled": true,
           "params": {
             "max_characters": 280
           }
         }
       ]
     },
-    
+
     "email": {
       "id": "email",
       "name": "Email Marketing",
@@ -272,7 +273,7 @@ Marketing teams need to create various content types (blogs, social media, email
       "tools": ["email_validator", "ab_test_generator"]
     }
   },
-  
+
   "tools": {
     "seo_analyzer": {
       "name": "seo_analyzer",
@@ -289,14 +290,14 @@ Marketing teams need to create various content types (blogs, social media, email
       }
     }
   },
-  
+
   "fragments": {
     "brand_voice": "You are writing for TechCorp, a B2B software company. Our voice is professional but approachable, authoritative but not arrogant. We speak to business leaders who value efficiency and results.",
-    
+
     "blog_guidelines": "Structure: compelling headline, intro hook, 3-5 main sections with subheadings, conclusion with CTA. Include specific examples and data. Optimize for SEO without sacrificing readability.",
-    
+
     "social_guidelines": "Be engaging and conversational. Include relevant hashtags. Encourage interaction through questions or polls when appropriate.",
-    
+
     "email_guidelines": "Subject line should be compelling but not clickbait. Personalize when possible. Include clear CTA. Respect recipient's time with concise, valuable content."
   }
 }
@@ -325,10 +326,10 @@ Educational institutions need AI assistants that can tutor students, help with r
 ```json
 {
   "id": "learning-assistant",
-  "name": "AI Learning Assistant", 
+  "name": "AI Learning Assistant",
   "version": "1.4.0",
   "description": "Comprehensive educational AI supporting multiple learning contexts",
-  
+
   "prompts": {
     "tutor": {
       "id": "tutor",
@@ -343,7 +344,7 @@ Educational institutions need AI assistants that can tutor students, help with r
           "example": "mathematics"
         },
         {
-          "name": "grade_level", 
+          "name": "grade_level",
           "type": "string",
           "required": true,
           "validation": {
@@ -352,7 +353,7 @@ Educational institutions need AI assistants that can tutor students, help with r
         },
         {
           "name": "question",
-          "type": "string", 
+          "type": "string",
           "required": true
         }
       ],
@@ -371,9 +372,9 @@ Educational institutions need AI assistants that can tutor students, help with r
         }
       ]
     },
-    
+
     "research": {
-      "id": "research", 
+      "id": "research",
       "name": "Research Assistant",
       "version": "1.1.0",
       "system_template": "You are a research assistant helping with {{research_topic}}.\n\nResearch question: {{question}}\n\n{{fragments.research_methodology}}\n\n{{fragments.citation_requirements}}",
@@ -392,7 +393,7 @@ Educational institutions need AI assistants that can tutor students, help with r
       "tools": ["database_search", "citation_formatter"],
       "validators": [
         {
-          "type": "academic_integrity", 
+          "type": "academic_integrity",
           "enabled": true,
           "params": {
             "plagiarism_check": true,
@@ -401,11 +402,11 @@ Educational institutions need AI assistants that can tutor students, help with r
         }
       ]
     },
-    
+
     "feedback": {
       "id": "feedback",
       "name": "Assignment Feedback",
-      "version": "1.0.0", 
+      "version": "1.0.0",
       "system_template": "Provide constructive feedback on this {{assignment_type}}.\n\nAssignment: {{student_work}}\n\nRubric: {{grading_rubric}}\n\n{{fragments.feedback_approach}}",
       "variables": [
         {
@@ -420,7 +421,7 @@ Educational institutions need AI assistants that can tutor students, help with r
           "required": true
         },
         {
-          "name": "grading_rubric", 
+          "name": "grading_rubric",
           "type": "string",
           "required": false
         }
@@ -430,13 +431,13 @@ Educational institutions need AI assistants that can tutor students, help with r
       }
     }
   },
-  
+
   "tools": {
     "database_search": {
       "name": "database_search",
       "description": "Search academic databases for research sources",
       "parameters": {
-        "type": "object", 
+        "type": "object",
         "properties": {
           "query": {"type": "string"},
           "subject_area": {"type": "string"},
@@ -451,16 +452,16 @@ Educational institutions need AI assistants that can tutor students, help with r
       }
     }
   },
-  
+
   "fragments": {
     "socratic_method": "Guide the student to discover the answer through questions. Don't give direct answers—help them think through the problem step by step.",
-    
+
     "safety_guidelines": "Always maintain appropriate boundaries. If a question is outside your expertise or inappropriate for the student's level, explain and redirect appropriately.",
-    
+
     "research_methodology": "Help identify reliable sources, evaluate credibility, synthesize information from multiple sources, and maintain academic integrity throughout the research process.",
-    
+
     "citation_requirements": "All sources must be properly cited. Help students understand plagiarism and the importance of attribution.",
-    
+
     "feedback_approach": "Provide specific, actionable feedback. Highlight strengths first, then areas for improvement. Suggest concrete next steps for enhancement."
   }
 }
@@ -1096,151 +1097,6 @@ Research teams need multiple AI specialists — a researcher who gathers informa
 
 **Entry Point**: `agents.entry: "researcher"` tells external systems which agent receives the initial request by default, but any agent can be invoked directly
 
-## Skill-Enhanced Support System *(v1.3.1+)*
-
-This pack demonstrates how skills provide progressive-disclosure knowledge loading — domain expertise that agents activate on demand without bloating system templates.
-
-### The Knowledge Challenge
-
-Support agents need deep domain knowledge — billing policies, troubleshooting procedures, escalation protocols — but embedding everything in system templates makes them unwieldy. Different conversation phases need different knowledge, and loading it all upfront wastes context window.
-
-### Skills Solution
-
-```json
-{
-  "id": "skill-enhanced-support",
-  "name": "Skill-Enhanced Support",
-  "version": "1.3.1",
-  "description": "Support system with progressive knowledge loading via skills",
-
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}",
-    "features": ["basic_substitution", "fragments"]
-  },
-
-  "skills": [
-    "./skills/billing",
-    "./skills/technical",
-    { "path": "./skills/compliance", "preload": true },
-    {
-      "name": "escalation-protocol",
-      "description": "Steps for escalating unresolved customer issues",
-      "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity of the issue\n2. Collect all relevant case details (order ID, error messages, steps tried)\n3. Create an escalation ticket with priority based on customer tier\n4. Provide the ticket reference number to the customer\n5. Set expectations for follow-up timeline (24h for standard, 4h for premium)"
-    }
-  ],
-
-  "prompts": {
-    "triage": {
-      "id": "triage",
-      "name": "Request Triage",
-      "version": "1.0.0",
-      "system_template": "You are a support triage agent for {{company}}.\n\nClassify the customer's request and respond with: billing, technical, or general.",
-      "variables": [
-        { "name": "company", "type": "string", "required": true }
-      ],
-      "parameters": { "temperature": 0.3 }
-    },
-    "billing": {
-      "id": "billing",
-      "name": "Billing Support",
-      "version": "1.0.0",
-      "system_template": "You are a billing specialist for {{company}}.\n\nHelp resolve the customer's billing issue using your available skills and tools.",
-      "variables": [
-        { "name": "company", "type": "string", "required": true }
-      ],
-      "tools": ["lookup_account", "process_refund"],
-      "parameters": { "temperature": 0.5 }
-    },
-    "technical": {
-      "id": "technical",
-      "name": "Technical Support",
-      "version": "1.0.0",
-      "system_template": "You are a technical support engineer for {{company}}.\n\nDiagnose and resolve the customer's technical issue using your available skills.",
-      "variables": [
-        { "name": "company", "type": "string", "required": true }
-      ],
-      "tools": ["run_diagnostic"],
-      "parameters": { "temperature": 0.4 }
-    },
-    "closing": {
-      "id": "closing",
-      "name": "Session Closing",
-      "version": "1.0.0",
-      "system_template": "Summarize the resolution and ask if there's anything else.",
-      "parameters": { "temperature": 0.6 }
-    }
-  },
-
-  "workflow": {
-    "version": 1,
-    "entry": "triage",
-    "states": {
-      "triage": {
-        "prompt_task": "triage",
-        "on_event": { "billing": "billing_state", "technical": "tech_state", "general": "closing_state" }
-      },
-      "billing_state": {
-        "prompt_task": "billing",
-        "on_event": { "resolved": "closing_state" },
-        "persistence": "persistent",
-        "skills": "./skills/billing"
-      },
-      "tech_state": {
-        "prompt_task": "technical",
-        "on_event": { "resolved": "closing_state" },
-        "persistence": "persistent",
-        "skills": "./skills/technical"
-      },
-      "closing_state": {
-        "prompt_task": "closing",
-        "on_event": {},
-        "skills": "none"
-      }
-    }
-  },
-
-  "tools": {
-    "lookup_account": {
-      "name": "lookup_account",
-      "description": "Look up customer account details",
-      "parameters": {
-        "type": "object",
-        "properties": { "customer_id": { "type": "string" } },
-        "required": ["customer_id"]
-      }
-    },
-    "process_refund": {
-      "name": "process_refund",
-      "description": "Process a customer refund",
-      "parameters": {
-        "type": "object",
-        "properties": { "amount": { "type": "number" }, "reason": { "type": "string" } },
-        "required": ["amount"]
-      }
-    },
-    "run_diagnostic": {
-      "name": "run_diagnostic",
-      "description": "Run automated diagnostic checks",
-      "parameters": {
-        "type": "object",
-        "properties": { "product_id": { "type": "string" }, "symptoms": { "type": "string" } }
-      }
-    }
-  }
-}
-```
-
-### Skills Benefits
-
-**Progressive Disclosure**: Skills load on demand rather than bloating system templates upfront. The billing state loads billing skills; the technical state loads technical skills
-
-**State-Scoped Knowledge**: Each workflow state declares which skills are available via the `skills` field, ensuring agents only see relevant knowledge. The closing state uses `"none"` to disable skills entirely
-
-**Mixed Sources**: The pack combines file-based skills (`./skills/billing`), eagerly-loaded compliance skills (`preload: true`), and an inline escalation protocol — all in one `skills` array
-
-**Lean Templates**: System templates stay focused on core behavior. Domain knowledge lives in skills, loaded when needed rather than embedded in every prompt
-
 ## Why These Examples Matter
 
 Each example shows how PromptPacks solve real business problems:
@@ -1251,6 +1107,5 @@ Each example shows how PromptPacks solve real business problems:
 4. **Maintainable Complexity**: Complex systems remain manageable through clear organization
 5. **Business Alignment**: Each prompt can optimize for its specific business outcomes
 6. **Flexible Architecture**: Choose the right orchestration pattern — workflow for rigid sequences, agents for dynamic collaboration, or both together
-7. **Progressive Knowledge**: Skills keep templates lean while giving agents access to deep domain expertise on demand
 
 PromptPacks transform conversational AI from experimental prototypes into production-ready business solutions.

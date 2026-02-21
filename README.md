@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.3-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.3.1-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -21,6 +21,7 @@ Production AI systems need more than a single prompt — they need specialized p
 - **Evals** — automated quality checks with Prometheus metric export, shipped alongside your prompts
 - **Workflows** — state-machine orchestration over prompts with event-driven transitions
 - **Agents** — A2A-compatible agent definitions for multi-agent orchestration
+- **Skills** — progressive-disclosure knowledge loading with file, package, and inline sources
 - **Built-in testing metadata** to track model performance across providers
 - **Portable format** that works with OpenAI, Anthropic, Google, and local models
 
@@ -87,6 +88,7 @@ Production AI systems need more than a single prompt — they need specialized p
 - **Evals & Metrics** — Declare automated quality checks (deterministic or LLM judge) with Prometheus metric export
 - **Workflows** — State-machine orchestration with event-driven transitions between prompts
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
+- **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
 - **Built-in Testing** — Testing metadata and quality assurance built into the spec
@@ -165,6 +167,33 @@ PromptPack v1.3 adds two new top-level sections for orchestration:
 
 See [RFC-0005: Workflow Extension](https://promptpack.org/docs/rfcs/workflow-extension) and [RFC-0007: Agents Extension](https://promptpack.org/docs/rfcs/agents-extension) for the full designs.
 
+## Skills *(v1.3.1)*
+
+PromptPack v1.3.1 adds progressive-disclosure knowledge loading. Skills are modular knowledge sources — file paths, package references, or inline definitions — that agents activate on demand:
+
+```json
+"skills": [
+  "./skills/billing",
+  { "path": "./skills/compliance", "preload": true },
+  {
+    "name": "escalation-protocol",
+    "description": "Steps for escalating unresolved issues",
+    "instructions": "When an issue cannot be resolved:\n1. Collect details\n2. Create ticket\n3. Set expectations"
+  }
+]
+```
+
+Workflow states can scope which skills are available per context:
+
+```json
+"states": {
+  "billing_state": { "prompt_task": "billing", "on_event": {}, "skills": "./skills/billing" },
+  "closing":       { "prompt_task": "closing",  "on_event": {}, "skills": "none" }
+}
+```
+
+See [RFC-0008: Skills Extension](https://promptpack.org/docs/rfcs/skills-extension) for the full design.
+
 ## Documentation
 
 - [Specification](https://promptpack.org/docs/spec/overview) — Complete PromptPack spec
@@ -175,13 +204,13 @@ See [RFC-0005: Workflow Extension](https://promptpack.org/docs/rfcs/workflow-ext
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.3/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.3.1/promptpack.schema.json`
 
 ## Ecosystem
 
 | Component | Status | Links |
 |-----------|--------|-------|
-| **Core Specification** | v1.3 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
+| **Core Specification** | v1.3.1 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
 | **PromptKit** | Stable | [CLI, validation, SDK](https://promptpack.org/docs/ecosystem/promptkit-runtime) |
 | **PromptArena** | Stable | [Multi-provider testing, CI/CD](https://promptpack.org/docs/ecosystem/arena-testing) |
 | **LangChain.js** | Available | [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) |

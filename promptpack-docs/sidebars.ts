@@ -31,6 +31,20 @@ const sidebars: SidebarsConfig = {
         'spec/schema-guide',
         {
           type: 'category',
+          label: 'v1.3 (Archived)',
+          collapsed: true,
+          items: [
+            'spec/v1.3/overview',
+            'spec/v1.3/structure',
+            'spec/v1.3/architecture-patterns',
+            'spec/v1.3/examples',
+            'spec/v1.3/file-format',
+            'spec/v1.3/schema-reference',
+            'spec/v1.3/schema-guide',
+          ],
+        },
+        {
+          type: 'category',
           label: 'v1.2 (Archived)',
           collapsed: true,
           items: [
@@ -75,6 +89,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'guides/add-workflow',
         'guides/setup-agents',
+        'guides/add-skills',
         'guides/add-evals',
       ],
     },

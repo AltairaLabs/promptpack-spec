@@ -6,24 +6,40 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.3
+## Current Version: v1.3.1
 
 **Status:** ✅ Current
 **Released:** February 2026
-**Schema:** `https://promptpack.org/schema/v1.3/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.3.1/promptpack.schema.json`
 
-### What's New in v1.3
+### What's New in v1.3.1
 
-- **Workflow Orchestration** ([RFC-0005](/docs/rfcs/workflow-extension)) - Define state-machine workflows over prompts with event-driven transitions
-- **Agent Definitions** ([RFC-0007](/docs/rfcs/agents-extension)) - Map prompts to A2A-compatible agent cards for multi-agent orchestration
-- **WorkflowState** - Per-state persistence (`transient`/`persistent`) and orchestration mode (`internal`/`external`/`hybrid`)
-- **AgentDef** - Discovery tags, input/output MIME types for A2A protocol interoperability
+- **Skills Extension** ([RFC-0008](/docs/rfcs/skills-extension)) - Progressive-disclosure knowledge loading via the AgentSkills.io standard
+- **Top-level `skills` array** - Declare skill sources as file paths, package references, or inline definitions
+- **SkillPathSource** - Path-based skill source with optional `preload` flag for eager loading
+- **InlineSkill** - Define skills inline with `name`, `description`, and `instructions`
+- **WorkflowState `skills` field** - Directory-scoped skill filtering per workflow state
 
-[View v1.3 Spec →](./overview)
+[View v1.3.1 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.3
+
+**Status:** 📦 Stable
+**Released:** February 2026
+**Schema:** `https://promptpack.org/schema/v1.3/promptpack.schema.json`
+
+- Workflow Orchestration - State-machine workflows over prompts with event-driven transitions
+- Agent Definitions - A2A-compatible agent cards for multi-agent orchestration
+- WorkflowState - Per-state persistence and orchestration modes
+- AgentDef - Discovery tags, input/output MIME types
+
+[View v1.3 Spec →](./v1.3/overview)
+
+---
 
 ### v1.2
 
@@ -77,7 +93,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.3    | ✅ Current | Full support | - |
+| v1.3.1  | ✅ Current | Full support | - |
+| v1.3    | 📦 Stable | Security fixes only | TBD |
 | v1.2    | 📦 Stable | Security fixes only | TBD |
 | v1.1    | 📦 Stable | Security fixes only | TBD |
 | v1.0    | 📦 Stable | Security fixes only | TBD |
@@ -85,6 +102,69 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.3 to v1.3.1
+
+v1.3.1 is **fully backward compatible** with v1.3. No breaking changes.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.3.1/promptpack.schema.json",
+     "version": "1.3.1"
+   }
+   ```
+
+2. **(Optional) Add skills** for progressive-disclosure knowledge loading:
+   ```json
+   {
+     "skills": [
+       "./skills/billing",
+       { "path": "./skills/compliance", "preload": true },
+       {
+         "name": "escalation-protocol",
+         "description": "Steps for escalating unresolved issues",
+         "instructions": "When an issue cannot be resolved:\n1. Collect details\n2. Create ticket\n3. Set expectations"
+       }
+     ]
+   }
+   ```
+
+3. **(Optional) Add skills to workflow states** for context-scoped filtering:
+   ```json
+   {
+     "workflow": {
+       "states": {
+         "billing_state": {
+           "prompt_task": "billing",
+           "on_event": { "resolved": "closing" },
+           "skills": "./skills/billing"
+         },
+         "closing": {
+           "prompt_task": "closing",
+           "on_event": {},
+           "skills": "none"
+         }
+       }
+     }
+   }
+   ```
+
+4. **Test and validate** - v1.3 packs continue to work without changes
+
+### New Features You Can Use
+
+- Add `skills` array at pack level to declare knowledge sources
+- Use string paths, `SkillPathSource` objects, or `InlineSkill` objects
+- Set `preload: true` on `SkillPathSource` for eager loading
+- Add `skills` field to `WorkflowState` to scope which skills are available per state
+- Use `"none"` to disable skills in specific workflow states
+
+See [RFC-0008: Skills Extension](/docs/rfcs/skills-extension) for details.
 
 ---
 
@@ -235,18 +315,19 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.3 if:
+### Use v1.3.1 if:
 - ✅ Building new PromptPacks
+- ✅ Need progressive-disclosure knowledge loading (skills)
 - ✅ Need workflow orchestration between prompts
 - ✅ Want A2A protocol interoperability for multi-agent systems
 - ✅ Want latest features
 
-### Stay on v1.2 if:
+### Stay on v1.3 if:
 - ✅ Existing packs work fine
-- ✅ Don't need workflow or agent definitions yet
+- ✅ Don't need skills yet
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.3 for all new projects. It's backward compatible and adds powerful orchestration capabilities.
+**Recommendation:** Use v1.3.1 for all new projects. It's backward compatible and adds progressive-disclosure knowledge loading.
 
 ---
 
@@ -254,6 +335,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.3.1  | Feb 2026    | Skills: progressive-disclosure knowledge loading |
 | v1.3    | Feb 2026    | Workflow orchestration, A2A agent definitions |
 | v1.2    | Feb 2026    | Evals extension: pack/prompt-level evals, Prometheus metrics |
 | v1.1    | Nov 2024    | Multimodal support, extensible media types |
