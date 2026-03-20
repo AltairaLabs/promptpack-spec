@@ -755,18 +755,15 @@
           }
         }
       },
-      "patternProperties": {
-        "^(?!enabled$|supported_types$|image$|audio$|video$|document$|examples$)[a-z0-9_]+$": {
-          "oneOf": [
-            {"$ref": "#/$defs/ImageConfig"},
-            {"$ref": "#/$defs/AudioConfig"},
-            {"$ref": "#/$defs/VideoConfig"},
-            {"$ref": "#/$defs/DocumentConfig"},
-            {"$ref": "#/$defs/GenericMediaTypeConfig"}
-          ]
-        }
-      },
-      "additionalProperties": false
+      "additionalProperties": {
+        "oneOf": [
+          {"$ref": "#/$defs/ImageConfig"},
+          {"$ref": "#/$defs/AudioConfig"},
+          {"$ref": "#/$defs/VideoConfig"},
+          {"$ref": "#/$defs/DocumentConfig"},
+          {"$ref": "#/$defs/GenericMediaTypeConfig"}
+        ]
+      }
     },
     
     "ImageConfig": {
