@@ -33,6 +33,11 @@
           - [7.1.6.1.7.5. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > maximum`](#prompts_additionalProperties_variables_items_validation_maximum)
           - [7.1.6.1.7.6. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > enum`](#prompts_additionalProperties_variables_items_validation_enum)
             - [7.1.6.1.7.6.1. PromptPack Specification > prompts > additionalProperties > variables > variables items > validation > enum > enum items](#prompts_additionalProperties_variables_items_validation_enum_items)
+        - [7.1.6.1.8. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding`](#prompts_additionalProperties_variables_items_binding)
+          - [7.1.6.1.8.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > kind`](#prompts_additionalProperties_variables_items_binding_kind)
+          - [7.1.6.1.8.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > field`](#prompts_additionalProperties_variables_items_binding_field)
+          - [7.1.6.1.8.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > auto_populate`](#prompts_additionalProperties_variables_items_binding_auto_populate)
+          - [7.1.6.1.8.4. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > filter`](#prompts_additionalProperties_variables_items_binding_filter)
     - [7.1.7. Property `PromptPack Specification > prompts > additionalProperties > tools`](#prompts_additionalProperties_tools)
       - [7.1.7.1. PromptPack Specification > prompts > additionalProperties > tools > tools items](#prompts_additionalProperties_tools_items)
     - [7.1.8. Property `PromptPack Specification > prompts > additionalProperties > tool_policy`](#prompts_additionalProperties_tool_policy)
@@ -59,8 +64,9 @@
       - [7.1.11.1. PromptPack Specification > prompts > additionalProperties > validators > Validator](#prompts_additionalProperties_validators_items)
         - [7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`](#prompts_additionalProperties_validators_items_type)
         - [7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`](#prompts_additionalProperties_validators_items_enabled)
-        - [7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`](#prompts_additionalProperties_validators_items_fail_on_violation)
-        - [7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`](#prompts_additionalProperties_validators_items_params)
+        - [7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > message`](#prompts_additionalProperties_validators_items_message)
+        - [7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`](#prompts_additionalProperties_validators_items_fail_on_violation)
+        - [7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`](#prompts_additionalProperties_validators_items_params)
     - [7.1.12. Property `PromptPack Specification > prompts > additionalProperties > evals`](#prompts_additionalProperties_evals)
       - [7.1.12.1. PromptPack Specification > prompts > additionalProperties > evals > Eval](#prompts_additionalProperties_evals_items)
         - [7.1.12.1.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > id`](#prompts_additionalProperties_evals_items_id)
@@ -76,6 +82,13 @@
           - [7.1.12.1.8.3. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > metric > range`](#prompts_additionalProperties_evals_items_metric_range)
             - [7.1.12.1.8.3.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > metric > range > min`](#prompts_additionalProperties_evals_items_metric_range_min)
             - [7.1.12.1.8.3.2. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > metric > range > max`](#prompts_additionalProperties_evals_items_metric_range_max)
+        - [7.1.12.1.9. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > threshold`](#prompts_additionalProperties_evals_items_threshold)
+          - [7.1.12.1.9.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > threshold > operator`](#prompts_additionalProperties_evals_items_threshold_operator)
+          - [7.1.12.1.9.2. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > threshold > value`](#prompts_additionalProperties_evals_items_threshold_value)
+        - [7.1.12.1.10. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > message`](#prompts_additionalProperties_evals_items_message)
+        - [7.1.12.1.11. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > when`](#prompts_additionalProperties_evals_items_when)
+        - [7.1.12.1.12. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > groups`](#prompts_additionalProperties_evals_items_groups)
+          - [7.1.12.1.12.1. PromptPack Specification > prompts > additionalProperties > evals > evals items > groups > groups items](#prompts_additionalProperties_evals_items_groups_items)
     - [7.1.13. Property `PromptPack Specification > prompts > additionalProperties > tested_models`](#prompts_additionalProperties_tested_models)
       - [7.1.13.1. PromptPack Specification > prompts > additionalProperties > tested_models > TestedModel](#prompts_additionalProperties_tested_models_items)
         - [7.1.13.1.1. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > provider`](#prompts_additionalProperties_tested_models_items_provider)
@@ -799,15 +812,16 @@ Must be one of:
 
 **Description:** A template variable definition with type information and validation rules. Variables are replaced with actual values when the prompt is rendered.
 
-| Property                                                                    | Pattern | Type             | Deprecated | Definition | Title/Description                                                                              |
-| --------------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------- |
-| + [name](#prompts_additionalProperties_variables_items_name )               | No      | string           | No         | -          | Variable name used in templates (e.g., `{{name}}`)                                               |
-| + [type](#prompts_additionalProperties_variables_items_type )               | No      | enum (of string) | No         | -          | Data type of the variable                                                                      |
-| + [required](#prompts_additionalProperties_variables_items_required )       | No      | boolean          | No         | -          | Whether this variable must be provided. Required variables without values will cause an error. |
-| - [default](#prompts_additionalProperties_variables_items_default )         | No      | object           | No         | -          | Default value used when variable is not provided. Cannot be set if required is true.           |
-| - [description](#prompts_additionalProperties_variables_items_description ) | No      | string           | No         | -          | Human-readable description of the variable's purpose                                           |
-| - [example](#prompts_additionalProperties_variables_items_example )         | No      | object           | No         | -          | Example value showing expected format and content                                              |
-| - [validation](#prompts_additionalProperties_variables_items_validation )   | No      | object           | No         | -          | Validation rules applied to the variable value at runtime                                      |
+| Property                                                                    | Pattern | Type    | Deprecated | Definition | Title/Description                                                                              |
+| --------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------- |
+| + [name](#prompts_additionalProperties_variables_items_name )               | No      | string  | No         | -          | Variable name used in templates (e.g., `{{name}}`)                                               |
+| + [type](#prompts_additionalProperties_variables_items_type )               | No      | string  | No         | -          | Data type of the variable                                                                      |
+| + [required](#prompts_additionalProperties_variables_items_required )       | No      | boolean | No         | -          | Whether this variable must be provided. Required variables without values will cause an error. |
+| - [default](#prompts_additionalProperties_variables_items_default )         | No      | object  | No         | -          | Default value used when variable is not provided. Cannot be set if required is true.           |
+| - [description](#prompts_additionalProperties_variables_items_description ) | No      | string  | No         | -          | Human-readable description of the variable's purpose                                           |
+| - [example](#prompts_additionalProperties_variables_items_example )         | No      | object  | No         | -          | Example value showing expected format and content                                              |
+| - [validation](#prompts_additionalProperties_variables_items_validation )   | No      | object  | No         | -          | Validation rules applied to the variable value at runtime                                      |
+| - [binding](#prompts_additionalProperties_variables_items_binding )         | No      | object  | No         | -          | Declares how this variable is automatically populated from runtime context.                    |
 
 ###### <a name="prompts_additionalProperties_variables_items_name"></a>7.1.6.1.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > name`
 
@@ -838,10 +852,10 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_variables_items_type"></a>7.1.6.1.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > type`
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | Yes                |
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
 
 **Description:** Data type of the variable
 
@@ -855,12 +869,17 @@ Must be one of:
 "number"
 ```
 
-Must be one of:
-* "string"
-* "number"
-* "boolean"
-* "object"
-* "array"
+```json
+"boolean"
+```
+
+```json
+"object"
+```
+
+```json
+"array"
+```
 
 ###### <a name="prompts_additionalProperties_variables_items_required"></a>7.1.6.1.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > required`
 
@@ -1120,6 +1139,102 @@ true
 | **Type**                  | `object`         |
 | **Required**              | No               |
 | **Additional properties** | Any type allowed |
+
+###### <a name="prompts_additionalProperties_variables_items_binding"></a>7.1.6.1.8. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding`
+
+|                           |             |
+| ------------------------- | ----------- |
+| **Type**                  | `object`    |
+| **Required**              | No          |
+| **Additional properties** | Not allowed |
+
+**Description:** Declares how this variable is automatically populated from runtime context.
+
+| Property                                                                                | Pattern | Type    | Deprecated | Definition | Title/Description                                                                 |
+| --------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | --------------------------------------------------------------------------------- |
+| - [kind](#prompts_additionalProperties_variables_items_binding_kind )                   | No      | string  | No         | -          | The binding source kind.                                                          |
+| - [field](#prompts_additionalProperties_variables_items_binding_field )                 | No      | string  | No         | -          | The field name within the binding source to extract.                              |
+| - [auto_populate](#prompts_additionalProperties_variables_items_binding_auto_populate ) | No      | boolean | No         | -          | Whether this variable is automatically populated at runtime without caller input. |
+| - [filter](#prompts_additionalProperties_variables_items_binding_filter )               | No      | string  | No         | -          | Optional filter expression applied to the bound value.                            |
+
+###### <a name="prompts_additionalProperties_variables_items_binding_kind"></a>7.1.6.1.8.1. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > kind`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** The binding source kind.
+
+**Examples:**
+
+```json
+"context"
+```
+
+```json
+"session"
+```
+
+```json
+"env"
+```
+
+```json
+"header"
+```
+
+###### <a name="prompts_additionalProperties_variables_items_binding_field"></a>7.1.6.1.8.2. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > field`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** The field name within the binding source to extract.
+
+**Examples:**
+
+```json
+"user_id"
+```
+
+```json
+"session_id"
+```
+
+```json
+"locale"
+```
+
+###### <a name="prompts_additionalProperties_variables_items_binding_auto_populate"></a>7.1.6.1.8.3. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > auto_populate`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `boolean` |
+| **Required** | No        |
+| **Default**  | `false`   |
+
+**Description:** Whether this variable is automatically populated at runtime without caller input.
+
+###### <a name="prompts_additionalProperties_variables_items_binding_filter"></a>7.1.6.1.8.4. Property `PromptPack Specification > prompts > additionalProperties > variables > variables items > binding > filter`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Optional filter expression applied to the bound value.
+
+**Examples:**
+
+```json
+"lowercase"
+```
+
+```json
+"trim"
+```
 
 #### <a name="prompts_additionalProperties_tools"></a>7.1.7. Property `PromptPack Specification > prompts > additionalProperties > tools`
 
@@ -1638,7 +1753,8 @@ null
 | Property                                                                                 | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                     |
 | ---------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | + [type](#prompts_additionalProperties_validators_items_type )                           | No      | string  | No         | -          | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types. |
-| + [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them.                                      |
+| - [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them.                                      |
+| - [message](#prompts_additionalProperties_validators_items_message )                     | No      | string  | No         | -          | User-facing message returned when the validator blocks content.                                                                       |
 | - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean | No         | -          | If true, validation failures cause an error. If false, violations are logged but allowed.                                             |
 | - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object  | No         | -          | Validator-specific parameters                                                                                                         |
 
@@ -1690,11 +1806,31 @@ null
 |              |           |
 | ------------ | --------- |
 | **Type**     | `boolean` |
-| **Required** | Yes       |
+| **Required** | No        |
+| **Default**  | `true`    |
 
 **Description:** Whether this validator is active. Allows temporarily disabling validators without removing them.
 
-###### <a name="prompts_additionalProperties_validators_items_fail_on_violation"></a>7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`
+###### <a name="prompts_additionalProperties_validators_items_message"></a>7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > message`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** User-facing message returned when the validator blocks content.
+
+**Examples:**
+
+```json
+"Response contains banned words"
+```
+
+```json
+"Response exceeds maximum length"
+```
+
+###### <a name="prompts_additionalProperties_validators_items_fail_on_violation"></a>7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`
 
 |              |           |
 | ------------ | --------- |
@@ -1704,7 +1840,7 @@ null
 
 **Description:** If true, validation failures cause an error. If false, violations are logged but allowed.
 
-###### <a name="prompts_additionalProperties_validators_items_params"></a>7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`
+###### <a name="prompts_additionalProperties_validators_items_params"></a>7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1768,16 +1904,20 @@ null
 
 **Description:** An eval definition that declares how to assess LLM output quality. Evals run asynchronously and produce scores or metrics, unlike validators which run inline and block.
 
-| Property                                                                            | Pattern | Type             | Deprecated | Definition           | Title/Description                                                                                                                        |
-| ----------------------------------------------------------------------------------- | ------- | ---------------- | ---------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| + [id](#prompts_additionalProperties_evals_items_id )                               | No      | string           | No         | -                    | Unique identifier for this eval within its scope (prompt-level or pack-level).                                                           |
-| - [description](#prompts_additionalProperties_evals_items_description )             | No      | string           | No         | -                    | Human-readable description of what this eval measures and why it matters.                                                                |
-| + [type](#prompts_additionalProperties_evals_items_type )                           | No      | string           | No         | -                    | The assertion type that determines how this eval is executed. Not an enum — runtimes define and register their own types.                |
-| + [trigger](#prompts_additionalProperties_evals_items_trigger )                     | No      | enum (of string) | No         | -                    | When this eval should be triggered.                                                                                                      |
-| - [sample_percentage](#prompts_additionalProperties_evals_items_sample_percentage ) | No      | number           | No         | -                    | Percentage of turns or sessions to sample when trigger is sample_turns or sample_sessions. Ignored for other trigger types.              |
-| - [enabled](#prompts_additionalProperties_evals_items_enabled )                     | No      | boolean          | No         | -                    | Whether this eval is active. Allows temporarily disabling evals without removing them.                                                   |
-| - [params](#prompts_additionalProperties_evals_items_params )                       | No      | object           | No         | -                    | Type-specific configuration for the eval. Structure depends on the eval type — runtimes interpret these based on the type field.         |
-| - [metric](#prompts_additionalProperties_evals_items_metric )                       | No      | object           | No         | In #/$defs/MetricDef | Prometheus-style metric declaration describing the output shape of this eval. Runtimes use this to expose results to monitoring systems. |
+| Property                                                                            | Pattern | Type            | Deprecated | Definition           | Title/Description                                                                                                                        |
+| ----------------------------------------------------------------------------------- | ------- | --------------- | ---------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| + [id](#prompts_additionalProperties_evals_items_id )                               | No      | string          | No         | -                    | Unique identifier for this eval within its scope (prompt-level or pack-level).                                                           |
+| - [description](#prompts_additionalProperties_evals_items_description )             | No      | string          | No         | -                    | Human-readable description of what this eval measures and why it matters.                                                                |
+| + [type](#prompts_additionalProperties_evals_items_type )                           | No      | string          | No         | -                    | The assertion type that determines how this eval is executed. Not an enum — runtimes define and register their own types.                |
+| + [trigger](#prompts_additionalProperties_evals_items_trigger )                     | No      | string          | No         | -                    | When this eval should be triggered.                                                                                                      |
+| - [sample_percentage](#prompts_additionalProperties_evals_items_sample_percentage ) | No      | number          | No         | -                    | Percentage of turns or sessions to sample when trigger is sample_turns or sample_sessions. Ignored for other trigger types.              |
+| - [enabled](#prompts_additionalProperties_evals_items_enabled )                     | No      | boolean         | No         | -                    | Whether this eval is active. Allows temporarily disabling evals without removing them.                                                   |
+| - [params](#prompts_additionalProperties_evals_items_params )                       | No      | object          | No         | -                    | Type-specific configuration for the eval. Structure depends on the eval type — runtimes interpret these based on the type field.         |
+| - [metric](#prompts_additionalProperties_evals_items_metric )                       | No      | object          | No         | In #/$defs/MetricDef | Prometheus-style metric declaration describing the output shape of this eval. Runtimes use this to expose results to monitoring systems. |
+| - [threshold](#prompts_additionalProperties_evals_items_threshold )                 | No      | object          | No         | -                    | Pass/fail threshold for the eval score.                                                                                                  |
+| - [message](#prompts_additionalProperties_evals_items_message )                     | No      | string          | No         | -                    | Human-readable message describing the eval result or failure reason.                                                                     |
+| - [when](#prompts_additionalProperties_evals_items_when )                           | No      | object          | No         | -                    | Conditional expression that determines whether this eval runs for a given turn or session.                                               |
+| - [groups](#prompts_additionalProperties_evals_items_groups )                       | No      | array of string | No         | -                    | Eval group tags for organizing and filtering evals.                                                                                      |
 
 ###### <a name="prompts_additionalProperties_evals_items_id"></a>7.1.12.1.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > id`
 
@@ -1852,18 +1992,38 @@ null
 
 ###### <a name="prompts_additionalProperties_evals_items_trigger"></a>7.1.12.1.4. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > trigger`
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | Yes                |
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
 
 **Description:** When this eval should be triggered.
 
-Must be one of:
-* "every_turn"
-* "on_session_complete"
-* "sample_turns"
-* "sample_sessions"
+**Examples:**
+
+```json
+"every_turn"
+```
+
+```json
+"on_session_complete"
+```
+
+```json
+"on_conversation_complete"
+```
+
+```json
+"on_workflow_step"
+```
+
+```json
+"sample_turns"
+```
+
+```json
+"sample_sessions"
+```
 
 ###### <a name="prompts_additionalProperties_evals_items_sample_percentage"></a>7.1.12.1.5. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > sample_percentage`
 
@@ -2033,6 +2193,166 @@ Must be one of:
 | **Required** | No       |
 
 **Description:** Maximum expected value
+
+###### <a name="prompts_additionalProperties_evals_items_threshold"></a>7.1.12.1.9. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > threshold`
+
+|                           |             |
+| ------------------------- | ----------- |
+| **Type**                  | `object`    |
+| **Required**              | No          |
+| **Additional properties** | Not allowed |
+
+**Description:** Pass/fail threshold for the eval score.
+
+| Property                                                                    | Pattern | Type   | Deprecated | Definition | Title/Description                       |
+| --------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | --------------------------------------- |
+| - [operator](#prompts_additionalProperties_evals_items_threshold_operator ) | No      | string | No         | -          | Comparison operator for the threshold.  |
+| - [value](#prompts_additionalProperties_evals_items_threshold_value )       | No      | number | No         | -          | The threshold value to compare against. |
+
+###### <a name="prompts_additionalProperties_evals_items_threshold_operator"></a>7.1.12.1.9.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > threshold > operator`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Comparison operator for the threshold.
+
+**Examples:**
+
+```json
+"gte"
+```
+
+```json
+"lte"
+```
+
+```json
+"gt"
+```
+
+```json
+"lt"
+```
+
+```json
+"eq"
+```
+
+###### <a name="prompts_additionalProperties_evals_items_threshold_value"></a>7.1.12.1.9.2. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > threshold > value`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `number` |
+| **Required** | No       |
+
+**Description:** The threshold value to compare against.
+
+**Examples:**
+
+```json
+0.8
+```
+
+```json
+4
+```
+
+```json
+0.95
+```
+
+###### <a name="prompts_additionalProperties_evals_items_message"></a>7.1.12.1.10. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > message`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Human-readable message describing the eval result or failure reason.
+
+**Examples:**
+
+```json
+"Tone score below threshold"
+```
+
+```json
+"Response failed brand consistency check"
+```
+
+###### <a name="prompts_additionalProperties_evals_items_when"></a>7.1.12.1.11. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > when`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Conditional expression that determines whether this eval runs for a given turn or session.
+
+**Examples:**
+
+```json
+{
+    "has_variable": "customer_tier"
+}
+```
+
+```json
+{
+    "turn_count_gte": 3
+}
+```
+
+| Property                                                                   | Pattern | Type   | Deprecated | Definition | Title/Description |
+| -------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
+###### <a name="prompts_additionalProperties_evals_items_groups"></a>7.1.12.1.12. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > groups`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Eval group tags for organizing and filtering evals.
+
+**Examples:**
+
+```json
+[
+    "quality",
+    "tone"
+]
+```
+
+```json
+[
+    "safety",
+    "compliance"
+]
+```
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                        | Description |
+| ---------------------------------------------------------------------- | ----------- |
+| [groups items](#prompts_additionalProperties_evals_items_groups_items) | -           |
+
+###### <a name="prompts_additionalProperties_evals_items_groups_items"></a>7.1.12.1.12.1. PromptPack Specification > prompts > additionalProperties > evals > evals items > groups > groups items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 #### <a name="prompts_additionalProperties_tested_models"></a>7.1.13. Property `PromptPack Specification > prompts > additionalProperties > tested_models`
 
@@ -2454,13 +2774,13 @@ Must be one of:
 
 **Description:** Image-specific configuration and constraints
 
-| Property                                                                              | Pattern | Type                      | Deprecated | Definition | Title/Description                                                                                                              |
-| ------------------------------------------------------------------------------------- | ------- | ------------------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| - [max_size_mb](#prompts_additionalProperties_media_image_max_size_mb )               | No      | integer                   | No         | -          | Maximum file size in megabytes                                                                                                 |
-| - [allowed_formats](#prompts_additionalProperties_media_image_allowed_formats )       | No      | array of enum (of string) | No         | -          | List of allowed image formats                                                                                                  |
-| - [default_detail](#prompts_additionalProperties_media_image_default_detail )         | No      | enum (of string)          | No         | -          | Default detail level for image processing. 'low' uses fewer tokens, 'high' provides more detail, 'auto' lets the model decide. |
-| - [require_caption](#prompts_additionalProperties_media_image_require_caption )       | No      | boolean                   | No         | -          | Whether image captions are required                                                                                            |
-| - [max_images_per_msg](#prompts_additionalProperties_media_image_max_images_per_msg ) | No      | integer                   | No         | -          | Maximum number of images allowed per message                                                                                   |
+| Property                                                                              | Pattern | Type            | Deprecated | Definition | Title/Description                                                                                                              |
+| ------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| - [max_size_mb](#prompts_additionalProperties_media_image_max_size_mb )               | No      | integer         | No         | -          | Maximum file size in megabytes                                                                                                 |
+| - [allowed_formats](#prompts_additionalProperties_media_image_allowed_formats )       | No      | array of string | No         | -          | List of allowed image formats                                                                                                  |
+| - [default_detail](#prompts_additionalProperties_media_image_default_detail )         | No      | string          | No         | -          | Default detail level for image processing. 'low' uses fewer tokens, 'high' provides more detail, 'auto' lets the model decide. |
+| - [require_caption](#prompts_additionalProperties_media_image_require_caption )       | No      | boolean         | No         | -          | Whether image captions are required                                                                                            |
+| - [max_images_per_msg](#prompts_additionalProperties_media_image_max_images_per_msg ) | No      | integer         | No         | -          | Maximum number of images allowed per message                                                                                   |
 
 ###### <a name="prompts_additionalProperties_media_image_max_size_mb"></a>7.1.15.3.1. Property `PromptPack Specification > prompts > additionalProperties > media > image > max_size_mb`
 
@@ -2487,20 +2807,31 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_media_image_allowed_formats"></a>7.1.15.3.2. Property `PromptPack Specification > prompts > additionalProperties > media > image > allowed_formats`
 
-|              |                             |
-| ------------ | --------------------------- |
-| **Type**     | `array of enum (of string)` |
-| **Required** | No                          |
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
 
 **Description:** List of allowed image formats
 
-**Example:**
+**Examples:**
 
 ```json
 [
     "jpeg",
     "png",
     "webp"
+]
+```
+
+```json
+[
+    "jpeg",
+    "jpg",
+    "png",
+    "webp",
+    "gif",
+    "bmp"
 ]
 ```
 
@@ -2518,30 +2849,26 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_media_image_allowed_formats_items"></a>7.1.15.3.2.1. PromptPack Specification > prompts > additionalProperties > media > image > allowed_formats > allowed_formats items
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-
-Must be one of:
-* "jpeg"
-* "jpg"
-* "png"
-* "webp"
-* "gif"
-* "bmp"
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 ###### <a name="prompts_additionalProperties_media_image_default_detail"></a>7.1.15.3.3. Property `PromptPack Specification > prompts > additionalProperties > media > image > default_detail`
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-| **Default**  | `"auto"`           |
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+| **Default**  | `"auto"` |
 
 **Description:** Default detail level for image processing. 'low' uses fewer tokens, 'high' provides more detail, 'auto' lets the model decide.
 
 **Examples:**
+
+```json
+"low"
+```
 
 ```json
 "high"
@@ -2550,11 +2877,6 @@ Must be one of:
 ```json
 "auto"
 ```
-
-Must be one of:
-* "low"
-* "high"
-* "auto"
 
 ###### <a name="prompts_additionalProperties_media_image_require_caption"></a>7.1.15.3.4. Property `PromptPack Specification > prompts > additionalProperties > media > image > require_caption`
 
@@ -2604,12 +2926,12 @@ Must be one of:
 
 **Description:** Audio-specific configuration and constraints
 
-| Property                                                                          | Pattern | Type                      | Deprecated | Definition | Title/Description                                       |
-| --------------------------------------------------------------------------------- | ------- | ------------------------- | ---------- | ---------- | ------------------------------------------------------- |
-| - [max_size_mb](#prompts_additionalProperties_media_audio_max_size_mb )           | No      | integer                   | No         | -          | Maximum file size in megabytes                          |
-| - [allowed_formats](#prompts_additionalProperties_media_audio_allowed_formats )   | No      | array of enum (of string) | No         | -          | List of allowed audio formats                           |
-| - [max_duration_sec](#prompts_additionalProperties_media_audio_max_duration_sec ) | No      | integer                   | No         | -          | Maximum audio duration in seconds                       |
-| - [require_metadata](#prompts_additionalProperties_media_audio_require_metadata ) | No      | boolean                   | No         | -          | Whether audio metadata (title, description) is required |
+| Property                                                                          | Pattern | Type            | Deprecated | Definition | Title/Description                                       |
+| --------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ------------------------------------------------------- |
+| - [max_size_mb](#prompts_additionalProperties_media_audio_max_size_mb )           | No      | integer         | No         | -          | Maximum file size in megabytes                          |
+| - [allowed_formats](#prompts_additionalProperties_media_audio_allowed_formats )   | No      | array of string | No         | -          | List of allowed audio formats                           |
+| - [max_duration_sec](#prompts_additionalProperties_media_audio_max_duration_sec ) | No      | integer         | No         | -          | Maximum audio duration in seconds                       |
+| - [require_metadata](#prompts_additionalProperties_media_audio_require_metadata ) | No      | boolean         | No         | -          | Whether audio metadata (title, description) is required |
 
 ###### <a name="prompts_additionalProperties_media_audio_max_size_mb"></a>7.1.15.4.1. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_size_mb`
 
@@ -2636,20 +2958,33 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_media_audio_allowed_formats"></a>7.1.15.4.2. Property `PromptPack Specification > prompts > additionalProperties > media > audio > allowed_formats`
 
-|              |                             |
-| ------------ | --------------------------- |
-| **Type**     | `array of enum (of string)` |
-| **Required** | No                          |
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
 
 **Description:** List of allowed audio formats
 
-**Example:**
+**Examples:**
 
 ```json
 [
     "mp3",
     "wav",
-    "opus"
+    "ogg"
+]
+```
+
+```json
+[
+    "mp3",
+    "wav",
+    "opus",
+    "flac",
+    "m4a",
+    "aac",
+    "ogg",
+    "webm"
 ]
 ```
 
@@ -2667,19 +3002,10 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_media_audio_allowed_formats_items"></a>7.1.15.4.2.1. PromptPack Specification > prompts > additionalProperties > media > audio > allowed_formats > allowed_formats items
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-
-Must be one of:
-* "mp3"
-* "wav"
-* "opus"
-* "flac"
-* "m4a"
-* "aac"
-* "ogg"
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 ###### <a name="prompts_additionalProperties_media_audio_max_duration_sec"></a>7.1.15.4.3. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_duration_sec`
 
@@ -2725,12 +3051,12 @@ Must be one of:
 
 **Description:** Video-specific configuration and constraints
 
-| Property                                                                          | Pattern | Type                      | Deprecated | Definition | Title/Description                                       |
-| --------------------------------------------------------------------------------- | ------- | ------------------------- | ---------- | ---------- | ------------------------------------------------------- |
-| - [max_size_mb](#prompts_additionalProperties_media_video_max_size_mb )           | No      | integer                   | No         | -          | Maximum file size in megabytes                          |
-| - [allowed_formats](#prompts_additionalProperties_media_video_allowed_formats )   | No      | array of enum (of string) | No         | -          | List of allowed video formats                           |
-| - [max_duration_sec](#prompts_additionalProperties_media_video_max_duration_sec ) | No      | integer                   | No         | -          | Maximum video duration in seconds                       |
-| - [require_metadata](#prompts_additionalProperties_media_video_require_metadata ) | No      | boolean                   | No         | -          | Whether video metadata (title, description) is required |
+| Property                                                                          | Pattern | Type            | Deprecated | Definition | Title/Description                                       |
+| --------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ------------------------------------------------------- |
+| - [max_size_mb](#prompts_additionalProperties_media_video_max_size_mb )           | No      | integer         | No         | -          | Maximum file size in megabytes                          |
+| - [allowed_formats](#prompts_additionalProperties_media_video_allowed_formats )   | No      | array of string | No         | -          | List of allowed video formats                           |
+| - [max_duration_sec](#prompts_additionalProperties_media_video_max_duration_sec ) | No      | integer         | No         | -          | Maximum video duration in seconds                       |
+| - [require_metadata](#prompts_additionalProperties_media_video_require_metadata ) | No      | boolean         | No         | -          | Whether video metadata (title, description) is required |
 
 ###### <a name="prompts_additionalProperties_media_video_max_size_mb"></a>7.1.15.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > video > max_size_mb`
 
@@ -2757,19 +3083,30 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_media_video_allowed_formats"></a>7.1.15.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > video > allowed_formats`
 
-|              |                             |
-| ------------ | --------------------------- |
-| **Type**     | `array of enum (of string)` |
-| **Required** | No                          |
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
 
 **Description:** List of allowed video formats
 
-**Example:**
+**Examples:**
 
 ```json
 [
     "mp4",
     "webm"
+]
+```
+
+```json
+[
+    "mp4",
+    "webm",
+    "mov",
+    "avi",
+    "mkv",
+    "ogg"
 ]
 ```
 
@@ -2787,17 +3124,10 @@ Must be one of:
 
 ###### <a name="prompts_additionalProperties_media_video_allowed_formats_items"></a>7.1.15.5.2.1. PromptPack Specification > prompts > additionalProperties > media > video > allowed_formats > allowed_formats items
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-
-Must be one of:
-* "mp4"
-* "webm"
-* "mov"
-* "avi"
-* "mkv"
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 ###### <a name="prompts_additionalProperties_media_video_max_duration_sec"></a>7.1.15.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > video > max_duration_sec`
 
@@ -4051,14 +4381,14 @@ Must be one of:
 
 **Description:** A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states.
 
-| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                     |
-| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object.                                                                                                       |
-| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                                                                                   |
-| + [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                     |
-| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | enum (of string) | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                      |
-| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.                                                                     |
-| - [skills](#workflow_states_additionalProperties_skills )               | No      | string           | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills. |
+| Property                                                                | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                     |
+| ----------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string | No         | -          | Reference to a prompt key defined in the pack's prompts object.                                                                                                       |
+| - [description](#workflow_states_additionalProperties_description )     | No      | string | No         | -          | Human-readable description of this state's purpose.                                                                                                                   |
+| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                     |
+| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                      |
+| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | string | No         | -          | How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.                                                                     |
+| - [skills](#workflow_states_additionalProperties_skills )               | No      | string | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills. |
 
 ##### <a name="workflow_states_additionalProperties_prompt_task"></a>13.3.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > prompt_task`
 
@@ -4097,7 +4427,7 @@ Must be one of:
 |                           |                                                                                                                            |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | **Type**                  | `object`                                                                                                                   |
-| **Required**              | Yes                                                                                                                        |
+| **Required**              | No                                                                                                                         |
 | **Additional properties** | [Each additional property must conform to the schema](#workflow_states_additionalProperties_on_event_additionalProperties) |
 
 **Description:** Map of event name to target state name. When the named event fires, the workflow transitions to the target state.
@@ -4124,30 +4454,45 @@ Must be one of:
 
 ##### <a name="workflow_states_additionalProperties_persistence"></a>13.3.1.4. Property `PromptPack Specification > workflow > states > additionalProperties > persistence`
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 **Description:** Whether conversation context is kept (persistent) or reset (transient) on entry.
 
-Must be one of:
-* "transient"
-* "persistent"
+**Examples:**
+
+```json
+"transient"
+```
+
+```json
+"persistent"
+```
 
 ##### <a name="workflow_states_additionalProperties_orchestration"></a>13.3.1.5. Property `PromptPack Specification > workflow > states > additionalProperties > orchestration`
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 **Description:** How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.
 
-Must be one of:
-* "internal"
-* "external"
-* "hybrid"
+**Examples:**
+
+```json
+"internal"
+```
+
+```json
+"external"
+```
+
+```json
+"hybrid"
+```
 
 ##### <a name="workflow_states_additionalProperties_skills"></a>13.3.1.6. Property `PromptPack Specification > workflow > states > additionalProperties > skills`
 
@@ -4575,4 +4920,4 @@ false
 | **Min length** | 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-03-20 at 19:37:25 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-03-20 at 19:48:16 +0000
