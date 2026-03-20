@@ -780,7 +780,7 @@
         }
       },
       "patternProperties": {
-        "^[a-z0-9_]+$": {
+        "^(?!enabled$|supported_types$|image$|audio$|video$|document$|examples$)[a-z0-9_]+$": {
           "oneOf": [
             {"$ref": "#/$defs/ImageConfig"},
             {"$ref": "#/$defs/AudioConfig"},
@@ -855,7 +855,7 @@
           "description": "List of allowed audio formats",
           "items": {
             "type": "string",
-            "enum": ["mp3", "wav", "opus", "flac", "m4a", "aac"]
+            "enum": ["mp3", "wav", "opus", "flac", "m4a", "aac", "ogg"]
           },
           "examples": [["mp3", "wav", "opus"]]
         },
