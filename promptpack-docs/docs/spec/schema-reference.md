@@ -138,17 +138,17 @@
                 - [7.1.15.7.1.4.1.3.4. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > mime_type`](#prompts_additionalProperties_media_examples_items_parts_items_media_mime_type)
                 - [7.1.15.7.1.4.1.3.5. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > detail`](#prompts_additionalProperties_media_examples_items_parts_items_media_detail)
                 - [7.1.15.7.1.4.1.3.6. Property `PromptPack Specification > prompts > additionalProperties > media > examples > examples items > parts > parts items > media > caption`](#prompts_additionalProperties_media_examples_items_parts_items_media_caption)
-      - [7.1.15.8. Pattern Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$`](#prompts_additionalProperties_media_pattern1)
-        - [7.1.15.8.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > ImageConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i0)
-        - [7.1.15.8.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > AudioConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i1)
-        - [7.1.15.8.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > VideoConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i2)
-        - [7.1.15.8.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > DocumentConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i3)
-        - [7.1.15.8.5. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > GenericMediaTypeConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i4)
-          - [7.1.15.8.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > max_size_mb`](#prompts_additionalProperties_media_pattern1_pattern1_i4_max_size_mb)
-          - [7.1.15.8.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats`](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats)
-            - [7.1.15.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats > allowed_formats items](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items)
-          - [7.1.15.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > require_metadata`](#prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata)
-          - [7.1.15.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > validation_params`](#prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params)
+      - [7.1.15.8. Pattern Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$`](#prompts_additionalProperties_media_pattern1)
+        - [7.1.15.8.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > ImageConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i0)
+        - [7.1.15.8.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > AudioConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i1)
+        - [7.1.15.8.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > VideoConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i2)
+        - [7.1.15.8.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > DocumentConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i3)
+        - [7.1.15.8.5. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > GenericMediaTypeConfig`](#prompts_additionalProperties_media_pattern1_pattern1_i4)
+          - [7.1.15.8.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > max_size_mb`](#prompts_additionalProperties_media_pattern1_pattern1_i4_max_size_mb)
+          - [7.1.15.8.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > allowed_formats`](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats)
+            - [7.1.15.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > allowed_formats > allowed_formats items](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items)
+          - [7.1.15.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > require_metadata`](#prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata)
+          - [7.1.15.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > validation_params`](#prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params)
 - [8. Property `PromptPack Specification > fragments`](#fragments)
   - [8.1. Property `PromptPack Specification > fragments > additionalProperties`](#fragments_additionalProperties)
 - [9. Property `PromptPack Specification > tools`](#tools)
@@ -2354,16 +2354,16 @@ Must be one of:
 
 **Description:** Multimodal content configuration for this prompt. Defines supported media types and validation rules.
 
-| Property                                                                  | Pattern | Type            | Deprecated | Definition                | Title/Description                                                                                                                                                                                                                                                                                       |
-| ------------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [enabled](#prompts_additionalProperties_media_enabled )                 | No      | boolean         | No         | -                         | Whether multimodal content is enabled for this prompt                                                                                                                                                                                                                                                   |
-| - [supported_types](#prompts_additionalProperties_media_supported_types ) | No      | array of string | No         | -                         | List of supported media types for this prompt. Common types include: image, audio, video, document, model3d, archive. Custom types are allowed - each type should have a corresponding configuration object (e.g., 'foo' type requires a 'foo' field with GenericMediaTypeConfig or a specific schema). |
-| - [image](#prompts_additionalProperties_media_image )                     | No      | object          | No         | In #/$defs/ImageConfig    | Image-specific configuration and constraints                                                                                                                                                                                                                                                            |
-| - [audio](#prompts_additionalProperties_media_audio )                     | No      | object          | No         | In #/$defs/AudioConfig    | Audio-specific configuration and constraints                                                                                                                                                                                                                                                            |
-| - [video](#prompts_additionalProperties_media_video )                     | No      | object          | No         | In #/$defs/VideoConfig    | Video-specific configuration and constraints                                                                                                                                                                                                                                                            |
-| - [document](#prompts_additionalProperties_media_document )               | No      | object          | No         | In #/$defs/DocumentConfig | Document-specific configuration and constraints (PDFs, CAD files, spreadsheets, etc.)                                                                                                                                                                                                                   |
-| - [examples](#prompts_additionalProperties_media_examples )               | No      | array           | No         | -                         | Example multimodal messages showing how to use media with this prompt                                                                                                                                                                                                                                   |
-| - [^[a-z0-9_]+$](#prompts_additionalProperties_media_pattern1 )           | Yes     | Combination     | No         | -                         | -                                                                                                                                                                                                                                                                                                       |
+| Property                                                                                                                                    | Pattern | Type            | Deprecated | Definition                | Title/Description                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [enabled](#prompts_additionalProperties_media_enabled )                                                                                   | No      | boolean         | No         | -                         | Whether multimodal content is enabled for this prompt                                                                                                                                                                                                                                                   |
+| - [supported_types](#prompts_additionalProperties_media_supported_types )                                                                   | No      | array of string | No         | -                         | List of supported media types for this prompt. Common types include: image, audio, video, document, model3d, archive. Custom types are allowed - each type should have a corresponding configuration object (e.g., 'foo' type requires a 'foo' field with GenericMediaTypeConfig or a specific schema). |
+| - [image](#prompts_additionalProperties_media_image )                                                                                       | No      | object          | No         | In #/$defs/ImageConfig    | Image-specific configuration and constraints                                                                                                                                                                                                                                                            |
+| - [audio](#prompts_additionalProperties_media_audio )                                                                                       | No      | object          | No         | In #/$defs/AudioConfig    | Audio-specific configuration and constraints                                                                                                                                                                                                                                                            |
+| - [video](#prompts_additionalProperties_media_video )                                                                                       | No      | object          | No         | In #/$defs/VideoConfig    | Video-specific configuration and constraints                                                                                                                                                                                                                                                            |
+| - [document](#prompts_additionalProperties_media_document )                                                                                 | No      | object          | No         | In #/$defs/DocumentConfig | Document-specific configuration and constraints (PDFs, CAD files, spreadsheets, etc.)                                                                                                                                                                                                                   |
+| - [examples](#prompts_additionalProperties_media_examples )                                                                                 | No      | array           | No         | -                         | Example multimodal messages showing how to use media with this prompt                                                                                                                                                                                                                                   |
+| - [^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$](#prompts_additionalProperties_media_pattern1 ) | Yes     | Combination     | No         | -                         | -                                                                                                                                                                                                                                                                                                       |
 
 ##### <a name="prompts_additionalProperties_media_enabled"></a>7.1.15.1. Property `PromptPack Specification > prompts > additionalProperties > media > enabled`
 
@@ -2679,6 +2679,7 @@ Must be one of:
 * "flac"
 * "m4a"
 * "aac"
+* "ogg"
 
 ###### <a name="prompts_additionalProperties_media_audio_max_duration_sec"></a>7.1.15.4.3. Property `PromptPack Specification > prompts > additionalProperties > media > audio > max_duration_sec`
 
@@ -3299,9 +3300,9 @@ Must be one of:
 "Customer's voice recording"
 ```
 
-##### <a name="prompts_additionalProperties_media_pattern1"></a>7.1.15.8. Pattern Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$`
+##### <a name="prompts_additionalProperties_media_pattern1"></a>7.1.15.8. Pattern Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$`
 > All properties whose name matches the regular expression
-```^[a-z0-9_]+$``` ([Test](https://regex101.com/?regex=%5E%5Ba-z0-9_%5D%2B%24))
+```^(?!enabled$|supported_types$|image$|audio$|video$|document$|examples$)[a-z0-9_]+$``` ([Test](https://regex101.com/?regex=%5E%28%3F%21enabled%24%7Csupported_types%24%7Cimage%24%7Caudio%24%7Cvideo%24%7Cdocument%24%7Cexamples%24%29%5Ba-z0-9_%5D%2B%24))
 must respect the following conditions
 
 |                           |                  |
@@ -3318,7 +3319,7 @@ must respect the following conditions
 | [DocumentConfig](#prompts_additionalProperties_media_pattern1_pattern1_i3)         |
 | [GenericMediaTypeConfig](#prompts_additionalProperties_media_pattern1_pattern1_i4) |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i0"></a>7.1.15.8.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > ImageConfig`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i0"></a>7.1.15.8.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > ImageConfig`
 
 |                           |                                                    |
 | ------------------------- | -------------------------------------------------- |
@@ -3329,7 +3330,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for image content
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i1"></a>7.1.15.8.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > AudioConfig`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i1"></a>7.1.15.8.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > AudioConfig`
 
 |                           |                                                    |
 | ------------------------- | -------------------------------------------------- |
@@ -3340,7 +3341,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for audio content
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i2"></a>7.1.15.8.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > VideoConfig`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i2"></a>7.1.15.8.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > VideoConfig`
 
 |                           |                                                    |
 | ------------------------- | -------------------------------------------------- |
@@ -3351,7 +3352,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for video content
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i3"></a>7.1.15.8.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > DocumentConfig`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i3"></a>7.1.15.8.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > DocumentConfig`
 
 |                           |                                                          |
 | ------------------------- | -------------------------------------------------------- |
@@ -3362,7 +3363,7 @@ must respect the following conditions
 
 **Description:** Configuration and validation rules for document content (PDFs, CAD files, spreadsheets, etc.)
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4"></a>7.1.15.8.5. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > GenericMediaTypeConfig`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4"></a>7.1.15.8.5. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > GenericMediaTypeConfig`
 
 |                           |                                |
 | ------------------------- | ------------------------------ |
@@ -3381,7 +3382,7 @@ must respect the following conditions
 | - [validation_params](#prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params ) | No      | object          | No         | -          | Custom validation parameters specific to this media type. Structure depends on the type. |
 | - - additionalProperties               | No      | object          | No         | -          | -                                                                                        |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_max_size_mb"></a>7.1.15.8.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > max_size_mb`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_max_size_mb"></a>7.1.15.8.5.1. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > max_size_mb`
 
 |              |           |
 | ------------ | --------- |
@@ -3408,7 +3409,7 @@ must respect the following conditions
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats"></a>7.1.15.8.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats"></a>7.1.15.8.5.2. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > allowed_formats`
 
 |              |                   |
 | ------------ | ----------------- |
@@ -3453,14 +3454,14 @@ must respect the following conditions
 | ------------------------------------------------------------------------------------------------------- | ----------- |
 | [allowed_formats items](#prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items) | -           |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items"></a>7.1.15.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > allowed_formats > allowed_formats items
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_allowed_formats_items"></a>7.1.15.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > allowed_formats > allowed_formats items
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata"></a>7.1.15.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > require_metadata`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_require_metadata"></a>7.1.15.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > require_metadata`
 
 |              |           |
 | ------------ | --------- |
@@ -3470,7 +3471,7 @@ must respect the following conditions
 
 **Description:** Whether metadata is required for this media type
 
-###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params"></a>7.1.15.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^[a-z0-9_]+$ > oneOf > item 4 > validation_params`
+###### <a name="prompts_additionalProperties_media_pattern1_pattern1_i4_validation_params"></a>7.1.15.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > ^(?!enabled$\|supported_types$\|image$\|audio$\|video$\|document$\|examples$)[a-z0-9_]+$ > oneOf > item 4 > validation_params`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -4577,4 +4578,4 @@ false
 | **Min length** | 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-03-20 at 19:04:10 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-03-20 at 19:22:03 +0000
