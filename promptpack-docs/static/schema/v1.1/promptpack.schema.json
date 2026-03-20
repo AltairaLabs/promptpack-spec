@@ -313,8 +313,7 @@
         "type": {
           "type": "string",
           "description": "Data type of the variable",
-          "enum": ["string", "number", "boolean", "object", "array"],
-          "examples": ["string", "number"]
+          "examples": ["string", "number", "boolean", "object", "array"]
         },
         
         "required": {
@@ -377,10 +376,38 @@
               "examples": [["low", "medium", "high"], [1, 2, 3]]
             }
           }
+        },
+
+        "binding": {
+          "type": "object",
+          "description": "Declares how this variable is automatically populated from runtime context.",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "type": "string",
+              "description": "The binding source kind.",
+              "examples": ["context", "session", "env", "header"]
+            },
+            "field": {
+              "type": "string",
+              "description": "The field name within the binding source to extract.",
+              "examples": ["user_id", "session_id", "locale"]
+            },
+            "auto_populate": {
+              "type": "boolean",
+              "description": "Whether this variable is automatically populated at runtime without caller input.",
+              "default": false
+            },
+            "filter": {
+              "type": "string",
+              "description": "Optional filter expression applied to the bound value.",
+              "examples": ["lowercase", "trim"]
+            }
+          }
         }
       }
     },
-    
+
     "Tool": {
       "type": "object",
       "description": "A tool definition following OpenAI's function calling format. Tools enable the LLM to call external functions to retrieve data or perform actions.",
@@ -574,31 +601,28 @@
     "Validator": {
       "type": "object",
       "description": "A validation rule (guardrail) applied to LLM responses. Validators can check content, length, format, and other constraints to ensure response quality and safety.",
-      "required": ["type", "enabled"],
+      "required": ["type"],
       "additionalProperties": false,
       "properties": {
         "type": {
           "type": "string",
-          "description": "Type of validation to perform",
-          "enum": [
-            "banned_words",
-            "max_length",
-            "min_length",
-            "regex_match",
-            "json_schema",
-            "sentiment",
-            "toxicity",
-            "pii_detection",
-            "custom"
-          ],
-          "examples": ["banned_words", "max_length"]
+          "description": "The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types.",
+          "minLength": 1,
+          "examples": ["banned_words", "max_length", "length", "max_sentences", "regex_match", "sentiment", "custom"]
         },
-        
+
         "enabled": {
           "type": "boolean",
-          "description": "Whether this validator is active. Allows temporarily disabling validators without removing them."
+          "description": "Whether this validator is active. Allows temporarily disabling validators without removing them.",
+          "default": true
         },
-        
+
+        "message": {
+          "type": "string",
+          "description": "User-facing message returned when the validator blocks content.",
+          "examples": ["Response contains banned words", "Response exceeds maximum length"]
+        },
+
         "fail_on_violation": {
           "type": "boolean",
           "description": "If true, validation failures cause an error. If false, violations are logged but allowed.",
@@ -782,18 +806,16 @@
           "type": "array",
           "description": "List of allowed image formats",
           "items": {
-            "type": "string",
-            "enum": ["jpeg", "jpg", "png", "webp", "gif", "bmp"]
+            "type": "string"
           },
-          "examples": [["jpeg", "png", "webp"]]
+          "examples": [["jpeg", "png", "webp"], ["jpeg", "jpg", "png", "webp", "gif", "bmp"]]
         },
         
         "default_detail": {
           "type": "string",
           "description": "Default detail level for image processing. 'low' uses fewer tokens, 'high' provides more detail, 'auto' lets the model decide.",
-          "enum": ["low", "high", "auto"],
           "default": "auto",
-          "examples": ["high", "auto"]
+          "examples": ["low", "high", "auto"]
         },
         
         "require_caption": {
@@ -827,10 +849,9 @@
           "type": "array",
           "description": "List of allowed audio formats",
           "items": {
-            "type": "string",
-            "enum": ["mp3", "wav", "opus", "flac", "m4a", "aac", "ogg"]
+            "type": "string"
           },
-          "examples": [["mp3", "wav", "opus"]]
+          "examples": [["mp3", "wav", "ogg"], ["mp3", "wav", "opus", "flac", "m4a", "aac", "ogg", "webm"]]
         },
         
         "max_duration_sec": {
@@ -864,10 +885,9 @@
           "type": "array",
           "description": "List of allowed video formats",
           "items": {
-            "type": "string",
-            "enum": ["mp4", "webm", "mov", "avi", "mkv"]
+            "type": "string"
           },
-          "examples": [["mp4", "webm"]]
+          "examples": [["mp4", "webm"], ["mp4", "webm", "mov", "avi", "mkv", "ogg"]]
         },
         
         "max_duration_sec": {
