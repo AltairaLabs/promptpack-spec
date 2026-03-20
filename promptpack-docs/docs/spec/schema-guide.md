@@ -246,7 +246,7 @@ A validation rule (guardrail) applied to LLM responses.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `type` | string | **Yes** | Validation type. One of: `"banned_words"`, `"max_length"`, `"min_length"`, `"regex_match"`, `"json_schema"`, `"sentiment"`, `"toxicity"`, `"pii_detection"`, `"custom"`. |
+| `type` | string | **Yes** | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own types. Examples: `"banned_words"`, `"max_length"`, `"length"`, `"max_sentences"`, `"regex_match"`, `"sentiment"`, `"custom"`. |
 | `enabled` | boolean | **Yes** | Whether this validator is active. |
 | `fail_on_violation` | boolean | No | If true, violations cause an error. Default: false. |
 | `params` | object | No | Validator-specific parameters (e.g., word lists, character limits). |
