@@ -465,7 +465,7 @@ PromptPack v1.1 adds multimodal content support through media configuration on i
 | Field | Type | Description |
 |-------|------|-------------|
 | `max_size_mb` | integer | Maximum file size in MB. |
-| `allowed_formats` | string[] | Allowed formats: `"mp3"`, `"wav"`, `"opus"`, `"flac"`, `"m4a"`, `"aac"`. |
+| `allowed_formats` | string[] | Allowed formats: `"mp3"`, `"wav"`, `"opus"`, `"flac"`, `"m4a"`, `"aac"`, `"ogg"`. |
 | `max_duration_sec` | integer | Maximum duration in seconds. |
 | `require_metadata` | boolean | Whether metadata is required (default: false). |
 
