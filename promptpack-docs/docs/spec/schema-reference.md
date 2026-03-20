@@ -1635,21 +1635,21 @@ null
 
 **Description:** A validation rule (guardrail) applied to LLM responses. Validators can check content, length, format, and other constraints to ensure response quality and safety.
 
-| Property                                                                                 | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                |
-| ---------------------------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| + [type](#prompts_additionalProperties_validators_items_type )                           | No      | enum (of string) | No         | -          | Type of validation to perform                                                                    |
-| + [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean          | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them. |
-| - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean          | No         | -          | If true, validation failures cause an error. If false, violations are logged but allowed.        |
-| - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object           | No         | -          | Validator-specific parameters                                                                    |
+| Property                                                                                 | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                     |
+| ---------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| + [type](#prompts_additionalProperties_validators_items_type )                           | No      | string  | No         | -          | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types. |
+| + [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them.                                      |
+| - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean | No         | -          | If true, validation failures cause an error. If false, violations are logged but allowed.                                             |
+| - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object  | No         | -          | Validator-specific parameters                                                                                                         |
 
 ###### <a name="prompts_additionalProperties_validators_items_type"></a>7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`
 
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | Yes                |
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
 
-**Description:** Type of validation to perform
+**Description:** The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types.
 
 **Examples:**
 
@@ -1661,16 +1661,29 @@ null
 "max_length"
 ```
 
-Must be one of:
-* "banned_words"
-* "max_length"
-* "min_length"
-* "regex_match"
-* "json_schema"
-* "sentiment"
-* "toxicity"
-* "pii_detection"
-* "custom"
+```json
+"length"
+```
+
+```json
+"max_sentences"
+```
+
+```json
+"regex_match"
+```
+
+```json
+"sentiment"
+```
+
+```json
+"custom"
+```
+
+| Restrictions   |   |
+| -------------- | - |
+| **Min length** | 1 |
 
 ###### <a name="prompts_additionalProperties_validators_items_enabled"></a>7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`
 
@@ -4564,4 +4577,4 @@ false
 | **Min length** | 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-02-21 at 08:44:18 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-03-20 at 19:04:10 +0000
