@@ -75,6 +75,26 @@ An agent loop is a cycle in a directed graph — and the workflow state machine 
 
 Together, these turn the workflow model from a conversational state machine into an agent loop runtime — without changing its fundamental nature.
 
+The generic agent loop pattern looks like this:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7045af', 'primaryTextColor': '#fff', 'primaryBorderColor': '#5d3991', 'lineColor': '#8659c1', 'secondaryColor': '#c9b1e8', 'tertiaryColor': '#f3eefa', 'edgeLabelBackground': '#f3eefa' }}}%%
+stateDiagram-v2
+    [*] --> Observe
+    Observe --> Act : PlanReady
+    Act --> Evaluate : ActionComplete
+    Evaluate --> Observe : NeedsRevision\n(max_visits guarded)
+    Evaluate --> Done : GoalMet
+    Act --> Done : max_visits reached\n(on_max_visits)
+    Done --> [*]
+
+    note right of Observe
+        Artifacts captured at
+        every transition ⟶
+        observable trace
+    end note
+```
+
 ### Schema Changes
 
 #### Modified Definition: `WorkflowState`
@@ -295,6 +315,45 @@ Artifacts are opt-in and intentionally lightweight. They should be pointers to i
 
 A runtime with rich session memory can carry conversational context implicitly — artifacts add value for structured metadata that you want in the observable transition trace.
 
+Example artifact trace for a codegen loop (each row is a state transition):
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7045af', 'primaryTextColor': '#fff', 'primaryBorderColor': '#5d3991', 'lineColor': '#8659c1', 'secondaryColor': '#c9b1e8', 'tertiaryColor': '#f3eefa' }}}%%
+gantt
+    title Artifact trace — codegen loop
+    dateFormat X
+    axisFormat %s
+
+    section State
+    plan           :a1, 0, 1
+    implement (1)  :a2, 1, 2
+    test (1)       :a3, 2, 3
+    implement (2)  :a4, 3, 4
+    test (2)       :a5, 4, 5
+    review         :a6, 5, 6
+    done           :a7, 6, 7
+
+    section commit_sha
+    —              :b1, 0, 1
+    abc123         :b2, 1, 2
+    abc123         :b3, 2, 3
+    def456         :b4, 3, 4
+    def456         :b5, 4, 5
+    def456         :b6, 5, 6
+    def456         :b7, 6, 7
+
+    section test_report
+    —              :c1, 0, 1
+    —              :c2, 1, 2
+    2/5 pass       :c3, 2, 3
+    2/5 pass       :c4, 3, 4
+    5/5 pass       :c5, 4, 5
+    5/5 pass       :c6, 5, 6
+    5/5 pass       :c7, 6, 7
+```
+
+Each row captures the artifact values *at that transition* — giving you a complete, replayable record of what the agent knew and produced at every step.
+
 #### Nested Loops
 
 Some use cases involve nested iteration — for example, a security audit that loops over findings (outer loop), where investigating each finding is itself an iterative process (inner loop). This RFC does not introduce nested state machines.
@@ -361,6 +420,26 @@ All three patterns work with the existing workflow model and the additions in th
 ### Example 1: Codegen Agent Loop
 
 A code generation workflow that plans, implements, tests, and reviews — with the implement/test cycle bounded by `max_visits`.
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7045af', 'primaryTextColor': '#fff', 'primaryBorderColor': '#5d3991', 'lineColor': '#8659c1', 'secondaryColor': '#c9b1e8', 'tertiaryColor': '#f3eefa', 'edgeLabelBackground': '#f3eefa' }}}%%
+stateDiagram-v2
+    [*] --> plan
+    plan --> implement : PlanReady
+
+    implement --> test : CodeReady
+    implement --> plan : NeedsRethink
+    implement --> review : max_visits (10)
+
+    test --> review : TestsPassed
+    test --> implement : TestsFailed
+    test --> review : max_visits (10)
+
+    review --> implement : ChangesNeeded
+    review --> done : Approved
+
+    done --> [*]
+```
 
 > YAML shown for readability (per [RFC 0002](./0002-yaml-format.md)). All examples are equally valid as JSON.
 
