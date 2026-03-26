@@ -396,15 +396,12 @@ prompts:
 
       Plan: {{plan}}
 
-      {{#if artifacts.commit_sha}}
-      Previous attempt: {{artifacts.commit_sha}}
+      Previous attempt (empty on first iteration): {{artifacts.commit_sha}}
       What was changed: {{artifacts.change_summary}}
+      Test results: {{artifacts.test_report}}
 
-      Test results:
-      {{artifacts.test_report}}
-
-      Fix the failing tests while preserving passing behavior.
-      {{/if}}
+      If there are test failures from a previous attempt, fix them
+      while preserving passing behavior.
     tools: [write_file, read_file]
     parameters:
       temperature: 0.2
@@ -556,15 +553,11 @@ prompts:
 
       Dataset: {{dataset_description}}
 
-      {{#if artifacts.findings}}
-      Previous findings (hypothesis → verdict → key metric):
+      Previous findings (empty on first iteration):
       {{artifacts.findings}}
-      {{/if}}
 
-      {{#if artifacts.queries_run}}
       Queries already executed (avoid repeating these):
       {{artifacts.queries_run}}
-      {{/if}}
     variables:
       - name: dataset_description
         type: string
@@ -703,7 +696,7 @@ The simplest possible agent loop — a single state that retries until it succee
       "id": "worker",
       "name": "Worker",
       "version": "1.0.0",
-      "system_template": "Complete the task. If your previous attempt had errors, review them and try again.\n\n{{#if artifacts.error_summary}}\nPrevious error:\n{{artifacts.error_summary}}\n{{/if}}"
+      "system_template": "Complete the task. If your previous attempt had errors, review them and try again.\n\nPrevious error (empty on first attempt): {{artifacts.error_summary}}"
     },
     "fallback": {
       "id": "fallback",
@@ -767,10 +760,8 @@ prompts:
 
       Alert: {{alert_description}}
 
-      {{#if artifacts.diagnosis_log}}
-      Previous investigation steps:
+      Previous investigation steps (empty on first visit):
       {{artifacts.diagnosis_log}}
-      {{/if}}
 
       Investigate the issue. Use available tools to gather data.
       When you have a diagnosis and proposed fix, emit DiagnosisReady.
