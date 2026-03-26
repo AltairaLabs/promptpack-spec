@@ -315,44 +315,21 @@ Artifacts are opt-in and intentionally lightweight. They should be pointers to i
 
 A runtime with rich session memory can carry conversational context implicitly — artifacts add value for structured metadata that you want in the observable transition trace.
 
-Example artifact trace for a codegen loop (each row is a state transition):
+Example artifact trace for a codegen loop — each row captures artifact values at that state transition:
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7045af', 'primaryTextColor': '#fff', 'primaryBorderColor': '#5d3991', 'lineColor': '#8659c1', 'secondaryColor': '#c9b1e8', 'tertiaryColor': '#f3eefa' }}}%%
-gantt
-    title Artifact trace — codegen loop
-    dateFormat X
-    axisFormat %s
-
-    section State
-    plan           :a1, 0, 1
-    implement (1)  :a2, 1, 2
-    test (1)       :a3, 2, 3
-    implement (2)  :a4, 3, 4
-    test (2)       :a5, 4, 5
-    review         :a6, 5, 6
-    done           :a7, 6, 7
-
-    section commit_sha
-    —              :b1, 0, 1
-    abc123         :b2, 1, 2
-    abc123         :b3, 2, 3
-    def456         :b4, 3, 4
-    def456         :b5, 4, 5
-    def456         :b6, 5, 6
-    def456         :b7, 6, 7
-
-    section test_report
-    —              :c1, 0, 1
-    —              :c2, 1, 2
-    2/5 pass       :c3, 2, 3
-    2/5 pass       :c4, 3, 4
-    5/5 pass       :c5, 4, 5
-    5/5 pass       :c6, 5, 6
-    5/5 pass       :c7, 6, 7
+```
+ Transition       │ Event        │ commit_sha │ test_report │
+──────────────────┼──────────────┼────────────┼─────────────┤
+ → plan           │ (entry)      │ —          │ —           │
+ → implement (1)  │ PlanReady    │ —          │ —           │
+ → test (1)       │ CodeReady    │ abc123     │ —           │
+ → implement (2)  │ TestsFailed  │ abc123     │ 2/5 pass    │
+ → test (2)       │ CodeReady    │ def456     │ 2/5 pass    │
+ → review         │ TestsPassed  │ def456     │ 5/5 pass    │
+ → done           │ Approved     │ def456     │ 5/5 pass    │
 ```
 
-Each row captures the artifact values *at that transition* — giving you a complete, replayable record of what the agent knew and produced at every step.
+The full trace is a replayable record of what the agent produced and knew at every step — each row is a snapshot you can inspect, diff, or replay.
 
 #### Nested Loops
 

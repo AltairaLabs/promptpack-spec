@@ -8,6 +8,10 @@ const config: Config = {
   title: 'PromptPack',
   tagline: 'An open specification for packaging conversational AI systems—portable, testable, and framework-agnostic.',
   favicon: 'img/favicon.svg',
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
