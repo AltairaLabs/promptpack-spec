@@ -33,6 +33,7 @@ The RFC (Request for Comments) process is how the PromptPack community proposes,
 | [RFC-0007](/docs/rfcs/agents-extension) | 🚀 Implemented | Agents Extension |
 | [RFC-0008](/docs/rfcs/skills-extension) | 🚀 Implemented | Skills Extension |
 | [RFC-0009](/docs/rfcs/agent-loops) | 🚀 Implemented | Agent Loop Extension |
+| [RFC-0010](/docs/rfcs/workflow-composition) | 📝 Draft | Workflow Composition Extension |
 <!-- RFC_TABLE_END -->
 
 ## Upcoming Considerations

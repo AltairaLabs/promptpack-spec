@@ -272,7 +272,7 @@ See [RFC-0009: Agent Loop Extension](https://promptpack.org/docs/rfcs/agent-loop
 
 | Component | Status | Links |
 |-----------|--------|-------|
-| **Core Specification** | v1.3.1 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
+| **Core Specification** | v1.4.0 Stable | [Spec](https://promptpack.org/docs/spec/overview) |
 | **PromptKit** | Stable | [CLI, validation, SDK](https://promptpack.org/docs/ecosystem/promptkit-runtime) |
 | **PromptArena** | Stable | [Multi-provider testing, CI/CD](https://promptpack.org/docs/ecosystem/arena-testing) |
 | **LangChain.js** | Available | [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) |

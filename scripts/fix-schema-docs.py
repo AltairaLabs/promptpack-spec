@@ -23,10 +23,10 @@ def fix_mdx_curly_braces(content: str) -> str:
             continue
 
         if not in_code_block:
-            # Replace {{word}} NOT already inside backticks with `{{word}}`
+            # Replace {{word}} or {{namespace.word}} NOT already inside backticks with `{{...}}`
             # Negative lookbehind/ahead for backtick
             line = re.sub(
-                r"(?<!`)(\{\{[\w]+\}\})(?!`)",
+                r"(?<!`)(\{\{[\w.]+\}\})(?!`)",
                 r"`\1`",
                 line,
             )

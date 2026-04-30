@@ -1,3 +1,7 @@
+---
+title: "Schema Reference (v1.3.1)"
+---
+
 # PromptPack Specification
 
 - [1. Property `PromptPack Specification > $schema`](#schema)
@@ -202,19 +206,7 @@
       - [13.3.1.4. Property `PromptPack Specification > workflow > states > additionalProperties > persistence`](#workflow_states_additionalProperties_persistence)
       - [13.3.1.5. Property `PromptPack Specification > workflow > states > additionalProperties > orchestration`](#workflow_states_additionalProperties_orchestration)
       - [13.3.1.6. Property `PromptPack Specification > workflow > states > additionalProperties > skills`](#workflow_states_additionalProperties_skills)
-      - [13.3.1.7. Property `PromptPack Specification > workflow > states > additionalProperties > terminal`](#workflow_states_additionalProperties_terminal)
-      - [13.3.1.8. Property `PromptPack Specification > workflow > states > additionalProperties > max_visits`](#workflow_states_additionalProperties_max_visits)
-      - [13.3.1.9. Property `PromptPack Specification > workflow > states > additionalProperties > on_max_visits`](#workflow_states_additionalProperties_on_max_visits)
-      - [13.3.1.10. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts`](#workflow_states_additionalProperties_artifacts)
-        - [13.3.1.10.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > ArtifactDef`](#workflow_states_additionalProperties_artifacts_additionalProperties)
-          - [13.3.1.10.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`](#workflow_states_additionalProperties_artifacts_additionalProperties_type)
-          - [13.3.1.10.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`](#workflow_states_additionalProperties_artifacts_additionalProperties_description)
-          - [13.3.1.10.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`](#workflow_states_additionalProperties_artifacts_additionalProperties_mode)
   - [13.4. Property `PromptPack Specification > workflow > engine`](#workflow_engine)
-    - [13.4.1. Property `PromptPack Specification > workflow > engine > budget`](#workflow_engine_budget)
-      - [13.4.1.1. Property `PromptPack Specification > workflow > engine > budget > max_total_visits`](#workflow_engine_budget_max_total_visits)
-      - [13.4.1.2. Property `PromptPack Specification > workflow > engine > budget > max_tool_calls`](#workflow_engine_budget_max_tool_calls)
-      - [13.4.1.3. Property `PromptPack Specification > workflow > engine > budget > max_wall_time_sec`](#workflow_engine_budget_max_wall_time_sec)
 - [14. Property `PromptPack Specification > agents`](#agents)
   - [14.1. Property `PromptPack Specification > agents > entry`](#agents_entry)
   - [14.2. Property `PromptPack Specification > agents > members`](#agents_members)
@@ -245,7 +237,7 @@
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, and skills support
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, and skills support
 
 **Examples:**
 
@@ -4323,12 +4315,12 @@ Must be one of:
 
 **Description:** Workflow configuration defining a state machine over the pack's prompts. Each state references a prompt key and declares event-driven transitions.
 
-| Property                        | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                                                                         |
-| ------------------------------- | ------- | ------- | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [version](#workflow_version ) | No      | integer | No         | -          | Workflow schema version. Use 1 for the current stable format.                                                                                                                             |
-| + [entry](#workflow_entry )     | No      | string  | No         | -          | Name of the initial state. Must match a key in the states object.                                                                                                                         |
-| + [states](#workflow_states )   | No      | object  | No         | -          | Map of state name to state definition. Each state references a prompt and declares transitions.                                                                                           |
-| - [engine](#workflow_engine )   | No      | object  | No         | -          | Optional runtime engine configuration for workflow execution. Hosts standardized fields like 'budget' for resource limits, alongside runtime-specific hints (timeout, concurrency, etc.). |
+| Property                        | Pattern | Type    | Deprecated | Definition | Title/Description                                                                               |
+| ------------------------------- | ------- | ------- | ---------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| + [version](#workflow_version ) | No      | integer | No         | -          | Workflow schema version. Use 1 for the current stable format.                                   |
+| + [entry](#workflow_entry )     | No      | string  | No         | -          | Name of the initial state. Must match a key in the states object.                               |
+| + [states](#workflow_states )   | No      | object  | No         | -          | Map of state name to state definition. Each state references a prompt and declares transitions. |
+| - [engine](#workflow_engine )   | No      | object  | No         | -          | Optional runtime engine hints for workflow execution (e.g., timeout, concurrency settings).     |
 
 ### <a name="workflow_version"></a>13.1. Property `PromptPack Specification > workflow > version`
 
@@ -4378,9 +4370,9 @@ Must be one of:
 
 **Description:** Map of state name to state definition. Each state references a prompt and declares transitions.
 
-| Property                                     | Pattern | Type   | Deprecated | Definition               | Title/Description                                                                                                                                                                                                                             |
-| -------------------------------------------- | ------- | ------ | ---------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - - additionalProperties | No      | object | No         | In #/$defs/WorkflowState | A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states. May be marked as terminal to indicate workflow completion, or guarded with max_visits to bound loop iterations. |
+| Property                                     | Pattern | Type   | Deprecated | Definition               | Title/Description                                                                                                             |
+| -------------------------------------------- | ------- | ------ | ---------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| - - additionalProperties | No      | object | No         | In #/$defs/WorkflowState | A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states. |
 
 #### <a name="workflow_states_additionalProperties"></a>13.3.1. Property `PromptPack Specification > workflow > states > WorkflowState`
 
@@ -4391,20 +4383,16 @@ Must be one of:
 | **Additional properties** | Not allowed           |
 | **Defined in**            | #/$defs/WorkflowState |
 
-**Description:** A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states. May be marked as terminal to indicate workflow completion, or guarded with max_visits to bound loop iterations.
+**Description:** A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states.
 
-| Property                                                                | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                                 |
-| ----------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string  | No         | -          | Reference to a prompt key defined in the pack's prompts object.                                                                                                                                                                                                                                                                                                                   |
-| - [description](#workflow_states_additionalProperties_description )     | No      | string  | No         | -          | Human-readable description of this state's purpose.                                                                                                                                                                                                                                                                                                                               |
-| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object  | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                                                                                                                                                                                                                                 |
-| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string  | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                                                                                                                                                                                                                                  |
-| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | string  | No         | -          | How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.                                                                                                                                                                                                                                                                                 |
-| - [skills](#workflow_states_additionalProperties_skills )               | No      | string  | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.                                                                                                                                                                                                             |
-| - [terminal](#workflow_states_additionalProperties_terminal )           | No      | boolean | No         | -          | If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.                                                                                                                                                                                                                      |
-| - [max_visits](#workflow_states_additionalProperties_max_visits )       | No      | integer | No         | -          | Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.                                                                                                                                              |
-| - [on_max_visits](#workflow_states_additionalProperties_on_max_visits ) | No      | string  | No         | -          | Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.                                                                                                                                                                                |
-| - [artifacts](#workflow_states_additionalProperties_artifacts )         | No      | object  | No         | -          | Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., `{{artifacts.commit_sha}}`). |
+| Property                                                                | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                     |
+| ----------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string | No         | -          | Reference to a prompt key defined in the pack's prompts object.                                                                                                       |
+| - [description](#workflow_states_additionalProperties_description )     | No      | string | No         | -          | Human-readable description of this state's purpose.                                                                                                                   |
+| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                     |
+| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                      |
+| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | string | No         | -          | How this state is orchestrated: internal (runtime manages), external (caller manages), or hybrid.                                                                     |
+| - [skills](#workflow_states_additionalProperties_skills )               | No      | string | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills. |
 
 ##### <a name="workflow_states_additionalProperties_prompt_task"></a>13.3.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > prompt_task`
 
@@ -4529,178 +4517,6 @@ Must be one of:
 "none"
 ```
 
-##### <a name="workflow_states_additionalProperties_terminal"></a>13.3.1.7. Property `PromptPack Specification > workflow > states > additionalProperties > terminal`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-| **Default**  | `false`   |
-
-**Description:** If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.
-
-**Example:**
-
-```json
-true
-```
-
-##### <a name="workflow_states_additionalProperties_max_visits"></a>13.3.1.8. Property `PromptPack Specification > workflow > states > additionalProperties > max_visits`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.
-
-**Examples:**
-
-```json
-5
-```
-
-```json
-10
-```
-
-```json
-20
-```
-
-| Restrictions |        |
-| ------------ | ------ |
-| **Minimum**  | &ge; 1 |
-
-##### <a name="workflow_states_additionalProperties_on_max_visits"></a>13.3.1.9. Property `PromptPack Specification > workflow > states > additionalProperties > on_max_visits`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.
-
-**Examples:**
-
-```json
-"review"
-```
-
-```json
-"summarize"
-```
-
-```json
-"error_handler"
-```
-
-##### <a name="workflow_states_additionalProperties_artifacts"></a>13.3.1.10. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts`
-
-|                           |                                                                                                                             |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| **Type**                  | `object`                                                                                                                    |
-| **Required**              | No                                                                                                                          |
-| **Additional properties** | [Each additional property must conform to the schema](#workflow_states_additionalProperties_artifacts_additionalProperties) |
-
-**Description:** Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., `{{artifacts.commit_sha}}`).
-
-**Example:**
-
-```json
-{
-    "commit_sha": {
-        "type": "text/plain",
-        "description": "Git commit of the latest generated code"
-    },
-    "test_report": {
-        "type": "application/json",
-        "description": "Structured test runner summary"
-    }
-}
-```
-
-| Property                                                                    | Pattern | Type   | Deprecated | Definition             | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| --------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - - additionalProperties | No      | object | No         | In #/$defs/ArtifactDef | Declares a named artifact slot for carrying lightweight, structured metadata across workflow state visits. Artifacts are typically pointers (commit SHAs, file paths, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Values are captured at each state transition, forming an observable trace that enables time-travel debugging and workflow audit. They persist across loop iterations and are accessible to prompts as template variables. |
-
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties"></a>13.3.1.10.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > ArtifactDef`
-
-|                           |                     |
-| ------------------------- | ------------------- |
-| **Type**                  | `object`            |
-| **Required**              | No                  |
-| **Additional properties** | Not allowed         |
-| **Defined in**            | #/$defs/ArtifactDef |
-
-**Description:** Declares a named artifact slot for carrying lightweight, structured metadata across workflow state visits. Artifacts are typically pointers (commit SHAs, file paths, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Values are captured at each state transition, forming an observable trace that enables time-travel debugging and workflow audit. They persist across loop iterations and are accessible to prompts as template variables.
-
-| Property                                                                                           | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                  |
-| -------------------------------------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [type](#workflow_states_additionalProperties_artifacts_additionalProperties_type )               | No      | string           | No         | -          | MIME type indicating the artifact's content type. Used by runtimes to determine serialization and presentation.                                                                    |
-| - [description](#workflow_states_additionalProperties_artifacts_additionalProperties_description ) | No      | string           | No         | -          | Human-readable description of what this artifact contains and how it's used.                                                                                                       |
-| - [mode](#workflow_states_additionalProperties_artifacts_additionalProperties_mode )               | No      | enum (of string) | No         | -          | How the artifact is updated across visits. 'replace' overwrites the previous value on each visit. 'append' accumulates content across visits (e.g., a log). Defaults to 'replace'. |
-
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_type"></a>13.3.1.10.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** MIME type indicating the artifact's content type. Used by runtimes to determine serialization and presentation.
-
-**Examples:**
-
-```json
-"text/plain"
-```
-
-```json
-"application/json"
-```
-
-```json
-"text/markdown"
-```
-
-```json
-"text/x-python"
-```
-
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_description"></a>13.3.1.10.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Human-readable description of what this artifact contains and how it's used.
-
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_mode"></a>13.3.1.10.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-| **Default**  | `"replace"`        |
-
-**Description:** How the artifact is updated across visits. 'replace' overwrites the previous value on each visit. 'append' accumulates content across visits (e.g., a log). Defaults to 'replace'.
-
-**Examples:**
-
-```json
-"replace"
-```
-
-```json
-"append"
-```
-
-Must be one of:
-* "replace"
-* "append"
-
 ### <a name="workflow_engine"></a>13.4. Property `PromptPack Specification > workflow > engine`
 
 |                           |                  |
@@ -4709,106 +4525,11 @@ Must be one of:
 | **Required**              | No               |
 | **Additional properties** | Any type allowed |
 
-**Description:** Optional runtime engine configuration for workflow execution. Hosts standardized fields like 'budget' for resource limits, alongside runtime-specific hints (timeout, concurrency, etc.).
+**Description:** Optional runtime engine hints for workflow execution (e.g., timeout, concurrency settings).
 
-| Property                                     | Pattern | Type   | Deprecated | Definition                | Title/Description                                                                          |
-| -------------------------------------------- | ------- | ------ | ---------- | ------------------------- | ------------------------------------------------------------------------------------------ |
-| - [budget](#workflow_engine_budget )         | No      | object | No         | In #/$defs/WorkflowBudget | Resource budget for workflow execution. Provides safety limits to prevent unbounded loops. |
-| - - additionalProperties | No      | object | No         | -                         | -                                                                                          |
-
-#### <a name="workflow_engine_budget"></a>13.4.1. Property `PromptPack Specification > workflow > engine > budget`
-
-|                           |                        |
-| ------------------------- | ---------------------- |
-| **Type**                  | `object`               |
-| **Required**              | No                     |
-| **Additional properties** | Not allowed            |
-| **Defined in**            | #/$defs/WorkflowBudget |
-
-**Description:** Resource budget for workflow execution. Provides safety limits to prevent unbounded loops.
-
-| Property                                                          | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                              |
-| ----------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| - [max_total_visits](#workflow_engine_budget_max_total_visits )   | No      | integer | No         | -          | Maximum total state visits across all states in the workflow. This is a global safety net independent of per-state max_visits. |
-| - [max_tool_calls](#workflow_engine_budget_max_tool_calls )       | No      | integer | No         | -          | Maximum total tool calls across all states in the workflow.                                                                    |
-| - [max_wall_time_sec](#workflow_engine_budget_max_wall_time_sec ) | No      | integer | No         | -          | Maximum wall-clock time in seconds for the entire workflow execution.                                                          |
-
-##### <a name="workflow_engine_budget_max_total_visits"></a>13.4.1.1. Property `PromptPack Specification > workflow > engine > budget > max_total_visits`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Maximum total state visits across all states in the workflow. This is a global safety net independent of per-state max_visits.
-
-**Examples:**
-
-```json
-50
-```
-
-```json
-100
-```
-
-```json
-200
-```
-
-| Restrictions |        |
-| ------------ | ------ |
-| **Minimum**  | &ge; 1 |
-
-##### <a name="workflow_engine_budget_max_tool_calls"></a>13.4.1.2. Property `PromptPack Specification > workflow > engine > budget > max_tool_calls`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Maximum total tool calls across all states in the workflow.
-
-**Examples:**
-
-```json
-100
-```
-
-```json
-500
-```
-
-| Restrictions |        |
-| ------------ | ------ |
-| **Minimum**  | &ge; 1 |
-
-##### <a name="workflow_engine_budget_max_wall_time_sec"></a>13.4.1.3. Property `PromptPack Specification > workflow > engine > budget > max_wall_time_sec`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Maximum wall-clock time in seconds for the entire workflow execution.
-
-**Examples:**
-
-```json
-300
-```
-
-```json
-600
-```
-
-```json
-3600
-```
-
-| Restrictions |        |
-| ------------ | ------ |
-| **Minimum**  | &ge; 1 |
+| Property                                     | Pattern | Type   | Deprecated | Definition | Title/Description |
+| -------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
 
 ## <a name="agents"></a>14. Property `PromptPack Specification > agents`
 
@@ -5203,4 +4924,4 @@ false
 | **Min length** | 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-04-30 at 12:03:27 +0100
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-03-20 at 19:48:16 +0000

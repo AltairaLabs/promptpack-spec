@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Getting Started with PromptPack
 
-Build a complete customer feedback system step-by-step, learning each PromptPack feature as you go. By the end of this tutorial you'll have a production-ready pack with multiple prompts, shared resources, validators, evals, a workflow, and agent definitions.
+Build a complete customer feedback system step-by-step, learning each PromptPack feature as you go. By the end of this tutorial you'll have a production-ready pack with multiple prompts, shared resources, validators, evals, a workflow, and agent definitions. Once you're comfortable, see [Agent Loops](/docs/spec/structure#agent-loops-v14) for the v1.4 fields (`terminal`, `max_visits`, `artifacts`, `engine.budget`) that turn an unbounded workflow into a production-safe iterative agent.
 
 **Time investment**: ~45 minutes
 
@@ -331,7 +331,7 @@ Here's the full `feedback-system.promptpack.json` combining everything from the 
   "$schema": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "id": "feedback-system",
   "name": "Customer Feedback System",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Complete customer feedback collection, analysis, and response system",
 
   "template_engine": {
@@ -513,8 +513,9 @@ Here's the full `feedback-system.promptpack.json` combining everything from the 
 
 You've built a PromptPack that uses every major feature. Here's where to go from here:
 
-- **Understand the architecture**: [Architecture Patterns](/docs/spec/architecture-patterns) — how workflows, agents, validators, and evals fit together
-- **Dive deeper into features**: [How to Add a Workflow](/docs/guides/add-workflow) · [How to Set Up Agents](/docs/guides/setup-agents) · [How to Add Evals](/docs/guides/add-evals)
+- **Understand the architecture**: [Architecture Patterns](/docs/spec/architecture-patterns) — how workflows, agents, validators, evals, and agent loops fit together
+- **Build an agent loop *(v1.4+)***: declare `terminal: true` on exit states, bound re-enterable states with `max_visits` + `on_max_visits`, flow structured state across visits via `artifacts`, and add an `engine.budget` as a global safety net. See the [code-generation loop example](/docs/spec/examples#code-generation-loop-with-test-feedback-v14)
+- **Dive deeper into features**: [How to Add a Workflow](/docs/guides/add-workflow) (covers agent-loop fields) · [How to Set Up Agents](/docs/guides/setup-agents) · [How to Add Skills](/docs/guides/add-skills) · [How to Add Evals](/docs/guides/add-evals)
 - **See more examples**: [Real-World Examples](/docs/spec/examples)
 - **Explore the full schema**: [Schema Reference](/docs/spec/schema-reference) · [Schema Guide](/docs/spec/schema-guide)
 - **Test your pack**: [PromptArena Testing](/docs/ecosystem/arena-testing)

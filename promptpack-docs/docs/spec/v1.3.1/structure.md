@@ -1,8 +1,25 @@
 ---
 sidebar_position: 2
+title: "Pack Structure (v1.3.1)"
 ---
 
 # Pack Structure & Design
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.3.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../structure)
+:::
 
 Understanding how PromptPacks are structured helps you design better conversational AI systems. The JSON-based format isn't just about data storage—it's architected to support real-world AI development patterns and deployment needs.
 
@@ -316,56 +333,6 @@ Skills come in three forms:
 - **Inline skills** — define `name`, `description`, and `instructions` directly in the pack
 
 When combined with workflows, each state can declare a `skills` field to scope which skills are available in that context, or use `"none"` to disable skills entirely for a state.
-
-## Agent Loops *(v1.4+)*
-
-PromptPack v1.4 extends `WorkflowState` with the fields needed to express iterative, self-correcting execution patterns over the existing state machine — without leaving the spec. The same `workflow` block now supports terminal states, bounded loops, structured artifacts that flow across visits, and an engine-level execution budget.
-
-```json
-{
-  "workflow": {
-    "version": 1,
-    "entry": "plan",
-    "states": {
-      "plan": {
-        "prompt_task": "plan",
-        "on_event": { "PlanReady": "implement" }
-      },
-      "implement": {
-        "prompt_task": "implement",
-        "max_visits": 5,
-        "on_max_visits": "review",
-        "artifacts": {
-          "commit_sha":  { "type": "text/plain",       "description": "Latest generated commit" },
-          "test_report": { "type": "application/json", "description": "Test runner summary" },
-          "log":         { "type": "text/plain", "mode": "append", "description": "Iteration log" }
-        },
-        "on_event": { "CodeReady": "test" }
-      },
-      "test": {
-        "prompt_task": "run_tests",
-        "on_event":    { "TestsFailed": "implement", "TestsPassed": "done" }
-      },
-      "review": { "prompt_task": "review",   "terminal": true },
-      "done":   { "prompt_task": "summarize", "terminal": true }
-    },
-    "engine": {
-      "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 }
-    }
-  }
-}
-```
-
-Four building blocks turn an unbounded workflow into a production-safe agent loop:
-
-- **`terminal: true`** — marks states that exit the workflow explicitly. A terminal state should not declare `on_event` transitions.
-- **`max_visits` (per state)** — caps how many times a single state can be entered during one execution. When the limit is hit, the workflow transitions to `on_max_visits` if set, or terminates with a budget-exhausted status.
-- **`artifacts`** — named slots for lightweight, structured metadata (commit SHAs, file paths, JSON summaries, diffs). Each entry declares a MIME `type`, an optional `description`, and an optional `mode`: `"replace"` (default — overwrite on each visit) or `"append"` (accumulate across visits, e.g. a log). Values are accessible to prompts as `{{artifacts.<name>}}`.
-- **`engine.budget`** — a global safety net independent of per-state caps. Supports `max_total_visits`, `max_tool_calls`, and `max_wall_time_sec`. Reaching any limit terminates the workflow with a budget-exhausted status.
-
-:::info Time-travel debugging for free
-Because artifacts are captured at every state transition, runtimes that persist them produce a structured, replayable execution trace. You get audit, replay, and step-back debugging without writing any extra orchestration code.
-:::
 
 ## Deployment Benefits
 
