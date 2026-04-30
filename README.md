@@ -9,6 +9,8 @@
 
 Production AI systems need more than a single prompt — they need specialized prompts, shared tools, reusable fragments, safety guardrails, and version control. PromptPack is a JSON-based spec that bundles all of that into one portable file that works across providers.
 
+**Want to use it, not just read about it?** [**PromptKit**](https://github.com/AltairaLabs/PromptKit) is the open-source reference toolkit — install it with `npm install -g @altairalabs/promptarena @altairalabs/packc` to test, validate, and run packs in production.
+
 ## Why PromptPack?
 
 **The problem:** As AI applications grow, prompt management becomes a mess — dozens of prompts scattered across codebases, duplicated tool definitions, no versioning, no testing, and tight coupling to a single provider.
@@ -80,6 +82,20 @@ Production AI systems need more than a single prompt — they need specialized p
 ```
 
 **Learn more:** [Getting Started Guide](https://promptpack.org/docs/getting-started)
+
+### Run a pack
+
+Once you've authored a pack, install [PromptKit](https://github.com/AltairaLabs/PromptKit) and try it:
+
+```bash
+npm install -g @altairalabs/promptarena @altairalabs/packc
+
+promptarena init my-project --template iot-maintenance-demo
+cd my-project
+promptarena run --scenario scenarios/hardware-faults.scenario.yaml
+```
+
+PromptKit is the reference toolkit — multi-provider testing, red-team scenarios, eval reporting, and SDK deployment.
 
 ## Key Features
 
