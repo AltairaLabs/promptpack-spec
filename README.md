@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.3.1-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.4.0-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -87,6 +87,7 @@ Production AI systems need more than a single prompt — they need specialized p
 - **Complete Packaging** — Prompts, tools, fragments, evals, and config in a single JSON file
 - **Evals & Metrics** — Declare automated quality checks (deterministic or LLM judge) with Prometheus metric export
 - **Workflows** — State-machine orchestration with event-driven transitions between prompts
+- **Agent Loops** — Iterative, self-correcting execution with terminal states, per-state visit guards, artifact trails, and engine budgets
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
@@ -194,6 +195,51 @@ Workflow states can scope which skills are available per context:
 
 See [RFC-0008: Skills Extension](https://promptpack.org/docs/rfcs/skills-extension) for the full design.
 
+## Agent Loops *(v1.4)*
+
+PromptPack v1.4 extends the workflow state machine with the guardrails needed for safe, productive agent loops: terminal states, per-state visit limits, lightweight artifact slots that flow across visits, and engine-level execution budgets.
+
+```json
+"workflow": {
+  "version": 1,
+  "entry": "plan",
+  "states": {
+    "plan":      { "prompt_task": "plan",   "on_event": { "PlanReady": "implement" } },
+    "implement": {
+      "prompt_task": "implement",
+      "max_visits": 5,
+      "on_max_visits": "review",
+      "artifacts": {
+        "commit_sha":  { "type": "text/plain", "description": "Latest generated commit" },
+        "test_report": { "type": "application/json", "description": "Test runner summary" }
+      },
+      "on_event": { "CodeReady": "test" }
+    },
+    "test":      {
+      "prompt_task": "run_tests",
+      "on_event":    { "TestsFailed": "implement", "TestsPassed": "done" }
+    },
+    "review":    { "prompt_task": "review", "terminal": true },
+    "done":      { "prompt_task": "summarize", "terminal": true }
+  },
+  "engine": {
+    "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 }
+  }
+}
+```
+
+**Key concepts:**
+
+| Feature | Description |
+|---------|-------------|
+| **Terminal states** | `terminal: true` marks workflow exit points explicitly |
+| **Loop guards** | Per-state `max_visits` + optional `on_max_visits` redirect — bounds individual loops without killing the whole workflow |
+| **Artifacts** | Named slots (`replace`/`append`) carry pointers, summaries, and structured results across visits; available to prompts as `{{artifacts.<name>}}` |
+| **Budgets** | `engine.budget` provides a global safety net (total visits, tool calls, wall time) independent of per-state limits |
+| **Time-travel debugging** | Artifacts are captured at every transition — runtimes get a complete, replayable execution trace for free |
+
+See [RFC-0009: Agent Loop Extension](https://promptpack.org/docs/rfcs/agent-loops) for the full design.
+
 ## Documentation
 
 - [Specification](https://promptpack.org/docs/spec/overview) — Complete PromptPack spec
@@ -204,7 +250,7 @@ See [RFC-0008: Skills Extension](https://promptpack.org/docs/rfcs/skills-extensi
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.3.1/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.4.0/promptpack.schema.json`
 
 ## Ecosystem
 

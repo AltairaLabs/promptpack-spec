@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
-  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, and skills support",
-  "version": "1.3.1",
+  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, and skills support",
+  "version": "1.4.0",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
@@ -1288,7 +1288,13 @@
         },
         "engine": {
           "type": "object",
-          "description": "Optional runtime engine hints for workflow execution (e.g., timeout, concurrency settings).",
+          "description": "Optional runtime engine configuration for workflow execution. Hosts standardized fields like 'budget' for resource limits, alongside runtime-specific hints (timeout, concurrency, etc.).",
+          "properties": {
+            "budget": {
+              "$ref": "#/$defs/WorkflowBudget",
+              "description": "Resource budget for workflow execution. Provides safety limits to prevent unbounded loops."
+            }
+          },
           "additionalProperties": true
         }
       }
@@ -1296,7 +1302,7 @@
 
     "WorkflowState": {
       "type": "object",
-      "description": "A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states.",
+      "description": "A single state in the workflow state machine. References a prompt task and declares event-driven transitions to other states. May be marked as terminal to indicate workflow completion, or guarded with max_visits to bound loop iterations.",
       "required": ["prompt_task"],
       "additionalProperties": false,
       "properties": {
@@ -1331,6 +1337,87 @@
           "type": "string",
           "description": "Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.",
           "examples": ["./skills/billing", "none"]
+        },
+        "terminal": {
+          "type": "boolean",
+          "description": "If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.",
+          "default": false,
+          "examples": [true]
+        },
+        "max_visits": {
+          "type": "integer",
+          "description": "Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.",
+          "minimum": 1,
+          "examples": [5, 10, 20]
+        },
+        "on_max_visits": {
+          "type": "string",
+          "description": "Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.",
+          "examples": ["review", "summarize", "error_handler"]
+        },
+        "artifacts": {
+          "type": "object",
+          "description": "Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., {{artifacts.commit_sha}}).",
+          "additionalProperties": {
+            "$ref": "#/$defs/ArtifactDef"
+          },
+          "examples": [
+            {
+              "commit_sha": { "type": "text/plain", "description": "Git commit of the latest generated code" },
+              "test_report": { "type": "application/json", "description": "Structured test runner summary" }
+            }
+          ]
+        }
+      }
+    },
+
+    "ArtifactDef": {
+      "type": "object",
+      "description": "Declares a named artifact slot for carrying lightweight, structured metadata across workflow state visits. Artifacts are typically pointers (commit SHAs, file paths, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Values are captured at each state transition, forming an observable trace that enables time-travel debugging and workflow audit. They persist across loop iterations and are accessible to prompts as template variables.",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "MIME type indicating the artifact's content type. Used by runtimes to determine serialization and presentation.",
+          "examples": ["text/plain", "application/json", "text/markdown", "text/x-python"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what this artifact contains and how it's used."
+        },
+        "mode": {
+          "type": "string",
+          "description": "How the artifact is updated across visits. 'replace' overwrites the previous value on each visit. 'append' accumulates content across visits (e.g., a log). Defaults to 'replace'.",
+          "enum": ["replace", "append"],
+          "default": "replace",
+          "examples": ["replace", "append"]
+        }
+      }
+    },
+
+    "WorkflowBudget": {
+      "type": "object",
+      "description": "Resource budget for workflow execution. Provides a safety net to prevent unbounded loops. When any budget limit is reached, the workflow terminates with a budget-exhausted status. All fields are optional — omitting a field means no limit for that resource.",
+      "additionalProperties": false,
+      "properties": {
+        "max_total_visits": {
+          "type": "integer",
+          "description": "Maximum total state visits across all states in the workflow. This is a global safety net independent of per-state max_visits.",
+          "minimum": 1,
+          "examples": [50, 100, 200]
+        },
+        "max_tool_calls": {
+          "type": "integer",
+          "description": "Maximum total tool calls across all states in the workflow.",
+          "minimum": 1,
+          "examples": [100, 500]
+        },
+        "max_wall_time_sec": {
+          "type": "integer",
+          "description": "Maximum wall-clock time in seconds for the entire workflow execution.",
+          "minimum": 1,
+          "examples": [300, 600, 3600]
         }
       }
     },
