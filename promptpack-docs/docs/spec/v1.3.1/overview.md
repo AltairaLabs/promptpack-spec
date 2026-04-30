@@ -1,27 +1,27 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
+title: "Specification Overview (v1.3.1)"
 ---
 
 # Specification Overview
 
 <div style={{
   padding: '8px 16px',
-  backgroundColor: '#10b981',
+  backgroundColor: '#6b7280',
   color: 'white',
   borderRadius: '6px',
   display: 'inline-block',
   marginBottom: '24px',
   fontWeight: 'bold'
 }}>
-  📘 v1.4.0 (Current)
+  📦 v1.3.1 (Stable)
 </div>
 
-PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
-
-:::info Version Information
-This documentation covers **v1.4.0** of the PromptPack specification, which adds **agent loops** — terminal states, per-state visit guards, artifacts, and engine budgets — on top of the v1.3 workflow state machine.
-Looking for previous versions? [View v1.3.1 docs →](./v1.3.1/overview) | [Version History →](./versions)
+:::warning Archived Version
+This is the **v1.3.1** documentation (February 2026). For the latest features, see [v1.4 docs →](../overview)
 :::
+
+PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
 
 ## Why PromptPacks?
 
@@ -55,7 +55,7 @@ PromptPacks solve this by providing a **single JSON file** that contains everyth
   "tools": { /* shared external functions */ },
   "fragments": { /* reusable text components */ },
   "evals": [ /* automated quality checks (v1.2+) */ ],
-  "workflow": { /* state machine + agent loops (v1.3+, v1.4 adds terminal/max_visits/artifacts/budget) */ },
+  "workflow": { /* state-machine orchestration (v1.3+) */ },
   "agents": { /* A2A agent definitions (v1.3+) */ },
   "skills": [ /* progressive-disclosure knowledge (v1.3.1+) */ ]
 }
@@ -94,10 +94,6 @@ Define state-machine workflows over your prompts with event-driven transitions. 
 ### 🧩 **Skills** *(v1.3.1+)*
 
 Declare modular knowledge sources that agents load progressively on demand. Skills can be file paths, package references, or inline definitions — keeping system templates lean while giving agents access to deep domain expertise when needed. Workflow states can scope which skills are available in each context.
-
-### 🔁 **Agent Loops** *(v1.4+)*
-
-Extend the workflow state machine with the guardrails needed for safe, productive agent loops: terminal states (`terminal: true`), per-state visit limits (`max_visits` with optional `on_max_visits` redirect), named artifact slots that flow structured metadata across visits (`artifacts`), and a global execution budget (`engine.budget`). Artifacts captured at every transition give runtimes a complete, replayable execution trace — time-travel debugging for free.
 
 ## Real-World Use Cases
 

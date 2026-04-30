@@ -1,8 +1,25 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
+title: "Examples (v1.3.1)"
 ---
 
 # Real-World Examples
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.3.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../examples)
+:::
 
 These examples showcase how PromptPacks solve real business problems. Each demonstrates different benefits of the multi-prompt architecture and shared resource model.
 
@@ -1241,146 +1258,6 @@ Support agents need deep domain knowledge — billing policies, troubleshooting 
 
 **Lean Templates**: System templates stay focused on core behavior. Domain knowledge lives in skills, loaded when needed rather than embedded in every prompt
 
-## Code-Generation Loop with Test Feedback *(v1.4+)*
-
-This pack demonstrates an iterative agent loop: the implementer state writes code, transitions to a test runner, and either declares success or loops back for another attempt. Per-state visit caps, named artifacts, and an engine budget keep the loop bounded and observable.
-
-### The Iteration Challenge
-
-Code-generation agents need feedback: write code, run tests, fix failures, repeat. Without bounded loops they happily run forever; without artifacts the only inter-iteration channel is the conversation transcript, which is bulky and lossy. Agent loops solve both — `max_visits` caps the implementer at five attempts, `artifacts` flow the latest commit SHA and the structured test report into the next visit, and `engine.budget` is a global runaway-loop backstop.
-
-```json
-{
-  "$schema": "https://promptpack.org/schema/v1.4.0/promptpack.schema.json",
-  "id": "codegen-loop",
-  "name": "Iterative Code Generation Pack",
-  "version": "1.0.0",
-  "description": "Plan → implement → test loop with bounded iteration and artifact-based feedback",
-
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}",
-    "features": ["basic_substitution", "fragments"]
-  },
-
-  "prompts": {
-    "plan": {
-      "id": "plan",
-      "name": "Task Planner",
-      "version": "1.0.0",
-      "system_template": "Read the user's task and produce a numbered implementation plan.\nWhen the plan is ready, emit the event: PlanReady",
-      "parameters": { "temperature": 0.4 }
-    },
-    "implement": {
-      "id": "implement",
-      "name": "Implementer",
-      "version": "1.0.0",
-      "system_template": "Implement the next step.\n\nLatest commit: {{artifacts.commit_sha}}\nLast test report: {{artifacts.test_report}}\nIteration log:\n{{artifacts.iteration_log}}\n\nWrite the code, commit it, and update the commit_sha artifact. When ready for testing, emit the event: CodeReady",
-      "tools": ["write_file", "run_shell"],
-      "parameters": { "temperature": 0.2 }
-    },
-    "run_tests": {
-      "id": "run_tests",
-      "name": "Test Runner",
-      "version": "1.0.0",
-      "system_template": "Run the test suite for commit {{artifacts.commit_sha}}.\nWrite the structured result to the test_report artifact.\nIf any test fails, emit the event: TestsFailed\nIf all tests pass, emit the event: TestsPassed",
-      "tools": ["run_shell"],
-      "parameters": { "temperature": 0.0 }
-    },
-    "review": {
-      "id": "review",
-      "name": "Reviewer",
-      "version": "1.0.0",
-      "system_template": "The implementer hit its max_visits limit without passing tests. Review the iteration_log and the latest test_report, then write a summary describing what blocked the loop and what a human should do next.",
-      "parameters": { "temperature": 0.5 }
-    },
-    "summarize": {
-      "id": "summarize",
-      "name": "Summarizer",
-      "version": "1.0.0",
-      "system_template": "Tests passed. Summarize what was built (commit {{artifacts.commit_sha}}) and how the loop converged.",
-      "parameters": { "temperature": 0.3 }
-    }
-  },
-
-  "tools": {
-    "write_file": {
-      "name": "write_file",
-      "description": "Write content to a file path",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "path":    { "type": "string" },
-          "content": { "type": "string" }
-        },
-        "required": ["path", "content"]
-      }
-    },
-    "run_shell": {
-      "name": "run_shell",
-      "description": "Run a shell command and return stdout/stderr",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "command": { "type": "string" }
-        },
-        "required": ["command"]
-      }
-    }
-  },
-
-  "workflow": {
-    "version": 1,
-    "entry": "plan",
-    "states": {
-      "plan": {
-        "prompt_task": "plan",
-        "on_event": { "PlanReady": "implement" }
-      },
-      "implement": {
-        "prompt_task":   "implement",
-        "max_visits":    5,
-        "on_max_visits": "review",
-        "artifacts": {
-          "commit_sha":    { "type": "text/plain",       "description": "SHA of the latest generated commit" },
-          "test_report":   { "type": "application/json", "description": "Structured output of the most recent test run" },
-          "iteration_log": { "type": "text/plain", "mode": "append", "description": "Per-visit log accumulated across the loop" }
-        },
-        "on_event": { "CodeReady": "test" },
-        "persistence": "persistent"
-      },
-      "test": {
-        "prompt_task": "run_tests",
-        "on_event":    { "TestsFailed": "implement", "TestsPassed": "done" }
-      },
-      "review": { "prompt_task": "review",    "terminal": true },
-      "done":   { "prompt_task": "summarize", "terminal": true }
-    },
-    "engine": {
-      "budget": {
-        "max_total_visits":  50,
-        "max_tool_calls":   200,
-        "max_wall_time_sec": 600
-      }
-    }
-  }
-}
-```
-
-### Agent Loop Benefits
-
-**Bounded Iteration**: `implement.max_visits: 5` caps the loop at five attempts. On the sixth, the workflow transitions to `review` instead of looping forever — `on_max_visits` turns a runaway loop into structured handoff.
-
-**Explicit Termination**: `review` and `done` declare `terminal: true` so the workflow's exit points are part of the schema, not implicit empty-`on_event` conventions.
-
-**Structured Cross-Visit State**: `commit_sha` and `test_report` are `replace` artifacts — each visit overwrites them with the latest state. `iteration_log` is `append` — it accumulates across visits, giving the implementer a full history of what's been tried.
-
-**Templates See Artifacts**: Prompts pull artifact values via `{{artifacts.commit_sha}}` etc., so each iteration gets the fresh state without re-deriving it from the conversation.
-
-**Global Safety Net**: `engine.budget` caps the entire workflow at 50 total visits, 200 tool calls, and 600 seconds. Even if state-level caps are misconfigured, the budget prevents runaway costs.
-
-**Time-Travel Debugging**: A runtime that persists artifact values at every transition produces a structured, replayable trace — every commit, every test report, every log line — without any extra plumbing.
-
 ## Why These Examples Matter
 
 Each example shows how PromptPacks solve real business problems:
@@ -1392,6 +1269,5 @@ Each example shows how PromptPacks solve real business problems:
 5. **Business Alignment**: Each prompt can optimize for its specific business outcomes
 6. **Flexible Architecture**: Choose the right orchestration pattern — workflow for rigid sequences, agents for dynamic collaboration, or both together
 7. **Progressive Knowledge**: Skills keep templates lean while giving agents access to deep domain expertise on demand
-8. **Bounded Iteration**: Agent loops let workflows revisit a state under explicit caps (`max_visits`, `engine.budget`) and flow structured state across visits via artifacts — turning "model that loops" into "production-safe self-correcting agent"
 
 PromptPacks transform conversational AI from experimental prototypes into production-ready business solutions.

@@ -1,9 +1,25 @@
 ---
 sidebar_position: 3
-title: Architecture Patterns
+title: "Architecture Patterns (v1.3.1)"
 ---
 
 # Architecture Patterns
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.3.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../architecture-patterns)
+:::
 
 PromptPack has grown from a simple prompt-packaging format into a full-stack specification for conversational AI systems. This page explains how the major building blocks relate to each other and when to use each one.
 
@@ -13,8 +29,6 @@ A PromptPack is organized in layers. Lower layers are simpler and more universal
 
 ```
 ┌─────────────────────────────────────────────┐
-│  Agent Loops  Bounded iteration + artifacts │  v1.4
-├─────────────────────────────────────────────┤
 │  Skills       Progressive knowledge loading │  v1.3.1
 ├─────────────────────────────────────────────┤
 │  Agents       Inter-system discovery (A2A)  │  v1.3
@@ -31,7 +45,7 @@ A PromptPack is organized in layers. Lower layers are simpler and more universal
 └─────────────────────────────────────────────┘
 ```
 
-**Prompts** define what the LLM does. **Tools & Fragments** provide shared resources that prompts reference. **Validators** add inline guardrails that block bad output. **Evals** add async quality measurement that scores and reports. **Workflow** orchestrates transitions between prompts via a state machine. **Agents** expose prompts as discoverable services via the A2A protocol. **Skills** provide progressive-disclosure knowledge that agents load on demand. **Agent Loops** layer terminal states, visit guards, artifact slots, and execution budgets onto the workflow so iterative, self-correcting patterns stay production-safe.
+**Prompts** define what the LLM does. **Tools & Fragments** provide shared resources that prompts reference. **Validators** add inline guardrails that block bad output. **Evals** add async quality measurement that scores and reports. **Workflow** orchestrates transitions between prompts via a state machine. **Agents** expose prompts as discoverable services via the A2A protocol. **Skills** provide progressive-disclosure knowledge that agents load on demand.
 
 Each layer is optional — a valid PromptPack only requires `id`, `name`, `version`, `template_engine`, and at least one prompt. You adopt higher layers only when you need them.
 
@@ -140,20 +154,6 @@ Combine workflow orchestration internally with agent discovery externally.
 
 **When to use**: Systems that need both internal routing logic and external interoperability.
 
-### Agent Loop *(v1.4+)*
-
-The workflow visits a state repeatedly until it succeeds or hits a guardrail. A code-generation loop, a research-and-refine cycle, a generate-test-fix cycle.
-
-```
-plan → implement ⇄ test → done (terminal)
-        │  ↑       │
-        │  └── TestsFailed (loop back, max_visits=5)
-        ↓
-       review (terminal, on_max_visits)
-```
-
-**When to use**: Self-correcting agents — codegen with test feedback, research crews that refine via critic feedback, drafting workflows where a reviewer sends edits back. Use `max_visits` + `on_max_visits` to bound each loop, declare `artifacts` to flow structured state across visits, and set `engine.budget` as a global runaway-loop safety net.
-
 ## Multimodal Integration
 
 The `media` configuration (v1.1+) composes with all other features:
@@ -197,34 +197,6 @@ Skills provide progressive-disclosure knowledge loading — modular expertise th
 Fragments and skills are complementary. Use fragments for compile-time text substitution and skills for runtime knowledge loading. A pack can use both.
 :::
 
-## Agent Loops Integration *(v1.4+)*
-
-Agent loops are not a new top-level section — they are four small fields layered onto the existing `workflow` block. They turn an unbounded state machine into a production-safe iterative agent.
-
-### Agent Loops vs Plain Workflow
-
-| Aspect | Plain Workflow (v1.3) | Workflow + Agent Loops (v1.4) |
-|--------|----------------------|-------------------------------|
-| **Termination** | Terminal = empty `on_event: {}` (implicit) | `terminal: true` (explicit) |
-| **Loop bounds** | None — relies on event design to converge | Per-state `max_visits` + optional `on_max_visits` redirect |
-| **Cross-visit state** | Conversation context only (persistent/transient) | Named `artifacts` slots (`replace`/`append`) — pointers, summaries, structured results |
-| **Global safety net** | None | `engine.budget`: `max_total_visits`, `max_tool_calls`, `max_wall_time_sec` |
-| **Debugging** | Replay conversation log | Replay artifact transitions (time-travel debugging) |
-
-### When to Reach for Agent Loop Fields
-
-| Scenario | Use `terminal` | Use `max_visits` | Use `artifacts` | Use `engine.budget` |
-|----------|:---:|:---:|:---:|:---:|
-| Linear pipeline (intake → analyze → close) | Yes (mark exit states) | — | — | — |
-| Code generation that loops with test feedback | Yes | Yes | Yes (commit_sha, test_report) | Yes |
-| Research-and-critique cycle | Yes | Yes | Yes (draft, critique log) | Yes |
-| Long-running batch jobs that must hard-stop after N minutes | — | — | — | Yes |
-| Anything where a model could loop forever in production | Strongly recommend | Strongly recommend | Optional | Strongly recommend |
-
-:::info Backwards compatibility
-v1.3 packs are valid v1.4 packs unchanged. The new fields are opt-in. A state without `terminal`/`max_visits` behaves exactly as it did in v1.3.
-:::
-
 ## Feature Compatibility Matrix
 
 | Feature | Version | Combines With |
@@ -237,10 +209,9 @@ v1.3 packs are valid v1.4 packs unchanged. The new fields are opt-in. A state wi
 | Model Overrides | v1.0 | Prompts |
 | Media (multimodal) | v1.1 | Prompts, Agents (MIME types) |
 | Evals | v1.2 | Prompts (prompt-level), Pack (pack-level) |
-| Workflow | v1.3 | Prompts (via `prompt_task`), Agents, Skills (state scoping), Agent Loops |
+| Workflow | v1.3 | Prompts (via `prompt_task`), Agents, Skills (state scoping) |
 | Agents | v1.3 | Prompts (via `members`), Workflow |
 | Skills | v1.3.1 | Workflow (state-scoped filtering), Agents |
-| Agent Loops (`terminal`, `max_visits`, `artifacts`, `engine.budget`) | v1.4 | Workflow (extends `WorkflowState` and `WorkflowConfig.engine`) |
 
 ## Next Steps
 
@@ -249,4 +220,4 @@ v1.3 packs are valid v1.4 packs unchanged. The new fields are opt-in. A state wi
 - **Add skills**: [How to Add Skills](/docs/guides/add-skills)
 - **Add quality monitoring**: [How to Add Evals](/docs/guides/add-evals)
 - **See full examples**: [Real-World Examples](/docs/spec/examples)
-- **Design rationale**: [RFC 0005: Workflow Extension](/docs/rfcs/workflow-extension) · [RFC 0007: Agents Extension](/docs/rfcs/agents-extension) · [RFC 0006: Evals Extension](/docs/rfcs/evals-extension) · [RFC 0009: Agent Loop Extension](/docs/rfcs/agent-loops)
+- **Design rationale**: [RFC 0005: Workflow Extension](/docs/rfcs/workflow-extension) · [RFC 0007: Agents Extension](/docs/rfcs/agents-extension) · [RFC 0006: Evals Extension](/docs/rfcs/evals-extension)

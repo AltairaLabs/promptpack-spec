@@ -1,8 +1,25 @@
 ---
-sidebar_position: 5
+sidebar_position: 7
+title: "Schema Guide (v1.3.1)"
 ---
 
 # Schema Guide
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.3.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../schema-guide)
+:::
 
 Human-readable guide to PromptPack entities and their properties. For the auto-generated technical reference, see [Schema Reference](./schema-reference).
 
@@ -12,7 +29,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `$schema` | string | No | JSON Schema reference for validation and IDE support. Default: `https://promptpack.org/schema/latest/promptpack.schema.json` |
+| `$schema` | string | No | JSON Schema reference for validation and IDE support. Default: `https://promptpack.org/schema/v1/promptpack.schema.json` |
 | `id` | string | **Yes** | Unique identifier for the pack. Lowercase with hyphens only. Pattern: `^[a-z][a-z0-9-]*$` (1--100 chars). |
 | `name` | string | **Yes** | Human-readable display name for the pack (1--200 chars). |
 | `version` | string | **Yes** | Pack version following [Semantic Versioning 2.0.0](https://semver.org/). Optional `v` prefix. Examples: `"1.0.0"`, `"v2.1.3"`. |
@@ -36,7 +53,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 
 ```json
 {
-  "$schema": "https://promptpack.org/schema/latest/promptpack.schema.json",
+  "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
   "id": "my-pack",
   "name": "My Pack",
   "version": "1.0.0",
@@ -553,7 +570,7 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 | `version` | integer | **Yes** | Workflow schema version. Use `1` for the current stable format. |
 | `entry` | string | **Yes** | Name of the initial state. Must match a key in the `states` object. |
 | `states` | object&lt;string, [WorkflowState](#workflowstate)&gt; | **Yes** | Map of state name to state definition. Must contain at least one entry. |
-| `engine` | object | No | Optional runtime engine configuration. Hosts the standardized [`budget`](#workflowbudget) field *(v1.4+)* alongside runtime-specific hints (timeout, concurrency, etc.). |
+| `engine` | object | No | Optional runtime engine hints for workflow execution (e.g., timeout, concurrency settings). |
 
 ### WorkflowState
 
@@ -561,14 +578,10 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 |-------|------|----------|-------------|
 | `prompt_task` | string | **Yes** | Reference to a prompt key defined in the pack's `prompts` object. |
 | `description` | string | No | Human-readable description of this state's purpose. |
-| `on_event` | object&lt;string, string&gt; | No | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. Terminal states should omit it (or set it to `{}`). |
+| `on_event` | object&lt;string, string&gt; | **Yes** | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. |
 | `persistence` | string | No | Whether conversation context is kept (`persistent`) or reset (`transient`) on entry. |
 | `orchestration` | string | No | How this state is orchestrated: `internal` (runtime manages), `external` (caller manages), or `hybrid`. |
 | `skills` | string | No | Skill filter for this state. A path scoping which skills are available, or `"none"` to disable skills. *(v1.3.1+)* |
-| `terminal` | boolean | No | If `true`, this state is a terminal state — the workflow completes after its prompt executes. Terminal states should not declare `on_event` transitions. Default: `false`. *(v1.4+)* |
-| `max_visits` | integer | No | Maximum number of times this state may be entered during a single workflow execution. Minimum: 1. When the limit is reached the workflow transitions to `on_max_visits`, or terminates with a budget-exhausted status if `on_max_visits` is not set. *(v1.4+)* |
-| `on_max_visits` | string | No | Target state to transition to when `max_visits` is reached. Must reference a key in the `states` object. *(v1.4+)* |
-| `artifacts` | object&lt;string, [ArtifactDef](#artifactdef)&gt; | No | Named artifact slots for lightweight, structured metadata that flows across state visits. Values are exposed to the prompt as `{{artifacts.<name>}}`. *(v1.4+)* |
 
 ```json
 "workflow": {
@@ -607,72 +620,6 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
   }
 }
 ```
-
-### ArtifactDef *(v1.4+)*
-
-Declares one named slot in a state's `artifacts` map. Artifacts carry lightweight, structured metadata across state visits — pointers (commit SHAs, file paths, URIs), compact representations (schemas, summaries, diffs), or small structured results. They are not bulk data. Values persist across loop iterations and are accessible to prompts as `{{artifacts.<name>}}`.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `type` | string | **Yes** | MIME type indicating the artifact's content type (e.g., `"text/plain"`, `"application/json"`, `"text/markdown"`, `"text/x-python"`). Used by runtimes to determine serialization and presentation. |
-| `description` | string | No | Human-readable description of what this artifact contains and how it's used. |
-| `mode` | string | No | How the artifact is updated across visits. `"replace"` (default) overwrites the previous value on each visit; `"append"` accumulates content across visits (e.g., a log). |
-
-```json
-"artifacts": {
-  "commit_sha":  { "type": "text/plain",       "description": "Latest generated commit" },
-  "test_report": { "type": "application/json", "description": "Test runner summary" },
-  "iteration_log": {
-    "type": "text/plain",
-    "mode": "append",
-    "description": "Per-visit log accumulated across the loop"
-  }
-}
-```
-
-### WorkflowBudget *(v1.4+)*
-
-Resource budget for an entire workflow execution. Provides a global safety net independent of per-state `max_visits` — when any limit is reached the workflow terminates with a budget-exhausted status. All fields are optional; omitting a field means no limit for that resource. The budget lives at `workflow.engine.budget`.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `max_total_visits` | integer | No | Maximum total state visits across all states in the workflow. Minimum: 1. |
-| `max_tool_calls` | integer | No | Maximum total tool calls across all states. Minimum: 1. |
-| `max_wall_time_sec` | integer | No | Maximum wall-clock time in seconds for the entire workflow execution. Minimum: 1. |
-
-```json
-"workflow": {
-  "version": 1,
-  "entry": "plan",
-  "states": {
-    "plan":      { "prompt_task": "plan",      "on_event": { "PlanReady": "implement" } },
-    "implement": {
-      "prompt_task":   "implement",
-      "max_visits":    5,
-      "on_max_visits": "review",
-      "artifacts": {
-        "commit_sha":  { "type": "text/plain",       "description": "Latest commit" },
-        "test_report": { "type": "application/json", "description": "Test runner output" }
-      },
-      "on_event": { "CodeReady": "test" }
-    },
-    "test":   { "prompt_task": "run_tests", "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
-    "review": { "prompt_task": "review",    "terminal": true },
-    "done":   { "prompt_task": "summarize", "terminal": true }
-  },
-  "engine": {
-    "budget": {
-      "max_total_visits":  50,
-      "max_tool_calls":   200,
-      "max_wall_time_sec": 600
-    }
-  }
-}
-```
-
-:::info Loop guards vs. budgets
-`max_visits` bounds a single state — useful for "give the implementer up to 5 attempts before forcing review". `engine.budget` bounds the entire workflow — the runaway-loop safety net that catches cycles `max_visits` couldn't predict. Use both together: per-state caps for normal flow control, the budget as a backstop.
-:::
 
 ---
 
