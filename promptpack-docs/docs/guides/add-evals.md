@@ -60,12 +60,14 @@ Each eval requires:
 
 ## Step 3: Choose Triggers
 
-The `trigger` field controls when the eval runs:
+The `trigger` field controls when the eval runs. The schema is open — runtimes can register their own trigger types — but these are the conventional values:
 
 | Trigger | Behavior | Use When |
 |---------|----------|----------|
 | `every_turn` | Runs on every LLM response | Critical quality checks (accuracy, structure) |
 | `on_session_complete` | Runs once per session | Session-level assessments (overall tone, completeness) |
+| `on_conversation_complete` | Runs once per conversation | Multi-session journeys; cross-session quality |
+| `on_workflow_step` | Runs at each workflow state transition | Per-state quality checks in workflow-driven packs |
 | `sample_turns` | Samples a percentage of turns | Expensive evals (LLM judge) on high-traffic prompts |
 | `sample_sessions` | Samples a percentage of sessions | Holistic quality audits |
 
@@ -308,10 +310,10 @@ A full pack with pack-level and prompt-level evals:
 ## Validation Checklist
 
 - [ ] Each eval has a unique `id` within its scope (pack-level or within a prompt)
-- [ ] `trigger` is one of: `every_turn`, `on_session_complete`, `sample_turns`, `sample_sessions`
+- [ ] `trigger` is set (schema is open; common values listed in Step 3)
 - [ ] `sample_percentage` is set when using `sample_turns` or `sample_sessions` triggers
 - [ ] `metric.name` follows Prometheus conventions (snake_case, namespace prefix)
-- [ ] `metric.type` is one of: `gauge`, `counter`, `histogram`, `boolean`
+- [ ] `metric.type` is one of: `gauge`, `counter`, `histogram`, `boolean` *(this one **is** an enum)*
 - [ ] `metric.range.min` &le; `metric.range.max` when range is specified
 - [ ] Pack validates against the v1.2+ JSON schema
 

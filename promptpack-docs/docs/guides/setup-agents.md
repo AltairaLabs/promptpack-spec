@@ -9,7 +9,7 @@ Make your PromptPack prompts discoverable via the A2A (Agent-to-Agent) protocol 
 
 ## Prerequisites
 
-- A PromptPack with at least 1 prompt (v1.3 schema)
+- A PromptPack with at least 1 prompt (v1.3+ schema)
 - Understanding of [Pack Structure](/docs/spec/structure)
 
 ## Step 1: Choose Which Prompts Become Agents
@@ -42,7 +42,7 @@ Add the `agents` top-level field with `entry` and `members`:
 Key rules:
 - `entry` must reference a key in `members`
 - Each key in `members` must match a key in `prompts`
-- `description` is required — it becomes the agent's A2A Agent Card description
+- `description` is technically optional in the schema but **strongly recommended** — it becomes the agent's A2A Agent Card description and is what registries and routers use for discovery
 
 ## Step 3: Configure Tags and MIME Types
 
@@ -227,14 +227,14 @@ A full pack with three standalone agents:
 
 - [ ] `agents.entry` references a valid key in `members`
 - [ ] Every key in `members` matches a key in `prompts`
-- [ ] Every member has a `description`
+- [ ] Every member has a `description` *(optional in schema, but required in practice for A2A discovery)*
 - [ ] If using workflow + agents, `workflow.entry` and `agents.entry` can differ (they serve different purposes)
 - [ ] MIME types in `input_modes`/`output_modes` are valid
-- [ ] Pack validates against the v1.3 JSON schema
+- [ ] Pack validates against the v1.3+ JSON schema
 
 :::warning Common Mistakes
 - **Agent key doesn't match prompt key**: `members.billing_agent` won't work if the prompt key is `billing`. The keys must match exactly.
-- **Missing description**: Every agent member must have a `description` — this becomes the A2A Agent Card's description and is essential for discovery.
+- **Missing description**: The schema technically allows agent members without a `description`, but you almost always want one — it becomes the A2A Agent Card's description and is what registries and routers use for discovery.
 - **Confusing workflow entry with agent entry**: `workflow.entry` is the first *state* in the state machine. `agents.entry` is the default agent for *incoming external requests*. They can reference different prompts.
 :::
 

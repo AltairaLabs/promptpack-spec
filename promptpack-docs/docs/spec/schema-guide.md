@@ -125,12 +125,13 @@ A template variable definition with type information and validation rules.
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `name` | string | **Yes** | Variable name used in templates (e.g., `{{name}}`). Pattern: `^[a-zA-Z_][a-zA-Z0-9_]*$`. |
-| `type` | string | **Yes** | Data type. One of: `"string"`, `"number"`, `"boolean"`, `"object"`, `"array"`. |
+| `type` | string | **Yes** | Data type. Schema is open — common values are `"string"`, `"number"`, `"boolean"`, `"object"`, `"array"`. |
 | `required` | boolean | **Yes** | Whether this variable must be provided at runtime. |
-| `default` | any | No | Default value when the variable is not provided. |
+| `default` | any | No | Default value when the variable is not provided. Should not be set when `required: true`. |
 | `description` | string | No | Human-readable description of the variable's purpose. |
 | `example` | any | No | Example value showing expected format and content. |
 | `validation` | [Validation](#validation) | No | Validation rules applied to the variable value at runtime. |
+| `binding` | [Binding](#binding) | No | Declares how this variable is automatically populated from runtime context (e.g., session, env, request header) without caller input. |
 
 ### Validation
 
@@ -144,6 +145,30 @@ Rules applied to variable values at runtime.
 | `minimum` | number | Minimum numeric value (for number types). |
 | `maximum` | number | Maximum numeric value (for number types). |
 | `enum` | any[] | List of allowed values. |
+
+### Binding
+
+Declares how a variable is auto-populated from runtime context, so the caller doesn't have to supply it explicitly.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | No | The binding source kind. Schema is open — common values are `"context"`, `"session"`, `"env"`, `"header"`. |
+| `field` | string | No | The field name within the binding source to extract (e.g., `"user_id"`, `"locale"`). |
+| `auto_populate` | boolean | No | Whether this variable is automatically populated at runtime without caller input. Default: `false`. |
+| `filter` | string | No | Optional filter expression applied to the bound value (e.g., `"lowercase"`, `"trim"`). |
+
+```json
+{
+  "name": "user_id",
+  "type": "string",
+  "required": true,
+  "binding": {
+    "kind": "session",
+    "field": "user_id",
+    "auto_populate": true
+  }
+}
+```
 
 ```json
 {
@@ -247,8 +272,9 @@ A validation rule (guardrail) applied to LLM responses.
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `type` | string | **Yes** | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own types. Examples: `"banned_words"`, `"max_length"`, `"length"`, `"max_sentences"`, `"regex_match"`, `"sentiment"`, `"custom"`. |
-| `enabled` | boolean | **Yes** | Whether this validator is active. |
-| `fail_on_violation` | boolean | No | If true, violations cause an error. Default: false. |
+| `enabled` | boolean | No | Whether this validator is active. Default: `true`. |
+| `fail_on_violation` | boolean | No | If true, violations cause an error. If false, violations are logged but allowed. Default: `false`. |
+| `message` | string | No | User-facing message returned when the validator blocks content (e.g., `"Response contains banned words"`). |
 | `params` | object | No | Validator-specific parameters (e.g., word lists, character limits). |
 
 ```json
@@ -363,13 +389,17 @@ Evals are automated quality checks on LLM outputs. Unlike validators (which run 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | string | **Yes** | Unique identifier for this eval within its scope. |
-| `type` | string | **Yes** | Assertion type determining how the eval runs. Not an enum — runtimes register their own types (e.g., `"contains"`, `"regex"`, `"json_valid"`, `"llm_judge"`). |
-| `trigger` | string | **Yes** | When this eval fires. One of: `"every_turn"`, `"on_session_complete"`, `"sample_turns"`, `"sample_sessions"`. |
+| `type` | string | **Yes** | Assertion type determining how the eval runs. Not an enum — runtimes register their own types (e.g., `"contains"`, `"regex"`, `"json_valid"`, `"llm_judge"`, `"cosine_similarity"`). |
+| `trigger` | string | **Yes** | When this eval fires. Schema is open — common values are `"every_turn"`, `"on_session_complete"`, `"on_conversation_complete"`, `"on_workflow_step"`, `"sample_turns"`, `"sample_sessions"`. |
 | `description` | string | No | Human-readable description of what this eval measures. |
 | `enabled` | boolean | No | Whether this eval is active. Default: `true`. |
 | `sample_percentage` | number | No | Percentage of turns/sessions to sample (0–100). Only used with `sample_turns` and `sample_sessions` triggers. Default: `5`. |
 | `params` | object | No | Type-specific configuration. Structure depends on the eval `type`. |
 | `metric` | [MetricDef](#metric-def) | No | Prometheus-style metric declaration for exposing eval results. |
+| `threshold` | [Threshold](#threshold) | No | Pass/fail threshold for the eval score. |
+| `message` | string | No | Human-readable message describing the eval result or failure reason. |
+| `when` | object | No | Conditional expression that determines whether this eval runs for a given turn or session (e.g., `{ "has_variable": "customer_tier" }`, `{ "turn_count_gte": 3 }`). Free-form — runtimes interpret. |
+| `groups` | string[] | No | Eval group tags for organizing and filtering evals (e.g., `["quality", "tone"]`, `["safety", "compliance"]`). |
 
 ### Metric Def
 
@@ -380,6 +410,15 @@ Evals are automated quality checks on LLM outputs. Unlike validators (which run 
 | `range` | object | No | Optional value bounds with `min` and/or `max` fields. |
 
 The `metric` object uses `additionalProperties: true`, so runtimes can attach extra fields (e.g., `labels`, `help`, `buckets`).
+
+### Threshold
+
+Optional pass/fail threshold attached to an eval. Runtimes compare the eval's numeric score against `value` using `operator`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `operator` | string | Comparison operator. Common values: `"gte"`, `"lte"`, `"gt"`, `"lt"`, `"eq"`. |
+| `value` | number | The threshold value to compare against (e.g., `0.8`, `4`, `0.95`). |
 
 ```json
 "evals": [

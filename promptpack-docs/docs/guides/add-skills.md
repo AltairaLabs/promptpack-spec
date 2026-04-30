@@ -9,7 +9,7 @@ Add progressive-disclosure knowledge loading to an existing PromptPack so that a
 
 ## Prerequisites
 
-- A PromptPack (v1.3.1 schema)
+- A PromptPack (v1.3.1+ schema)
 - Understanding of [Pack Structure](/docs/spec/structure)
 - Knowledge you want to make available to agents beyond what's in system templates
 
@@ -180,7 +180,7 @@ If your pack uses a workflow, you can filter which skills are available in each 
 
 After adding skills, verify:
 
-- [ ] Pack validates against the v1.3.1 schema
+- [ ] Pack validates against the v1.3.1+ schema
 - [ ] All file paths point to existing directories/files (if using path-based skills)
 - [ ] Inline skills have all three required fields: `name`, `description`, `instructions`
 - [ ] `SkillPathSource` objects have a `path` field
