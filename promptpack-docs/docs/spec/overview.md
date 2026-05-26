@@ -16,7 +16,7 @@ sidebar_position: 2
   📘 v1.4.0 (Current)
 </div>
 
-PromptPack is a portable specification for packaging conversational AI systems into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything needed to run sophisticated conversational AI.
+PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
 :::info Version Information
 This documentation covers **v1.4.0** of the PromptPack specification, which adds **agent loops** — terminal states, per-state visit guards, artifacts, and engine budgets — on top of the v1.3 workflow state machine.
@@ -27,106 +27,114 @@ Looking for previous versions? [View v1.3.1 docs →](./v1.3.1/overview) | [Vers
 
 ### The Challenge
 
-Building production-ready conversational AI involves more than just writing prompts. You need:
+Production AI agents involve more than a single prompt. You need:
 
-- **Multiple specialized prompts** for different scenarios (support, sales, technical help)
-- **External tools** that the AI can call (databases, APIs, calculators)
-- **Shared resources** like reusable text fragments and configurations
-- **Safety guardrails** to ensure appropriate responses
+- **Specialized prompts** for different scenarios or workflow stages
+- **External tools** the agent can call (databases, APIs, calculators)
+- **Workflows** that coordinate multi-step or iterative behavior
+- **Shared resources** like reusable fragments and configuration
+- **Safety guardrails** to constrain output
 - **Version management** to track changes and ensure compatibility
-- **Testing frameworks** to validate behavior across different models
+- **Testing** to validate behavior across providers and models
 
-Without a standard format, AI applications become fragmented, hard to maintain, and impossible to share reliably.
+Without a standard format, AI applications fragment, become hard to maintain, and lock in to a single framework or provider.
 
 ### The Solution
 
-PromptPacks solve this by providing a **single JSON file** that contains everything needed to run a conversational AI system:
+A PromptPack is a **single JSON file** that contains everything needed to run an AI agent. Here's an autonomous coding agent expressed as a pack — a `plan → implement → test → review` loop with bounded retries and a hard execution budget:
 
 ```json
 {
-  "id": "customer-support",
-  "name": "Customer Support Pack", 
+  "id": "code-agent",
+  "name": "Code Generation Agent",
   "version": "1.0.0",
   "prompts": {
-    "support": { /* specialized for general support */ },
-    "sales": { /* optimized for sales inquiries */ },
-    "technical": { /* focused on technical issues */ }
+    "plan":      { /* break a task into steps */ },
+    "implement": { /* write code for the current step */ },
+    "test":      { /* run and interpret tests */ },
+    "review":    { /* summarize what's left if the loop is exhausted */ }
   },
-  "tools": { /* shared external functions */ },
+  "workflow": {
+    "entry": "plan",
+    "states": {
+      "plan":      { "prompt_task": "plan",      "on_event": { "PlanReady":   "implement" } },
+      "implement": {
+        "prompt_task":   "implement",
+        "max_visits":    5,
+        "on_max_visits": "review",
+        "on_event":      { "CodeReady": "test" }
+      },
+      "test":      { "prompt_task": "test",      "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
+      "done":      { "prompt_task": "review",    "terminal": true },
+      "review":    { "prompt_task": "review",    "terminal": true }
+    },
+    "engine": { "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 } }
+  },
+  "tools":     { /* shared external functions */ },
   "fragments": { /* reusable text components */ },
-  "evals": [ /* automated quality checks (v1.2+) */ ],
-  "workflow": { /* state machine + agent loops (v1.3+, v1.4 adds terminal/max_visits/artifacts/budget) */ },
-  "agents": { /* A2A agent definitions (v1.3+) */ },
-  "skills": [ /* progressive-disclosure knowledge (v1.3.1+) */ ]
+  "evals":     [ /* automated quality checks (v1.2+) */ ],
+  "agents":    { /* A2A agent definitions (v1.3+) */ },
+  "skills":    [ /* progressive-disclosure knowledge (v1.3.1+) */ ]
 }
 ```
 
-## Core Benefits
+The same spec format expresses simpler shapes too — a single-prompt assistant, a multi-prompt router, or a multi-agent system — depending on which sections you populate.
 
-### 🎯 **Multi-Prompt Architecture**
-
-Instead of one generic prompt trying to handle everything, PromptPacks let you create **specialized prompts for specific tasks**. A customer service pack might have separate prompts for billing questions, technical support, and sales inquiries—each optimized for its specific purpose while sharing common tools and configuration.
-
-### 📦 **Complete Packaging**
-
-Everything needed to run your AI system is in one file. No more hunting for prompt templates, tool definitions, or configuration scattered across multiple files. Deploy once, run anywhere.
-
-### 🔄 **Reusability & Sharing**
-
-PromptPacks are portable. Build a customer support pack once, then use it across different applications, teams, or even organizations. Share best practices through standardized, tested packages.
-
-### 🛡️ **Built-in Safety**
-
-Each prompt can have its own validators (guardrails) to ensure safe, appropriate responses. Define content filters, length limits, and custom validation rules that travel with your prompts.
-
-### 🧪 **Testability**
-
-PromptPacks include testing metadata—which models have been tested, success rates, performance metrics. Know before you deploy whether your pack works well with different AI providers.
-
-### ⚡ **Tool Integration**
-
-Define external tools once, reference them from any prompt in the pack. Whether it's looking up customer data, performing calculations, or calling external APIs, tools are reusable across all prompts.
-
-### 🔀 **Orchestration** *(v1.3+)*
-
-Define state-machine workflows over your prompts with event-driven transitions. Combine with A2A-compatible agent definitions to enable multi-agent orchestration — route conversations between specialized prompts based on events, with configurable persistence and orchestration modes.
-
-### 🧩 **Skills** *(v1.3.1+)*
-
-Declare modular knowledge sources that agents load progressively on demand. Skills can be file paths, package references, or inline definitions — keeping system templates lean while giving agents access to deep domain expertise when needed. Workflow states can scope which skills are available in each context.
+## Core Capabilities
 
 ### 🔁 **Agent Loops** *(v1.4+)*
 
-Extend the workflow state machine with the guardrails needed for safe, productive agent loops: terminal states (`terminal: true`), per-state visit limits (`max_visits` with optional `on_max_visits` redirect), named artifact slots that flow structured metadata across visits (`artifacts`), and a global execution budget (`engine.budget`). Artifacts captured at every transition give runtimes a complete, replayable execution trace — time-travel debugging for free.
+Build iterative, self-correcting agents on top of the workflow state machine. Terminal states (`terminal: true`) mark exit points explicitly. Per-state visit limits (`max_visits` plus optional `on_max_visits` redirect) cap individual loops without killing the whole workflow. Named artifact slots flow structured metadata across visits, and a global execution budget (`engine.budget`) provides a safety net for total visits, tool calls, and wall time. Artifacts captured at every transition give you a complete, replayable execution trace — time-travel debugging for free.
+
+### 🔀 **Workflows & Multi-Agent Orchestration** *(v1.3+)*
+
+Define state-machine workflows over prompts with event-driven transitions. Combine with A2A-compatible agent definitions to coordinate multi-agent systems — route between specialized prompts or agents based on events, with configurable persistence and orchestration modes.
+
+### 🎯 **Multi-Prompt Architecture**
+
+Instead of one generic prompt trying to handle everything, PromptPacks let you create **specialized prompts** for specific tasks. A customer service pack might route between billing, technical support, and sales inquiries — each prompt optimized for its purpose while sharing tools and configuration.
+
+### 🧩 **Skills** *(v1.3.1+)*
+
+Declare modular knowledge sources that agents load progressively on demand. Skills can be file paths, package references, or inline definitions — keeping system templates lean while giving agents deep domain expertise when needed. Workflow states can scope which skills are available in each context.
+
+### ⚡ **Tool Integration**
+
+Define external tools once, reference them from any prompt in the pack. Whether it's looking up data, performing calculations, or calling external APIs, tools are reusable across all prompts and workflow states.
+
+### 🛡️ **Built-in Safety**
+
+Each prompt can have its own validators (guardrails) to block unsafe output inline. Define content filters, length limits, and custom validation rules that travel with the pack.
+
+### 🧪 **Evals & Testability** *(v1.2+)*
+
+Ship quality policy alongside your prompts. Evals run asynchronously and produce scores via Prometheus metrics. Testing metadata tracks which models have been tested and how well they performed.
+
+### 📦 **Complete Packaging**
+
+Everything needed to run your agent — prompts, workflow, tools, fragments, evals, agents, skills — lives in one file. Deploy once, run anywhere.
+
+### 🔄 **Reusability & Sharing**
+
+PromptPacks are portable. Build a pack once, then use it across different applications, teams, or organizations. Share best practices through standardized, tested packages.
 
 ## Real-World Use Cases
 
-### Customer Service
+### Autonomous Agent Loops
 
-A complete customer service PromptPack might include:
+A code-generation agent runs `plan → implement → test → review` with `implement` capped at 5 retries (redirecting to `review` if it loops), `test` bouncing back on failures, and a global ceiling of 50 transitions and 200 tool calls. Artifacts capture each generated commit and test report for replay and post-hoc review.
 
-- **Support prompt** for general inquiries with ticket creation tools
-- **Sales prompt** for product questions with inventory lookup tools
-- **Technical prompt** for troubleshooting with diagnostic tools
-- **Shared fragments** for company policies and escalation procedures
+### Multi-Prompt Customer Service
+
+A customer service pack includes specialized prompts for general support, sales inquiries, and technical troubleshooting, with shared fragments for company policies and escalation procedures — and validators that enforce PII handling on the billing path.
 
 ### Content Creation
 
-A content generation PromptPack could contain:
-
-- **Blog writing prompt** with SEO optimization tools
-- **Social media prompt** with character limit validators
-- **Email marketing prompt** with A/B testing tools
-- **Brand voice fragments** ensuring consistent tone across all content
+A content generation pack contains a blog-writing prompt with SEO optimization tools, a social-media prompt with character-limit validators, and an email-marketing prompt with A/B testing tools — all sharing brand voice fragments.
 
 ### Educational Assistant
 
-An educational PromptPack might feature:
-
-- **Tutoring prompt** with adaptive questioning techniques
-- **Assessment prompt** with grading rubrics and feedback tools
-- **Research prompt** with citation tools and fact-checking
-- **Curriculum fragments** aligned to learning standards
+A tutoring pack pairs an adaptive-questioning prompt, an assessment prompt with grading rubrics, and a research prompt with citation tools — all anchored to curriculum fragments aligned with learning standards.
 
 ## Design Philosophy
 
@@ -134,16 +142,16 @@ PromptPacks follow key principles that make them powerful and practical:
 
 **Modularity**: Each prompt handles one domain well rather than trying to do everything
 
-**Composability**: Shared tools, fragments, and configuration reduce duplication  
+**Composability**: Shared tools, fragments, and configuration reduce duplication
 
 **Portability**: Works across different AI providers and runtime environments
 
-**Versioning**: Track changes and maintain compatibility as your AI evolves
+**Versioning**: Track changes and maintain compatibility as your agents evolve
 
-**Observability**: Built-in testing and performance tracking helps you optimize
+**Observability**: Built-in evals, validators, and testing metadata make behavior measurable
 
 ## Getting Started
 
-The PromptPack format is designed to be both human-readable and machine-executable. Whether you're hand-crafting prompts or generating them programmatically, the JSON structure provides the flexibility and power needed for production AI applications.
+The PromptPack format is designed to be both human-readable and machine-executable. Whether you're hand-crafting prompts or generating them programmatically, the JSON structure provides the flexibility and power needed for production agents.
 
 Ready to dive deeper? Explore the [structure guide](./structure) to understand how packs are organized, or jump to [examples](./examples) to see complete, real-world PromptPacks in action.

@@ -349,4 +349,4 @@ JSON structure supports backward-compatible evolution:
 }
 ```
 
-The JSON format makes PromptPacks a practical, production-ready solution for packaging and deploying conversational AI systems at scale.
+The JSON format makes PromptPacks a practical, production-ready solution for packaging and deploying AI agent behavior at scale.

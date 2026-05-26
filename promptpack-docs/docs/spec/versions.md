@@ -6,25 +6,42 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.3.1
+## Current Version: v1.4.0
 
 **Status:** ✅ Current
-**Released:** February 2026
-**Schema:** `https://promptpack.org/schema/v1.3.1/promptpack.schema.json`
+**Released:** April 2026
+**Schema:** `https://promptpack.org/schema/v1.4.0/promptpack.schema.json`
 
-### What's New in v1.3.1
+### What's New in v1.4.0
 
-- **Skills Extension** ([RFC-0008](/docs/rfcs/skills-extension)) - Progressive-disclosure knowledge loading via the AgentSkills.io standard
-- **Top-level `skills` array** - Declare skill sources as file paths, package references, or inline definitions
-- **SkillPathSource** - Path-based skill source with optional `preload` flag for eager loading
-- **InlineSkill** - Define skills inline with `name`, `description`, and `instructions`
-- **WorkflowState `skills` field** - Directory-scoped skill filtering per workflow state
+- **Agent Loops** ([RFC-0009](/docs/rfcs/agent-loops)) — Extends the workflow state machine with the guardrails iterative agents need
+- **Terminal states** — Mark workflow exit points explicitly with `terminal: true`
+- **Per-state visit guards** — `max_visits` with optional `on_max_visits` redirect bounds individual loops
+- **Artifacts** — Named slots (`replace`/`append`) flow structured metadata across visits; available to prompts as `{{artifacts.<name>}}`
+- **Engine budgets** — `engine.budget` provides a global safety net (total visits, tool calls, wall time)
+- **Replayable execution traces** — Artifacts captured at every transition give runtimes a complete time-travel debug log for free
 
-[View v1.3.1 Spec →](./overview)
+[View v1.4.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.3.1
+
+**Status:** 📦 Stable
+**Released:** February 2026
+**Schema:** `https://promptpack.org/schema/v1.3.1/promptpack.schema.json`
+
+- Skills Extension - Progressive-disclosure knowledge loading via the AgentSkills.io standard
+- Top-level `skills` array - File paths, package references, or inline definitions
+- SkillPathSource with optional `preload` flag for eager loading
+- InlineSkill with `name`, `description`, and `instructions`
+- WorkflowState `skills` field for directory-scoped filtering
+
+[View v1.3.1 Spec →](./v1.3.1/overview)
+
+---
 
 ### v1.3
 
@@ -93,7 +110,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.3.1  | ✅ Current | Full support | - |
+| v1.4.0  | ✅ Current | Full support | - |
+| v1.3.1  | 📦 Stable | Security fixes only | TBD |
 | v1.3    | 📦 Stable | Security fixes only | TBD |
 | v1.2    | 📦 Stable | Security fixes only | TBD |
 | v1.1    | 📦 Stable | Security fixes only | TBD |
@@ -102,6 +120,63 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.3.1 to v1.4
+
+v1.4 is **fully backward compatible** with v1.3.1. No breaking changes.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.4.0/promptpack.schema.json",
+     "version": "1.4.0"
+   }
+   ```
+
+2. **(Optional) Add agent-loop guardrails** to workflow states:
+   ```json
+   {
+     "workflow": {
+       "entry": "plan",
+       "states": {
+         "plan":      { "prompt_task": "plan", "on_event": { "PlanReady": "implement" } },
+         "implement": {
+           "prompt_task": "implement",
+           "max_visits": 5,
+           "on_max_visits": "review",
+           "artifacts": {
+             "commit_sha":  { "type": "text/plain",       "description": "Latest generated commit" },
+             "test_report": { "type": "application/json", "description": "Test runner summary" }
+           },
+           "on_event": { "CodeReady": "test" }
+         },
+         "test":   { "prompt_task": "test",   "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
+         "review": { "prompt_task": "review", "terminal": true },
+         "done":   { "prompt_task": "review", "terminal": true }
+       },
+       "engine": {
+         "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 }
+       }
+     }
+   }
+   ```
+
+3. **Test and validate** — v1.3.1 packs continue to work without changes
+
+### New Features You Can Use
+
+- Mark workflow exit points with `terminal: true`
+- Cap individual loops with per-state `max_visits` plus optional `on_max_visits` redirect
+- Flow structured results across visits with named `artifacts` slots (`replace` or `append`)
+- Reference artifacts from prompt templates as `{{artifacts.<name>}}`
+- Add a global `engine.budget` for total visits, tool calls, and wall time
+- Get replayable execution traces for free — artifacts are captured at every transition
+
+See [RFC-0009: Agent Loop Extension](/docs/rfcs/agent-loops) for the full design.
 
 ---
 
@@ -315,19 +390,21 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.3.1 if:
+### Use v1.4.0 if:
 - ✅ Building new PromptPacks
+- ✅ Building autonomous agents with iterative loops (plan/implement/test patterns)
+- ✅ Need terminal states, visit guards, artifacts, or engine budgets
 - ✅ Need progressive-disclosure knowledge loading (skills)
 - ✅ Need workflow orchestration between prompts
 - ✅ Want A2A protocol interoperability for multi-agent systems
 - ✅ Want latest features
 
-### Stay on v1.3 if:
+### Stay on v1.3.1 if:
 - ✅ Existing packs work fine
-- ✅ Don't need skills yet
+- ✅ Not running iterative agent loops yet
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.3.1 for all new projects. It's backward compatible and adds progressive-disclosure knowledge loading.
+**Recommendation:** Use v1.4.0 for all new projects. It's backward compatible and adds agent-loop guardrails (terminal states, visit guards, artifacts, engine budgets) on top of the v1.3 workflow state machine.
 
 ---
 
@@ -335,6 +412,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.4.0  | Apr 2026    | Agent loops: terminal states, visit guards, artifacts, engine budgets |
 | v1.3.1  | Feb 2026    | Skills: progressive-disclosure knowledge loading |
 | v1.3    | Feb 2026    | Workflow orchestration, A2A agent definitions |
 | v1.2    | Feb 2026    | Evals extension: pack/prompt-level evals, Prometheus metrics |

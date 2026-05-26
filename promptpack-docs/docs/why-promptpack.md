@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## The Engineering Challenge
 
-Prompts have become critical business logic. They orchestrate AI systems, integrate with tools, handle multi-turn conversations, and make decisions that impact users directly. But most prompt development lacks the discipline we apply to traditional software engineering.
+Prompts have become critical business logic. They drive AI agents, orchestrate tool calls, run multi-step workflows, and make decisions that impact users directly. But most prompt development lacks the discipline we apply to traditional software engineering.
 
 Consider what we have for traditional code:
 - Version control (Git)
@@ -24,11 +24,11 @@ Now consider typical prompt development:
 - Difficult to test systematically
 - Hard to version independently
 
-**PromptPack brings software engineering discipline to conversational AI.**
+**PromptPack brings software engineering discipline to AI agent behavior.**
 
 ## Framework Independence
 
-AI frameworks come and go. Your prompt logic shouldn't.
+AI frameworks come and go. Your agent logic shouldn't.
 
 PromptPack is deliberately NOT a framework—it's a specification. Just as:
 - OpenAPI specifies REST APIs independent of implementation
@@ -40,21 +40,27 @@ PromptPack provides a standard format that works across:
 - Any runtime implementation (PromptKit, custom runtimes)
 - Any orchestration framework (when they add PromptPack support)
 
-## Multi-Prompt Architecture
+## What You Can Build
 
-Generic prompts trying to do everything perform worse than specialized prompts optimized for specific scenarios.
+PromptPack expresses a wide range of agent shapes — from single-prompt assistants to multi-state autonomous loops — in one declarative file. You populate the sections your agent needs and leave the rest out.
 
-A production customer service AI needs:
-- **Support prompt**: Optimized for empathy, ticket creation, escalation
-- **Sales prompt**: Focused on product knowledge, opportunity detection
-- **Technical prompt**: Detailed troubleshooting, diagnostic tools
-- **Billing prompt**: Payment handling, invoice generation, PII protection
+### Agent Loops *(v1.4+)*
 
-Each prompt:
-- Uses appropriate temperature settings for its task
-- Has specialized tools and validators
-- Can evolve independently with its own version
-- Shares common fragments and configuration
+For agents that plan, act, observe, and revise, PromptPack ships a workflow state machine with the guardrails real loops need: terminal states, per-state visit limits, artifacts that carry structured results across iterations, and a global execution budget.
+
+A code-generation agent might run `plan → implement → test → review`, cap `implement` at 5 retries, redirect to `review` if it loops, and ceiling the whole workflow at 50 transitions and 200 tool calls. Every artifact is captured at every transition — you get a replayable execution trace for free.
+
+### Multi-Prompt Routing
+
+Generic prompts trying to do everything perform worse than specialized prompts optimized for specific scenarios. A pack can carry several prompts that share tools and fragments — for example, a customer service pack with separate prompts for support, sales, technical, and billing inquiries, each tuned for its task.
+
+### Multi-Agent Orchestration *(v1.3+)*
+
+A2A-compatible agent definitions let one pack expose multiple agents, or coordinate handoffs between specialized agents — useful for delegation, review patterns, and federated agent systems.
+
+### Evals and Guardrails
+
+Each prompt can carry validators (guardrails) that block unsafe output inline, and evals (automated checks) that score quality asynchronously with Prometheus metric export. Quality policy ships with the pack.
 
 See real examples in our [Specification Examples](/docs/spec/examples).
 
@@ -72,27 +78,25 @@ PromptPack isn't just for documentation—it's designed for production use:
 
 ## Current Status and Roadmap
 
-PromptPack is an emerging specification:
+PromptPack is an actively evolving specification:
 
 **✅ Available Now**:
-- Complete v1.1 specification with multimodal support
+- Complete v1.4 specification with agent loops, workflows, multi-agent definitions, skills, evals, and multimodal support
 - JSON Schema for validation
-- Comprehensive documentation and real-world examples
-- PromptArena testing tool for multi-provider evaluation
+- PromptKit reference runtime and PromptArena testing tool
+- LangChain.js and LangChain Python adapter libraries
 - RFC process for community-driven evolution
 
 **🚧 Under Development**:
-- PromptKit reference runtime implementation
-- Language-specific SDK libraries (Python, JavaScript)
-- Validation and linting tools
+- Additional framework integrations (LlamaIndex, Transformers)
+- Pack registry design
 
 **🔮 Future Vision**:
-- Growing ecosystem of compatible tools
+- Growing ecosystem of compatible tools and runtimes
 - Community-contributed PromptPack library
-- Framework integrations (LangChain, LlamaIndex, etc.)
 - PromptPack Hub for sharing and discovering packs
 
-We're building toward an ecosystem. Join us in shaping the future of prompt engineering.
+We're building toward an ecosystem. Join us in shaping the future of agent engineering.
 
 ## Getting Started
 

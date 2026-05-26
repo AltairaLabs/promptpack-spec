@@ -11,10 +11,10 @@ PromptPack is a **specification**, not a product or framework. The ecosystem con
 
 ### PromptPack Specification
 
-**Status**: ✅ v1.1 Available  
+**Status**: ✅ v1.4 Available
 **Repository**: [altairalabs/promptpack-spec](https://github.com/altairalabs/promptpack-spec)
 
-The open specification defining the JSON format for packaging conversational AI systems. Includes:
+The open specification defining the JSON format for packaging AI agent behavior — from multi-prompt routers to autonomous agent loops. Includes:
 
 - Complete schema definition
 - RFC process for evolution
@@ -23,26 +23,30 @@ The open specification defining the JSON format for packaging conversational AI 
 
 [View Specification →](/docs/spec/overview)
 
-### PromptKit Runtime
+### PromptKit Toolkit
 
-**Status**: 🚧 In Development  
+**Status**: ✅ Available Now
 **Separate Project**: Related but independent
 
-Reference implementation for loading and executing PromptPacks. When complete, will provide:
+The reference toolkit for loading, executing, testing, and compiling PromptPacks. Ships:
 
-- CLI tools for validation and testing
-- SDK libraries (Python, JavaScript)
-- PromptPack execution runtime
-- Integration examples
+- **`promptarena`** CLI — multi-provider testing, red-team scenarios, CI/CD reports
+- **`packc`** CLI — compile workspace config into portable `.pack.json` artifacts
+- Go runtime for executing packs with workflows, agent loops, tools, and skills
+- GitHub Actions for CI/CD integration
+
+```bash
+npm install -g @altairalabs/promptarena @altairalabs/packc
+```
 
 [Learn more →](/docs/ecosystem/promptkit-runtime)
 
 ### PromptArena Testing
 
-**Status**: ✅ Available Now  
-**Separate Tool**: Related but independent
+**Status**: ✅ Available Now
+**Part of**: PromptKit toolkit
 
-CLI tool for systematic testing of conversational AI across multiple providers:
+CLI tool for systematic testing of agent behavior across multiple providers:
 
 - Multi-provider comparison (OpenAI, Anthropic, Google, etc.)
 - Multi-turn conversation testing
@@ -83,8 +87,8 @@ CLI tool for systematic testing of conversational AI across multiple providers:
 These are **separate but related projects**:
 
 - **PromptPack Spec**: Defines the standard (open governance, RFC process)
-- **PromptKit**: Reference implementation (actively developed by AltairaLabs)
-- **PromptArena**: Testing tool (available now, separate repository)
+- **PromptKit**: Reference toolkit — shipped and actively maintained by AltairaLabs
+- **PromptArena**: Testing CLI shipped as part of the PromptKit toolkit
 
 ## Community Tools
 
@@ -192,10 +196,9 @@ Any tool can implement PromptPack support by:
 
 The PromptPack ecosystem roadmap includes:
 
-- Completing PromptKit reference runtime
 - Growing the compatible tools ecosystem
-- Framework adapter development
-- Potential PromptPack Hub for community sharing
+- Additional framework adapters (LlamaIndex, Transformers)
+- Pack registry / PromptPack Hub for community sharing
 - Continued specification evolution via RFC process
 
 We're in the early stages of building an ecosystem. **Join us in shaping it.**

@@ -10,13 +10,13 @@ sidebar_position: 2
 
 ## Overview
 
-**PromptArena** (`promptarena`) is a CLI tool for running multi-turn conversation simulations across multiple LLM providers, validating conversation flows, and generating comprehensive test reports.
+**PromptArena** (`promptarena`) is a CLI tool for running scenarios across multiple LLM providers, validating agent behavior, and generating comprehensive test reports.
 
-PromptArena enables systematic testing of conversational AI systems with support for:
+PromptArena enables systematic testing of agent behavior — including multi-prompt routing, multi-turn conversations, and agent loops — with support for:
 
 - **Multi-Provider Testing** - Run the same tests across OpenAI, Anthropic, Google, and more
-- **Multi-Turn Conversations** - Test complex conversation flows and state management
-- **Self-Play Mode** - Simulate realistic user interactions with configurable roles
+- **Scenarios & Self-Play** - Multi-turn flows, agent-loop runs, and configurable role simulation
+- **Red-Team Mode** - Adversarial scenarios for safety and robustness testing
 - **Multimodal Testing** - Test with images, audio, and video content
 - **Comprehensive Reporting** - HTML, JSON, JUnit XML, and Markdown reports
 - **Mock Testing** - Fast, cost-free testing with mock providers

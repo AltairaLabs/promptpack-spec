@@ -111,7 +111,6 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Processes',
       items: [
-        'processes/rfc-index',
         'processes/rfc-process',
         'processes/governance',
         'processes/contributing',

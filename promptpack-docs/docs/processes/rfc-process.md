@@ -145,4 +145,4 @@ RFCs are evaluated based on:
 
 ## RFC Index
 
-For a complete list of submitted and accepted RFCs, see the [RFC Index](/docs/processes/rfc-index).
+For a complete list of submitted and accepted RFCs, see the [RFC Index](/docs/rfcs).

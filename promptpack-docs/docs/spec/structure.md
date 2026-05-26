@@ -4,11 +4,11 @@ sidebar_position: 2
 
 # Pack Structure & Design
 
-Understanding how PromptPacks are structured helps you design better conversational AI systems. The JSON-based format isn't just about data storage—it's architected to support real-world AI development patterns and deployment needs.
+Understanding how PromptPacks are structured helps you design better AI agent behavior — from simple multi-prompt routers to autonomous agent loops. The JSON-based format isn't just about data storage; it's architected to support real-world agent development patterns and deployment needs.
 
 ## The Multi-Prompt Architecture
 
-The defining characteristic of PromptPacks is that **each pack contains multiple specialized prompts** rather than trying to fit everything into one generic prompt.
+A defining characteristic of PromptPacks is that **each pack can contain multiple specialized prompts** — one per workflow stage, one per routing destination, or one per agent — rather than trying to fit everything into a single generic prompt.
 
 ### Why Multiple Prompts?
 

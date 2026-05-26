@@ -93,7 +93,31 @@ When breaking changes occur, we provide:
 
 ## Version History
 
-### v1.2.0 (Current)
+### v1.4.0 (Current)
+
+- Agent loops extension ([RFC-0009](/docs/rfcs/agent-loops))
+- Terminal states (`terminal: true`) for explicit workflow exit points
+- Per-state `max_visits` with optional `on_max_visits` redirect
+- Named `artifacts` slots that flow structured metadata across visits
+- Global `engine.budget` (total visits, tool calls, wall time)
+- Replayable execution traces — artifacts captured at every transition
+
+### v1.3.1
+
+- Skills extension ([RFC-0008](/docs/rfcs/skills-extension))
+- Top-level `skills` array (paths, package references, or inline)
+- SkillPathSource with optional `preload` flag
+- WorkflowState `skills` field for directory-scoped filtering
+
+### v1.3.0
+
+- Workflow extension ([RFC-0005](/docs/rfcs/workflow-extension))
+- Agents extension ([RFC-0007](/docs/rfcs/agents-extension))
+- State-machine workflows with event-driven transitions
+- Per-state context persistence (`transient`/`persistent`) and orchestration modes
+- A2A-compatible Agent Cards with discovery tags and MIME types
+
+### v1.2.0
 
 - Evals extension ([RFC-0006](/docs/rfcs/evals-extension))
 - Pack-level and prompt-level eval definitions

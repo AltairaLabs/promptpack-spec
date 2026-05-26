@@ -4,41 +4,41 @@ sidebar_position: 3
 
 # Adopters
 
-Organizations and projects using PromptPack to build conversational AI systems.
+Organizations and projects using PromptPack to build AI agent behavior.
 
 ## Early Adopters
 
 :::info
-PromptPack v1.1 is available. If you're using PromptPack in your organization, [let us know](https://github.com/altairalabs/promptpack-spec/discussions) to be featured here!
+PromptPack v1.4 is available. If you're using PromptPack in your organization, [let us know](https://github.com/altairalabs/promptpack-spec/discussions) to be featured here!
 :::
 
 ### AltairaLabs
 
-**Industry:** AI Development Tools  
-**Use Case:** Internal tooling and PromptKit runtime development  
-**Scale:** Development and testing environments  
+**Industry:** AI Development Tools
+**Use Case:** Authoring and operating the PromptKit reference toolkit
+**Scale:** Production use across testing, CI/CD, and runtime workloads
 
 AltairaLabs is the original creator of PromptPack and uses it extensively for:
-- Building the PromptKit runtime engine
-- Internal prompt engineering workflows  
-- Testing conversational AI applications
+- Operating the PromptKit reference toolkit (runtime, `promptarena`, `packc`)
+- Internal agent engineering workflows
+- Testing agent behavior across providers
 - Community examples and documentation
 
 [Learn more →](https://altairalabs.com)
 
 ## Implementation Showcase
 
-### PromptKit Runtime
+### PromptKit Toolkit
 
-The reference implementation of PromptPack, providing a TypeScript/JavaScript runtime for executing PromptPack files.
+The reference implementation of PromptPack — a Go runtime plus npm-distributed CLIs for testing, validating, and compiling packs.
 
 **Features:**
-- Full PromptPack v1.1 specification support
-- Multiple LLM provider integrations
-- Testing and validation framework
-- CLI and programmatic interfaces
+- Full PromptPack v1.4 specification support (agent loops, workflows, multi-agent, skills, evals)
+- Multi-provider integrations (Claude, OpenAI, Gemini, Azure, local models)
+- `promptarena` testing CLI and `packc` compiler CLI
+- GitHub Actions for CI/CD integration
 
-[View on GitHub →](https://github.com/altairalabs/promptkit)
+[View on GitHub →](https://github.com/AltairaLabs/PromptKit)
 
 ### Community Examples
 
@@ -57,7 +57,7 @@ Want to be featured as a PromptPack adopter? We'd love to hear from you!
 
 ### Criteria
 
-- Using PromptPack v1.1 specification
+- Using PromptPack v1.4 specification
 - Production or significant development usage  
 - Willing to share basic implementation details
 - Open to community engagement

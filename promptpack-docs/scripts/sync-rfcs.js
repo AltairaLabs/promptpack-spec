@@ -16,7 +16,21 @@ const path = require('path');
 // Paths
 const RFC_SOURCE_DIR = path.join(__dirname, '../../rfcs');
 const RFC_DEST_DIR = path.join(__dirname, '../docs/rfcs');
-const RFC_INDEX_PATH = path.join(__dirname, '../docs/processes/rfc-index.md');
+const RFC_INDEX_PATH = path.join(__dirname, '../docs/rfcs/index.md');
+
+// Hand-maintained mapping of RFC number → spec version that implemented it.
+// Update when a new RFC ships in a spec release.
+const RFC_SPEC_VERSION = {
+  1: 'v1.0',
+  2: 'v1.0',
+  3: 'v1.0',
+  4: 'v1.1',
+  5: 'v1.3',
+  6: 'v1.2',
+  7: 'v1.3',
+  8: 'v1.3.1',
+  9: 'v1.4',
+};
 
 /**
  * Extract RFC metadata from file content
@@ -67,7 +81,13 @@ function extractMetadata(filename, content) {
   const statusMatch = content.match(/[-*]\s*\*\*Status[:]?\*\*[:\s]*(.*)/i);
   const status = statusMatch ? statusMatch[1].trim() : 'Draft';
 
-  return { position, title, description, status };
+  // Extract Created and Updated dates from metadata block
+  const createdMatch = content.match(/[-*]\s*\*\*Created[:]?\*\*[:\s]*(\d{4}-\d{2}-\d{2})/i);
+  const updatedMatch = content.match(/[-*]\s*\*\*Updated[:]?\*\*[:\s]*(\d{4}-\d{2}-\d{2})/i);
+  const created = createdMatch ? createdMatch[1] : '—';
+  const updated = updatedMatch ? updatedMatch[1] : '—';
+
+  return { position, title, description, status, created, updated };
 }
 
 /**
@@ -146,28 +166,47 @@ function formatStatus(status) {
  */
 function updateRfcIndex(rfcEntries) {
   if (!fs.existsSync(RFC_INDEX_PATH)) {
-    console.log('⚠️  rfc-index.md not found, skipping index update');
+    console.log('⚠️  rfcs/index.md not found, skipping index update');
     return;
   }
 
   const indexContent = fs.readFileSync(RFC_INDEX_PATH, 'utf8');
 
   // Build the table
-  const header = '| RFC | Status | Title |\n|-----|--------|-------|';
-  const rows = rfcEntries
-    .sort((a, b) => a.position - b.position)
-    .map(e => {
-      const slug = e.filename.replace(/^\d{4}-/, '').replace(/\.md$/, '');
-      const rfcNum = String(e.position).padStart(4, '0');
-      // Strip "RFC NNNN: " prefix from title for cleaner display
-      const shortTitle = e.title.replace(/^RFC\s+\d{4}:\s*/, '');
-      return `| [RFC-${rfcNum}](/docs/rfcs/${slug}) | ${formatStatus(e.status)} | ${shortTitle} |`;
-    });
+  const header = '| # | Title | Status | Spec | Created | Updated |\n|---|-------|--------|------|---------|---------|';
+  const sorted = rfcEntries.sort((a, b) => a.position - b.position);
+  const rows = sorted.map(e => {
+    const slug = e.filename.replace(/^\d{4}-/, '').replace(/\.md$/, '');
+    const rfcNum = String(e.position).padStart(4, '0');
+    const shortTitle = e.title.replace(/^RFC\s+\d{4}:\s*/, '');
+    const spec = RFC_SPEC_VERSION[e.position] || '—';
+    return `| [RFC-${rfcNum}](./${slug}) | ${shortTitle} | ${formatStatus(e.status)} | ${spec} | ${e.created} | ${e.updated} |`;
+  });
 
   const table = [header, ...rows].join('\n');
-  const newContent = indexContent.replace(
+  let newContent = indexContent.replace(
     /<!-- RFC_TABLE_START -->[\s\S]*?<!-- RFC_TABLE_END -->/,
     `<!-- RFC_TABLE_START -->\n${table}\n<!-- RFC_TABLE_END -->`
+  );
+
+  // Also refresh the At-a-Glance counts
+  const total = sorted.length;
+  const implemented = sorted.filter(e => /implemented/i.test(e.status)).length;
+  const draft = sorted.filter(e => /draft/i.test(e.status)).length;
+  const review = sorted.filter(e => /review/i.test(e.status)).length;
+  const rejected = sorted.filter(e => /rejected/i.test(e.status)).length;
+  const countsBlock =
+    `<!-- RFC_COUNTS_START -->\n` +
+    `| | Count |\n|---|---|\n` +
+    `| Total RFCs | ${total} |\n` +
+    `| Implemented | ${implemented} |\n` +
+    `| Draft | ${draft} |\n` +
+    `| In Review | ${review} |\n` +
+    `| Rejected | ${rejected} |\n` +
+    `<!-- RFC_COUNTS_END -->`;
+  newContent = newContent.replace(
+    /<!-- RFC_COUNTS_START -->[\s\S]*?<!-- RFC_COUNTS_END -->/,
+    countsBlock
   );
 
   fs.writeFileSync(RFC_INDEX_PATH, newContent, 'utf8');

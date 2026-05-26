@@ -12,34 +12,35 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Stop Building the Same Prompts Over and Over',
+    title: 'Stop Building the Same Agents Over and Over',
     Svg: require('@site/static/img/reusable.svg').default,
     description: (
       <>
-        Package your customer support, sales, and technical prompts into a single deployable unit.
-        Share proven AI solutions across teams, projects, and organizations. 
+        Package your prompts, tools, workflows, and agent loops into a single deployable unit.
+        Share proven agent behavior across teams, projects, and organizations.
         <strong> Build once, deploy everywhere.</strong>
       </>
     ),
   },
   {
-    title: 'Deploy AI Systems, Not Just Prompts',
+    title: 'Deploy Agents, Not Just Prompts',
     Svg: require('@site/static/img/interoperability.svg').default,
     description: (
       <>
-        Everything your AI needs in one JSON file: specialized prompts, external tools, 
-        safety guardrails, and shared resources. No more hunting for scattered configurations.
-        <strong> One file = Complete AI system.</strong>
+        Everything your agent needs in one JSON file: specialized prompts, external tools,
+        workflow state machines, safety guardrails, and shared resources. No more hunting
+        for scattered configurations.
+        <strong> One file = Complete agent.</strong>
       </>
     ),
   },
   {
-    title: 'Know Your AI Works Before You Deploy',
+    title: 'Know Your Agent Works Before You Deploy',
     Svg: require('@site/static/img/testable.svg').default,
     description: (
       <>
-        Built-in testing shows which models work best, expected costs, and success rates.
-        Deploy with confidence knowing your AI performs reliably.
+        Built-in evals and testing metadata show which models work best, expected costs, and success rates.
+        Deploy with confidence knowing your agent performs reliably.
         <strong> No more "works on my machine" surprises.</strong>
       </>
     ),

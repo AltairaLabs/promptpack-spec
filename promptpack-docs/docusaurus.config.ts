@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'PromptPack',
-  tagline: 'An open specification for packaging conversational AI systems—portable, testable, and framework-agnostic.',
+  tagline: 'An open specification for packaging AI agent behavior—portable, testable, and framework-agnostic.',
   favicon: 'img/favicon.svg',
   markdown: {
     mermaid: true,
@@ -63,16 +63,16 @@ const config: Config = {
     // Social card for sharing
     image: 'img/promptpack-social-card.svg',
     metadata: [
-      {name: 'description', content: 'Stop building AI systems from scratch. PromptPack lets you package, share, and deploy production-ready conversational AI with everything included: specialized prompts, tools, and safety guardrails.'},
-      {name: 'keywords', content: 'promptpack, prompts, conversational ai, llm, specification, json, testing, packaging, deployment, production ai'},
-      {property: 'og:title', content: 'PromptPack - Deploy Production-Ready AI Systems'},
-      {property: 'og:description', content: 'Stop building AI systems from scratch. Package, share, and deploy production-ready conversational AI with everything included.'},
+      {name: 'description', content: 'Stop building AI agents from scratch. PromptPack lets you package, share, and deploy production-ready agent behavior with everything included: specialized prompts, tools, workflows, agent loops, and safety guardrails.'},
+      {name: 'keywords', content: 'promptpack, prompts, ai agents, agent loops, llm, specification, json, workflows, testing, packaging, deployment'},
+      {property: 'og:title', content: 'PromptPack - Deploy Production-Ready AI Agents'},
+      {property: 'og:description', content: 'Stop building AI agents from scratch. Package, share, and deploy production-ready agent behavior with everything included.'},
       {property: 'og:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
       {property: 'og:url', content: 'https://promptpack.org'},
       {property: 'og:type', content: 'website'},
       {name: 'twitter:card', content: 'summary_large_image'},
-      {name: 'twitter:title', content: 'PromptPack - Deploy Production-Ready AI Systems'},
-      {name: 'twitter:description', content: 'Stop building AI systems from scratch. Package, share, and deploy production-ready conversational AI with everything included.'},
+      {name: 'twitter:title', content: 'PromptPack - Deploy Production-Ready AI Agents'},
+      {name: 'twitter:description', content: 'Stop building AI agents from scratch. Package, share, and deploy production-ready agent behavior with everything included.'},
       {name: 'twitter:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
     ],
     colorMode: {
@@ -87,7 +87,7 @@ const config: Config = {
       items: [
         {to: '/docs/spec/overview', label: 'Spec', position: 'left'},
         {to: '/docs/processes/rfc-process', label: 'Processes', position: 'left'},
-        {to: '/docs/rfcs/core-schema', label: 'RFCs', position: 'left'},
+        {to: '/docs/rfcs', label: 'RFCs', position: 'left'},
         {to: '/docs/ecosystem/promptkit-runtime', label: 'Ecosystem', position: 'left'},
         {
           href: 'https://github.com/altairalabs/promptpack-spec',

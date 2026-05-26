@@ -10,6 +10,8 @@
 
 # Auto-generated RFCs (synced from /rfcs/)
 docs/rfcs/*.md
+# Hand-maintained RFC landing page (table auto-updated by sync-rfcs.js)
+!docs/rfcs/index.md
 
 # Misc
 .DS_Store
