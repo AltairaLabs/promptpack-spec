@@ -180,7 +180,7 @@ function updateRfcIndex(rfcEntries) {
     const rfcNum = String(e.position).padStart(4, '0');
     const shortTitle = e.title.replace(/^RFC\s+\d{4}:\s*/, '');
     const spec = RFC_SPEC_VERSION[e.position] || '—';
-    return `| [RFC-${rfcNum}](./${slug}) | ${shortTitle} | ${formatStatus(e.status)} | ${spec} | ${e.created} | ${e.updated} |`;
+    return `| [RFC-${rfcNum}](/docs/rfcs/${slug}) | ${shortTitle} | ${formatStatus(e.status)} | ${spec} | ${e.created} | ${e.updated} |`;
   });
 
   const table = [header, ...rows].join('\n');
