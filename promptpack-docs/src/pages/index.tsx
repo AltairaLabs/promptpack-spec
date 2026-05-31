@@ -37,6 +37,25 @@ function HomepageHeader() {
   );
 }
 
+function HeroVideoSection() {
+  return (
+    <section className={styles.heroVideo}>
+      <div className="container">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/img/hero.jpg">
+          <source src="/img/hero.webm" type="video/webm" />
+          <source src="/img/hero.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+  );
+}
+
 function ProblemSolutionSection() {
   return (
     <section className={styles.problemSolution}>
@@ -100,6 +119,7 @@ export default function Home(): ReactNode {
       description="PromptPack is the open specification for packaging, testing, and running AI agent behavior — from multi-prompt routers to autonomous agent loops. Framework-agnostic, portable, and production-ready.">
       <HomepageHeader />
       <main>
+        <HeroVideoSection />
         <ProblemSolutionSection />
         <HomepageFeatures />
       </main>

@@ -35,6 +35,27 @@
   display: inline-block;
 }
 
+.heroVideo {
+  padding: 3rem 0 4rem;
+  text-align: center;
+}
+
+.heroVideo video {
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(67, 43, 105, 0.25);
+  display: block;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 996px) {
+  .heroVideo {
+    padding: 1.5rem 1rem 2rem;
+  }
+}
+
 .problemSolution {
   padding: 4rem 0;
   background-color: var(--ifm-color-emphasis-100);
