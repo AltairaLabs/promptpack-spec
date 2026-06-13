@@ -52,6 +52,8 @@ A spec change lands in **two** PRs. Keep them separate.
 
 > Why all in one PR: RFC-0009 was once marked Implemented while its schema fields were never added. `version-check` and this rule exist to stop exactly that drift. An RFC reaching `Implemented` and the schema version bump are the **same event**.
 
+**The full step-by-step for PR 2 is in [`release-runbook.md`](./release-runbook.md)** (this skill directory) — the detailed, de-drifted release checklist (schema, docs archive, versions, sidebars, README lockstep, sync-schema, RFC index, guide).
+
 ## Schema publishing (`latest` + versioned copies)
 
 `schema/promptpack.schema.json` is the only source of truth. `npm run sync-schema` (runs automatically in the docs `prebuild`/`prestart`) copies it to **both** `static/schema/v<version>/` and `static/schema/latest/` — so `latest/` always mirrors the current schema; you never hand-point it. The authoritative public publish happens when a **`v*` git tag** is pushed: `publish-schema.yml` copies the schema into `static/schema/<tag>/` + `latest/` and commits to `main`. So the release flow is: merge PR 2 → tag `vX.Y.Z` → CI publishes the versioned + `latest` schema.
@@ -60,16 +62,9 @@ Never hand-edit `static/schema/**` or the generated `schema-reference` docs — 
 
 ## Docs site versioning
 
-The docs site **is** versioned, but **manually** — and only `docs/spec/` is versioned (processes, RFCs, ecosystem docs stay current). It does **not** use Docusaurus `docs:version` (no `versioned_docs/`); that's a deliberate choice. **`promptpack-docs/docs/spec/VERSIONING.md` is the canonical guide — follow it** for exact steps and badge markup.
+The docs site **is** versioned, but **manually** — only `docs/spec/` is versioned (processes, RFCs, ecosystem stay current). It does **not** use Docusaurus `docs:version` (no `versioned_docs/`); deliberate choice. When the implementation PR bumps the spec version, you archive the outgoing `docs/spec/*` into `docs/spec/v<previous>/`, advance the current docs, and update `versions.md` + `sidebars.ts` — all in that same PR. **[`release-runbook.md`](./release-runbook.md) (steps 3–6) has the exact per-file edits; `promptpack-docs/docs/spec/VERSIONING.md` is the canonical guide for badge markup.**
 
-When the implementation PR bumps the spec version (e.g. 1.4 → 1.5), in the **same PR**:
-
-1. **Archive the outgoing version** — `cp docs/spec/*.md docs/spec/v<previous>/`, then add the archived-version badge + warning admonition to each (copy the pattern from an existing `docs/spec/vX.Y/overview.md`).
-2. **Update the current docs** in `docs/spec/*.md` to the new version — version badge, "What's New" box, schema URLs (`schema/vX.Y.Z/...`), new feature docs.
-3. **Update `docs/spec/versions.md`** — move the previous version to "Previous Versions", add the new current, extend the migration guide. (This is the canonical version index — keep it current.)
-4. **Update `sidebars.ts`** — add a collapsed category for the newly archived version.
-
-`static/schema/` (machine schema) and `docs/spec/` (human docs) are versioned independently but in step; both advance in the implementation PR.
+`static/schema/` (machine schema) and `docs/spec/` (human docs) version independently but in step — both advance in the implementation PR.
 
 ## Quick reference
 
