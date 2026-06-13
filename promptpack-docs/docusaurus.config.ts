@@ -32,6 +32,20 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'warn',
 
+  // giscus comment widget config, consumed by src/theme/DocItem/Footer.
+  // Renders a comment box on individual RFC pages (/docs/rfcs/<slug>), backed
+  // by GitHub Discussions. The footer no-ops until repoId + categoryId are set.
+  // One-time setup: see promptpack-docs/src/theme/DocItem/Footer/SETUP-giscus.md
+  customFields: {
+    giscus: {
+      repo: 'altairalabs/promptpack-spec',
+      repoId: '', // TODO: from https://giscus.app
+      category: 'RFC Comments',
+      categoryId: '', // TODO: from https://giscus.app
+      mapping: 'pathname',
+    },
+  },
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
