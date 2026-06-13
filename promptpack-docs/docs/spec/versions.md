@@ -6,26 +6,37 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.4.0
+## Current Version: v1.4.1
 
 **Status:** ✅ Current
-**Released:** April 2026
-**Schema:** `https://promptpack.org/schema/v1.4.0/promptpack.schema.json`
+**Released:** June 2026
+**Schema:** `https://promptpack.org/schema/v1.4.1/promptpack.schema.json`
 
-### What's New in v1.4.0
+### What's New in v1.4.1
 
-- **Agent Loops** ([RFC-0009](/docs/rfcs/agent-loops)) — Extends the workflow state machine with the guardrails iterative agents need
-- **Terminal states** — Mark workflow exit points explicitly with `terminal: true`
-- **Per-state visit guards** — `max_visits` with optional `on_max_visits` redirect bounds individual loops
-- **Artifacts** — Named slots (`replace`/`append`) flow structured metadata across visits; available to prompts as `{{artifacts.<name>}}`
-- **Engine budgets** — `engine.budget` provides a global safety net (total visits, tool calls, wall time)
-- **Replayable execution traces** — Artifacts captured at every transition give runtimes a complete time-travel debug log for free
+- **Workflow States as Agents** ([RFC-0011](/docs/rfcs/workflow-states-as-agents)) — An agent can be backed by a workflow state instead of a single prompt
+- **`AgentDef.state`** — Optional field referencing a key in `workflow.states`; invoking the agent enters the workflow at that state and runs its transitions and loops
+- **Stateful specialists** — Expose a looping behavior (e.g. a triage→investigate loop) as an A2A agent, instead of flattening it into a single prompt
+- Fully backward compatible — agents without `state` behave exactly as in v1.4.0
 
-[View v1.4.0 Spec →](./overview)
+[View v1.4.1 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.4.0
+
+**Status:** 📦 Stable
+**Released:** April 2026
+**Schema:** `https://promptpack.org/schema/v1.4.0/promptpack.schema.json`
+
+- Agent Loops — terminal states, per-state `max_visits` guards, artifacts, engine budgets
+- Replayable execution traces via artifacts captured at every transition
+
+[View v1.4.0 Spec →](./v1.4.0/overview)
+
+---
 
 ### v1.3.1
 
@@ -110,7 +121,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.4.0  | ✅ Current | Full support | - |
+| v1.4.1  | ✅ Current | Full support | - |
+| v1.4.0  | 📦 Stable | Security fixes only | TBD |
 | v1.3.1  | 📦 Stable | Security fixes only | TBD |
 | v1.3    | 📦 Stable | Security fixes only | TBD |
 | v1.2    | 📦 Stable | Security fixes only | TBD |
@@ -120,6 +132,45 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.4.0 to v1.4.1
+
+v1.4.1 is **fully backward compatible** with v1.4.0. No breaking changes.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.4.1/promptpack.schema.json",
+     "version": "1.4.1"
+   }
+   ```
+
+2. **(Optional) Back an agent with a workflow state** — point an agent member at a state in your single `workflow`, so invoking it runs that state's transitions/loop instead of a single prompt:
+   ```json
+   {
+     "agents": {
+       "entry": "triage",
+       "members": {
+         "triage": { "state": "triage", "tags": ["triage"] },
+         "analyst": { "tags": ["analysis"] }
+       }
+     }
+   }
+   ```
+
+3. **Test and validate** — v1.4.0 packs continue to work without changes
+
+### New Features You Can Use
+
+- Add `state` to an `agents.members` entry to back that agent with a `workflow.states` state
+- Expose stateful, looping specialist behavior as an A2A agent (the workflow drives it)
+- Agents without `state` are unchanged — single-prompt agents as before
+
+See [RFC-0011: Workflow States as Agents](/docs/rfcs/workflow-states-as-agents) for the full design.
 
 ---
 
@@ -390,8 +441,9 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.4.0 if:
+### Use v1.4.1 if:
 - ✅ Building new PromptPacks
+- ✅ Want to expose a stateful/looping behavior as an A2A agent (back an agent with a workflow state)
 - ✅ Building autonomous agents with iterative loops (plan/implement/test patterns)
 - ✅ Need terminal states, visit guards, artifacts, or engine budgets
 - ✅ Need progressive-disclosure knowledge loading (skills)
@@ -399,12 +451,12 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - ✅ Want A2A protocol interoperability for multi-agent systems
 - ✅ Want latest features
 
-### Stay on v1.3.1 if:
+### Stay on v1.4.0 if:
 - ✅ Existing packs work fine
-- ✅ Not running iterative agent loops yet
+- ✅ Your agents are single-prompt and don't need workflow-state backing
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.4.0 for all new projects. It's backward compatible and adds agent-loop guardrails (terminal states, visit guards, artifacts, engine budgets) on top of the v1.3 workflow state machine.
+**Recommendation:** Use v1.4.1 for all new projects. It's backward compatible and lets an agent be backed by a workflow state (`AgentDef.state`) on top of the v1.4 agent-loop model.
 
 ---
 
@@ -412,6 +464,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.4.1  | Jun 2026    | Workflow states as agents (`AgentDef.state`) |
 | v1.4.0  | Apr 2026    | Agent loops: terminal states, visit guards, artifacts, engine budgets |
 | v1.3.1  | Feb 2026    | Skills: progressive-disclosure knowledge loading |
 | v1.3    | Feb 2026    | Workflow orchestration, A2A agent definitions |

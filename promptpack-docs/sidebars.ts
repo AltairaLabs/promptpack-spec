@@ -31,6 +31,20 @@ const sidebars: SidebarsConfig = {
         'spec/schema-guide',
         {
           type: 'category',
+          label: 'v1.4.0 (Archived)',
+          collapsed: true,
+          items: [
+            'spec/v1.4.0/overview',
+            'spec/v1.4.0/structure',
+            'spec/v1.4.0/architecture-patterns',
+            'spec/v1.4.0/examples',
+            'spec/v1.4.0/file-format',
+            'spec/v1.4.0/schema-reference',
+            'spec/v1.4.0/schema-guide',
+          ],
+        },
+        {
+          type: 'category',
           label: 'v1.3.1 (Archived)',
           collapsed: true,
           items: [
