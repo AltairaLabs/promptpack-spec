@@ -36,12 +36,40 @@ Substantial spec changes land as an **RFC** (`rfcs/NNNN-slug.md`) following `rfc
 | Extend, don't compete | Prefer adding a field/mode to an existing surface over a new top-level primitive (cf. RFC 0010 composition as a state mode; RFC 0011 a field on AgentDef). Call this out in Alternatives. |
 | Honesty sections | Fill Drawbacks, Alternatives (2-3, each with why-rejected), and Unresolved Questions for real. Engineer-to-engineer, no hype. |
 
-## Landmines
+## The two PRs
 
-- **Schema change ≠ RFC PR.** The RFC PR is markdown only. `schema/promptpack.schema.json` changes in a separate implementation PR after the RFC is Accepted. The RFC's "Documentation Impact / schema" box stays unchecked until then.
-- **`version-check` CI is a three-way lockstep.** When the implementation PR bumps `schema/promptpack.schema.json` `version`, you MUST also update the **README spec badge** and the **versioned schema URL in README** to the same version, or CI fails. (Additive optional field = minor bump.)
-- **`RFC_SPEC_VERSION` map** in `sync-rfcs.js` is hand-maintained — add `NN: 'vX.Y'` when the RFC ships in a spec release (only matters at Implemented).
-- **Schema-reference docs and `static/schema/<ver>/` copies are generated** — never hand-edit.
+A spec change lands in **two** PRs. Keep them separate.
+
+**PR 1 — the RFC** (this skill's Workflow above). Markdown only, `Status: Draft`. It *proposes* the schema change; it does **not** touch `schema/promptpack.schema.json`.
+
+**PR 2 — implementation** (after the RFC is Accepted). One PR carries **everything together, in lockstep** — never split these across PRs:
+
+1. **Schema** — add the fields to `schema/promptpack.schema.json` and bump its top-level `version` (additive optional field = **minor** bump). Schema is the source of truth.
+2. **RFC status** — set the RFC's `Status: Implemented`, bump `Updated`, add a Revision History line; move its row to the **Implemented** table in `rfcs/README.md`.
+3. **README lockstep** — update the `Spec-vX.Y.Z-blue` badge **and** the versioned schema URL (`schema/vX.Y.Z/...`) to the new version. Enforced by `version-check` (`scripts/check-version-consistency.mjs`): schema version == badge == URL, or CI fails.
+4. **Docs + version snapshot** — update the current spec docs (`promptpack-docs/docs/spec/*`) with the new feature, and perform the manual docs-version snapshot (see Docs site versioning below).
+5. **`RFC_SPEC_VERSION` map** in `sync-rfcs.js` — add `NN: 'vX.Y'` (the spec version that ships it).
+
+> Why all in one PR: RFC-0009 was once marked Implemented while its schema fields were never added. `version-check` and this rule exist to stop exactly that drift. An RFC reaching `Implemented` and the schema version bump are the **same event**.
+
+## Schema publishing (`latest` + versioned copies)
+
+`schema/promptpack.schema.json` is the only source of truth. `npm run sync-schema` (runs automatically in the docs `prebuild`/`prestart`) copies it to **both** `static/schema/v<version>/` and `static/schema/latest/` — so `latest/` always mirrors the current schema; you never hand-point it. The authoritative public publish happens when a **`v*` git tag** is pushed: `publish-schema.yml` copies the schema into `static/schema/<tag>/` + `latest/` and commits to `main`. So the release flow is: merge PR 2 → tag `vX.Y.Z` → CI publishes the versioned + `latest` schema.
+
+Never hand-edit `static/schema/**` or the generated `schema-reference` docs — they're produced by `sync-schema.js` / the schema-docs workflow.
+
+## Docs site versioning
+
+The docs site **is** versioned, but **manually** — and only `docs/spec/` is versioned (processes, RFCs, ecosystem docs stay current). It does **not** use Docusaurus `docs:version` (no `versioned_docs/`); that's a deliberate choice. **`promptpack-docs/docs/spec/VERSIONING.md` is the canonical guide — follow it** for exact steps and badge markup.
+
+When the implementation PR bumps the spec version (e.g. 1.4 → 1.5), in the **same PR**:
+
+1. **Archive the outgoing version** — `cp docs/spec/*.md docs/spec/v<previous>/`, then add the archived-version badge + warning admonition to each (copy the pattern from an existing `docs/spec/vX.Y/overview.md`).
+2. **Update the current docs** in `docs/spec/*.md` to the new version — version badge, "What's New" box, schema URLs (`schema/vX.Y.Z/...`), new feature docs.
+3. **Update `docs/spec/versions.md`** — move the previous version to "Previous Versions", add the new current, extend the migration guide. (This is the canonical version index — keep it current.)
+4. **Update `sidebars.ts`** — add a collapsed category for the newly archived version.
+
+`static/schema/` (machine schema) and `docs/spec/` (human docs) are versioned independently but in step; both advance in the implementation PR.
 
 ## Quick reference
 
