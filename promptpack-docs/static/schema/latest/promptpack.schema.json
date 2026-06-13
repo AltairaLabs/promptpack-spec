@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
-  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, and skills support",
-  "version": "1.4.0",
+  "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, and skills support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior.",
+  "version": "1.4.1",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
@@ -1478,6 +1478,11 @@
           },
           "default": ["text/plain"],
           "examples": [["text/plain"], ["text/plain", "application/json"]]
+        },
+        "state": {
+          "type": "string",
+          "description": "Reference to a state key in the pack's workflow.states. When set, invoking this agent runs the pack workflow starting at the named state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level workflow. If omitted, the agent is a single-prompt agent.",
+          "examples": ["triage", "diagnose"]
         }
       }
     },

@@ -1,27 +1,27 @@
 ---
 sidebar_position: 2
+title: "Specification Overview (v1.4.0)"
 ---
 
 # Specification Overview
 
 <div style={{
   padding: '8px 16px',
-  backgroundColor: '#10b981',
+  backgroundColor: '#6b7280',
   color: 'white',
   borderRadius: '6px',
   display: 'inline-block',
   marginBottom: '24px',
   fontWeight: 'bold'
 }}>
-  📘 v1.4.1 (Current)
+  📦 v1.4.0 (Stable)
 </div>
 
-PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
-
-:::info Version Information
-This documentation covers **v1.4.1** of the PromptPack specification, which lets an agent be backed by a **workflow state** (`AgentDef.state`) — exposing stateful, looping behavior as an A2A agent — on top of the v1.4 agent-loop model.
-Looking for previous versions? [View v1.4.0 docs →](./v1.4.0/overview) | [Version History →](./versions)
+:::warning Archived Version
+This is the **v1.4.0** documentation (June 2026). For the latest features, see [v1.4.1 docs →](../overview)
 :::
+
+PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
 ## Why PromptPacks?
 

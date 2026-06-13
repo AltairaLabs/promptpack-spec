@@ -1,8 +1,25 @@
 ---
 sidebar_position: 5
+title: "Schema Guide (v1.4.0)"
 ---
 
 # Schema Guide
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.4.0 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.4.0** documentation. For the latest features, see [v1.4.1 docs →](../schema-guide)
+:::
 
 Human-readable guide to PromptPack entities and their properties. For the auto-generated technical reference, see [Schema Reference](./schema-reference).
 
@@ -734,7 +751,6 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 | `tags` | string[] | No | Discovery tags for the agent, used by A2A registries and routers. |
 | `input_modes` | string[] | No | MIME types the agent accepts as input. Defaults to `["text/plain"]`. |
 | `output_modes` | string[] | No | MIME types the agent can produce as output. Defaults to `["text/plain"]`. |
-| `state` | string | No | Reference to a state key in the pack's `workflow.states`. When set, invoking this agent runs the pack workflow starting at that state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level `workflow`. If omitted, the agent is a single-prompt agent. See [RFC-0011](/docs/rfcs/workflow-states-as-agents). |
 
 ```json
 "agents": {

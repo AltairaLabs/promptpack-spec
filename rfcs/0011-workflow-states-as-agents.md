@@ -1,6 +1,6 @@
 # RFC 0011: Workflow States as Agents
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland (chaholl)
 - **Created:** 2026-06-13
 - **Updated:** 2026-06-13
@@ -219,6 +219,7 @@ No migration required. Authors add `state` to an agent when they want it to run 
 ## Revision History
 
 - **2026-06-13:** Initial draft.
+- **2026-06-13:** Implemented in spec v1.4.1 — added optional `AgentDef.state` to the schema.
 
 ## References
 
