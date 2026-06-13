@@ -226,6 +226,7 @@
         - [14.2.1.3.1. PromptPack Specification > agents > members > additionalProperties > input_modes > input_modes items](#agents_members_additionalProperties_input_modes_items)
       - [14.2.1.4. Property `PromptPack Specification > agents > members > additionalProperties > output_modes`](#agents_members_additionalProperties_output_modes)
         - [14.2.1.4.1. PromptPack Specification > agents > members > additionalProperties > output_modes > output_modes items](#agents_members_additionalProperties_output_modes_items)
+      - [14.2.1.5. Property `PromptPack Specification > agents > members > additionalProperties > state`](#agents_members_additionalProperties_state)
 - [15. Property `PromptPack Specification > skills`](#skills)
   - [15.1. PromptPack Specification > skills > SkillSource](#skills_items)
     - [15.1.1. Property `PromptPack Specification > skills > skills items > oneOf > item 0`](#skills_items_oneOf_i0)
@@ -245,7 +246,7 @@
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, and skills support
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, and skills support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior.
 
 **Examples:**
 
@@ -4874,12 +4875,13 @@ Must be one of:
 
 **Description:** Agent definition for a single prompt, providing A2A Agent Card metadata. Overrides or extends the prompt's own metadata for agent discovery.
 
-| Property                                                             | Pattern | Type            | Deprecated | Definition | Title/Description                                                                             |
-| -------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | --------------------------------------------------------------------------------------------- |
-| - [description](#agents_members_additionalProperties_description )   | No      | string          | No         | -          | Agent description published in the A2A Agent Card. Overrides the prompt's description if set. |
-| - [tags](#agents_members_additionalProperties_tags )                 | No      | array of string | No         | -          | Discovery tags for the agent, used by A2A registries and routers.                             |
-| - [input_modes](#agents_members_additionalProperties_input_modes )   | No      | array of string | No         | -          | MIME types the agent accepts as input. Defaults to ["text/plain"] if omitted.                 |
-| - [output_modes](#agents_members_additionalProperties_output_modes ) | No      | array of string | No         | -          | MIME types the agent can produce as output. Defaults to ["text/plain"] if omitted.            |
+| Property                                                             | Pattern | Type            | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                              |
+| -------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [description](#agents_members_additionalProperties_description )   | No      | string          | No         | -          | Agent description published in the A2A Agent Card. Overrides the prompt's description if set.                                                                                                                                                                                                                  |
+| - [tags](#agents_members_additionalProperties_tags )                 | No      | array of string | No         | -          | Discovery tags for the agent, used by A2A registries and routers.                                                                                                                                                                                                                                              |
+| - [input_modes](#agents_members_additionalProperties_input_modes )   | No      | array of string | No         | -          | MIME types the agent accepts as input. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                                  |
+| - [output_modes](#agents_members_additionalProperties_output_modes ) | No      | array of string | No         | -          | MIME types the agent can produce as output. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                             |
+| - [state](#agents_members_additionalProperties_state )               | No      | string          | No         | -          | Reference to a state key in the pack's workflow.states. When set, invoking this agent runs the pack workflow starting at the named state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level workflow. If omitted, the agent is a single-prompt agent. |
 
 ##### <a name="agents_members_additionalProperties_description"></a>14.2.1.1. Property `PromptPack Specification > agents > members > additionalProperties > description`
 
@@ -5021,6 +5023,25 @@ Must be one of:
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
+
+##### <a name="agents_members_additionalProperties_state"></a>14.2.1.5. Property `PromptPack Specification > agents > members > additionalProperties > state`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Reference to a state key in the pack's workflow.states. When set, invoking this agent runs the pack workflow starting at the named state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level workflow. If omitted, the agent is a single-prompt agent.
+
+**Examples:**
+
+```json
+"triage"
+```
+
+```json
+"diagnose"
+```
 
 ## <a name="skills"></a>15. Property `PromptPack Specification > skills`
 
@@ -5203,4 +5224,4 @@ false
 | **Min length** | 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-04-30 at 12:03:27 +0100
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-06-13 at 15:21:09 +0000
