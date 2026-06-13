@@ -43,10 +43,10 @@ function GiscusComments({cfg, mode}: {cfg: GiscusConfig; mode: string}): React.R
     script.setAttribute('data-category', cfg.category ?? '');
     script.setAttribute('data-category-id', cfg.categoryId ?? '');
     script.setAttribute('data-mapping', cfg.mapping ?? 'pathname');
-    script.setAttribute('data-strict', '1');
+    script.setAttribute('data-strict', '0');
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
-    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-input-position', 'bottom');
     script.setAttribute('data-theme', GISCUS_THEME(mode));
     script.setAttribute('data-lang', 'en');
     script.setAttribute('data-loading', 'lazy');

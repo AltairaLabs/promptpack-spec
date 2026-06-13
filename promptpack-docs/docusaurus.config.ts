@@ -39,9 +39,9 @@ const config: Config = {
   customFields: {
     giscus: {
       repo: 'altairalabs/promptpack-spec',
-      repoId: '', // TODO: from https://giscus.app
+      repoId: 'R_kgDOQMvRhA',
       category: 'RFC Comments',
-      categoryId: '', // TODO: from https://giscus.app
+      categoryId: 'DIC_kwDOQMvRhM4C_FUh',
       mapping: 'pathname',
     },
   },
