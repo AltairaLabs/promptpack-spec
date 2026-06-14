@@ -406,7 +406,7 @@ Reducers name how a parallel block's branch outputs are merged into a single val
       },
       "into": {
         "type": "string",
-        "description": "Name under which the merged result is exposed to subsequent steps."
+        "description": "Field name under which the merged result is placed on the parallel step's output. Subsequent steps reference it as ${<parallelStepId>.output.<into>} — e.g. a 'barrier' reduce with 'into: metadata' on parallel step 'extract_metadata' is read as ${extract_metadata.output.metadata}, consistent with the ${stepId.output.X} reference model used everywhere else."
       }
     },
     "required": ["strategy", "into"]
