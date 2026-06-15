@@ -6,24 +6,41 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.4.1
+## Current Version: v1.5.0
 
 **Status:** ✅ Current
 **Released:** June 2026
-**Schema:** `https://promptpack.org/schema/v1.4.1/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.5.0/promptpack.schema.json`
 
-### What's New in v1.4.1
+### What's New in v1.5.0
 
-- **Workflow States as Agents** ([RFC-0011](/docs/rfcs/workflow-states-as-agents)) — An agent can be backed by a workflow state instead of a single prompt
-- **`AgentDef.state`** — Optional field referencing a key in `workflow.states`; invoking the agent enters the workflow at that state and runs its transitions and loops
-- **Stateful specialists** — Expose a looping behavior (e.g. a triage→investigate loop) as an A2A agent, instead of flattening it into a single prompt
-- Fully backward compatible — agents without `state` behave exactly as in v1.4.0
+- **Workflow Composition** ([RFC-0010](/docs/rfcs/workflow-composition)) — A workflow state can drive its work with a declarative step graph instead of a single prompt
+- **`composition` orchestration mode** — A fourth value on `WorkflowState.orchestration` (alongside `internal` / `external` / `hybrid`) that delegates the state's full orchestration to a composition
+- **Top-level `compositions` map** — Named step graphs over the pack's prompts, tools, and evals; reached only through a workflow state
+- **Five step kinds** — `prompt`, `agent` (bounded LLM-tool loop, requires `termination`), `tool`, `branch` (constrained predicate → then/else), `parallel` (≥2 branches + `reduce`)
+- **Constrained predicate language** — compare ops, exists, and `all_of`/`any_of`/`not` combinators; no expression evaluation
+- **Reducers & modifiers** — `append`/`replace`/`barrier` reducers; `retry` and `eval` step modifiers
+- **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
+- Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.4.1 Spec →](./overview)
+[View v1.5.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.4.1
+
+**Status:** 📦 Stable
+**Released:** June 2026
+**Schema:** `https://promptpack.org/schema/v1.4.1/promptpack.schema.json`
+
+- Workflow States as Agents — an agent can be backed by a workflow state (`AgentDef.state`) instead of a single prompt
+- Expose stateful, looping specialist behavior as an A2A agent
+
+[View v1.4.1 Spec →](./v1.4.1/overview)
+
+---
 
 ### v1.4.0
 
@@ -121,7 +138,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.4.1  | ✅ Current | Full support | - |
+| v1.5.0  | ✅ Current | Full support | - |
+| v1.4.1  | 📦 Stable | Security fixes only | TBD |
 | v1.4.0  | 📦 Stable | Security fixes only | TBD |
 | v1.3.1  | 📦 Stable | Security fixes only | TBD |
 | v1.3    | 📦 Stable | Security fixes only | TBD |
@@ -132,6 +150,64 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.4.1 to v1.5.0
+
+v1.5.0 is **fully backward compatible** with v1.4.1. No breaking changes — composition is purely additive. Existing packs (including every v1.4.x workflow, agent-loop, and agent definition) are unaffected; no migration is required.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.5.0/promptpack.schema.json",
+     "version": "1.5.0"
+   }
+   ```
+
+2. **(Optional) Add a composition** for a procedural flow. Define a one-state terminal workflow whose state is in composition mode, and a `compositions` entry with the step graph:
+   ```json
+   {
+     "workflow": {
+       "version": 1,
+       "entry": "main",
+       "states": {
+         "main": { "orchestration": "composition", "composition": "analyze_document", "terminal": true }
+       }
+     },
+     "compositions": {
+       "analyze_document": {
+         "version": 1,
+         "steps": [
+           { "id": "classify", "kind": "prompt", "prompt_task": "doc_classifier", "input": "${input.text}" },
+           {
+             "id": "route", "kind": "branch",
+             "predicate": { "path": "${classify.output.type}", "op": "equals", "value": "research_paper" },
+             "then": "extract_paper", "else": "extract_general"
+           },
+           { "id": "extract_paper",   "kind": "prompt", "prompt_task": "research_paper_extractor", "input": "${input.text}" },
+           { "id": "extract_general", "kind": "prompt", "prompt_task": "general_doc_extractor",   "input": "${input.text}" }
+         ]
+       }
+     }
+   }
+   ```
+
+3. **Test and validate** — v1.4.1 packs continue to work without changes.
+
+### New Features You Can Use
+
+- Set `orchestration: composition` on a `WorkflowState` and point its `composition` field at a `compositions` entry
+- Build step graphs from `prompt`, `agent`, `tool`, `branch`, and `parallel` steps
+- Gate flow with a constrained predicate language (compare ops, `exists`, `all_of`/`any_of`/`not`) — no expressions
+- Fan out with `parallel` (≥2 branches) and merge with an `append` / `replace` / `barrier` reducer
+- Wire steps together with `${input.X}` and `${stepId.output.X}` bindings
+- Attach `retry` and `eval` modifiers to any step
+- Omit `prompt_task` on composition-mode states (it stays required everywhere else)
+
+See [RFC-0010: Workflow Composition](/docs/rfcs/workflow-composition) for the full design.
 
 ---
 
@@ -441,8 +517,10 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.4.1 if:
+### Use v1.5.0 if:
 - ✅ Building new PromptPacks
+- ✅ Need procedural, Function-style flows expressed as declarative step graphs (composition)
+- ✅ Want classify → branch → extract or parallel fan-out → synthesize pipelines in the spec
 - ✅ Want to expose a stateful/looping behavior as an A2A agent (back an agent with a workflow state)
 - ✅ Building autonomous agents with iterative loops (plan/implement/test patterns)
 - ✅ Need terminal states, visit guards, artifacts, or engine budgets
@@ -451,12 +529,12 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - ✅ Want A2A protocol interoperability for multi-agent systems
 - ✅ Want latest features
 
-### Stay on v1.4.0 if:
+### Stay on v1.4.1 if:
 - ✅ Existing packs work fine
-- ✅ Your agents are single-prompt and don't need workflow-state backing
+- ✅ Your flows are conversational/event-driven and don't need procedural step graphs
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.4.1 for all new projects. It's backward compatible and lets an agent be backed by a workflow state (`AgentDef.state`) on top of the v1.4 agent-loop model.
+**Recommendation:** Use v1.5.0 for all new projects. It's backward compatible and adds workflow composition — declarative step graphs for procedural flows — on top of the full v1.4 workflow, agent-loop, and agent model.
 
 ---
 
@@ -464,6 +542,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.5.0  | Jun 2026    | Workflow composition: `composition` orchestration mode + step-graph `compositions` |
 | v1.4.1  | Jun 2026    | Workflow states as agents (`AgentDef.state`) |
 | v1.4.0  | Apr 2026    | Agent loops: terminal states, visit guards, artifacts, engine budgets |
 | v1.3.1  | Feb 2026    | Skills: progressive-disclosure knowledge loading |

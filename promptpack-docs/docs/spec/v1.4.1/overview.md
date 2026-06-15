@@ -1,27 +1,27 @@
 ---
 sidebar_position: 2
+title: "Specification Overview (v1.4.1)"
 ---
 
 # Specification Overview
 
 <div style={{
   padding: '8px 16px',
-  backgroundColor: '#10b981',
+  backgroundColor: '#6b7280',
   color: 'white',
   borderRadius: '6px',
   display: 'inline-block',
   marginBottom: '24px',
   fontWeight: 'bold'
 }}>
-  📘 v1.5.0 (Current)
+  📦 v1.4.1 (Stable)
 </div>
 
-PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
-
-:::info Version Information
-This documentation covers **v1.5.0** of the PromptPack specification, which adds **workflow composition** — a `composition` orchestration mode on a workflow state, driven by a declarative step graph of LLM calls, tool invocations, conditionals, and parallel fan-out — alongside a new top-level `compositions` map. This brings procedural, Function-style flows into the spec while keeping the workflow state machine as the universal orchestration primitive.
-Looking for previous versions? [View v1.4.1 docs →](./v1.4.1/overview) | [Version History →](./versions)
+:::warning Archived Version
+This is the **v1.4.1** documentation. For the latest features, see [v1.5.0 docs →](../overview)
 :::
+
+PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
 ## Why PromptPacks?
 
@@ -74,18 +74,13 @@ A PromptPack is a **single JSON file** that contains everything needed to run an
   "fragments": { /* reusable text components */ },
   "evals":     [ /* automated quality checks (v1.2+) */ ],
   "agents":    { /* A2A agent definitions (v1.3+) */ },
-  "skills":    [ /* progressive-disclosure knowledge (v1.3.1+) */ ],
-  "compositions": { /* declarative step-graph compositions (v1.5+) */ }
+  "skills":    [ /* progressive-disclosure knowledge (v1.3.1+) */ ]
 }
 ```
 
 The same spec format expresses simpler shapes too — a single-prompt assistant, a multi-prompt router, or a multi-agent system — depending on which sections you populate.
 
 ## Core Capabilities
-
-### 🧱 **Workflow Composition** *(v1.5+)*
-
-Express **procedural** flows declaratively. A workflow state can set `orchestration: composition` to hand its work to a named step graph in the new top-level `compositions` map — a directed, acyclic graph of typed steps: `prompt` (one-shot LLM call), `agent` (bounded LLM-tool loop), `tool` (deterministic call), `branch` (constrained predicate → then/else), and `parallel` (fan-out + reduce). Steps wire together with `${input.X}` and `${stepId.output.X}` bindings, conditionals use a constrained predicate language (no expression evaluation), and parallel blocks merge via `append`/`replace`/`barrier` reducers. Compositions are reached only through a workflow state, so a purely procedural pack is just a one-state terminal workflow — the workflow state machine stays the universal orchestration primitive.
 
 ### 🔁 **Agent Loops** *(v1.4+)*
 
@@ -124,10 +119,6 @@ Everything needed to run your agent — prompts, workflow, tools, fragments, eva
 PromptPacks are portable. Build a pack once, then use it across different applications, teams, or organizations. Share best practices through standardized, tested packages.
 
 ## Real-World Use Cases
-
-### Procedural Document Analysis *(v1.5+)*
-
-A document-analysis pack runs as a one-state terminal workflow whose state is in `composition` mode: a `classify` prompt step routes via a `branch` to a type-specific extractor, or fans out metadata extraction across parallel `prompt`/`tool` steps and synthesizes the result with a bounded `agent` step. The flow is explicit and inspectable — no "remember to classify first" buried in a mega-prompt.
 
 ### Autonomous Agent Loops
 

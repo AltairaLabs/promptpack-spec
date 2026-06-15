@@ -1,8 +1,25 @@
 ---
 sidebar_position: 3
+title: "Real-World Examples (v1.4.1)"
 ---
 
 # Real-World Examples
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.4.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.4.1** documentation. For the latest features, see [v1.5.0 docs →](../examples)
+:::
 
 These examples showcase how PromptPacks solve real business problems. Each demonstrates different benefits of the multi-prompt architecture and shared resource model.
 
@@ -1381,168 +1398,6 @@ Code-generation agents need feedback: write code, run tests, fix failures, repea
 
 **Time-Travel Debugging**: A runtime that persists artifact values at every transition produces a structured, replayable trace — every commit, every test report, every log line — without any extra plumbing.
 
-## Procedural Document Analyzer with Composition *(v1.5+)*
-
-This pack demonstrates **workflow composition** — a procedural, Function-mode flow expressed as a declarative step graph rather than turn-by-turn dialogue. The pack is a one-state terminal workflow whose state runs in `composition` mode: it classifies a document and routes to a type-specific extractor via a `branch`.
-
-### The Procedural Challenge
-
-Document-analysis flows are a fixed sequence of deterministic steps — classify, branch on the type, extract. Encoding that as an event-driven state machine abuses `on_event` to mean "next step," and folding it into one mega-prompt ("remember to classify first") is exactly the failure mode composition exists to prevent. A composition makes the shape explicit and inspectable.
-
-### Composition Solution
-
-```json
-{
-  "$schema": "https://promptpack.org/schema/v1.5.0/promptpack.schema.json",
-  "id": "document-analyzer",
-  "name": "Document Analyzer",
-  "version": "1.0.0",
-  "description": "Classify a document and route to a type-specific extractor via a composition",
-
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}",
-    "features": ["basic_substitution"]
-  },
-
-  "prompts": {
-    "doc_classifier": {
-      "id": "doc_classifier",
-      "name": "Document Classifier",
-      "version": "1.0.0",
-      "system_template": "Classify the document into its type. Return JSON: { \"type\": \"research_paper\" | \"general\" }.\n\nDocument:\n{{input}}",
-      "parameters": { "temperature": 0.0 }
-    },
-    "research_paper_extractor": {
-      "id": "research_paper_extractor",
-      "name": "Research Paper Extractor",
-      "version": "1.0.0",
-      "system_template": "Extract title, authors, abstract, and key findings from this research paper.\n\n{{input}}",
-      "parameters": { "temperature": 0.2 }
-    },
-    "general_doc_extractor": {
-      "id": "general_doc_extractor",
-      "name": "General Document Extractor",
-      "version": "1.0.0",
-      "system_template": "Extract a summary and the main entities from this document.\n\n{{input}}",
-      "parameters": { "temperature": 0.2 }
-    }
-  },
-
-  "workflow": {
-    "version": 1,
-    "entry": "main",
-    "states": {
-      "main": {
-        "orchestration": "composition",
-        "composition": "analyze_document",
-        "terminal": true
-      }
-    }
-  },
-
-  "compositions": {
-    "analyze_document": {
-      "version": 1,
-      "description": "Classify a document and route to a type-specific analyzer.",
-      "input_schema": "schemas/document.json",
-      "output_schema": "schemas/analysis.json",
-      "steps": [
-        {
-          "id": "classify",
-          "kind": "prompt",
-          "prompt_task": "doc_classifier",
-          "input": "${input.text}",
-          "output_schema": "schemas/document-type.json"
-        },
-        {
-          "id": "route",
-          "kind": "branch",
-          "predicate": {
-            "path": "${classify.output.type}",
-            "op": "equals",
-            "value": "research_paper"
-          },
-          "then": "extract_paper",
-          "else": "extract_general"
-        },
-        {
-          "id": "extract_paper",
-          "kind": "prompt",
-          "prompt_task": "research_paper_extractor",
-          "input": "${input.text}",
-          "output_schema": "schemas/analysis.json"
-        },
-        {
-          "id": "extract_general",
-          "kind": "prompt",
-          "prompt_task": "general_doc_extractor",
-          "input": "${input.text}",
-          "output_schema": "schemas/analysis.json"
-        }
-      ]
-    }
-  }
-}
-```
-
-### Composition Benefits
-
-**Procedural, Not Conversational**: The `main` state sets `orchestration: composition`, so its work is driven by the step graph — no events, no turns. A purely procedural pack is just a one-state terminal workflow; the workflow state machine stays the universal entry point.
-
-**Explicit Flow**: The `classify → route → extract_*` shape is visible in the pack. A `branch` step picks the successor with a constrained predicate (`${classify.output.type}` equals `"research_paper"`) — no expression language, no hidden routing logic.
-
-**Reference Bindings**: Steps wire together with `${input.X}` (the composition's structured input) and `${stepId.output.X}` (a prior step's output). The `route` branch reads `${classify.output.type}` from the classifier's output.
-
-**`prompt_task` Stays Optional**: The composition-mode state omits `prompt_task` entirely — it's only required for `internal` / `external` / `hybrid` states. Every other pack in this catalog is unaffected.
-
-### Going Deeper: Parallel + Agent
-
-For richer analysis, a composition can fan out with a `parallel` step and then synthesize with a bounded `agent` step. The parallel block runs ≥2 branches concurrently (a mix of small `prompt` steps and deterministic `tool` steps) and merges them with a reducer; the agent step is a bounded LLM-tool loop that **requires** a `termination` predicate:
-
-```yaml
-compositions:
-  deep_analyze:
-    version: 1
-    description: "Extract metadata in parallel, then synthesize a structured analysis."
-    steps:
-      - id: extract_metadata
-        kind: parallel
-        branches:
-          - id: title
-            kind: prompt
-            prompt_task: "title_extractor"
-            input: "${input.text}"
-          - id: keywords
-            kind: prompt
-            prompt_task: "keyword_extractor"
-            input: "${input.text}"
-          - id: structure
-            kind: tool
-            tool: "doc.parse_structure"
-            args: { content: "${input.text}" }
-          - id: citations
-            kind: tool
-            tool: "doc.extract_citations"
-            args: { content: "${input.text}" }
-        reduce:
-          strategy: barrier
-          into: metadata
-
-      - id: synthesize
-        kind: agent
-        prompt_task: "doc_analyzer"
-        input: "${extract_metadata.output.metadata}"
-        tools: ["doc.section_lookup", "ref.search", "kb.lookup"]
-        termination:
-          max_steps: 10
-        output_schema: "schemas/analysis.json"
-        modifiers:
-          eval: ["analysis_quality"]
-```
-
-The `barrier` reducer collects every branch output into a map under `into: metadata`, read downstream as `${extract_metadata.output.metadata}`. The `agent` step scopes a per-step tool registry and exits when `termination` is met. The optional `eval` modifier attaches a pack-level eval (RFC 0006) for observability. See [How to Add a Composition](/docs/guides/add-composition) and the [Compositions schema reference](./schema-guide#compositions-v15) for the full vocabulary.
-
 ## Why These Examples Matter
 
 Each example shows how PromptPacks solve real business problems:
@@ -1555,6 +1410,5 @@ Each example shows how PromptPacks solve real business problems:
 6. **Flexible Architecture**: Choose the right orchestration pattern — workflow for rigid sequences, agents for dynamic collaboration, or both together
 7. **Progressive Knowledge**: Skills keep templates lean while giving agents access to deep domain expertise on demand
 8. **Bounded Iteration**: Agent loops let workflows revisit a state under explicit caps (`max_visits`, `engine.budget`) and flow structured state across visits via artifacts — turning "model that loops" into "production-safe self-correcting agent"
-9. **Procedural Composition**: Compositions express fixed step graphs (classify → branch → extract, or parallel fan-out → synthesize) declaratively — procedural flows become inspectable and portable instead of hidden inside a mega-prompt or abused event transitions
 
 PromptPacks transform conversational AI from experimental prototypes into production-ready business solutions.

@@ -1,8 +1,25 @@
 ---
 sidebar_position: 2
+title: "Pack Structure (v1.4.1)"
 ---
 
 # Pack Structure & Design
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.4.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.4.1** documentation. For the latest features, see [v1.5.0 docs →](../structure)
+:::
 
 Understanding how PromptPacks are structured helps you design better AI agent behavior — from simple multi-prompt routers to autonomous agent loops. The JSON-based format isn't just about data storage; it's architected to support real-world agent development patterns and deployment needs.
 
@@ -366,61 +383,6 @@ Four building blocks turn an unbounded workflow into a production-safe agent loo
 :::info Time-travel debugging for free
 Because artifacts are captured at every state transition, runtimes that persist them produce a structured, replayable execution trace. You get audit, replay, and step-back debugging without writing any extra orchestration code.
 :::
-
-## Workflow Composition *(v1.5+)*
-
-PromptPack v1.5 adds a third way to drive a workflow state: a **composition**. Until now a `WorkflowState` was always backed by a single prompt (`prompt_task`) and orchestrated `internal`ly, `external`ly, or via `hybrid` control. v1.5 adds `composition` as a fourth `orchestration` value. When a state sets `orchestration: composition`, its work is driven by a **declarative step graph** instead of a single LLM call — ideal for *procedural* flows (document pipelines, data extraction, request → reasoning → commit) that don't fit the event-driven dialogue shape.
-
-Compositions live in a new top-level `compositions` map, keyed by name, exactly like `prompts`, `tools`, and `evals`. A state references one by key:
-
-```json
-{
-  "workflow": {
-    "version": 1,
-    "entry": "main",
-    "states": {
-      "main": {
-        "orchestration": "composition",
-        "composition": "analyze_document",
-        "terminal": true
-      }
-    }
-  },
-  "compositions": {
-    "analyze_document": {
-      "version": 1,
-      "description": "Classify a document and route to a type-specific analyzer.",
-      "steps": [
-        { "id": "classify", "kind": "prompt", "prompt_task": "doc_classifier", "input": "${input.text}" },
-        {
-          "id": "route", "kind": "branch",
-          "predicate": { "path": "${classify.output.type}", "op": "equals", "value": "research_paper" },
-          "then": "extract_paper", "else": "extract_general"
-        },
-        { "id": "extract_paper",   "kind": "prompt", "prompt_task": "research_paper_extractor", "input": "${input.text}" },
-        { "id": "extract_general", "kind": "prompt", "prompt_task": "general_doc_extractor",   "input": "${input.text}" }
-      ]
-    }
-  }
-}
-```
-
-Two amendments make this work, both fully backward compatible:
-
-- **`orchestration` gains a `composition` value** alongside `internal` / `external` / `hybrid`. Selecting it delegates the state's *entire* orchestration to the referenced composition — work and transitions both. It is exclusive: don't mix `composition` with the other modes on the same state.
-- **`prompt_task` becomes optional.** It's still required for `internal` / `external` / `hybrid` (and the default `internal`); a `composition`-mode state omits it and sets `composition` instead.
-
-A composition is a directed **acyclic** graph of typed steps. v1 defines five step kinds:
-
-- **`prompt`** — a one-shot LLM call against a `prompt_task`, with an optional `output_schema`. No tool calls.
-- **`agent`** — a *bounded LLM-tool loop* over a scoped `tools` list. **Requires** a `termination` predicate (`max_steps` and/or `tool_called`).
-- **`tool`** — a deterministic tool invocation called directly by the runtime (not via an LLM tool-call decision).
-- **`branch`** — picks `then`/`else` based on a constrained `predicate` (no expression language).
-- **`parallel`** — a static fan-out of **≥2 branches** merged by a declared `reduce` strategy (`append` / `replace` / `barrier`).
-
-Steps wire together with reference bindings — `${input.X}` reads the composition's structured input; `${stepId.output.X}` reads a prior step's output. Optional per-step `modifiers` add `retry` (max attempts) and `eval` (attach pack-level eval keys). Compositions are reached *only* through a workflow state, so a purely procedural ("Function-mode") pack is simply a one-state terminal workflow whose state is in composition mode — the workflow state machine remains the universal orchestration primitive.
-
-See the [Compositions schema reference](./schema-guide#compositions-v15), the [worked example](./examples#procedural-document-analyzer-with-composition-v15), and [How to Add a Composition](/docs/guides/add-composition) for the full vocabulary.
 
 ## Deployment Benefits
 
