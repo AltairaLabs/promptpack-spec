@@ -1,10 +1,11 @@
 # RFC 0010: Workflow Composition Extension
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland (chaholl)
 - **Created:** 2026-04-28
-- **Updated:** 2026-04-28
+- **Updated:** 2026-06-15
 - **Related Issues:** N/A
+- **Implemented in:** Spec v1.5.0
 
 ## Summary
 
@@ -858,6 +859,7 @@ A future RFC may permit a composition step to invoke an agent declared via RFC 0
 ## Revision History
 
 - **2026-04-28:** Initial draft.
+- **2026-06-15:** Clarified reducer `into` reference form. Implemented in spec v1.5.0 — `compositions` top-level field, the `composition` orchestration mode + `WorkflowState.composition` field, and the full step-graph definitions (`Composition`, `Step`, the five step kinds, `Predicate` family, `Reducer`, `StepModifiers`, `TerminationPredicate`, `StepInput`) added to `schema/promptpack.schema.json`. Status → Implemented.
 
 ## References
 
