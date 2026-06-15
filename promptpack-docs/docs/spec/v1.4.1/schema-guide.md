@@ -1,8 +1,25 @@
 ---
 sidebar_position: 5
+title: "Schema Guide (v1.4.1)"
 ---
 
 # Schema Guide
+
+<div style={{
+  padding: '8px 16px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  borderRadius: '6px',
+  display: 'inline-block',
+  marginBottom: '24px',
+  fontWeight: 'bold'
+}}>
+  📦 v1.4.1 (Stable)
+</div>
+
+:::warning Archived Version
+This is the **v1.4.1** documentation. For the latest features, see [v1.5.0 docs →](../schema-guide)
+:::
 
 Human-readable guide to PromptPack entities and their properties. For the auto-generated technical reference, see [Schema Reference](./schema-reference).
 
@@ -809,177 +826,6 @@ Each entry in the top-level `skills` array is one of three forms:
 
 :::info Skills + Workflow
 When a `WorkflowState` declares a `skills` field, it scopes which skills are available in that state. Use `"none"` to disable skills for a state. Without a `skills` field, all pack-level skills are available.
-:::
-
----
-
-## Compositions *(v1.5+)*
-
-PromptPack v1.5 adds **workflow composition**: a workflow state can set `orchestration: composition` to drive its work with a declarative step graph instead of a single prompt. Compositions live in a new top-level `compositions` map, keyed by name, and are reached *only* through a workflow state. A purely procedural ("Function-mode") pack is a one-state terminal workflow whose state is in composition mode.
-
-### WorkflowState amendments
-
-Two backward-compatible changes to [WorkflowState](#workflowstate):
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `orchestration` | string | No | Now accepts a fourth value, `composition`, alongside `internal` / `external` / `hybrid`. `composition` delegates the state's *entire* orchestration (work + transitions) to the referenced composition. Exclusive — don't combine with the other modes on the same state. |
-| `composition` | string | Conditional | Reference to a key in the pack's `compositions` map. **Required** when `orchestration` is `composition`; must be absent otherwise. |
-| `prompt_task` | string | Conditional | Now **optional**. Still required for `internal` / `external` / `hybrid` (and the default `internal`); not used in `composition` mode. |
-
-### Composition
-
-A named step graph over the pack's prompts, tools, and evals.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `version` | integer | **Yes** | Composition format version. Currently `1`. |
-| `steps` | [Step](#step)[] | **Yes** | Ordered array of step definitions (minimum 1). Order is logical — sequential by default; `branch` and `parallel` alter flow. The graph must be **acyclic**. |
-| `description` | string | No | Human-readable description of what the composition does. |
-| `input_schema` | string | No | Reference to a JSON Schema declaring the structured input shape. |
-| `output_schema` | string | No | Reference to a JSON Schema declaring the structured output shape. |
-| `output` | string | No | Step ID whose output is the composition's output. Defaults to the last step's output. |
-| `engine` | object | No | Opaque runtime-specific configuration (budgets, telemetry, scheduling hints). No schema enforcement. |
-
-### Step
-
-A single node in the step graph. The `kind` discriminator selects the step shape.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | string | **Yes** | Stable identifier, unique within the composition (including across nested `parallel.branches`). Pattern: `^[a-zA-Z_][a-zA-Z0-9_]*$`. Used for output references, eval attachment, and trace records. |
-| `kind` | string | **Yes** | Step kind. v1 conventional values: `"prompt"`, `"agent"`, `"tool"`, `"branch"`, `"parallel"`. Free-form string (like `Eval.type`); runtimes may support vendor-namespaced kinds (e.g. `"omnia.judge"`). |
-| `description` | string | No | Human-readable description. |
-| `depends_on` | string[] | No | Explicit predecessor step IDs. If omitted, the step sequentially follows the prior step in `steps[]`. Required to declare a join point after a `branch` or `parallel`. |
-| `modifiers` | [StepModifiers](#stepmodifiers) | No | Declarative modifiers (retry, eval attachment). Semantics are runtime-defined. |
-
-Each step also carries kind-specific fields, below.
-
-#### PromptStep (`kind: "prompt"`)
-
-A one-shot LLM invocation against a prompt task. No tool calls.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `kind` | string | **Yes** | Constant `"prompt"`. |
-| `prompt_task` | string | **Yes** | Reference to a key in the pack's `prompts` object. |
-| `input` | [StepInput](#stepinput) | No | Input binding resolved against the composition input and prior step outputs. |
-| `output_schema` | string | No | Reference to a JSON Schema for the expected output shape. |
-
-#### AgentStep (`kind: "agent"`)
-
-A **bounded LLM-tool loop** (distinct in name only from RFC 0007 `agents`).
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `kind` | string | **Yes** | Constant `"agent"`. |
-| `prompt_task` | string | **Yes** | Reference to a key in the pack's `prompts` object. |
-| `termination` | [TerminationPredicate](#terminationpredicate) | **Yes** | The condition under which the bounded loop exits. Without it, the agent step is invalid. |
-| `input` | [StepInput](#stepinput) | No | Input binding. |
-| `tools` | string[] | No | Subset of the pack's tools available to this step — a per-step scoped tool registry. Each must resolve to a key in `tools`. |
-| `output_schema` | string | No | Reference to a JSON Schema for the expected output shape. |
-
-#### ToolStep (`kind: "tool"`)
-
-A deterministic tool invocation called directly by the runtime (not via an LLM tool-call decision).
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `kind` | string | **Yes** | Constant `"tool"`. |
-| `tool` | string | **Yes** | Reference to a key in the pack's `tools` object. |
-| `args` | object | No | Argument bindings, resolved against the composition input and prior step outputs. |
-
-#### BranchStep (`kind: "branch"`)
-
-A conditional that picks a successor based on a constrained predicate.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `kind` | string | **Yes** | Constant `"branch"`. |
-| `predicate` | [Predicate](#predicate) | **Yes** | Constrained predicate (no free-form expressions). |
-| `then` | string | **Yes** | Step ID to execute when the predicate is true. |
-| `else` | string | No | Step ID to execute when the predicate is false. |
-
-#### ParallelStep (`kind: "parallel"`)
-
-A static fan-out whose branches execute concurrently and are merged by a reducer.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `kind` | string | **Yes** | Constant `"parallel"`. |
-| `branches` | [Step](#step)[] | **Yes** | At least **2** branch steps. |
-| `reduce` | [Reducer](#reducer) | **Yes** | How branch outputs are merged. |
-
-### Predicate
-
-Predicates use a constrained, declarative shape — **not** an expression language. A predicate is exactly one of: a compare, an exists check, or an `all_of` / `any_of` / `not` combinator. Authors who need complex conditions emit a boolean from a `prompt` step and branch on its output.
-
-| Form | Shape | Description |
-|------|-------|-------------|
-| **Compare** | `{ path, op, value }` | Compare a `path` against a literal `value`. `op` ∈ `equals`, `not_equals`, `in`, `not_in`, `less_than`, `less_than_or_equals`, `greater_than`, `greater_than_or_equals`. (`value` is an array for `in`/`not_in`.) |
-| **Exists** | `{ path, exists }` | `exists: true`/`false` tests presence of the value at `path`. |
-| **All of** | `{ all_of: [Predicate, …] }` | Logical AND of nested predicates. |
-| **Any of** | `{ any_of: [Predicate, …] }` | Logical OR of nested predicates. |
-| **Not** | `{ not: Predicate }` | Logical negation of a nested predicate. |
-
-`path` references a value via the same `${...}` dot-notation used for step inputs, e.g. `${classify.output.intent}`.
-
-```yaml
-predicate:
-  any_of:
-    - path: "${assess.output.confidence}"
-      op: less_than
-      value: 0.8
-    - path: "${assess.output.complexity}"
-      op: greater_than
-      value: 7
-```
-
-### Reducer
-
-Names how a `parallel` block's branch outputs are merged into a single value.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `strategy` | string | **Yes** | v1 conventional values: `"append"` (extend lists), `"replace"` (last write wins), `"barrier"` (collect all outputs into a named map). Free-form string; runtimes may add vendor-namespaced reducers. |
-| `into` | string | **Yes** | Field name under which the merged result is placed on the parallel step's output, read downstream as `${<parallelStepId>.output.<into>}`. |
-
-### StepModifiers
-
-Declarative annotations on a step. Semantics are runtime-defined.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `retry` | object | No | `{ "max_attempts": <integer ≥ 1> }` — retry budget for the step. |
-| `eval` | string[] | No | References to keys in the pack's `evals` object (RFC 0006). Runtimes may execute these inline or post-Send. |
-
-### TerminationPredicate
-
-The required exit condition for an `agent` step. At least one field must be set.
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `max_steps` | integer | Conditional | Maximum loop iterations (≥ 1). Either this or `tool_called` (or both) must be present. |
-| `tool_called` | string | Conditional | Tool name; the agent terminates when the LLM successfully invokes this tool. |
-
-### StepInput
-
-Input binding for a step — either a reference string or an object combining literals and references.
-
-| Form | Description |
-|------|-------------|
-| **String** | A reference of the form `${path.to.value}`. |
-| **Object** | A free-form object whose values may be literals or `${...}` references. |
-
-References resolve against:
-
-- `${input.X}` — the composition's structured input.
-- `${stepId.output.X}` — a prior step's structured output.
-
-This is a strict subset of the RFC 0003 template-variable system — no expressions, arithmetic, or function calls.
-
-:::info Composition validation rules
-A `composition`-mode state must set `composition` and may omit `prompt_task`; every other state must set `prompt_task` and must not set `composition`. Step IDs must be unique within the composition; every `prompt_task`, `tool`, `eval`, `then`/`else`/`depends_on`, and `${...}` reference must resolve. `agent` steps require `termination`; `parallel` steps require ≥2 branches and a `reduce`; the graph must be acyclic.
 :::
 
 ---

@@ -35,7 +35,7 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 | [RFC-0007](/docs/rfcs/agents-extension) | Agents Extension | 🚀 Implemented | v1.3 | 2026-02-15 | 2026-02-15 |
 | [RFC-0008](/docs/rfcs/skills-extension) | Skills Extension | 🚀 Implemented | v1.3.1 | 2026-02-21 | 2026-02-21 |
 | [RFC-0009](/docs/rfcs/agent-loops) | Agent Loop Extension | 🚀 Implemented | v1.4 | 2026-03-26 | 2026-04-18 |
-| [RFC-0010](/docs/rfcs/workflow-composition) | Workflow Composition Extension | 📝 Draft | — | 2026-04-28 | 2026-04-28 |
+| [RFC-0010](/docs/rfcs/workflow-composition) | Workflow Composition Extension | 🚀 Implemented | v1.5.0 | 2026-04-28 | 2026-06-15 |
 | [RFC-0011](/docs/rfcs/workflow-states-as-agents) | Workflow States as Agents | 🚀 Implemented | v1.4.1 | 2026-06-13 | 2026-06-13 |
 <!-- RFC_TABLE_END -->
 
@@ -45,8 +45,8 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 | | Count |
 |---|---|
 | Total RFCs | 11 |
-| Implemented | 10 |
-| Draft | 1 |
+| Implemented | 11 |
+| Draft | 0 |
 | In Review | 0 |
 | Rejected | 0 |
 <!-- RFC_COUNTS_END -->
