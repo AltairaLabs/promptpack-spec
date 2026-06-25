@@ -3,7 +3,7 @@
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
   "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010).",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
@@ -219,10 +219,91 @@
       "type": "object",
       "description": "Map of composition name to composition definition (RFC 0010). Each composition declares a named step graph that a runtime may invoke as a structured-input/structured-output unit. Compositions are reached only through workflow states whose orchestration is 'composition'. Optional; packs without it are unaffected.",
       "additionalProperties": { "$ref": "#/$defs/Composition" }
+    },
+
+    "requires": {
+      "type": "object",
+      "description": "External resources the pack needs to run (RFC 0012). Optional; when present, validated strictly. Reserved for future requirement categories (e.g. tools, skills).",
+      "additionalProperties": false,
+      "properties": {
+        "providers": {
+          "type": "array",
+          "description": "Logical model-provider requirements. Each entry is a string shorthand (an 'llm' requirement with that key) or a ProviderRequirement object.",
+          "items": { "$ref": "#/$defs/ProviderRequirement" }
+        }
+      }
     }
   },
   
   "$defs": {
+    "ProviderRequirement": {
+      "description": "A logical model-provider requirement (RFC 0012). A bare string is shorthand for an 'llm' requirement with that key.",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Shorthand: the requirement key. Expands to { key, role: 'llm', required: true }."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["key", "role"],
+          "properties": {
+            "key": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-]+$",
+              "description": "Logical name the runtime resolves this provider by (e.g. 'default', 'embeddings', 'judge'). 'default' is reserved for the primary LLM."
+            },
+            "role": {
+              "type": "string",
+              "description": "The kind of model required. Open set; runtimes MAY extend (validators must not reject unknown roles). Suggested values (PromptKit roles): 'llm', 'embedding', 'tts', 'stt', 'image', 'inference'.",
+              "examples": ["llm", "embedding", "tts", "stt", "image", "inference"]
+            },
+            "required": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether the pack cannot run without this provider. Optional requirements degrade features rather than blocking startup."
+            },
+            "description": {
+              "type": "string",
+              "description": "Human-readable explanation of the provider's purpose and the capabilities it should have."
+            },
+            "capabilities": { "$ref": "#/$defs/ProviderCapabilities" }
+          }
+        }
+      ]
+    },
+
+    "ProviderCapabilities": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Structured, advisory capabilities the satisfying provider should have (RFC 0012). The well-known fields below are validated when present, but the object is OPEN: provider- or role-specific capabilities (a 'role: inference' provider may expose anything) may be added as extra keys with any shape. Custom keys SHOULD be namespaced (e.g. 'x-' prefix) to avoid clashing with fields the spec may define later. All listed fields are optional.",
+      "properties": {
+        "modalities": {
+          "type": "array",
+          "description": "Media types the provider must handle. Reuses the media-type vocabulary (MediaConfig.supported_types, RFC 0004). Common: 'text', 'image', 'audio', 'video', 'document'.",
+          "items": { "type": "string", "pattern": "^[a-z0-9_]+$" }
+        },
+        "min_context_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Minimum context window, in tokens, the provider must support."
+        },
+        "tool_use": {
+          "type": "boolean",
+          "description": "Whether the provider must support tool/function calling."
+        },
+        "structured_output": {
+          "type": "boolean",
+          "description": "Whether the provider must support structured/JSON output."
+        },
+        "embedding_dimensions": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Required embedding vector dimensionality (for role 'embedding')."
+        }
+      }
+    },
+
     "Prompt": {
       "type": "object",
       "description": "A single prompt configuration within a pack. Each prompt represents a specific task type (e.g., 'support', 'sales') with its own template, variables, tools, and validation rules. Prompts within a pack can evolve independently with their own version numbers.",
