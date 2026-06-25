@@ -11,7 +11,16 @@ import sys
 
 
 def fix_mdx_curly_braces(content: str) -> str:
-    """Wrap bare {{...}} patterns in inline backticks when outside code fences."""
+    """Wrap brace expressions in inline backticks when outside code fences.
+
+    MDX treats a bare ``{...}`` as a JSX expression. Schema descriptions contain
+    two flavours that must be shown literally, not evaluated:
+    - ``{{variable}}`` template placeholders, and
+    - ``${stepId.output.X}`` composition reference bindings (RFC 0010) — these can
+      even contain angle brackets (``${<parallelStepId>.output.<into>}``) which make
+      MDX's acorn parser fail outright.
+    Both are wrapped in inline backticks so Docusaurus renders them as code.
+    """
     lines = content.split("\n")
     result = []
     in_code_block = False
@@ -23,8 +32,13 @@ def fix_mdx_curly_braces(content: str) -> str:
             continue
 
         if not in_code_block:
-            # Replace {{word}} or {{namespace.word}} NOT already inside backticks with `{{...}}`
-            # Negative lookbehind/ahead for backtick
+            # Replace ${...} reference bindings NOT already inside backticks.
+            line = re.sub(
+                r"(?<!`)(\$\{[^}]*\})(?!`)",
+                r"`\1`",
+                line,
+            )
+            # Replace {{word}} or {{namespace.word}} NOT already inside backticks.
             line = re.sub(
                 r"(?<!`)(\{\{[\w.]+\}\})(?!`)",
                 r"`\1`",

@@ -42,6 +42,7 @@ Each RFC has one of the following statuses:
 | 0009 | [Agent Loop Extension](0009-agent-loops.md) | Implemented | AltairaLabs | 2026-03-26 |
 | 0010 | [Workflow Composition Extension](0010-workflow-composition.md) | Implemented | Charlie Holland | 2026-04-28 |
 | 0011 | [Workflow States as Agents](0011-workflow-states-as-agents.md) | Implemented | Charlie Holland | 2026-06-13 |
+| 0012 | [Provider Requirements](0012-provider-requirements.md) | Implemented | Charlie Holland | 2026-06-25 |
 
 ## Active RFCs
 

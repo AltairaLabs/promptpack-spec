@@ -37,6 +37,7 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 | [RFC-0009](/docs/rfcs/agent-loops) | Agent Loop Extension | 🚀 Implemented | v1.4 | 2026-03-26 | 2026-04-18 |
 | [RFC-0010](/docs/rfcs/workflow-composition) | Workflow Composition Extension | 🚀 Implemented | v1.5.0 | 2026-04-28 | 2026-06-15 |
 | [RFC-0011](/docs/rfcs/workflow-states-as-agents) | Workflow States as Agents | 🚀 Implemented | v1.4.1 | 2026-06-13 | 2026-06-13 |
+| [RFC-0012](/docs/rfcs/provider-requirements) | Provider Requirements | 🚀 Implemented | v1.5.1 | 2026-06-25 | 2026-06-25 |
 <!-- RFC_TABLE_END -->
 
 ## At a Glance
@@ -44,8 +45,8 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 <!-- RFC_COUNTS_START -->
 | | Count |
 |---|---|
-| Total RFCs | 11 |
-| Implemented | 11 |
+| Total RFCs | 12 |
+| Implemented | 12 |
 | Draft | 0 |
 | In Review | 0 |
 | Rejected | 0 |

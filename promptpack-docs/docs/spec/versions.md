@@ -6,13 +6,21 @@ sidebar_position: 0
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.5.0
+## Current Version: v1.5.1
 
 **Status:** ✅ Current
 **Released:** June 2026
-**Schema:** `https://promptpack.org/schema/v1.5.0/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.5.1/promptpack.schema.json`
 
-### What's New in v1.5.0
+### What's New in v1.5.1
+
+- **Provider Requirements** ([RFC-0012](/docs/rfcs/provider-requirements)) — An optional top-level `requires.providers` block lets a pack declare, runtime-agnostically, the model providers it needs to run
+- **Logical `ProviderRequirement`** — each entry has a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (open set: `llm`, `embedding`, `tts`, `stt`, `image`, `inference`, …), optional `required` (default `true`), and a human `description`
+- **Advisory `ProviderCapabilities`** — an open object with well-known hints (`modalities`, `min_context_tokens`, `tool_use`, `structured_output`, `embedding_dimensions`) plus namespaced custom keys for matching
+- **String shorthand** — a bare key expands to a required `llm` requirement; `default` is reserved for the primary LLM
+- Patch release — the block is optional and advisory (no runtime behavior change); packs without it are unaffected
+
+### Also in v1.5 (v1.5.0)
 
 - **Workflow Composition** ([RFC-0010](/docs/rfcs/workflow-composition)) — A workflow state can drive its work with a declarative step graph instead of a single prompt
 - **`composition` orchestration mode** — A fourth value on `WorkflowState.orchestration` (alongside `internal` / `external` / `hybrid`) that delegates the state's full orchestration to a composition
@@ -23,7 +31,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.5.0 Spec →](./overview)
+[View v1.5.1 Spec →](./overview)
 
 ---
 
@@ -138,7 +146,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.5.0  | ✅ Current | Full support | - |
+| v1.5.1  | ✅ Current | Full support | - |
+| v1.5.0  | 📦 Stable | Security fixes only | TBD |
 | v1.4.1  | 📦 Stable | Security fixes only | TBD |
 | v1.4.0  | 📦 Stable | Security fixes only | TBD |
 | v1.3.1  | 📦 Stable | Security fixes only | TBD |
@@ -150,6 +159,46 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.5.0 to v1.5.1
+
+v1.5.1 is **fully backward compatible** with v1.5.0. No breaking changes — provider requirements are purely additive and advisory.
+
+### Upgrade Steps
+
+1. **Update schema version** in your PromptPack:
+   ```json
+   {
+     "$schema": "https://promptpack.org/schema/v1.5.1/promptpack.schema.json",
+     "version": "1.5.1"
+   }
+   ```
+
+2. **(Optional) Declare the providers your pack needs** so deployers can check coverage and bind them:
+   ```json
+   {
+     "requires": {
+       "providers": [
+         "default",
+         { "key": "embeddings", "role": "embedding", "capabilities": { "embedding_dimensions": 1536 } },
+         { "key": "judge", "role": "llm", "required": false, "description": "Optional eval judge." }
+       ]
+     }
+   }
+   ```
+
+3. **Test and validate** — v1.5.0 packs continue to work without changes.
+
+### New Features You Can Use
+
+- Add a top-level `requires.providers` array listing the logical model providers the pack needs
+- Use string shorthand (a bare key → required `llm`) or full `ProviderRequirement` objects with `key`, `role`, `required`, `description`, and `capabilities`
+- Reserve `default` for the primary LLM; distinguish multiple same-role models by `key`
+- Attach advisory `capabilities` (`modalities`, `min_context_tokens`, `tool_use`, `structured_output`, `embedding_dimensions`) for automatic matching, plus namespaced custom keys
+
+See [RFC-0012: Provider Requirements](/docs/rfcs/provider-requirements) for the full design.
 
 ---
 
@@ -517,8 +566,9 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.5.0 if:
+### Use v1.5.1 if:
 - ✅ Building new PromptPacks
+- ✅ Want to declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
 - ✅ Need procedural, Function-style flows expressed as declarative step graphs (composition)
 - ✅ Want classify → branch → extract or parallel fan-out → synthesize pipelines in the spec
 - ✅ Want to expose a stateful/looping behavior as an A2A agent (back an agent with a workflow state)
@@ -534,7 +584,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - ✅ Your flows are conversational/event-driven and don't need procedural step graphs
 - ✅ Prefer maximum stability
 
-**Recommendation:** Use v1.5.0 for all new projects. It's backward compatible and adds workflow composition — declarative step graphs for procedural flows — on top of the full v1.4 workflow, agent-loop, and agent model.
+**Recommendation:** Use v1.5.1 for all new projects. It's backward compatible and adds an optional `requires.providers` block for declaring provider needs, on top of v1.5.0 workflow composition and the full v1.4 workflow, agent-loop, and agent model.
 
 ---
 
@@ -542,6 +592,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.5.1  | Jun 2026    | Provider requirements: optional `requires.providers` block declaring a pack's model-provider needs |
 | v1.5.0  | Jun 2026    | Workflow composition: `composition` orchestration mode + step-graph `compositions` |
 | v1.4.1  | Jun 2026    | Workflow states as agents (`AgentDef.state`) |
 | v1.4.0  | Apr 2026    | Agent loops: terminal states, visit guards, artifacts, engine budgets |
