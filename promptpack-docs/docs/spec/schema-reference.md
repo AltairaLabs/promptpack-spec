@@ -6480,4 +6480,4 @@ Specific value: `"parallel"`
 | **Minimum**  | &ge; 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-06-25 at 13:49:25 +0100
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-06-25 at 18:42:47 +0000
