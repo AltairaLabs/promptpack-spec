@@ -13,13 +13,13 @@ sidebar_position: 2
   marginBottom: '24px',
   fontWeight: 'bold'
 }}>
-  📘 v1.5.0 (Current)
+  📘 v1.5.1 (Current)
 </div>
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
 :::info Version Information
-This documentation covers **v1.5.0** of the PromptPack specification, which adds **workflow composition** — a `composition` orchestration mode on a workflow state, driven by a declarative step graph of LLM calls, tool invocations, conditionals, and parallel fan-out — alongside a new top-level `compositions` map. This brings procedural, Function-style flows into the spec while keeping the workflow state machine as the universal orchestration primitive.
+This documentation covers **v1.5.1** of the PromptPack specification. **v1.5.1** adds an optional top-level `requires.providers` block, letting a pack declare — runtime-agnostically — the model providers it needs to run (RFC 0012). **v1.5.0** added **workflow composition** — a `composition` orchestration mode on a workflow state, driven by a declarative step graph of LLM calls, tool invocations, conditionals, and parallel fan-out — alongside a new top-level `compositions` map. This brings procedural, Function-style flows into the spec while keeping the workflow state machine as the universal orchestration primitive.
 Looking for previous versions? [View v1.4.1 docs →](./v1.4.1/overview) | [Version History →](./versions)
 :::
 
@@ -75,13 +75,18 @@ A PromptPack is a **single JSON file** that contains everything needed to run an
   "evals":     [ /* automated quality checks (v1.2+) */ ],
   "agents":    { /* A2A agent definitions (v1.3+) */ },
   "skills":    [ /* progressive-disclosure knowledge (v1.3.1+) */ ],
-  "compositions": { /* declarative step-graph compositions (v1.5+) */ }
+  "compositions": { /* declarative step-graph compositions (v1.5+) */ },
+  "requires":  { /* model providers the pack needs to run (v1.5.1+) */ }
 }
 ```
 
 The same spec format expresses simpler shapes too — a single-prompt assistant, a multi-prompt router, or a multi-agent system — depending on which sections you populate.
 
 ## Core Capabilities
+
+### 🔌 **Provider Requirements** *(v1.5.1+)*
+
+Declare the model providers a pack needs to run, runtime-agnostically. The optional top-level `requires.providers` block lists *logical* providers — each with a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (`llm`, `embedding`, `tts`, …), an optional human `description`, and optional advisory `capabilities` (modalities, minimum context, tool-use, embedding dimensions). A pack states *what it needs*, never which concrete provider satisfies it — resolution stays the host runtime's job. The block is optional and fully backward compatible; when present it's validated strictly, giving runtimes and deployers a contract for coverage checks, auto-binding, and test/deploy parity.
 
 ### 🧱 **Workflow Composition** *(v1.5+)*
 

@@ -1,6 +1,6 @@
 # RFC 0012: Provider Requirements
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland (@chaholl)
 - **Created:** 2026-06-25
 - **Updated:** 2026-06-25
@@ -318,6 +318,7 @@ None outstanding.
 - **2026-06-25:** Initial draft.
 - **2026-06-25:** Resolved open questions — open `role` set (PromptKit values incl. `inference`); added optional structured `ProviderCapabilities` reusing RFC 0004 media types; `default` reserved-but-optional; `key` as sole discriminator.
 - **2026-06-25:** Made `ProviderCapabilities` an open object (`additionalProperties: true`) so open-ended providers (e.g. `role: inference`) can express arbitrary, namespaced capabilities; well-known fields still validated.
+- **2026-06-25:** Implemented in spec v1.5.1 — added the optional top-level `requires` block with `requires.providers`, and the `ProviderRequirement` and `ProviderCapabilities` `$defs`, to `schema/promptpack.schema.json`. Patch bump: the field is optional and advisory (no runtime behavior change). Status → Implemented.
 
 ## References
 

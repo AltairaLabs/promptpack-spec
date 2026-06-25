@@ -106,6 +106,7 @@ PromptKit is the reference toolkit — multi-provider testing, red-team scenario
 - **Agent Loops** — Iterative, self-correcting execution with terminal states, per-state visit guards, artifact trails, and engine budgets
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
+- **Provider Requirements** — Declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
 - **Built-in Testing** — Testing metadata and quality assurance built into the spec
@@ -255,6 +256,37 @@ PromptPack v1.4 extends the workflow state machine with the guardrails needed fo
 | **Time-travel debugging** | Artifacts are captured at every transition — runtimes get a complete, replayable execution trace for free |
 
 See [RFC-0009: Agent Loop Extension](https://promptpack.org/docs/rfcs/agent-loops) for the full design.
+
+## Provider Requirements *(v1.5.1)*
+
+PromptPack v1.5.1 adds an optional top-level `requires.providers` block so a pack can declare, runtime-agnostically, the model providers it needs to run. A requirement states *what the pack needs* — never which concrete provider satisfies it — so each runtime resolves the logical keys to its own providers.
+
+```json
+"requires": {
+  "providers": [
+    "default",
+    {
+      "key": "embeddings",
+      "role": "embedding",
+      "description": "Embeds the knowledge base for retrieval.",
+      "capabilities": { "embedding_dimensions": 1536 }
+    },
+    { "key": "judge", "role": "llm", "required": false, "description": "Optional eval judge." }
+  ]
+}
+```
+
+**Key concepts:**
+
+| Feature | Description |
+|---------|-------------|
+| **Logical providers** | Each entry has a `key` (`default`, `embeddings`, `judge`, …) and a `role` (open set: `llm`, `embedding`, `tts`, `stt`, `image`, `inference`, …) |
+| **String shorthand** | A bare key expands to a required `llm` requirement; `default` is reserved for the primary LLM |
+| **Optional requirements** | `required: false` degrades a feature rather than blocking startup |
+| **Advisory capabilities** | Open `capabilities` object — `modalities`, `min_context_tokens`, `tool_use`, `structured_output`, `embedding_dimensions`, plus namespaced custom keys — for automatic matching |
+| **Coverage, binding, parity** | Deployers verify needed providers exist, resolve each key to a concrete provider, and warn when a resolved model diverges from `tested_models` |
+
+See [RFC-0012: Provider Requirements](https://promptpack.org/docs/rfcs/provider-requirements) for the full design.
 
 ## Documentation
 

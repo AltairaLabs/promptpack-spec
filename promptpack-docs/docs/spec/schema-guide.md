@@ -27,6 +27,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 | `workflow` | [WorkflowConfig](#workflowconfig) | No | State-machine workflow over the pack's prompts with event-driven transitions. *(v1.3+)* |
 | `agents` | [AgentsConfig](#agentsconfig) | No | Agent configuration mapping prompts to A2A-compatible agent definitions. *(v1.3+)* |
 | `skills` | [SkillSource](#skillsource)[] | No | Skill sources for progressive-disclosure knowledge loading. *(v1.3.1+)* |
+| `requires` | [Requires](#provider-requirements-v151) | No | External resources the pack needs to run. Currently carries `providers` (logical model-provider requirements). *(v1.5.1+)* |
 
 :::info Collections are keyed maps, not arrays
 `prompts`, `fragments`, and `tools` are all **objects** (keyed maps), not arrays. Each key serves as the identifier for the entry. For example, `prompts` maps task type strings like `"support"` or `"billing"` to their Prompt definitions.
@@ -980,6 +981,50 @@ This is a strict subset of the RFC 0003 template-variable system — no expressi
 
 :::info Composition validation rules
 A `composition`-mode state must set `composition` and may omit `prompt_task`; every other state must set `prompt_task` and must not set `composition`. Step IDs must be unique within the composition; every `prompt_task`, `tool`, `eval`, `then`/`else`/`depends_on`, and `${...}` reference must resolve. `agent` steps require `termination`; `parallel` steps require ≥2 branches and a `reduce`; the graph must be acyclic.
+:::
+
+---
+
+## Provider Requirements *(v1.5.1+)*
+
+PromptPack v1.5.1 adds an optional top-level `requires` block so a pack can declare, runtime-agnostically, the model providers it needs to run. A requirement states *what the pack needs* (a logical provider, by key and role), never *which concrete provider satisfies it* — resolution is the host runtime's job. The block is fully backward compatible: optional, and validated strictly only when present.
+
+### Requires
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `providers` | [ProviderRequirement](#providerrequirement)[] | No | Logical model-provider requirements. Each item is a string shorthand or a `ProviderRequirement` object. |
+
+The `requires` object is closed (`additionalProperties: false`); `providers` is currently its only field, leaving room for future requirement categories (e.g. `requires.tools`).
+
+### ProviderRequirement
+
+Either a **string** (shorthand for `{ key: <string>, role: "llm", required: true }`) or an **object**:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `key` | string | **Yes** | Logical name the runtime resolves this provider by (e.g. `default`, `embeddings`, `judge`). Pattern: `^[a-zA-Z0-9_-]+$`. `default` is reserved for the primary LLM. Keys must be unique within `providers` — `key` is the sole discriminator. |
+| `role` | string | **Yes** | The kind of model required. **Open set** — validators must not reject unknown roles. Suggested values: `llm`, `embedding`, `tts`, `stt`, `image`, `inference`. |
+| `required` | boolean | No | Whether the pack cannot run without this provider. Default `true`. An optional requirement degrades a feature rather than blocking startup. |
+| `description` | string | No | Human-readable explanation of the provider's purpose and the capabilities it should have. The primary signal for an operator wiring things up. |
+| `capabilities` | [ProviderCapabilities](#providercapabilities) | No | Structured, advisory capabilities for automatic matching. |
+
+The object form is closed (`additionalProperties: false`).
+
+### ProviderCapabilities
+
+Structured, **advisory** hints the satisfying provider should have. The `description` remains the primary human guidance; `capabilities` lets runtimes match and warn automatically. The object is **open** (`additionalProperties: true`) — the well-known fields below are validated when present, but provider- or role-specific keys are allowed with any shape. Custom keys SHOULD be namespaced (e.g. an `x-` prefix) to avoid clashing with fields the spec may define later. All fields are optional.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `modalities` | string[] | Media types the provider must handle. Reuses the RFC 0004 media vocabulary (`MediaConfig.supported_types`). Common: `text`, `image`, `audio`, `video`, `document`. |
+| `min_context_tokens` | integer | Minimum context window, in tokens, the provider must support (≥1). |
+| `tool_use` | boolean | Whether the provider must support tool/function calling. |
+| `structured_output` | boolean | Whether the provider must support structured/JSON output. |
+| `embedding_dimensions` | integer | Required embedding vector dimensionality, for `role: embedding` (≥1). |
+
+:::info Requirements vs. tested models
+`requires.providers` is the pack's **contract** (what it needs to run); `tested_models` is **provenance** (what a prompt was tested against). They're complementary and independent — a runtime MAY cross-check the provider it resolves against `tested_models` to warn on test/deploy divergence.
 :::
 
 ---

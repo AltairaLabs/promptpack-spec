@@ -1543,6 +1543,47 @@ compositions:
 
 The `barrier` reducer collects every branch output into a map under `into: metadata`, read downstream as `${extract_metadata.output.metadata}`. The `agent` step scopes a per-step tool registry and exits when `termination` is met. The optional `eval` modifier attaches a pack-level eval (RFC 0006) for observability. See [How to Add a Composition](/docs/guides/add-composition) and the [Compositions schema reference](./schema-guide#compositions-v15) for the full vocabulary.
 
+## Declaring Provider Requirements *(v1.5.1+)*
+
+### The Deployment Problem
+
+A retrieval-augmented support pack needs more than "an LLM": it needs a primary chat model with tool-use and a large context window, an embedding model to index its knowledge base, and — for its eval suite — an optional LLM judge. Today none of that is written down, so every deployment rediscovers the needs by hand and fails late when a binding is missing or points at the wrong kind of model.
+
+### The `requires.providers` Solution
+
+> YAML shown for readability (per [RFC 0002](/docs/rfcs/yaml-format)). Equally valid as JSON.
+
+```yaml
+requires:
+  providers:
+    # string shorthand → { key: default, role: llm, required: true }
+    - key: default
+      role: llm
+      description: Primary support agent. Needs tool-use and a large context window.
+      capabilities:
+        min_context_tokens: 32000
+        tool_use: true
+    - key: embeddings
+      role: embedding
+      description: Embeds the knowledge base for retrieval.
+      capabilities:
+        embedding_dimensions: 1536
+    - key: reranker
+      role: inference
+      required: false
+      description: Cross-encoder that reorders retrieved passages by relevance.
+      capabilities:
+        # open, provider-specific capabilities — namespaced to avoid future clashes
+        x-task: reranking
+        x-max-documents: 100
+    - key: judge
+      role: llm
+      required: false
+      description: Optional LLM judge for the eval suite; a strong reasoning model.
+```
+
+With requirements declared once in the portable pack, a deployer can: verify the workspace provides an `llm` and an `embedding` provider (**coverage**), resolve each `key` to a concrete provider (**binding**), and warn if the resolved `default` model is absent from the pack's `tested_models` (**parity**). `required: false` entries like `reranker` and `judge` degrade a feature rather than blocking startup. See the [Provider Requirements schema reference](./schema-guide#provider-requirements-v151) and [RFC-0012](/docs/rfcs/provider-requirements) for the full design.
+
 ## Why These Examples Matter
 
 Each example shows how PromptPacks solve real business problems:
@@ -1556,5 +1597,6 @@ Each example shows how PromptPacks solve real business problems:
 7. **Progressive Knowledge**: Skills keep templates lean while giving agents access to deep domain expertise on demand
 8. **Bounded Iteration**: Agent loops let workflows revisit a state under explicit caps (`max_visits`, `engine.budget`) and flow structured state across visits via artifacts — turning "model that loops" into "production-safe self-correcting agent"
 9. **Procedural Composition**: Compositions express fixed step graphs (classify → branch → extract, or parallel fan-out → synthesize) declaratively — procedural flows become inspectable and portable instead of hidden inside a mega-prompt or abused event transitions
+10. **Portable Requirements**: `requires.providers` declares a pack's model-provider needs once, runtime-agnostically — so deployers get coverage checks, auto-binding, and test/deploy parity instead of rediscovering needs by hand and failing late
 
 PromptPacks transform conversational AI from experimental prototypes into production-ready business solutions.

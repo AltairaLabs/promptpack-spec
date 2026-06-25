@@ -422,6 +422,42 @@ Steps wire together with reference bindings — `${input.X}` reads the compositi
 
 See the [Compositions schema reference](./schema-guide#compositions-v15), the [worked example](./examples#procedural-document-analyzer-with-composition-v15), and [How to Add a Composition](/docs/guides/add-composition) for the full vocabulary.
 
+## Provider Requirements *(v1.5.1+)*
+
+A pack is portable, but its model-provider needs have always been implicit — every runtime and deployment rediscovered "this needs an LLM, and an embedding model for retrieval, and maybe a judge model" by hand, and failed late when a binding was missing or pointed at the wrong kind of model. PromptPack v1.5.1 adds an optional top-level `requires` block so a pack can declare those needs once, runtime-agnostically:
+
+```json
+{
+  "requires": {
+    "providers": [
+      "default",
+      {
+        "key": "embeddings",
+        "role": "embedding",
+        "description": "Embeds the knowledge base for retrieval.",
+        "capabilities": { "embedding_dimensions": 1536 }
+      },
+      {
+        "key": "judge",
+        "role": "llm",
+        "required": false,
+        "description": "Optional LLM judge for the eval suite."
+      }
+    ]
+  }
+}
+```
+
+Each entry under `requires.providers` is either a **string shorthand** (a bare key, which expands to a required `llm` requirement) or a **`ProviderRequirement` object**:
+
+- **`key`** — the logical name the runtime resolves the provider by (`default`, `embeddings`, `judge`, …). `default` is reserved for the primary LLM. Keys must be unique within the list — `key` is the sole discriminator, so a fast and a strong model are just two `llm` requirements with different keys.
+- **`role`** — the *kind* of model (`llm`, `embedding`, `tts`, `stt`, `image`, `inference`, …). The set is **open**: validators must not reject unknown roles.
+- **`required`** — defaults to `true`. An optional requirement (`false`) degrades a feature rather than blocking startup.
+- **`description`** — human guidance on the provider's purpose and the capabilities it should have. This stays the primary signal for an operator wiring things up.
+- **`capabilities`** — optional, advisory, structured hints for automatic matching: `modalities` (reusing the RFC 0004 media vocabulary), `min_context_tokens`, `tool_use`, `structured_output`, `embedding_dimensions`. The object is **open** — provider-specific keys are allowed and SHOULD be namespaced (e.g. an `x-` prefix) to avoid clashing with fields the spec may define later.
+
+A requirement declares *what the pack needs*, never *which concrete provider satisfies it* — resolution is the host runtime's job. The block is fully backward compatible (optional; validated strictly only when present) and complements `tested_models`: `tested_models` records provenance (what a prompt was tested against), `requires.providers` records the contract (what the pack needs), so a runtime can warn when the resolved provider diverges from what the pack was tested on. See the [Provider Requirements schema reference](./schema-guide#provider-requirements-v151).
+
 ## Deployment Benefits
 
 The pack structure provides significant operational advantages:

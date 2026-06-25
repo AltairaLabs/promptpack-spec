@@ -314,6 +314,22 @@
           - [16.1.6.1.10.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval`](#compositions_additionalProperties_steps_items_modifiers_eval)
             - [16.1.6.1.10.2.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval > eval items](#compositions_additionalProperties_steps_items_modifiers_eval_items)
     - [16.1.7. Property `PromptPack Specification > compositions > additionalProperties > engine`](#compositions_additionalProperties_engine)
+- [17. Property `PromptPack Specification > requires`](#requires)
+  - [17.1. Property `PromptPack Specification > requires > providers`](#requires_providers)
+    - [17.1.1. PromptPack Specification > requires > providers > ProviderRequirement](#requires_providers_items)
+      - [17.1.1.1. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 0`](#requires_providers_items_oneOf_i0)
+      - [17.1.1.2. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1`](#requires_providers_items_oneOf_i1)
+        - [17.1.1.2.1. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > key`](#requires_providers_items_oneOf_i1_key)
+        - [17.1.1.2.2. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > role`](#requires_providers_items_oneOf_i1_role)
+        - [17.1.1.2.3. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > required`](#requires_providers_items_oneOf_i1_required)
+        - [17.1.1.2.4. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > description`](#requires_providers_items_oneOf_i1_description)
+        - [17.1.1.2.5. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities`](#requires_providers_items_oneOf_i1_capabilities)
+          - [17.1.1.2.5.1. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > modalities`](#requires_providers_items_oneOf_i1_capabilities_modalities)
+            - [17.1.1.2.5.1.1. PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > modalities > modalities items](#requires_providers_items_oneOf_i1_capabilities_modalities_items)
+          - [17.1.1.2.5.2. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > min_context_tokens`](#requires_providers_items_oneOf_i1_capabilities_min_context_tokens)
+          - [17.1.1.2.5.3. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > tool_use`](#requires_providers_items_oneOf_i1_capabilities_tool_use)
+          - [17.1.1.2.5.4. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > structured_output`](#requires_providers_items_oneOf_i1_capabilities_structured_output)
+          - [17.1.1.2.5.5. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > embedding_dimensions`](#requires_providers_items_oneOf_i1_capabilities_embedding_dimensions)
 
 **Title:** PromptPack Specification
 
@@ -323,7 +339,7 @@
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010).
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012).
 
 **Examples:**
 
@@ -474,6 +490,7 @@
 | - [agents](#agents )                   | No      | object | No         | In #/$defs/AgentsConfig   | Agent configuration mapping prompts to A2A-compatible agent definitions. Enables multi-agent orchestration via the Agent-to-Agent protocol.                                                                                                                                                                               |
 | - [skills](#skills )                   | No      | array  | No         | -                         | Skill sources for progressive-disclosure knowledge loading. Each entry is either a string (path or package reference), a SkillPathSource object, or an InlineSkill object.                                                                                                                                                |
 | - [compositions](#compositions )       | No      | object | No         | -                         | Map of composition name to composition definition (RFC 0010). Each composition declares a named step graph that a runtime may invoke as a structured-input/structured-output unit. Compositions are reached only through workflow states whose orchestration is 'composition'. Optional; packs without it are unaffected. |
+| - [requires](#requires )               | No      | object | No         | -                         | External resources the pack needs to run (RFC 0012). Optional; when present, validated strictly. Reserved for future requirement categories (e.g. tools, skills).                                                                                                                                                         |
 
 ## <a name="schema"></a>1. Property `PromptPack Specification > $schema`
 
@@ -5525,7 +5542,7 @@ Specific value: `"prompt"`
 | **Type**     | `string` |
 | **Required** | No       |
 
-**Description:** Reference of the form '${path.to.value}'.
+**Description:** Reference of the form '`${path.to.value}`'.
 
 ###### <a name="compositions_additionalProperties_steps_items_oneOf_i0_input_oneOf_i1"></a>16.1.6.1.1.3.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 0 > input > oneOf > item 1`
 
@@ -5563,7 +5580,7 @@ Specific value: `"prompt"`
 | ----------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | + [kind](#compositions_additionalProperties_steps_items_oneOf_i1_kind )                   | No      | const           | No         | -                                                                               | -                                                                                                                                                                                                                                  |
 | + [prompt_task](#compositions_additionalProperties_steps_items_oneOf_i1_prompt_task )     | No      | string          | No         | -                                                                               | -                                                                                                                                                                                                                                  |
-| - [input](#compositions_additionalProperties_steps_items_oneOf_i1_input )                 | No      | object          | No         | Same as [input](#compositions_additionalProperties_steps_items_oneOf_i0_input ) | Input binding for a step (RFC 0010). May be a reference of the form '${path.to.value}' against the composition input ('${input.X}') or a prior step output ('${stepId.output.X}'), or an object combining literals and references. |
+| - [input](#compositions_additionalProperties_steps_items_oneOf_i1_input )                 | No      | object          | No         | Same as [input](#compositions_additionalProperties_steps_items_oneOf_i0_input ) | Input binding for a step (RFC 0010). May be a reference of the form '`${path.to.value}`' against the composition input ('`${input.X}`') or a prior step output ('`${stepId.output.X}`'), or an object combining literals and references. |
 | - [tools](#compositions_additionalProperties_steps_items_oneOf_i1_tools )                 | No      | array of string | No         | -                                                                               | Subset of the pack's tools available to this agent step. Acts as a per-step scoped tool registry.                                                                                                                                  |
 | + [termination](#compositions_additionalProperties_steps_items_oneOf_i1_termination )     | No      | object          | No         | In #/$defs/TerminationPredicate                                                 | REQUIRED. The condition under which the bounded loop exits. Without an explicit termination predicate, an agent step is invalid.                                                                                                   |
 | - [output_schema](#compositions_additionalProperties_steps_items_oneOf_i1_output_schema ) | No      | string          | No         | -                                                                               | -                                                                                                                                                                                                                                  |
@@ -5593,7 +5610,7 @@ Specific value: `"agent"`
 | **Additional properties** | Any type allowed                                                       |
 | **Same definition as**    | [input](#compositions_additionalProperties_steps_items_oneOf_i0_input) |
 
-**Description:** Input binding for a step (RFC 0010). May be a reference of the form '${path.to.value}' against the composition input ('${input.X}') or a prior step output ('${stepId.output.X}'), or an object combining literals and references.
+**Description:** Input binding for a step (RFC 0010). May be a reference of the form '`${path.to.value}`' against the composition input ('`${input.X}`') or a prior step output ('`${stepId.output.X}`'), or an object combining literals and references.
 
 ###### <a name="compositions_additionalProperties_steps_items_oneOf_i1_tools"></a>16.1.6.1.2.4. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 1 > tools`
 
@@ -5799,7 +5816,7 @@ Specific value: `"branch"`
 
 | Property                                                                                     | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                             |
 | -------------------------------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| + [path](#compositions_additionalProperties_steps_items_oneOf_i3_predicate_oneOf_i0_path )   | No      | string           | No         | -          | Reference to a value via dot-notation against the composition's input and step outputs. Example: '${classify.output.intent}'. |
+| + [path](#compositions_additionalProperties_steps_items_oneOf_i3_predicate_oneOf_i0_path )   | No      | string           | No         | -          | Reference to a value via dot-notation against the composition's input and step outputs. Example: '`${classify.output.intent}`'. |
 | + [op](#compositions_additionalProperties_steps_items_oneOf_i3_predicate_oneOf_i0_op )       | No      | enum (of string) | No         | -          | -                                                                                                                             |
 | + [value](#compositions_additionalProperties_steps_items_oneOf_i3_predicate_oneOf_i0_value ) | No      | object           | No         | -          | Literal comparison value (string, number, boolean, or array for in/not_in).                                                   |
 
@@ -5810,7 +5827,7 @@ Specific value: `"branch"`
 | **Type**     | `string` |
 | **Required** | Yes      |
 
-**Description:** Reference to a value via dot-notation against the composition's input and step outputs. Example: '${classify.output.intent}'.
+**Description:** Reference to a value via dot-notation against the composition's input and step outputs. Example: '`${classify.output.intent}`'.
 
 ###### <a name="compositions_additionalProperties_steps_items_oneOf_i3_predicate_oneOf_i0_op"></a>16.1.6.1.4.2.1.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 3 > predicate > oneOf > item 0 > op`
 
@@ -6065,7 +6082,7 @@ Specific value: `"parallel"`
 | Property                                                                               | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                                               |
 | -------------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | + [strategy](#compositions_additionalProperties_steps_items_oneOf_i4_reduce_strategy ) | No      | string | No         | -          | v1 conventional values: 'append' (extend lists), 'replace' (last write wins), 'barrier' (collect all outputs into a named map). Free-form string; additional reducers reserved for future RFCs. |
-| + [into](#compositions_additionalProperties_steps_items_oneOf_i4_reduce_into )         | No      | string | No         | -          | Field name under which the merged result is placed on the parallel step's output. Subsequent steps reference it as ${<parallelStepId>.output.<into>}.                                           |
+| + [into](#compositions_additionalProperties_steps_items_oneOf_i4_reduce_into )         | No      | string | No         | -          | Field name under which the merged result is placed on the parallel step's output. Subsequent steps reference it as `${<parallelStepId>.output.<into>}`.                                           |
 
 ###### <a name="compositions_additionalProperties_steps_items_oneOf_i4_reduce_strategy"></a>16.1.6.1.5.3.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 4 > reduce > strategy`
 
@@ -6083,7 +6100,7 @@ Specific value: `"parallel"`
 | **Type**     | `string` |
 | **Required** | Yes      |
 
-**Description:** Field name under which the merged result is placed on the parallel step's output. Subsequent steps reference it as ${<parallelStepId>.output.<into>}.
+**Description:** Field name under which the merged result is placed on the parallel step's output. Subsequent steps reference it as `${<parallelStepId>.output.<into>}`.
 
 ###### <a name="compositions_additionalProperties_steps_items_id"></a>16.1.6.1.6. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > id`
 
@@ -6223,5 +6240,244 @@ Specific value: `"parallel"`
 | --------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - - additionalProperties | No      | object | No         | -          | -                 |
 
+## <a name="requires"></a>17. Property `PromptPack Specification > requires`
+
+|                           |             |
+| ------------------------- | ----------- |
+| **Type**                  | `object`    |
+| **Required**              | No          |
+| **Additional properties** | Not allowed |
+
+**Description:** External resources the pack needs to run (RFC 0012). Optional; when present, validated strictly. Reserved for future requirement categories (e.g. tools, skills).
+
+| Property                            | Pattern | Type  | Deprecated | Definition | Title/Description                                                                                                                           |
+| ----------------------------------- | ------- | ----- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [providers](#requires_providers ) | No      | array | No         | -          | Logical model-provider requirements. Each entry is a string shorthand (an 'llm' requirement with that key) or a ProviderRequirement object. |
+
+### <a name="requires_providers"></a>17.1. Property `PromptPack Specification > requires > providers`
+
+|              |         |
+| ------------ | ------- |
+| **Type**     | `array` |
+| **Required** | No      |
+
+**Description:** Logical model-provider requirements. Each entry is a string shorthand (an 'llm' requirement with that key) or a ProviderRequirement object.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                  | Description                                                                                                         |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| [ProviderRequirement](#requires_providers_items) | A logical model-provider requirement (RFC 0012). A bare string is shorthand for an 'llm' requirement with that key. |
+
+#### <a name="requires_providers_items"></a>17.1.1. PromptPack Specification > requires > providers > ProviderRequirement
+
+|                           |                             |
+| ------------------------- | --------------------------- |
+| **Type**                  | `combining`                 |
+| **Required**              | No                          |
+| **Additional properties** | Any type allowed            |
+| **Defined in**            | #/$defs/ProviderRequirement |
+
+**Description:** A logical model-provider requirement (RFC 0012). A bare string is shorthand for an 'llm' requirement with that key.
+
+| One of(Option)                               |
+| -------------------------------------------- |
+| [item 0](#requires_providers_items_oneOf_i0) |
+| [item 1](#requires_providers_items_oneOf_i1) |
+
+##### <a name="requires_providers_items_oneOf_i0"></a>17.1.1.1. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 0`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Shorthand: the requirement key. Expands to a required 'llm' requirement with that key (role 'llm', required true).
+
+##### <a name="requires_providers_items_oneOf_i1"></a>17.1.1.2. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1`
+
+|                           |             |
+| ------------------------- | ----------- |
+| **Type**                  | `object`    |
+| **Required**              | No          |
+| **Additional properties** | Not allowed |
+
+| Property                                                           | Pattern | Type    | Deprecated | Definition                      | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------------------------------------------------------------ | ------- | ------- | ---------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [key](#requires_providers_items_oneOf_i1_key )                   | No      | string  | No         | -                               | Logical name the runtime resolves this provider by (e.g. 'default', 'embeddings', 'judge'). 'default' is reserved for the primary LLM.                                                                                                                                                                                                                                                                                                               |
+| + [role](#requires_providers_items_oneOf_i1_role )                 | No      | string  | No         | -                               | The kind of model required. Open set; runtimes MAY extend (validators must not reject unknown roles). Suggested values (PromptKit roles): 'llm', 'embedding', 'tts', 'stt', 'image', 'inference'.                                                                                                                                                                                                                                                    |
+| - [required](#requires_providers_items_oneOf_i1_required )         | No      | boolean | No         | -                               | Whether the pack cannot run without this provider. Optional requirements degrade features rather than blocking startup.                                                                                                                                                                                                                                                                                                                              |
+| - [description](#requires_providers_items_oneOf_i1_description )   | No      | string  | No         | -                               | Human-readable explanation of the provider's purpose and the capabilities it should have.                                                                                                                                                                                                                                                                                                                                                            |
+| - [capabilities](#requires_providers_items_oneOf_i1_capabilities ) | No      | object  | No         | In #/$defs/ProviderCapabilities | Structured, advisory capabilities the satisfying provider should have (RFC 0012). The well-known fields below are validated when present, but the object is OPEN: provider- or role-specific capabilities (a 'role: inference' provider may expose anything) may be added as extra keys with any shape. Custom keys SHOULD be namespaced (e.g. 'x-' prefix) to avoid clashing with fields the spec may define later. All listed fields are optional. |
+
+###### <a name="requires_providers_items_oneOf_i1_key"></a>17.1.1.2.1. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > key`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** Logical name the runtime resolves this provider by (e.g. 'default', 'embeddings', 'judge'). 'default' is reserved for the primary LLM.
+
+| Restrictions                      |                                                                                       |
+| --------------------------------- | ------------------------------------------------------------------------------------- |
+| **Must match regular expression** | ```^[a-zA-Z0-9_-]+$``` [Test](https://regex101.com/?regex=%5E%5Ba-zA-Z0-9_-%5D%2B%24) |
+
+###### <a name="requires_providers_items_oneOf_i1_role"></a>17.1.1.2.2. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > role`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** The kind of model required. Open set; runtimes MAY extend (validators must not reject unknown roles). Suggested values (PromptKit roles): 'llm', 'embedding', 'tts', 'stt', 'image', 'inference'.
+
+**Examples:**
+
+```json
+"llm"
+```
+
+```json
+"embedding"
+```
+
+```json
+"tts"
+```
+
+```json
+"stt"
+```
+
+```json
+"image"
+```
+
+```json
+"inference"
+```
+
+###### <a name="requires_providers_items_oneOf_i1_required"></a>17.1.1.2.3. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > required`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `boolean` |
+| **Required** | No        |
+| **Default**  | `true`    |
+
+**Description:** Whether the pack cannot run without this provider. Optional requirements degrade features rather than blocking startup.
+
+###### <a name="requires_providers_items_oneOf_i1_description"></a>17.1.1.2.4. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > description`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Human-readable explanation of the provider's purpose and the capabilities it should have.
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities"></a>17.1.1.2.5. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities`
+
+|                           |                              |
+| ------------------------- | ---------------------------- |
+| **Type**                  | `object`                     |
+| **Required**              | No                           |
+| **Additional properties** | Any type allowed             |
+| **Defined in**            | #/$defs/ProviderCapabilities |
+
+**Description:** Structured, advisory capabilities the satisfying provider should have (RFC 0012). The well-known fields below are validated when present, but the object is OPEN: provider- or role-specific capabilities (a 'role: inference' provider may expose anything) may be added as extra keys with any shape. Custom keys SHOULD be namespaced (e.g. 'x-' prefix) to avoid clashing with fields the spec may define later. All listed fields are optional.
+
+| Property                                                                                        | Pattern | Type            | Deprecated | Definition | Title/Description                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [modalities](#requires_providers_items_oneOf_i1_capabilities_modalities )                     | No      | array of string | No         | -          | Media types the provider must handle. Reuses the media-type vocabulary (MediaConfig.supported_types, RFC 0004). Common: 'text', 'image', 'audio', 'video', 'document'. |
+| - [min_context_tokens](#requires_providers_items_oneOf_i1_capabilities_min_context_tokens )     | No      | integer         | No         | -          | Minimum context window, in tokens, the provider must support.                                                                                                          |
+| - [tool_use](#requires_providers_items_oneOf_i1_capabilities_tool_use )                         | No      | boolean         | No         | -          | Whether the provider must support tool/function calling.                                                                                                               |
+| - [structured_output](#requires_providers_items_oneOf_i1_capabilities_structured_output )       | No      | boolean         | No         | -          | Whether the provider must support structured/JSON output.                                                                                                              |
+| - [embedding_dimensions](#requires_providers_items_oneOf_i1_capabilities_embedding_dimensions ) | No      | integer         | No         | -          | Required embedding vector dimensionality (for role 'embedding').                                                                                                       |
+| - - additionalProperties                     | No      | object          | No         | -          | -                                                                                                                                                                      |
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities_modalities"></a>17.1.1.2.5.1. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > modalities`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Media types the provider must handle. Reuses the media-type vocabulary (MediaConfig.supported_types, RFC 0004). Common: 'text', 'image', 'audio', 'video', 'document'.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                                      | Description |
+| ------------------------------------------------------------------------------------ | ----------- |
+| [modalities items](#requires_providers_items_oneOf_i1_capabilities_modalities_items) | -           |
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities_modalities_items"></a>17.1.1.2.5.1.1. PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > modalities > modalities items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+| Restrictions                      |                                                                               |
+| --------------------------------- | ----------------------------------------------------------------------------- |
+| **Must match regular expression** | ```^[a-z0-9_]+$``` [Test](https://regex101.com/?regex=%5E%5Ba-z0-9_%5D%2B%24) |
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities_min_context_tokens"></a>17.1.1.2.5.2. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > min_context_tokens`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `integer` |
+| **Required** | No        |
+
+**Description:** Minimum context window, in tokens, the provider must support.
+
+| Restrictions |        |
+| ------------ | ------ |
+| **Minimum**  | &ge; 1 |
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities_tool_use"></a>17.1.1.2.5.3. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > tool_use`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `boolean` |
+| **Required** | No        |
+
+**Description:** Whether the provider must support tool/function calling.
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities_structured_output"></a>17.1.1.2.5.4. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > structured_output`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `boolean` |
+| **Required** | No        |
+
+**Description:** Whether the provider must support structured/JSON output.
+
+###### <a name="requires_providers_items_oneOf_i1_capabilities_embedding_dimensions"></a>17.1.1.2.5.5. Property `PromptPack Specification > requires > providers > providers items > oneOf > item 1 > capabilities > embedding_dimensions`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `integer` |
+| **Required** | No        |
+
+**Description:** Required embedding vector dimensionality (for role 'embedding').
+
+| Restrictions |        |
+| ------------ | ------ |
+| **Minimum**  | &ge; 1 |
+
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-06-15 at 12:21:08 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-06-25 at 13:49:25 +0100
