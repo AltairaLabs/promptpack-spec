@@ -4,6 +4,8 @@ import {useThemeConfig} from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
+import useSpecVersion from '@site/src/hooks/useSpecVersion';
+
 import styles from './styles.module.css';
 
 /**
@@ -26,8 +28,6 @@ type FooterColumn = {
   items: FooterLink[];
 };
 
-const SPEC_VERSION = 'v1.5.1';
-
 function FooterItem({item}: {item: FooterLink}): ReactNode {
   const toUrl = useBaseUrl(item.to);
   return (
@@ -41,6 +41,7 @@ function FooterItem({item}: {item: FooterLink}): ReactNode {
 
 export default function Footer(): ReactNode {
   const {footer} = useThemeConfig();
+  const specVersion = useSpecVersion();
   const {siteConfig} = useDocusaurusContext();
   const logoUrl = useBaseUrl('img/logo.svg');
   const logoDarkUrl = useBaseUrl('img/logo-dark.svg');
@@ -95,7 +96,7 @@ export default function Footer(): ReactNode {
           PromptPack is an open specification by AltairaLabs · Spec CC-BY-4.0 ·
           code &amp; reference implementations MIT
         </span>
-        <span className={styles.legalVersion}>{SPEC_VERSION} · stable</span>
+        <span className={styles.legalVersion}>{specVersion} · stable</span>
       </div>
     </footer>
   );

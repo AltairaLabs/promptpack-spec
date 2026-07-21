@@ -1,8 +1,23 @@
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+/**
+ * The spec version, read from the schema — the single source of truth.
+ *
+ * Surfaced to components via customFields so the standards strip, homepage and
+ * footer cannot drift from the schema on a version bump. version-check only
+ * guards the schema against README, so anything hardcoded in the site would go
+ * stale silently; this removes that class of drift rather than adding another
+ * checklist item.
+ */
+const SPEC_VERSION: string = JSON.parse(
+  readFileSync(path.join(__dirname, '../schema/promptpack.schema.json'), 'utf8'),
+).version;
 
 const config: Config = {
   title: 'PromptPack',
@@ -37,6 +52,8 @@ const config: Config = {
   // by GitHub Discussions. The footer no-ops until repoId + categoryId are set.
   // One-time setup: see promptpack-docs/src/theme/DocItem/Footer/SETUP-giscus.md
   customFields: {
+    // Read from schema/promptpack.schema.json at build time — never hardcode.
+    specVersion: SPEC_VERSION,
     giscus: {
       repo: 'altairalabs/promptpack-spec',
       repoId: 'R_kgDOQMvRhA',

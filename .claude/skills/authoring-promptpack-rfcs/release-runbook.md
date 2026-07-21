@@ -49,7 +49,16 @@ cp promptpack-docs/docs/spec/*.md promptpack-docs/docs/spec/{OLD_VTAG}/
 
 For **each** archived file:
 1. Frontmatter — add `title: "... ({OLD_VTAG})"` (keep `sidebar_position`).
-2. Version badge — color `#10b981` (green/current) → `#6b7280` (gray/stable); text `📘 {OLD_VTAG} (Current)` → `📦 {OLD_VTAG} (Stable)`.
+2. Version badge — swap the class, not a colour:
+   ```mdx
+   <span className="ppVersionBadge ppVersionBadge--current">📘 {OLD_VTAG} (Current)</span>
+   ↓
+   <span className="ppVersionBadge ppVersionBadge--archived">📦 {OLD_VTAG} (Stable)</span>
+   ```
+   These badges used to be `<div style={{...}}>` blocks with hardcoded
+   `#10b981` / `#6b7280` fills, which could not follow the light/dark theme.
+   The colours now live in `src/css/custom.css`. Do **not** reintroduce an
+   inline-styled badge.
 3. Add an archived warning right after the badge:
    ```mdx
    :::warning Archived Version
@@ -62,6 +71,14 @@ For **each** archived file:
 > regenerate and copy the new version into both `docs/spec/` and the archive dir.
 
 ### 4. Update the current spec docs to the new version
+
+> The site chrome needs **no** edit here. The standards strip, homepage and
+> footer read the version from `schema/promptpack.schema.json` at build time
+> (`docusaurus.config.ts` → `customFields.specVersion` → `useSpecVersion()`).
+> Never hardcode the current version in a component — `version-check` only
+> compares the schema against the README, so it would go stale silently.
+> Capability-card pills like `'v1.4'` are the version a feature *landed in* and
+> stay hardcoded on purpose.
 
 In `promptpack-docs/docs/spec/`: `overview.md` (badge → `📘 {NEW_VTAG} (Current)`,
 "What's New" info box, feature in the solution snippet), `structure.md`,

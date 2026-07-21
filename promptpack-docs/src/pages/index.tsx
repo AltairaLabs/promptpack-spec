@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+
+import useSpecVersion from '@site/src/hooks/useSpecVersion';
 import Layout from '@theme/Layout';
 
 import styles from './index.module.css';
@@ -15,8 +17,6 @@ import styles from './index.module.css';
  * strip and footer. Those are site chrome and live in the Navbar/Footer
  * swizzles; everything between them lives here.
  */
-
-const SPEC_VERSION = 'v1.5.1';
 
 const MANIFEST_ROWS: [string, string, boolean][] = [
   ['id · name · version', 'identity & semver', false],
@@ -182,6 +182,8 @@ const ANNOTATIONS: [string, string, string][] = [
 ];
 
 function Anatomy() {
+  const specVersion = useSpecVersion();
+
   return (
     <section className={styles.section}>
       <div className={styles.container}>
@@ -207,7 +209,7 @@ function Anatomy() {
                 customer-support.promptpack.json
               </span>
               <span className={styles.codeValid}>
-                validated · schema {SPEC_VERSION}
+                validated · schema {specVersion}
               </span>
             </div>
             {/* Hand-coloured rather than Prism: the design calls for a muted
@@ -357,6 +359,8 @@ const CAPABILITIES: [string, string, string][] = [
 ];
 
 function Capabilities() {
+  const specVersion = useSpecVersion();
+
   return (
     <section className={clsx(styles.section, styles.band)}>
       <div className={styles.container}>
@@ -372,7 +376,7 @@ function Capabilities() {
           <div className={styles.capsVersions}>
             spec versions
             <br />
-            <span className={styles.capsVersionsValue}>v1.0 → {SPEC_VERSION}</span>
+            <span className={styles.capsVersionsValue}>v1.0 → {specVersion}</span>
           </div>
         </div>
         <div className={styles.capsGrid}>

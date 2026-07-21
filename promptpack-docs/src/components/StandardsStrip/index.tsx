@@ -1,5 +1,7 @@
 import type {ReactNode} from 'react';
 
+import useSpecVersion from '@site/src/hooks/useSpecVersion';
+
 import styles from './styles.module.css';
 
 /**
@@ -13,9 +15,9 @@ import styles from './styles.module.css';
  * straight from family bar to masthead.
  */
 
-const SPEC_VERSION = 'v1.5.1';
-
 export default function StandardsStrip(): ReactNode {
+  const specVersion = useSpecVersion();
+
   return (
     <div className={styles.strip}>
       <div className={styles.inner}>
@@ -25,7 +27,7 @@ export default function StandardsStrip(): ReactNode {
         <span className={styles.sep}>·</span>
         <span>code mit</span>
         <span className={styles.sep}>·</span>
-        <span>current draft {SPEC_VERSION}</span>
+        <span>current draft {specVersion}</span>
         <span className={styles.sep}>·</span>
         <span>status: stable</span>
         <span className={styles.from}>an open standard from altairalabs</span>
