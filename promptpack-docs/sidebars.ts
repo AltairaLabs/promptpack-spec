@@ -17,6 +17,7 @@ const sidebars: SidebarsConfig = {
   tutorialSidebar: [
     'getting-started',
     'why-promptpack',
+    'regulated-environments',
     {
       type: 'category',
       label: 'Specification',

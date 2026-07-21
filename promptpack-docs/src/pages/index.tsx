@@ -158,7 +158,11 @@ function ProblemSolution() {
 }
 
 const ANNOTATIONS: [string, string, string][] = [
-  ['01', 'id · name · version', 'Identity and semantic version. The only required fields.'],
+  [
+    '01',
+    'id · name · version',
+    'Identity and semantic version — required, alongside template_engine and prompts.',
+  ],
   ['02', 'tools', 'External functions defined once, referenced by any prompt.'],
   [
     '03',
@@ -188,10 +192,10 @@ function Anatomy() {
           </div>
           <h2 className={styles.sectionTitle}>One file describes the whole agent.</h2>
           <p className={styles.sectionLead}>
-            A promptpack is plain JSON validated against a published schema.
-            Every top-level section is optional except identity — start with a
-            single prompt, grow into full multi-agent orchestration without
-            changing format.
+            A promptpack is plain JSON validated against a published schema. A
+            valid pack needs only identity, a template engine and one prompt —
+            everything beyond that is optional, so you can grow into full
+            multi-agent orchestration without changing format.
           </p>
         </div>
 
