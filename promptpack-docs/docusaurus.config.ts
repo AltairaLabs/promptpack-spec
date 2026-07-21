@@ -21,7 +21,7 @@ const SPEC_VERSION: string = JSON.parse(
 
 const config: Config = {
   title: 'PromptPack',
-  tagline: 'An open specification for packaging AI agent behavior—portable, testable, and framework-agnostic.',
+  tagline: 'One open spec to define, package, and ship an agent.',
   favicon: 'img/favicon.svg',
   markdown: {
     mermaid: true,
@@ -94,16 +94,16 @@ const config: Config = {
     // Social card for sharing
     image: 'img/promptpack-social-card.svg',
     metadata: [
-      {name: 'description', content: 'Stop building AI agents from scratch. PromptPack lets you package, share, and deploy production-ready agent behavior with everything included: specialized prompts, tools, workflows, agent loops, and safety guardrails.'},
+      {name: 'description', content: 'PromptPack is the declarative format for a production agent — the models it requires, its prompts, tools, workflows, guardrails, and the quality checks it must pass — in a single portable, versioned artifact.'},
       {name: 'keywords', content: 'promptpack, prompts, ai agents, agent loops, llm, specification, json, workflows, testing, packaging, deployment'},
-      {property: 'og:title', content: 'PromptPack - Deploy Production-Ready AI Agents'},
-      {property: 'og:description', content: 'Stop building AI agents from scratch. Package, share, and deploy production-ready agent behavior with everything included.'},
+      {property: 'og:title', content: 'PromptPack — One open spec to define, package, and ship an agent'},
+      {property: 'og:description', content: 'The open, vendor-neutral format for a production agent — prompts, tools, workflows, guardrails and quality checks in one portable, versioned artifact.'},
       {property: 'og:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
       {property: 'og:url', content: 'https://promptpack.org'},
       {property: 'og:type', content: 'website'},
       {name: 'twitter:card', content: 'summary_large_image'},
-      {name: 'twitter:title', content: 'PromptPack - Deploy Production-Ready AI Agents'},
-      {name: 'twitter:description', content: 'Stop building AI agents from scratch. Package, share, and deploy production-ready agent behavior with everything included.'},
+      {name: 'twitter:title', content: 'PromptPack — One open spec to define, package, and ship an agent'},
+      {name: 'twitter:description', content: 'The open, vendor-neutral format for a production agent — prompts, tools, workflows, guardrails and quality checks in one portable, versioned artifact.'},
       {name: 'twitter:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
     ],
     colorMode: {

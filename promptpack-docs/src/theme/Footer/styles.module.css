@@ -47,6 +47,16 @@
   max-width: 260px;
 }
 
+.tagline {
+  color: var(--star-500);
+  font-size: var(--text-size-body-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-snug);
+  line-height: var(--leading-snug);
+  margin: var(--space-5) 0 0;
+  max-width: 260px;
+}
+
 /* The mark is outline-only, so swap the file with the ramp. */
 .markDark {
   display: none;

@@ -77,6 +77,13 @@ export default function Footer(): ReactNode {
             An open specification for packaging, testing, and running AI agent
             behavior.
           </p>
+          {/* The AltairaLabs masterbrand tagline. Per
+              planning/strategy/site-heroes.md it rides on every property, but
+              on promptpack.org the footer only — the .org keeps a neutral,
+              open-standard register above the fold. */}
+          <p className={styles.tagline}>
+            Own the agent layer. The model is the easy part.
+          </p>
         </div>
 
         {columns.map((column, i) => (

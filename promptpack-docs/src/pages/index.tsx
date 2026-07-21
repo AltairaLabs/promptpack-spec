@@ -35,14 +35,22 @@ function Hero() {
       <div className={clsx(styles.container, styles.hero)}>
         <div className={styles.heroAtmosphere} aria-hidden="true" />
         <div>
-          <div className={styles.eyebrow}>promptpack · open specification</div>
+          {/* The four-verb journey spine, per planning/strategy/site-heroes.md:
+              every property shows the spine and highlights its own stage. */}
+          <div className={styles.eyebrow}>
+            where every agent starts:&nbsp;
+            <span className={styles.eyebrowNum}>define</span>
+            &nbsp;→ prove → run → operate
+          </div>
           <h1 className={styles.heroTitle}>
-            An open specification for{' '}
-            <span className={styles.heroAccent}>prompt&nbsp;engineering.</span>
+            One open spec to define, package, and{' '}
+            <span className={styles.heroAccent}>ship&nbsp;an&nbsp;agent.</span>
           </h1>
           <p className={styles.heroSub}>
-            Define, test, and manage AI agent behavior in a framework-agnostic
-            format — portable across any provider or runtime.
+            PromptPack is the declarative format for a production agent — the
+            models it requires, its prompts, tools, workflows, guardrails, and
+            the quality checks it must pass — in a single portable, versioned
+            artifact. Author once, run it on any PromptPack-compatible runtime.
           </p>
           <div className={styles.heroMeta}>
             <span>one file</span>
@@ -58,7 +66,7 @@ function Hero() {
               Read the spec
             </Link>
             <Link className={styles.btnGhost} to="/docs/spec/examples">
-              View examples
+              See an example
             </Link>
             <Link
               className={styles.btnBare}
