@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  Hero video poster — Atlas scheme, 1124x720 (the video's native size).
+
+  This is the real opening frame of the existing video, re-matted: the browser
+  window was cropped out of frame 0 (measured bounds 1012x644 at 56,37, taken
+  with a 2px inset so the rounded-corner antialiasing against the old purple
+  matte came away with it) and re-composited onto the Atlas ground.
+
+  Deliberately NOT a designed illustration. The video autoplays, so the poster
+  is only on screen while it loads — anything that differs from the first frame
+  flashes at playback. A re-matted true frame flows straight into the video.
+
+  Ground is #E9EEF6 (--ink-void, Atlas light ramp) to match both the video
+  frame in the page and the matte the video is being re-cut to.
+
+  Render:
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+      --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
+      --window-size=1124,720 --screenshot=poster.png poster.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 720px; overflow: hidden; width: 1124px; }
+
+  body {
+    align-items: center;
+    background: #E9EEF6;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Same starlight atmosphere as the site hero and the end card. */
+  .atmo {
+    background:
+      radial-gradient(760px 380px at 84% -10%, rgba(59,130,246,0.16), transparent 60%),
+      radial-gradient(560px 320px at 6% 104%, rgba(59,130,246,0.08), transparent 58%);
+    inset: 0;
+    position: absolute;
+  }
+
+  /* Radius clips the last of the old matte still caught in the corner arcs. */
+  .window {
+    border: 1px solid rgba(16, 27, 46, 0.16);
+    border-radius: 11px;
+    box-shadow:
+      0 1px 2px rgba(16, 27, 46, 0.05),
+      0 18px 44px -22px rgba(16, 27, 46, 0.32);
+    display: block;
+    height: 640px;
+    position: relative;
+    width: 1008px;
+  }
+</style>
+</head>
+<body>
+  <div class="atmo"></div>
+  <img class="window" src="window.png" alt="">
+</body>
+</html>
