@@ -12,7 +12,7 @@ type Props = WrapperProps<typeof ContentType>;
 /**
  * Wrapper swizzle: the docs shell's sidebar header — a "Specification" label
  * and the current spec version — sits above the nav tree, per the docs
- * prototype in design_handoff_promptpack_org.
+ * prototype (Atlas design handoff, bundle since removed).
  *
  * The version is read from the schema at build time (useSpecVersion), so this
  * cannot drift on a version bump.

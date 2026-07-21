@@ -10,8 +10,7 @@ import Layout from '@theme/Layout';
 import styles from './index.module.css';
 
 /**
- * Homepage, rebuilt from the Atlas design handoff
- * (design_handoff_promptpack_org/"PromptPack.org Home.dc.html").
+ * Homepage, rebuilt from the Atlas design handoff (bundle since removed).
  *
  * The prototype carried its own masthead, AltairaLabs family bar, standards
  * strip and footer. Those are site chrome and live in the Navbar/Footer
