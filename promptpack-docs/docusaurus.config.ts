@@ -227,6 +227,10 @@ const config: Config = {
       copyright: `PromptPack is an open specification by AltairaLabs. The specification is licensed CC-BY-4.0; code and reference implementations are MIT.`,
     },
     prism: {
+      // 'diff' is not in Prism's default bundle, so ```diff fences rendered as
+      // plain text with no inserted/deleted tokens for CSS to colour. The docs
+      // use diff blocks on the file-format page.
+      additionalLanguages: ['diff'],
       theme: prismThemes.github,
       // Night Owl's navy ground sits with the Atlas ink ramp; Dracula's
       // purple fought it.
