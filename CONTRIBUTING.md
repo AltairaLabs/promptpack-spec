@@ -118,7 +118,7 @@ npm start
 - **GitHub Issues**: Bug reports and feature requests
 - **GitHub Discussions**: General discussion and questions
 - **Pull Requests**: Code and documentation changes
-- **Email**: [community@altairalabs.com](mailto:community@altairalabs.com) for sensitive matters
+- **Email**: [community@altairalabs.ai](mailto:community@altairalabs.ai) for sensitive matters
 
 ## 🔒 Security Policy
 

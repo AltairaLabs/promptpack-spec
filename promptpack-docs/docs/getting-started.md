@@ -525,4 +525,4 @@ You've built a PromptPack that uses every major feature. Here's where to go from
 
 - **Questions**: [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
 - **Issues**: [GitHub Issues](https://github.com/altairalabs/promptpack-spec/issues)
-- **Email**: [community@altairalabs.com](mailto:community@altairalabs.com)
+- **Email**: [community@altairalabs.ai](mailto:community@altairalabs.ai)

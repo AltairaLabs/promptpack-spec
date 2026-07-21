@@ -18,7 +18,7 @@ We take the security of PromptPack seriously. If you discover a security vulnera
 **Please DO NOT create a public GitHub issue for security vulnerabilities.**
 
 Instead, please report security issues by emailing:
-**[security@altairalabs.com](mailto:security@altairalabs.com)**
+**[security@altairalabs.ai](mailto:security@altairalabs.ai)**
 
 ### 📋 What to Include
 

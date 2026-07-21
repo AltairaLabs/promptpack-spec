@@ -202,7 +202,7 @@ const config: Config = {
             },
             {
               label: 'AltairaLabs',
-              href: 'https://altairalabs.com',
+              href: 'https://altairalabs.ai',
             },
           ],
         },

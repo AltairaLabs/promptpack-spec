@@ -24,7 +24,7 @@ AltairaLabs is the original creator of PromptPack and uses it extensively for:
 - Testing agent behavior across providers
 - Community examples and documentation
 
-[Learn more →](https://altairalabs.com)
+[Learn more →](https://altairalabs.ai)
 
 ## Implementation Showcase
 
