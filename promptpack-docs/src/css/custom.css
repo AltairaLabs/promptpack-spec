@@ -183,8 +183,44 @@ h4 {
 }
 
 .navbar__logo {
-  height: 32px;
-  margin-right: var(--space-3);
+  height: 30px;
+  margin-right: 11px;
+}
+
+/* Masthead extras from the handoff: a .org pill against the wordmark, and a
+   starlight CTA in the right-hand cluster. Both ride as navbar items because
+   the theme's brand block cannot carry markup. */
+
+.navbarOrgPill {
+  border: var(--border-hairline) solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  color: var(--star-900);
+  font-family: var(--font-mono);
+  font-size: var(--text-size-mono-label);
+  margin-left: -12px;
+  padding: 2px var(--space-2);
+}
+
+.navbar__item.navbarCta,
+.navbar__link.navbarCta {
+  background: var(--starlight-tint);
+  border: var(--border-hairline) solid var(--pp-accent-strong);
+  border-radius: var(--radius-md);
+  color: var(--pp-accent);
+  font-size: var(--text-size-mono-sm);
+  font-weight: var(--fw-semibold);
+  padding: 9px 15px;
+  transition: background var(--dur-base) var(--ease-standard);
+}
+
+.navbar__link.navbarCta:hover {
+  background: var(--starlight-border);
+  color: var(--pp-accent);
+}
+
+/* The pill is decoration, not navigation — hide it in the mobile drawer. */
+.navbar-sidebar .navbarOrgPill {
+  display: none;
 }
 
 /* ---- Code ---------------------------------------------------- */

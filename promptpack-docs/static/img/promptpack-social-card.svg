@@ -1,84 +1,47 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- PromptPack social card, Atlas register: night-sky ink, starlight lead,
+       no gold. Copy tracks the current spec — the previous card still said
+       "multi-prompt conversational systems" and "v1 Draft". -->
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#E0E7FF;stop-opacity:1" />
-    </linearGradient>
+    <radialGradient id="atmo" cx="84%" cy="-14%" r="70%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#93C5FD" stroke-width="0.5" opacity="0.06"/>
+    </pattern>
   </defs>
-  
-  <!-- Background -->
-  <rect width="1200" height="630" fill="url(#bgGrad)"/>
-  
-  <!-- Grid pattern overlay -->
-  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/>
-  </pattern>
+
+  <rect width="1200" height="630" fill="#070C16"/>
   <rect width="1200" height="630" fill="url(#grid)"/>
-  
-  <!-- Logo -->
-  <g transform="translate(100, 200)">
-    <rect width="80" height="80" rx="20" fill="url(#logoGrad)"/>
-    <circle cx="40" cy="30" r="8" fill="#3B82F6"/>
-    <circle cx="25" cy="50" r="6" fill="#3B82F6" opacity="0.7"/>
-    <circle cx="55" cy="50" r="6" fill="#3B82F6" opacity="0.7"/>
-    <path d="M 25 50 Q 40 35 55 50" stroke="#3B82F6" stroke-width="2" fill="none" opacity="0.5"/>
+  <rect width="1200" height="630" fill="url(#atmo)"/>
+
+  <!-- standards strip -->
+  <rect x="0" y="0" width="1200" height="44" fill="#0A1120"/>
+  <line x1="0" y1="44" x2="1200" y2="44" stroke="#93C5FD" stroke-opacity="0.10"/>
+  <circle cx="104" cy="22" r="4" fill="#93C5FD"/>
+  <text x="118" y="27" font-family="'Spline Sans Mono', ui-monospace, Menlo, monospace" font-size="15" letter-spacing="1.6" fill="#93C5FD">OPEN SPECIFICATION</text>
+  <text x="360" y="27" font-family="'Spline Sans Mono', ui-monospace, Menlo, monospace" font-size="15" letter-spacing="1.6" fill="#5E708C">SPEC CC-BY-4.0 · CODE MIT · STATUS: STABLE</text>
+
+  <!-- mark -->
+  <g transform="translate(100, 168) scale(1.4)">
+    <rect x="4" y="4" width="56" height="56" rx="15" fill="none" stroke="#93C5FD" stroke-width="2"/>
+    <polygon points="32,12 36.5,27 51,32 36.5,37 32,52 27.5,37 13,32 27.5,27" fill="none" stroke="#C7D5EA" stroke-width="2" stroke-linejoin="round"/>
   </g>
-  
-  <!-- Title -->
-  <text x="220" y="250" font-family="Inter, system-ui, sans-serif" font-size="72" font-weight="bold" fill="white">
-    PromptPack
-  </text>
-  
-  <!-- Tagline -->
-  <text x="220" y="310" font-family="Inter, system-ui, sans-serif" font-size="28" fill="white" opacity="0.9">
-    The open specification for packaging, testing, and running
-  </text>
-  <text x="220" y="350" font-family="Inter, system-ui, sans-serif" font-size="28" fill="white" opacity="0.9">
-    multi-prompt conversational systems.
-  </text>
-  
-  <!-- Version badge -->
-  <g transform="translate(220, 380)">
-    <rect width="120" height="36" rx="18" fill="white" opacity="0.2"/>
-    <text x="60" y="25" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="600" fill="white" text-anchor="middle">
-      v1 Draft
-    </text>
+
+  <text x="100" y="330" font-family="'Space Grotesk', system-ui, sans-serif" font-size="76" font-weight="600" letter-spacing="-2.2" fill="#F4F8FF">PromptPack</text>
+
+  <text x="100" y="392" font-family="'Space Grotesk', system-ui, sans-serif" font-size="27" fill="#C7D5EA">An open specification for packaging, testing, and</text>
+  <text x="100" y="430" font-family="'Space Grotesk', system-ui, sans-serif" font-size="27" fill="#C7D5EA">running AI agent behavior.</text>
+
+  <!-- meta row -->
+  <text x="100" y="492" font-family="'Spline Sans Mono', ui-monospace, Menlo, monospace" font-size="19" fill="#73849F">one file · every provider · versioned · open</text>
+
+  <!-- version pill -->
+  <g transform="translate(100, 520)">
+    <rect width="150" height="38" rx="19" fill="#3B82F6" fill-opacity="0.12" stroke="#3B82F6" stroke-opacity="0.30"/>
+    <text x="75" y="25" font-family="'Spline Sans Mono', ui-monospace, Menlo, monospace" font-size="17" fill="#93C5FD" text-anchor="middle">v1.5.1 stable</text>
   </g>
-  
-  <!-- Feature icons -->
-  <g transform="translate(800, 180)">
-    <!-- Interoperability -->
-    <circle cx="50" cy="50" r="25" fill="white" opacity="0.1"/>
-    <circle cx="40" cy="40" r="6" fill="white"/>
-    <circle cx="60" cy="40" r="6" fill="white"/>
-    <circle cx="50" cy="60" r="6" fill="white"/>
-    <line x1="44" y1="44" x2="56" y2="44" stroke="white" stroke-width="2"/>
-    <line x1="46" y1="50" x2="54" y2="56" stroke="white" stroke-width="2"/>
-    
-    <!-- Reusable -->
-    <g transform="translate(120, 0)">
-      <circle cx="50" cy="50" r="25" fill="white" opacity="0.1"/>
-      <rect x="35" y="40" width="30" height="20" rx="3" fill="white" opacity="0.8"/>
-      <rect x="33" y="38" width="30" height="20" rx="3" fill="white" opacity="0.6"/>
-      <rect x="31" y="36" width="30" height="20" rx="3" fill="white" opacity="0.4"/>
-    </g>
-    
-    <!-- Testable -->
-    <g transform="translate(240, 0)">
-      <circle cx="50" cy="50" r="25" fill="white" opacity="0.1"/>
-      <circle cx="40" cy="40" r="8" fill="#10B981"/>
-      <path d="M 36 40 L 39 43 L 44 37" stroke="white" stroke-width="2" fill="none"/>
-      <circle cx="60" cy="40" r="8" fill="#10B981"/>
-      <path d="M 56 40 L 59 43 L 64 37" stroke="white" stroke-width="2" fill="none"/>
-    </g>
-  </g>
-  
-  <!-- URL -->
-  <text x="220" y="500" font-family="Inter, system-ui, sans-serif" font-size="24" fill="white" opacity="0.8">
-    promptpack.org
-  </text>
+
+  <text x="1100" y="545" font-family="'Spline Sans Mono', ui-monospace, Menlo, monospace" font-size="21" fill="#5E708C" text-anchor="end">promptpack.org</text>
 </svg>

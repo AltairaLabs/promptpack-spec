@@ -98,10 +98,17 @@ const config: Config = {
     navbar: {
       title: 'PromptPack',
       logo: {
-        alt: 'PromptPack Logo',
+        alt: 'PromptPack',
         src: 'img/logo.svg',
+        // The Atlas mark is outline-only, so its strokes have to change with
+        // the ramp — one file cannot serve both grounds.
+        srcDark: 'img/logo-dark.svg',
       },
       items: [
+        // The .org pill sits immediately after the wordmark, per the handoff
+        // masthead. Navbar titles cannot carry markup, so it rides as the
+        // first left-hand item.
+        {type: 'html', position: 'left', value: '<span class="navbarOrgPill">.org</span>'},
         {to: '/docs/spec/overview', label: 'Spec', position: 'left'},
         {to: '/docs/processes/rfc-process', label: 'Processes', position: 'left'},
         {to: '/docs/rfcs', label: 'RFCs', position: 'left'},
@@ -110,6 +117,12 @@ const config: Config = {
           href: 'https://github.com/altairalabs/promptpack-spec',
           label: 'GitHub',
           position: 'right',
+        },
+        {
+          to: '/docs/spec/overview',
+          label: 'Read the spec',
+          position: 'right',
+          className: 'navbarCta',
         },
       ],
     },

@@ -36,10 +36,6 @@
   background: var(--ink-tile);
 }
 
-.strip {
-  background: var(--ink-void);
-}
-
 /* Eyebrow: mono, uppercase, wide-tracked, with a 22px accent rule. */
 
 .eyebrow {
@@ -85,39 +81,6 @@
   font-size: 17px;
   line-height: var(--leading-body);
   margin: 0;
-}
-
-/* Standards strip ---------------------------------------------- */
-
-.standardsStrip {
-  background: var(--ink-void);
-  border-bottom: var(--border-hairline) solid var(--hairline);
-}
-
-.standardsStrip .container {
-  align-items: center;
-  color: var(--star-900);
-  display: flex;
-  flex-wrap: wrap;
-  font-family: var(--font-mono);
-  font-size: var(--text-size-mono-label);
-  gap: var(--space-7);
-  letter-spacing: var(--tracking-label);
-  padding-block: var(--space-2);
-  text-transform: uppercase;
-}
-
-.standardsOpen {
-  color: var(--pp-accent);
-}
-
-.standardsSep {
-  opacity: 0.4;
-}
-
-.standardsFrom {
-  margin-left: auto;
-  opacity: 0.7;
 }
 
 /* Hero ---------------------------------------------------------- */

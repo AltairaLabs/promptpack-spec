@@ -10,31 +10,12 @@ import styles from './index.module.css';
  * Homepage, rebuilt from the Atlas design handoff
  * (design_handoff_promptpack_org/"PromptPack.org Home.dc.html").
  *
- * The prototype carried its own masthead, AltairaLabs family bar and footer.
- * Those are site chrome and arrive via Navbar/Footer swizzles; everything
- * between them lives here.
+ * The prototype carried its own masthead, AltairaLabs family bar, standards
+ * strip and footer. Those are site chrome and live in the Navbar/Footer
+ * swizzles; everything between them lives here.
  */
 
 const SPEC_VERSION = 'v1.5.1';
-
-function StandardsStrip() {
-  return (
-    <div className={styles.standardsStrip}>
-      <div className={styles.container}>
-        <span className={styles.standardsOpen}>● open specification</span>
-        <span className={styles.standardsSep}>·</span>
-        <span>spec cc-by-4.0</span>
-        <span className={styles.standardsSep}>·</span>
-        <span>code mit</span>
-        <span className={styles.standardsSep}>·</span>
-        <span>current draft {SPEC_VERSION}</span>
-        <span className={styles.standardsSep}>·</span>
-        <span>status: stable</span>
-        <span className={styles.standardsFrom}>an open standard from altairalabs</span>
-      </div>
-    </div>
-  );
-}
 
 const MANIFEST_ROWS: [string, string, boolean][] = [
   ['id · name · version', 'identity & semver', false],
@@ -493,7 +474,6 @@ export default function Home(): ReactNode {
       title={`${siteConfig.title} - Open Specification for AI Agents`}
       description="PromptPack is the open specification for packaging, testing, and running AI agent behavior — from multi-prompt routers to autonomous agent loops. Framework-agnostic, portable, and production-ready.">
       <div className={styles.page}>
-        <StandardsStrip />
         <main>
           <Hero />
           <HeroVideoSection />
