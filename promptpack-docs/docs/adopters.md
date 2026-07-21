@@ -1,105 +1,79 @@
 ---
-sidebar_position: 3
+sidebar_position: 9
 ---
 
 # Adopters
 
-Organizations and projects using PromptPack to build AI agent behavior.
+Who is building on PromptPack, and how to get listed.
 
-## Early Adopters
-
-:::info
-PromptPack v1.5.1 is available. If you're using PromptPack in your organization, [let us know](https://github.com/altairalabs/promptpack-spec/discussions) to be listed here.
+:::info The honest position
+PromptPack is a young specification. Today there is **one adopter — AltairaLabs,
+who wrote it** — and one reference implementation. This page lists what is
+actually true rather than what would look better, and grows as real adopters
+appear.
 :::
 
-### AltairaLabs
+## AltairaLabs
 
-**Industry:** AI Development Tools
-**Use Case:** Authoring and operating the PromptKit reference toolkit
-**Scale:** Production use across testing, CI/CD, and runtime workloads
+**Industry:** AI development tools
+**Use case:** authoring and operating the PromptKit reference toolkit
+**Scale:** production use across testing, CI/CD and runtime workloads
 
-AltairaLabs is the original creator of PromptPack and uses it extensively for:
+AltairaLabs created PromptPack and uses it for:
+
 - Operating the PromptKit reference toolkit (runtime, `promptarena`, `packc`)
 - Internal agent engineering workflows
 - Testing agent behavior across providers
-- Community examples and documentation
+- The examples and documentation on this site
 
-[Learn more →](https://altairalabs.ai)
+[altairalabs.ai →](https://altairalabs.ai)
 
-## Implementation Showcase
+## Reference implementation
 
-### PromptKit Toolkit
+### PromptKit
 
-The reference implementation of PromptPack — a Go runtime plus npm-distributed CLIs for testing, validating, and compiling packs.
+A Go runtime plus npm-distributed CLIs for testing, validating and compiling
+packs.
 
-**Features:**
-- Full PromptPack v1.5.1 specification support (agent loops, workflows, compositions, multi-agent, skills, evals)
-- Multi-provider integrations (Claude, OpenAI, Gemini, Azure, local models)
+- Full PromptPack v1.5.1 support — agent loops, workflows, compositions,
+  multi-agent, skills, evals
+- Provider integrations: Claude, OpenAI, Gemini, Azure, local models
 - `promptarena` testing CLI and `packc` compiler CLI
-- GitHub Actions for CI/CD integration
+- GitHub Actions for CI/CD
 
 [View on GitHub →](https://github.com/AltairaLabs/PromptKit)
 
-### Community Examples
+### LangChain.js integration
 
-Explore real-world PromptPack implementations:
+[`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs)
+loads packs directly into LangChain.js.
 
-- **Customer Support Bot**: Multi-turn conversational flows
-- **Code Review Assistant**: Tool-integrated workflows
-- **Content Generation Pipeline**: Reusable prompt components
-- **Educational Tutor**: Persona-driven interactions
+## Worked examples
 
-[Browse Examples →](/docs/spec/examples)
+The [examples in the specification](/docs/spec/examples) are written to
+demonstrate the format — a support router, a code-review loop, a content
+pipeline, a tutor. They are illustrative, not case studies of deployments by
+third parties.
 
-## Getting Listed
+## Getting listed
 
-Want to be featured as a PromptPack adopter? We'd love to hear from you!
+If you are running PromptPack somewhere real, we would like to hear about it —
+particularly what the format got wrong, which is more useful to a young spec
+than an endorsement.
 
-### Criteria
+**What qualifies:** production or substantial development use of the
+specification, and willingness to share enough implementation detail that the
+entry means something to a reader.
 
-- Using PromptPack v1.5.1 specification
-- Production or significant development usage  
-- Willing to share basic implementation details
-- Open to community engagement
+**How:** open a [GitHub Discussion](https://github.com/altairalabs/promptpack-spec/discussions)
+with your organization, use case and scale. We will follow up to check details
+before listing you.
 
-### How to Apply
+Entries are named and attributable. This page will not carry anonymous quotes
+or aggregate counts.
 
-1. **GitHub Discussion**: Share your story in our [Community Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
-2. **Include Details**: Organization, use case, scale, and benefits
-3. **Provide Contact**: For follow-up questions and verification
-4. **Review Process**: We'll review and add qualifying adopters
+## Next
 
-### Benefits
-
-- **Visibility**: Showcase your innovation to the PromptPack community
-- **Credibility**: Demonstrate commitment to open standards
-- **Networking**: Connect with other adopters and contributors
-- **Input**: Influence future specification development
-
-## Success Stories
-
-> *"PromptPack helped us standardize our prompt engineering process across teams. The testing framework caught issues that would have been expensive to fix in production."*
-> — Early Adopter
-
-> *"The interoperability features let us switch between different LLM providers without rewriting our entire conversational system."*
-> — Community Member
-
-## Implementation Stats
-
-| Metric | Count |
-|--------|-------|
-| **Known Implementations** | 1+ |
-| **Community Members** | Growing |
-
-*Statistics updated as of February 2026*
-
----
-
-## Ready to Adopt PromptPack?
-
-- **Start Building**: Follow our [Getting Started Guide](/docs/getting-started)
-- **Join Community**: Participate in [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
-- **Get Support**: Ask questions and share experiences
-- **Contribute**: Help improve the specification and ecosystem
-
-[Get Started Now →](/docs/getting-started)
+- [Getting Started](/docs/getting-started) — build your first pack
+- [Specification Overview](/docs/spec/overview) — what the format contains
+- [RFC Process](/docs/processes/rfc-process) — propose a change
