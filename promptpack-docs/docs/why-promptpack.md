@@ -80,18 +80,18 @@ PromptPack isn't just for documentation—it's designed for production use:
 
 PromptPack is an actively evolving specification:
 
-** Available Now**:
+**Available Now**:
 - Complete v1.5.1 specification with agent loops, workflows, compositions, provider requirements, multi-agent definitions, skills, evals, and multimodal support
 - JSON Schema for validation
 - PromptKit reference runtime and PromptArena testing tool
 - LangChain.js and LangChain Python adapter libraries
 - RFC process for community-driven evolution
 
-** Under Development**:
+**Under Development**:
 - Additional framework integrations (LlamaIndex, Transformers)
 - Pack registry design
 
-** Future Vision**:
+**Future Vision**:
 - Growing ecosystem of compatible tools and runtimes
 - Community-contributed PromptPack library
 - PromptPack Hub for sharing and discovering packs
