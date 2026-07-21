@@ -1,23 +1,33 @@
 ---
 sidebar_position: 9
+title: Adopters
+description: Who is building on PromptPack, and how to get listed. Entries are named and attributable.
 ---
+
+{/*
+  Editorial rule for this page: every entry is a named organisation that has
+  confirmed its own usage. No anonymous testimonials, no aggregate counts, no
+  logos we have not been given permission to show. An adopters page that
+  overstates is worth less than a short one — and this is the page an evaluator
+  checks first. See planning/branding: "No fabricated proof."
+*/}
 
 # Adopters
 
-Who is building on PromptPack, and how to get listed.
+PromptPack v1.5.1 is published and running in production at AltairaLabs, with a
+reference implementation and a LangChain.js integration. Entries below are named
+and attributable.
 
-:::info The honest position
-PromptPack is a young specification. Today there is **one adopter — AltairaLabs,
-who wrote it** — and one reference implementation. This page lists what is
-actually true rather than what would look better, and grows as real adopters
-appear.
-:::
+If you are running PromptPack, [tell us](https://github.com/altairalabs/promptpack-spec/discussions)
+and we will list you.
 
 ## AltairaLabs
 
-**Industry:** AI development tools
-**Use case:** authoring and operating the PromptKit reference toolkit
-**Scale:** production use across testing, CI/CD and runtime workloads
+| | |
+| --- | --- |
+| **Industry** | AI development tools |
+| **Use case** | Authoring and operating the PromptKit reference toolkit |
+| **Scale** | Production use across testing, CI/CD and runtime workloads |
 
 AltairaLabs created PromptPack and uses it for:
 
@@ -57,20 +67,16 @@ third parties.
 
 ## Getting listed
 
-If you are running PromptPack somewhere real, we would like to hear about it —
-particularly what the format got wrong, which is more useful to a young spec
-than an endorsement.
+We are as interested in what the format got wrong as in an endorsement — the
+first is more useful to the RFC process.
 
 **What qualifies:** production or substantial development use of the
 specification, and willingness to share enough implementation detail that the
 entry means something to a reader.
 
 **How:** open a [GitHub Discussion](https://github.com/altairalabs/promptpack-spec/discussions)
-with your organization, use case and scale. We will follow up to check details
+with your organization, use case and scale. We will follow up to confirm details
 before listing you.
-
-Entries are named and attributable. This page will not carry anonymous quotes
-or aggregate counts.
 
 ## Next
 
