@@ -232,6 +232,24 @@ h4 {
   font-size: var(--text-size-mono-sm);
 }
 
+/* Unhighlighted fences carry the box-drawing diagrams (layer stacks, trees).
+   Two things break that art at normal prose settings:
+
+   - line-height. Box characters draw to the edge of the em box, so anything
+     above ~1.15 leaves visible gaps and the verticals stop joining up.
+   - the typeface. Spline Sans Mono has no box-drawing glyphs, so they come
+     from a fallback at a slightly different advance width (7.827px against
+     7.800px) — about 1px of drift per 40 columns, enough to pull the right
+     border out of true. Taking Spline Sans Mono out of the stack here puts
+     every character in one font again.
+
+   Scoped to .language-text so real code keeps the Atlas typeface. */
+.prism-code.language-text {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono',
+    monospace;
+  line-height: 1.15;
+}
+
 code {
   border: var(--border-hairline) solid var(--border-default);
   font-size: var(--text-size-mono-sm);
