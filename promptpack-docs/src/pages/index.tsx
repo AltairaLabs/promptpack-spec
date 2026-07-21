@@ -362,7 +362,7 @@ function Capabilities() {
               <span className={styles.eyebrowNum}>§ 04</span>&nbsp;— capabilities
             </div>
             <h2 className={styles.sectionTitle}>
-              Grows with the agent, not the format.
+              New capabilities arrive as optional sections.
             </h2>
           </div>
           <div className={styles.capsVersions}>
