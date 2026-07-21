@@ -345,6 +345,10 @@ table th {
   border-top: var(--border-hairline) solid var(--border-default);
 }
 
+.footer__link-item:hover {
+  color: var(--pp-accent);
+}
+
 .footer__title {
   font-family: var(--font-mono);
   font-size: var(--text-size-mono-label);

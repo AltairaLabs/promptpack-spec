@@ -114,7 +114,8 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
+      // No 'dark' style: Infima's .footer--dark pins a fixed #303846 that beats
+      // the Atlas mapping. The footer now follows --ink-void in both modes.
       links: [
         {
           title: 'Documentation',
