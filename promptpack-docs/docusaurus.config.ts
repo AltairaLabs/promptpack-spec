@@ -112,6 +112,28 @@ const config: Config = {
       defaultMode: 'light',
       respectPrefersColorScheme: true,
     },
+    mermaid: {
+      // 'base' is the only built-in theme that honours themeVariables. Set
+      // once here so diagrams inherit the Atlas palette instead of each
+      // carrying its own %%{init}%% block — which is how the old purple
+      // survived in RFC 0009 long after the rebrand.
+      theme: {light: 'base', dark: 'base'},
+      options: {
+        themeVariables: {
+          primaryColor: '#EAF0F8', // --ink-tile (light)
+          primaryTextColor: '#101C2F', // --star-200 (light)
+          primaryBorderColor: '#2563EB', // --starlight-500 (light)
+          lineColor: '#5E7091', // --star-700 (light)
+          secondaryColor: '#F3F6FB', // --ink-canvas (light)
+          tertiaryColor: '#FFFFFF', // --ink-surface (light)
+          background: '#FFFFFF',
+          mainBkg: '#EAF0F8',
+          edgeLabelBackground: '#F3F6FB',
+          fontFamily: "'Space Grotesk', system-ui, sans-serif",
+          fontSize: '14px',
+        },
+      },
+    },
     navbar: {
       title: 'PromptPack',
       logo: {

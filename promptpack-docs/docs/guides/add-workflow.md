@@ -23,9 +23,12 @@ Each state in the workflow maps to a prompt. Look at your existing prompts and d
 
 For example, if you have `triage`, `billing`, `technical`, and `closing` prompts:
 
-```
-triage (entry) ──[billing]──→ billing_state ──[resolved]──→ closing_state
-               ──[technical]─→ tech_state   ──[resolved]──→ closing_state
+```mermaid
+flowchart LR
+    triage([triage · entry]) -- billing --> billing_state[billing_state]
+    triage -- technical --> tech_state[tech_state]
+    billing_state -- resolved --> closing_state([closing_state])
+    tech_state -- resolved --> closing_state
 ```
 
 ## Step 2: Define Entry and Events

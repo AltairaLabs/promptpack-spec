@@ -59,29 +59,14 @@ CLI tool for systematic testing of agent behavior across multiple providers:
 
 ## Relationship Between Components
 
-```
-┌─────────────────────────────────────┐
-│ PromptPack Specification (This) │
-│ - Defines JSON format │
-│ - Schema and validation │
-│ - Documentation │
-└───────────┬─────────────────────────┘
- │ implements & tests
- ↓
-┌─────────────────────────────────────┐
-│ PromptKit Runtime │
-│ - Executes PromptPacks │
-│ - SDK libraries │
-│ - Validation tools │
-└───────────┬─────────────────────────┘
- │ uses for testing
- ↓
-┌─────────────────────────────────────┐
-│ PromptArena Testing │
-│ - Multi-provider testing │
-│ - Conversation simulation │
-│ - Report generation │
-└─────────────────────────────────────┘
+```mermaid
+flowchart TB
+    spec["<b>PromptPack Specification</b><br/>JSON format · schema · validation · docs"]
+    runtime["<b>PromptKit Runtime</b><br/>executes packs · SDK libraries · validation tools"]
+    arena["<b>PromptArena Testing</b><br/>multi-provider testing · simulation · reports"]
+
+    spec -- implements &amp; tests --> runtime
+    runtime -- uses for testing --> arena
 ```
 
 These are **separate but related projects**:

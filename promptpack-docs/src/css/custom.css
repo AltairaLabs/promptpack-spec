@@ -255,6 +255,68 @@ code {
   font-size: var(--text-size-mono-sm);
 }
 
+/* ---- Mermaid --------------------------------------------------
+   themeVariables in docusaurus.config.ts are static, so they can only carry
+   one ramp. These rules re-point the rendered SVG at the Atlas tokens, which
+   means the diagrams follow the colour-mode toggle like everything else. */
+
+.docusaurus-mermaid-container {
+  background: var(--surface-code);
+  border: var(--border-hairline) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+  overflow-x: auto;
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+}
+
+.docusaurus-mermaid-container svg {
+  max-width: 100%;
+}
+
+.docusaurus-mermaid-container .node rect,
+.docusaurus-mermaid-container .node circle,
+.docusaurus-mermaid-container .node polygon,
+.docusaurus-mermaid-container .node path {
+  fill: var(--surface-card) !important;
+  stroke: var(--pp-accent-strong) !important;
+}
+
+.docusaurus-mermaid-container .cluster rect {
+  fill: var(--hairline-faint) !important;
+  stroke: var(--border-strong) !important;
+}
+
+.docusaurus-mermaid-container .nodeLabel,
+.docusaurus-mermaid-container .cluster-label,
+.docusaurus-mermaid-container .label {
+  color: var(--text-heading) !important;
+  fill: var(--text-heading) !important;
+}
+
+.docusaurus-mermaid-container .edgePath path,
+.docusaurus-mermaid-container .flowchart-link {
+  stroke: var(--star-700) !important;
+}
+
+.docusaurus-mermaid-container marker path,
+.docusaurus-mermaid-container .arrowheadPath {
+  fill: var(--star-700) !important;
+  stroke: var(--star-700) !important;
+}
+
+/* Edge labels sit on the diagram ground, not on white. */
+.docusaurus-mermaid-container .edgeLabel,
+.docusaurus-mermaid-container .edgeLabel p {
+  background: var(--surface-code) !important;
+  color: var(--text-muted) !important;
+  fill: var(--surface-code) !important;
+}
+
+.docusaurus-mermaid-container .edgeLabel .labelBkg {
+  background: var(--surface-code) !important;
+}
+
 /* ---- Tables -------------------------------------------------- */
 
 table {
