@@ -97,15 +97,37 @@ Move the old version to "Previous Versions" (link `./{OLD_VTAG}/overview`), make
 
 ### 6. Update `sidebars.ts`
 
-Add a collapsed category for the newly archived version:
+Add the newly archived version as the **first entry inside the `Archive`
+category** (newest first) — not as a sibling of the current spec pages:
+
 ```ts
-{ type: 'category', label: '{OLD_VTAG} (Archived)', collapsed: true, items: [
-  'spec/{OLD_VTAG}/overview', 'spec/{OLD_VTAG}/structure',
-  'spec/{OLD_VTAG}/architecture-patterns', 'spec/{OLD_VTAG}/examples',
-  'spec/{OLD_VTAG}/file-format', 'spec/{OLD_VTAG}/schema-reference',
-  'spec/{OLD_VTAG}/schema-guide',
-] },
+{
+  type: 'category',
+  label: 'Specification',
+  items: [
+    /* … current spec pages … */
+    {
+      type: 'category',
+      label: 'Archive',
+      collapsed: true,
+      items: [
+        { type: 'category', label: '{OLD_VTAG}', collapsed: true, items: [
+          'spec/{OLD_VTAG}/overview', 'spec/{OLD_VTAG}/structure',
+          'spec/{OLD_VTAG}/architecture-patterns', 'spec/{OLD_VTAG}/examples',
+          'spec/{OLD_VTAG}/file-format', 'spec/{OLD_VTAG}/schema-reference',
+          'spec/{OLD_VTAG}/schema-guide',
+        ] },
+        /* … older versions … */
+      ],
+    },
+  ],
+}
 ```
+
+The label is the bare version — **no "(Archived)" suffix**; the parent
+category already says it. Every archived version lives under `Archive` so the
+current spec pages are not outnumbered in the nav.
+
 If you add a how-to guide, register it in the Guides category too.
 
 ### 7. Update `README.md` (version-check lockstep)

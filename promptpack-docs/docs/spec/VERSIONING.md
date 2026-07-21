@@ -54,20 +54,33 @@ Edit `docs/spec/versions.md`:
 
 ### 3. Update Sidebars
 
-Edit `sidebars.ts` to add collapsed section for archived version:
+Edit `sidebars.ts`. Archived versions live inside the **`Archive`** category
+under `Specification`, newest first — never as siblings of the current spec
+pages, which they would otherwise outnumber in the nav.
 
 ```typescript
 {
- type: 'category',
- label: 'v1.1 (Archived)',
- collapsed: true,
- items: [
- 'spec/v1.1/overview',
- 'spec/v1.1/examples',
- // ... other v1.1 docs
- ],
+  type: 'category',
+  label: 'Archive',
+  collapsed: true,
+  items: [
+    {
+      type: 'category',
+      label: 'v1.1',
+      collapsed: true,
+      items: [
+        'spec/v1.1/overview',
+        'spec/v1.1/examples',
+        // ... other v1.1 docs
+      ],
+    },
+    // ... older versions
+  ],
 }
 ```
+
+The label is the bare version number — the parent category already says
+"Archive", so no `(Archived)` suffix.
 
 ### 4. Update Main Spec Docs
 
