@@ -8,7 +8,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ## Current Version: v1.5.1
 
-**Status:** ✅ Current
+**Status:** current
 **Released:** June 2026
 **Schema:** `https://promptpack.org/schema/v1.5.1/promptpack.schema.json`
 
@@ -39,7 +39,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.4.1
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** June 2026
 **Schema:** `https://promptpack.org/schema/v1.4.1/promptpack.schema.json`
 
@@ -52,7 +52,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.4.0
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** April 2026
 **Schema:** `https://promptpack.org/schema/v1.4.0/promptpack.schema.json`
 
@@ -65,7 +65,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.3.1
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** February 2026
 **Schema:** `https://promptpack.org/schema/v1.3.1/promptpack.schema.json`
 
@@ -81,7 +81,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.3
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** February 2026
 **Schema:** `https://promptpack.org/schema/v1.3/promptpack.schema.json`
 
@@ -96,7 +96,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.2
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** February 2026
 **Schema:** `https://promptpack.org/schema/v1.2/promptpack.schema.json`
 
@@ -110,7 +110,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.1
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** November 2024
 **Schema:** `https://promptpack.org/schema/v1.1/promptpack.schema.json`
 
@@ -124,7 +124,7 @@ The PromptPack specification evolves over time. This page helps you find the rig
 
 ### v1.0
 
-**Status:** 📦 Stable
+**Status:** stable
 **Released:** October 2024
 **Schema:** `https://promptpack.org/schema/v1.0/promptpack.schema.json`
 
@@ -146,15 +146,15 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.5.1  | ✅ Current | Full support | - |
-| v1.5.0  | 📦 Stable | Security fixes only | TBD |
-| v1.4.1  | 📦 Stable | Security fixes only | TBD |
-| v1.4.0  | 📦 Stable | Security fixes only | TBD |
-| v1.3.1  | 📦 Stable | Security fixes only | TBD |
-| v1.3    | 📦 Stable | Security fixes only | TBD |
-| v1.2    | 📦 Stable | Security fixes only | TBD |
-| v1.1    | 📦 Stable | Security fixes only | TBD |
-| v1.0    | 📦 Stable | Security fixes only | TBD |
+| v1.5.1 | current | Full support | - |
+| v1.5.0 | stable | Security fixes only | TBD |
+| v1.4.1 | stable | Security fixes only | TBD |
+| v1.4.0 | stable | Security fixes only | TBD |
+| v1.3.1 | stable | Security fixes only | TBD |
+| v1.3 | stable | Security fixes only | TBD |
+| v1.2 | stable | Security fixes only | TBD |
+| v1.1 | stable | Security fixes only | TBD |
+| v1.0 | stable | Security fixes only | TBD |
 
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
@@ -169,25 +169,25 @@ v1.5.1 is **fully backward compatible** with v1.5.0. No breaking changes — pro
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.5.1/promptpack.schema.json",
-     "version": "1.5.1"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.5.1/promptpack.schema.json",
+ "version": "1.5.1"
+ }
+ ```
 
 2. **(Optional) Declare the providers your pack needs** so deployers can check coverage and bind them:
-   ```json
-   {
-     "requires": {
-       "providers": [
-         "default",
-         { "key": "embeddings", "role": "embedding", "capabilities": { "embedding_dimensions": 1536 } },
-         { "key": "judge", "role": "llm", "required": false, "description": "Optional eval judge." }
-       ]
-     }
-   }
-   ```
+ ```json
+ {
+ "requires": {
+ "providers": [
+ "default",
+ { "key": "embeddings", "role": "embedding", "capabilities": { "embedding_dimensions": 1536 } },
+ { "key": "judge", "role": "llm", "required": false, "description": "Optional eval judge." }
+ ]
+ }
+ }
+ ```
 
 3. **Test and validate** — v1.5.0 packs continue to work without changes.
 
@@ -209,40 +209,40 @@ v1.5.0 is **fully backward compatible** with v1.4.1. No breaking changes — com
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.5.0/promptpack.schema.json",
-     "version": "1.5.0"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.5.0/promptpack.schema.json",
+ "version": "1.5.0"
+ }
+ ```
 
 2. **(Optional) Add a composition** for a procedural flow. Define a one-state terminal workflow whose state is in composition mode, and a `compositions` entry with the step graph:
-   ```json
-   {
-     "workflow": {
-       "version": 1,
-       "entry": "main",
-       "states": {
-         "main": { "orchestration": "composition", "composition": "analyze_document", "terminal": true }
-       }
-     },
-     "compositions": {
-       "analyze_document": {
-         "version": 1,
-         "steps": [
-           { "id": "classify", "kind": "prompt", "prompt_task": "doc_classifier", "input": "${input.text}" },
-           {
-             "id": "route", "kind": "branch",
-             "predicate": { "path": "${classify.output.type}", "op": "equals", "value": "research_paper" },
-             "then": "extract_paper", "else": "extract_general"
-           },
-           { "id": "extract_paper",   "kind": "prompt", "prompt_task": "research_paper_extractor", "input": "${input.text}" },
-           { "id": "extract_general", "kind": "prompt", "prompt_task": "general_doc_extractor",   "input": "${input.text}" }
-         ]
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "workflow": {
+ "version": 1,
+ "entry": "main",
+ "states": {
+ "main": { "orchestration": "composition", "composition": "analyze_document", "terminal": true }
+ }
+ },
+ "compositions": {
+ "analyze_document": {
+ "version": 1,
+ "steps": [
+ { "id": "classify", "kind": "prompt", "prompt_task": "doc_classifier", "input": "${input.text}" },
+ {
+ "id": "route", "kind": "branch",
+ "predicate": { "path": "${classify.output.type}", "op": "equals", "value": "research_paper" },
+ "then": "extract_paper", "else": "extract_general"
+ },
+ { "id": "extract_paper", "kind": "prompt", "prompt_task": "research_paper_extractor", "input": "${input.text}" },
+ { "id": "extract_general", "kind": "prompt", "prompt_task": "general_doc_extractor", "input": "${input.text}" }
+ ]
+ }
+ }
+ }
+ ```
 
 3. **Test and validate** — v1.4.1 packs continue to work without changes.
 
@@ -267,25 +267,25 @@ v1.4.1 is **fully backward compatible** with v1.4.0. No breaking changes.
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.4.1/promptpack.schema.json",
-     "version": "1.4.1"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.4.1/promptpack.schema.json",
+ "version": "1.4.1"
+ }
+ ```
 
 2. **(Optional) Back an agent with a workflow state** — point an agent member at a state in your single `workflow`, so invoking it runs that state's transitions/loop instead of a single prompt:
-   ```json
-   {
-     "agents": {
-       "entry": "triage",
-       "members": {
-         "triage": { "state": "triage", "tags": ["triage"] },
-         "analyst": { "tags": ["analysis"] }
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "agents": {
+ "entry": "triage",
+ "members": {
+ "triage": { "state": "triage", "tags": ["triage"] },
+ "analyst": { "tags": ["analysis"] }
+ }
+ }
+ }
+ ```
 
 3. **Test and validate** — v1.4.0 packs continue to work without changes
 
@@ -306,40 +306,40 @@ v1.4 is **fully backward compatible** with v1.3.1. No breaking changes.
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.4.0/promptpack.schema.json",
-     "version": "1.4.0"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.4.0/promptpack.schema.json",
+ "version": "1.4.0"
+ }
+ ```
 
 2. **(Optional) Add agent-loop guardrails** to workflow states:
-   ```json
-   {
-     "workflow": {
-       "entry": "plan",
-       "states": {
-         "plan":      { "prompt_task": "plan", "on_event": { "PlanReady": "implement" } },
-         "implement": {
-           "prompt_task": "implement",
-           "max_visits": 5,
-           "on_max_visits": "review",
-           "artifacts": {
-             "commit_sha":  { "type": "text/plain",       "description": "Latest generated commit" },
-             "test_report": { "type": "application/json", "description": "Test runner summary" }
-           },
-           "on_event": { "CodeReady": "test" }
-         },
-         "test":   { "prompt_task": "test",   "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
-         "review": { "prompt_task": "review", "terminal": true },
-         "done":   { "prompt_task": "review", "terminal": true }
-       },
-       "engine": {
-         "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 }
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "workflow": {
+ "entry": "plan",
+ "states": {
+ "plan": { "prompt_task": "plan", "on_event": { "PlanReady": "implement" } },
+ "implement": {
+ "prompt_task": "implement",
+ "max_visits": 5,
+ "on_max_visits": "review",
+ "artifacts": {
+ "commit_sha": { "type": "text/plain", "description": "Latest generated commit" },
+ "test_report": { "type": "application/json", "description": "Test runner summary" }
+ },
+ "on_event": { "CodeReady": "test" }
+ },
+ "test": { "prompt_task": "test", "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
+ "review": { "prompt_task": "review", "terminal": true },
+ "done": { "prompt_task": "review", "terminal": true }
+ },
+ "engine": {
+ "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 }
+ }
+ }
+ }
+ ```
 
 3. **Test and validate** — v1.3.1 packs continue to work without changes
 
@@ -363,47 +363,47 @@ v1.3.1 is **fully backward compatible** with v1.3. No breaking changes.
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.3.1/promptpack.schema.json",
-     "version": "1.3.1"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.3.1/promptpack.schema.json",
+ "version": "1.3.1"
+ }
+ ```
 
 2. **(Optional) Add skills** for progressive-disclosure knowledge loading:
-   ```json
-   {
-     "skills": [
-       "./skills/billing",
-       { "path": "./skills/compliance", "preload": true },
-       {
-         "name": "escalation-protocol",
-         "description": "Steps for escalating unresolved issues",
-         "instructions": "When an issue cannot be resolved:\n1. Collect details\n2. Create ticket\n3. Set expectations"
-       }
-     ]
-   }
-   ```
+ ```json
+ {
+ "skills": [
+ "./skills/billing",
+ { "path": "./skills/compliance", "preload": true },
+ {
+ "name": "escalation-protocol",
+ "description": "Steps for escalating unresolved issues",
+ "instructions": "When an issue cannot be resolved:\n1. Collect details\n2. Create ticket\n3. Set expectations"
+ }
+ ]
+ }
+ ```
 
 3. **(Optional) Add skills to workflow states** for context-scoped filtering:
-   ```json
-   {
-     "workflow": {
-       "states": {
-         "billing_state": {
-           "prompt_task": "billing",
-           "on_event": { "resolved": "closing" },
-           "skills": "./skills/billing"
-         },
-         "closing": {
-           "prompt_task": "closing",
-           "on_event": {},
-           "skills": "none"
-         }
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "workflow": {
+ "states": {
+ "billing_state": {
+ "prompt_task": "billing",
+ "on_event": { "resolved": "closing" },
+ "skills": "./skills/billing"
+ },
+ "closing": {
+ "prompt_task": "closing",
+ "on_event": {},
+ "skills": "none"
+ }
+ }
+ }
+ }
+ ```
 
 4. **Test and validate** - v1.3 packs continue to work without changes
 
@@ -426,43 +426,43 @@ v1.3 is **fully backward compatible** with v1.2. No breaking changes.
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.3/promptpack.schema.json",
-     "version": "1.3.0"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.3/promptpack.schema.json",
+ "version": "1.3.0"
+ }
+ ```
 
 2. **(Optional) Add workflow** to orchestrate transitions between prompts:
-   ```json
-   {
-     "workflow": {
-       "version": 1,
-       "entry": "triage",
-       "states": {
-         "triage": {
-           "prompt_task": "triage",
-           "on_event": { "billing": "billing_support", "technical": "tech_support" }
-         }
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "workflow": {
+ "version": 1,
+ "entry": "triage",
+ "states": {
+ "triage": {
+ "prompt_task": "triage",
+ "on_event": { "billing": "billing_support", "technical": "tech_support" }
+ }
+ }
+ }
+ }
+ ```
 
 3. **(Optional) Add agents** for A2A protocol interoperability:
-   ```json
-   {
-     "agents": {
-       "entry": "triage",
-       "members": {
-         "triage": {
-           "description": "Routes requests to specialists",
-           "tags": ["router"]
-         }
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "agents": {
+ "entry": "triage",
+ "members": {
+ "triage": {
+ "description": "Routes requests to specialists",
+ "tags": ["router"]
+ }
+ }
+ }
+ }
+ ```
 
 4. **Test and validate** - v1.2 packs continue to work without changes
 
@@ -486,29 +486,29 @@ v1.2 is **fully backward compatible** with v1.1. No breaking changes.
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.2/promptpack.schema.json",
-     "version": "1.2.0"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.2/promptpack.schema.json",
+ "version": "1.2.0"
+ }
+ ```
 
 2. **(Optional) Add evals** at the pack level or prompt level:
-   ```json
-   {
-     "evals": [
-       {
-         "id": "json_format",
-         "type": "json_valid",
-         "trigger": "every_turn",
-         "metric": {
-           "name": "promptpack_json_valid",
-           "type": "boolean"
-         }
-       }
-     ]
-   }
-   ```
+ ```json
+ {
+ "evals": [
+ {
+ "id": "json_format",
+ "type": "json_valid",
+ "trigger": "every_turn",
+ "metric": {
+ "name": "promptpack_json_valid",
+ "type": "boolean"
+ }
+ }
+ ]
+ }
+ ```
 
 3. **Test and validate** - v1.1 packs continue to work without changes
 
@@ -531,26 +531,26 @@ v1.1 is **fully backward compatible** with v1.0. No breaking changes.
 ### Upgrade Steps
 
 1. **Update schema version** in your PromptPack:
-   ```json
-   {
-     "$schema": "https://promptpack.org/schema/v1.1/promptpack.schema.json",
-     "version": "1.1.0"
-   }
-   ```
+ ```json
+ {
+ "$schema": "https://promptpack.org/schema/v1.1/promptpack.schema.json",
+ "version": "1.1.0"
+ }
+ ```
 
 2. **(Optional) Add multimodal support**:
-   ```json
-   {
-     "prompts": {
-       "my-prompt": {
-         "media": {
-           "enabled": true,
-           "supported_types": ["image"]
-         }
-       }
-     }
-   }
-   ```
+ ```json
+ {
+ "prompts": {
+ "my-prompt": {
+ "media": {
+ "enabled": true,
+ "supported_types": ["image"]
+ }
+ }
+ }
+ }
+ ```
 
 3. **Test and validate** - v1.0 packs continue to work without changes
 
@@ -567,22 +567,22 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 ## Choosing a Version
 
 ### Use v1.5.1 if:
-- ✅ Building new PromptPacks
-- ✅ Want to declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
-- ✅ Need procedural, Function-style flows expressed as declarative step graphs (composition)
-- ✅ Want classify → branch → extract or parallel fan-out → synthesize pipelines in the spec
-- ✅ Want to expose a stateful/looping behavior as an A2A agent (back an agent with a workflow state)
-- ✅ Building autonomous agents with iterative loops (plan/implement/test patterns)
-- ✅ Need terminal states, visit guards, artifacts, or engine budgets
-- ✅ Need progressive-disclosure knowledge loading (skills)
-- ✅ Need workflow orchestration between prompts
-- ✅ Want A2A protocol interoperability for multi-agent systems
-- ✅ Want latest features
+- Building new PromptPacks
+- Want to declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
+- Need procedural, Function-style flows expressed as declarative step graphs (composition)
+- Want classify → branch → extract or parallel fan-out → synthesize pipelines in the spec
+- Want to expose a stateful/looping behavior as an A2A agent (back an agent with a workflow state)
+- Building autonomous agents with iterative loops (plan/implement/test patterns)
+- Need terminal states, visit guards, artifacts, or engine budgets
+- Need progressive-disclosure knowledge loading (skills)
+- Need workflow orchestration between prompts
+- Want A2A protocol interoperability for multi-agent systems
+- Want latest features
 
 ### Stay on v1.4.1 if:
-- ✅ Existing packs work fine
-- ✅ Your flows are conversational/event-driven and don't need procedural step graphs
-- ✅ Prefer maximum stability
+- Existing packs work fine
+- Your flows are conversational/event-driven and don't need procedural step graphs
+- Prefer maximum stability
 
 **Recommendation:** Use v1.5.1 for all new projects. It's backward compatible and adds an optional `requires.providers` block for declaring provider needs, on top of v1.5.0 workflow composition and the full v1.4 workflow, agent-loop, and agent model.
 
@@ -592,14 +592,14 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
-| v1.5.1  | Jun 2026    | Provider requirements: optional `requires.providers` block declaring a pack's model-provider needs |
-| v1.5.0  | Jun 2026    | Workflow composition: `composition` orchestration mode + step-graph `compositions` |
-| v1.4.1  | Jun 2026    | Workflow states as agents (`AgentDef.state`) |
-| v1.4.0  | Apr 2026    | Agent loops: terminal states, visit guards, artifacts, engine budgets |
-| v1.3.1  | Feb 2026    | Skills: progressive-disclosure knowledge loading |
-| v1.3    | Feb 2026    | Workflow orchestration, A2A agent definitions |
-| v1.2    | Feb 2026    | Evals extension: pack/prompt-level evals, Prometheus metrics |
-| v1.1    | Nov 2024    | Multimodal support, extensible media types |
-| v1.0    | Oct 2024    | Initial release: core schema, YAML format, templates |
+| v1.5.1 | Jun 2026 | Provider requirements: optional `requires.providers` block declaring a pack's model-provider needs |
+| v1.5.0 | Jun 2026 | Workflow composition: `composition` orchestration mode + step-graph `compositions` |
+| v1.4.1 | Jun 2026 | Workflow states as agents (`AgentDef.state`) |
+| v1.4.0 | Apr 2026 | Agent loops: terminal states, visit guards, artifacts, engine budgets |
+| v1.3.1 | Feb 2026 | Skills: progressive-disclosure knowledge loading |
+| v1.3 | Feb 2026 | Workflow orchestration, A2A agent definitions |
+| v1.2 | Feb 2026 | Evals extension: pack/prompt-level evals, Prometheus metrics |
+| v1.1 | Nov 2024 | Multimodal support, extensible media types |
+| v1.0 | Oct 2024 | Initial release: core schema, YAML format, templates |
 
 See [Changelog](https://github.com/altairalabs/promptpack-spec/blob/main/CHANGELOG.md) for complete version history.

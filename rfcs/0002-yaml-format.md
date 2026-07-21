@@ -46,29 +46,29 @@ PromptPack YAML files use the `.promptpack.yaml` extension:
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: PromptConfig
 metadata:
-  name: customer-support
-  version: 1.0.0
+ name: customer-support
+ version: 1.0.0
 
 spec:
-  # System prompt template
-  system_template: |
-    You are a {{role}} assistant for {{company}}.
-    
-    Provide helpful, professional support.
-  
-  # Variable definitions
-  variables:
-    - name: role
-      type: string
-      required: true
-    - name: company
-      type: string
-      required: true
-  
-  # Tool definitions
-  tools:
-    - name: lookup_order
-      description: Look up order details
+ # System prompt template
+ system_template: |
+ You are a {{role}} assistant for {{company}}.
+
+ Provide helpful, professional support.
+
+ # Variable definitions
+ variables:
+ - name: role
+ type: string
+ required: true
+ - name: company
+ type: string
+ required: true
+
+ # Tool definitions
+ tools:
+ - name: lookup_order
+ description: Look up order details
 ```
 
 ### Compilation to JSON
@@ -90,35 +90,35 @@ The compiler:
 
 ```json
 {
-  "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
-  "id": "customer-support",
-  "name": "Customer Support Pack",
-  "version": "1.0.0",
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}"
-  },
-  "prompts": {
-    "support": {
-      "id": "support",
-      "name": "Support Bot",
-      "version": "1.0.0",
-      "system_template": "You are a {{role}} assistant...",
-      "variables": [...]
-    },
-    "sales": {
-      "id": "sales",
-      "name": "Sales Assistant",
-      "version": "1.0.0",
-      "system_template": "You are a sales representative...",
-      "variables": [...]
-    }
-  },
-  "compilation": {
-    "compiled_with": "packc-v1.0.0",
-    "created_at": "2024-10-31T12:00:00Z",
-    "schema": "v1"
-  }
+ "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
+ "id": "customer-support",
+ "name": "Customer Support Pack",
+ "version": "1.0.0",
+ "template_engine": {
+ "version": "v1",
+ "syntax": "{{variable}}"
+ },
+ "prompts": {
+ "support": {
+ "id": "support",
+ "name": "Support Bot",
+ "version": "1.0.0",
+ "system_template": "You are a {{role}} assistant...",
+ "variables": [...]
+ },
+ "sales": {
+ "id": "sales",
+ "name": "Sales Assistant",
+ "version": "1.0.0",
+ "system_template": "You are a sales representative...",
+ "variables": [...]
+ }
+ },
+ "compilation": {
+ "compiled_with": "packc-v1.0.0",
+ "created_at": "2024-10-31T12:00:00Z",
+ "schema": "v1"
+ }
 }
 ```
 
@@ -140,16 +140,16 @@ YAML must map cleanly to JSON:
 ```yaml
 # YAML (source)
 prompts:
-  support:
-    system_template: "Hello {{name}}"
-    
+ support:
+ system_template: "Hello {{name}}"
+
 # Compiles to JSON
 {
-  "prompts": {
-    "support": {
-      "system_template": "Hello {{name}}"
-    }
-  }
+ "prompts": {
+ "support": {
+ "system_template": "Hello {{name}}"
+ }
+ }
 }
 ```
 
@@ -160,17 +160,17 @@ prompts:
 YAML files follow Kubernetes resource conventions:
 
 ```yaml
-apiVersion: promptkit.altairalabs.ai/v1alpha1  # Versioned API
-kind: PromptConfig                              # Resource type
-metadata:                                        # Identity & labels
-  name: my-prompt
-  version: 1.0.0
-spec:                                           # Actual configuration
-  system_template: "..."
-  variables: [...]
+apiVersion: promptkit.altairalabs.ai/v1alpha1 # Versioned API
+kind: PromptConfig # Resource type
+metadata: # Identity & labels
+ name: my-prompt
+ version: 1.0.0
+spec: # Actual configuration
+ system_template: "..."
+ variables: [...]
 ```
 
-**Rationale**: 
+**Rationale**:
 - **Familiar pattern** - DevOps teams already know this structure from Kubernetes
 - **Extensibility** - Easy to add new resource kinds (PromptConfig, ToolConfig, FragmentConfig)
 - **Versioning** - `apiVersion` enables schema evolution without breaking changes
@@ -190,8 +190,8 @@ This enables features like:
 # This is a customer support prompt
 # Updated: 2024-10-31
 system_template: |
-  You are a support agent.
-  # This comment is preserved in the template
+ You are a support agent.
+ # This comment is preserved in the template
 ```
 
 **Rationale**: Documentation is critical for maintainability.
@@ -204,17 +204,17 @@ system_template: |
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: PromptConfig
 metadata:
-  name: greeting
-  version: 1.0.0
+ name: greeting
+ version: 1.0.0
 
 spec:
-  system_template: "Say hello to {{name}}."
-  
-  variables:
-    - name: name
-      type: string
-      required: true
-      example: "Alice"
+ system_template: "Say hello to {{name}}."
+
+ variables:
+ - name: name
+ type: string
+ required: true
+ example: "Alice"
 ```
 
 ### Multi-Prompt Pack from Multiple Files
@@ -226,17 +226,17 @@ The PackC compiler combines multiple PromptConfig files into a single PromptPack
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: PromptConfig
 metadata:
-  name: support
-  version: 1.0.0
+ name: support
+ version: 1.0.0
 
 spec:
-  system_template: |
-    {{fragments.greeting}}
-    You are a support agent.
-  variables:
-    - name: company
-      type: string
-      required: true
+ system_template: |
+ {{fragments.greeting}}
+ You are a support agent.
+ variables:
+ - name: company
+ type: string
+ required: true
 ```
 
 **prompts/sales.yaml:**
@@ -244,17 +244,17 @@ spec:
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: PromptConfig
 metadata:
-  name: sales
-  version: 1.0.0
+ name: sales
+ version: 1.0.0
 
 spec:
-  system_template: |
-    {{fragments.greeting}}
-    You are a sales representative.
-  variables:
-    - name: company
-      type: string
-      required: true
+ system_template: |
+ {{fragments.greeting}}
+ You are a sales representative.
+ variables:
+ - name: company
+ type: string
+ required: true
 ```
 
 **Compilation:**
@@ -310,12 +310,7 @@ packc explode pack.json -o prompts/
 
 ## Implementation Plan
 
-1. **Phase 1:** Add YAML parsing to PackC ✅
-2. **Phase 2:** Implement bidirectional conversion ✅
-3. **Phase 3:** Update documentation with YAML examples ✅
-4. **Phase 4:** Add YAML validation ✅
-
-## Testing Strategy
+1. **Phase 1:** Add YAML parsing to PackC 2. **Phase 2:** Implement bidirectional conversion 3. **Phase 3:** Update documentation with YAML examples 4. **Phase 4:** Add YAML validation ## Testing Strategy
 
 - Round-trip conversion tests (YAML → JSON → YAML)
 - Schema validation for YAML sources

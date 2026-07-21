@@ -6,27 +6,27 @@ sidebar_position: 4
 
 How to contribute to the PromptPack specification and ecosystem.
 
-## Welcome Contributors! 🎉
+## Contributing
 
-Thank you for your interest in contributing to PromptPack! This guide will help you get started with contributing to the specification, documentation, and surrounding ecosystem.
+Thank you for your interest in contributing to PromptPack. This guide will help you get started with contributing to the specification, documentation, and surrounding ecosystem.
 
 ## Ways to Contribute
 
-### 📝 Documentation
+### Documentation
 
 - **Fix Typos**: Small corrections are always welcome
 - **Improve Examples**: Add better code examples and use cases
 - **Write Tutorials**: Help others learn PromptPack
 - **Translate Content**: Internationalization support
 
-### 🔧 Specification
+### Specification
 
 - **Propose RFCs**: Suggest new features or improvements
 - **Review RFCs**: Provide feedback on proposed changes
 - **Update Schemas**: Maintain JSON schemas and validation
 - **Test Examples**: Ensure examples work correctly
 
-### 🌟 Ecosystem
+### Ecosystem
 
 - **Build Tools**: Create PromptPack development tools
 - **Write Integrations**: Connect PromptPack to other systems
@@ -54,11 +54,11 @@ npm start
 
 ```
 promptpack-spec/
-├── docs/                    # Specification documents
-├── examples/               # Example PromptPack files
-├── schemas/               # JSON schemas
-├── promptpack-docs/       # Documentation website
-└── tools/                 # Development utilities
+├── docs/ # Specification documents
+├── examples/ # Example PromptPack files
+├── schemas/ # JSON schemas
+├── promptpack-docs/ # Documentation website
+└── tools/ # Development utilities
 ```
 
 ### 3. Join the Community
@@ -109,17 +109,17 @@ promptpack-spec/
 apiVersion: v1
 kind: PromptPack
 metadata:
-  name: customer-support
-  version: 1.0.0
-  description: Customer support automation system
+ name: customer-support
+ version: 1.0.0
+ description: Customer support automation system
 spec:
-  prompts:
-    - name: greeting
-      template: "Hello {{customer_name}}, how can I help you?"
-      variables:
-        - name: customer_name
-          type: string
-          required: true
+ prompts:
+ - name: greeting
+ template: "Hello {{customer_name}}, how can I help you?"
+ variables:
+ - name: customer_name
+ type: string
+ required: true
 ```
 
 ### Code Style
@@ -194,11 +194,11 @@ Active contributors may be invited to become maintainers with:
 
 ## Questions?
 
-Don't hesitate to ask! We're here to help:
+If you need help:
 
 1. **Start Small**: Look for `good first issue` labels
 2. **Ask Questions**: Use GitHub discussions for help
 3. **Join Community**: Connect with other contributors
 4. **Be Patient**: Good contributions take time
 
-Thank you for helping make PromptPack better! 🚀
+Thank you for helping make PromptPack better.

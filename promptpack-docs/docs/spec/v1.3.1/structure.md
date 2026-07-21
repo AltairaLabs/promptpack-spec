@@ -5,7 +5,7 @@ title: "Pack Structure (v1.3.1)"
 
 # Pack Structure & Design
 
-<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.3.1 (Stable)</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
 
 :::warning Archived Version
 This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../structure)
@@ -31,16 +31,16 @@ The defining characteristic of PromptPacks is that **each pack contains multiple
 
 ```json
 {
-  "id": "customer-support",
-  "name": "Customer Support Pack",
-  "version": "1.0.0",
-  
-  "prompts": {
-    "support": { /* optimized for general support */ },
-    "sales": { /* tuned for sales conversations */ },
-    "technical": { /* focused on troubleshooting */ },
-    "billing": { /* handles payment issues */ }
-  }
+ "id": "customer-support",
+ "name": "Customer Support Pack",
+ "version": "1.0.0",
+
+ "prompts": {
+ "support": { /* optimized for general support */ },
+ "sales": { /* tuned for sales conversations */ },
+ "technical": { /* focused on troubleshooting */ },
+ "billing": { /* handles payment issues */ }
+ }
 }
 ```
 
@@ -54,11 +54,11 @@ PromptPacks eliminate duplication through shared resources that all prompts can 
 
 ```json
 {
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}",
-    "features": ["basic_substitution", "fragments"]
-  }
+ "template_engine": {
+ "version": "v1",
+ "syntax": "{{variable}}",
+ "features": ["basic_substitution", "fragments"]
+ }
 }
 ```
 
@@ -68,11 +68,11 @@ PromptPacks eliminate duplication through shared resources that all prompts can 
 
 ```json
 {
-  "fragments": {
-    "company_intro": "Welcome to {{company_name}}, where customer satisfaction is our priority.",
-    "escalation_notice": "Let me connect you with a specialist who can better assist you.",
-    "data_privacy": "We protect your information according to our privacy policy."
-  }
+ "fragments": {
+ "company_intro": "Welcome to {{company_name}}, where customer satisfaction is our priority.",
+ "escalation_notice": "Let me connect you with a specialist who can better assist you.",
+ "data_privacy": "We protect your information according to our privacy policy."
+ }
 }
 ```
 
@@ -86,11 +86,11 @@ PromptPacks eliminate duplication through shared resources that all prompts can 
 
 ```json
 {
-  "tools": {
-    "lookup_customer": { /* database query tool */ },
-    "create_ticket": { /* ticketing system integration */ },
-    "send_email": { /* email automation tool */ }
-  }
+ "tools": {
+ "lookup_customer": { /* database query tool */ },
+ "create_ticket": { /* ticketing system integration */ },
+ "send_email": { /* email automation tool */ }
+ }
 }
 ```
 
@@ -108,20 +108,20 @@ While sharing common resources, each prompt has its own specialized configuratio
 
 ```json
 {
-  "prompts": {
-    "support": {
-      "parameters": {
-        "temperature": 0.7,
-        "max_tokens": 1500
-      }
-    },
-    "sales": {
-      "parameters": {
-        "temperature": 0.9,
-        "max_tokens": 800
-      }
-    }
-  }
+ "prompts": {
+ "support": {
+ "parameters": {
+ "temperature": 0.7,
+ "max_tokens": 1500
+ }
+ },
+ "sales": {
+ "parameters": {
+ "temperature": 0.9,
+ "max_tokens": 800
+ }
+ }
+ }
 }
 ```
 
@@ -129,17 +129,17 @@ While sharing common resources, each prompt has its own specialized configuratio
 
 ```json
 {
-  "prompts": {
-    "support": {
-      "tools": ["lookup_customer", "create_ticket", "send_email"]
-    },
-    "sales": {
-      "tools": ["lookup_customer", "get_pricing", "schedule_demo"]
-    },
-    "billing": {
-      "tools": ["lookup_customer", "process_payment", "send_receipt"]
-    }
-  }
+ "prompts": {
+ "support": {
+ "tools": ["lookup_customer", "create_ticket", "send_email"]
+ },
+ "sales": {
+ "tools": ["lookup_customer", "get_pricing", "schedule_demo"]
+ },
+ "billing": {
+ "tools": ["lookup_customer", "process_payment", "send_receipt"]
+ }
+ }
 }
 ```
 
@@ -147,20 +147,20 @@ While sharing common resources, each prompt has its own specialized configuratio
 
 ```json
 {
-  "prompts": {
-    "support": {
-      "validators": [
-        {"type": "max_length", "params": {"max_tokens": 500}},
-        {"type": "banned_words", "params": {"words": ["impossible", "can't help"]}}
-      ]
-    },
-    "sales": {
-      "validators": [
-        {"type": "sentiment", "params": {"min_positive": 0.6}},
-        {"type": "max_length", "params": {"max_tokens": 300}}
-      ]
-    }
-  }
+ "prompts": {
+ "support": {
+ "validators": [
+ {"type": "max_length", "params": {"max_tokens": 500}},
+ {"type": "banned_words", "params": {"words": ["impossible", "can't help"]}}
+ ]
+ },
+ "sales": {
+ "validators": [
+ {"type": "sentiment", "params": {"min_positive": 0.6}},
+ {"type": "max_length", "params": {"max_tokens": 300}}
+ ]
+ }
+ }
 }
 ```
 
@@ -170,15 +170,15 @@ PromptPacks support both pack-level and prompt-level versioning:
 
 ```json
 {
-  "version": "2.1.0",
-  "prompts": {
-    "support": {
-      "version": "1.5.2"
-    },
-    "sales": {
-      "version": "2.0.1"
-    }
-  }
+ "version": "2.1.0",
+ "prompts": {
+ "support": {
+ "version": "1.5.2"
+ },
+ "sales": {
+ "version": "2.0.1"
+ }
+ }
 }
 ```
 
@@ -195,19 +195,19 @@ PromptPacks include built-in support for testing and quality tracking:
 
 ```json
 {
-  "prompts": {
-    "support": {
-      "tested_models": [
-        {
-          "provider": "openai",
-          "model": "gpt-4",
-          "success_rate": 0.94,
-          "avg_cost": 0.0045,
-          "avg_latency_ms": 1200
-        }
-      ]
-    }
-  }
+ "prompts": {
+ "support": {
+ "tested_models": [
+ {
+ "provider": "openai",
+ "model": "gpt-4",
+ "success_rate": 0.94,
+ "avg_cost": 0.0045,
+ "avg_latency_ms": 1200
+ }
+ ]
+ }
+ }
 }
 ```
 
@@ -224,14 +224,14 @@ PromptPacks can also declare **evals** — automated quality checks that run asy
 
 ```json
 {
-  "evals": [
-    {
-      "id": "json_format",
-      "type": "json_valid",
-      "trigger": "every_turn",
-      "metric": { "name": "promptpack_json_valid", "type": "boolean" }
-    }
-  ]
+ "evals": [
+ {
+ "id": "json_format",
+ "type": "json_valid",
+ "trigger": "every_turn",
+ "metric": { "name": "promptpack_json_valid", "type": "boolean" }
+ }
+ ]
 }
 ```
 
@@ -243,30 +243,30 @@ PromptPack v1.3 introduces a state-machine workflow that orchestrates transition
 
 ```json
 {
-  "workflow": {
-    "version": 1,
-    "entry": "triage",
-    "states": {
-      "triage": {
-        "prompt_task": "triage",
-        "on_event": { "billing": "billing_support", "technical": "tech_support" }
-      },
-      "billing_support": {
-        "prompt_task": "billing",
-        "on_event": { "resolved": "closing" },
-        "persistence": "persistent"
-      },
-      "tech_support": {
-        "prompt_task": "technical",
-        "on_event": { "resolved": "closing" },
-        "persistence": "persistent"
-      },
-      "closing": {
-        "prompt_task": "closing",
-        "on_event": {}
-      }
-    }
-  }
+ "workflow": {
+ "version": 1,
+ "entry": "triage",
+ "states": {
+ "triage": {
+ "prompt_task": "triage",
+ "on_event": { "billing": "billing_support", "technical": "tech_support" }
+ },
+ "billing_support": {
+ "prompt_task": "billing",
+ "on_event": { "resolved": "closing" },
+ "persistence": "persistent"
+ },
+ "tech_support": {
+ "prompt_task": "technical",
+ "on_event": { "resolved": "closing" },
+ "persistence": "persistent"
+ },
+ "closing": {
+ "prompt_task": "closing",
+ "on_event": {}
+ }
+ }
+ }
 }
 ```
 
@@ -278,21 +278,21 @@ The `agents` section maps prompts to A2A (Agent-to-Agent) protocol compatible ag
 
 ```json
 {
-  "agents": {
-    "entry": "triage",
-    "members": {
-      "triage": {
-        "description": "Routes requests to specialists",
-        "tags": ["router"],
-        "input_modes": ["text/plain"],
-        "output_modes": ["text/plain"]
-      },
-      "billing": {
-        "description": "Handles billing inquiries",
-        "tags": ["billing", "payments"]
-      }
-    }
-  }
+ "agents": {
+ "entry": "triage",
+ "members": {
+ "triage": {
+ "description": "Routes requests to specialists",
+ "tags": ["router"],
+ "input_modes": ["text/plain"],
+ "output_modes": ["text/plain"]
+ },
+ "billing": {
+ "description": "Handles billing inquiries",
+ "tags": ["billing", "payments"]
+ }
+ }
+ }
 }
 ```
 
@@ -304,15 +304,15 @@ The `skills` section declares external knowledge sources that agents can load pr
 
 ```json
 {
-  "skills": [
-    "./skills/billing",
-    { "path": "./skills/compliance", "preload": true },
-    {
-      "name": "escalation-protocol",
-      "description": "Steps for escalating unresolved customer issues",
-      "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket"
-    }
-  ]
+ "skills": [
+ "./skills/billing",
+ { "path": "./skills/compliance", "preload": true },
+ {
+ "name": "escalation-protocol",
+ "description": "Steps for escalating unresolved customer issues",
+ "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket"
+ }
+ ]
 }
 ```
 
@@ -360,7 +360,7 @@ PromptPacks enable GitOps workflows:
 The pack structure follows key principles that make conversational AI more manageable:
 
 **Modularity**: Break complex AI behavior into focused, manageable pieces
-**Composability**: Combine specialized prompts with shared resources efficiently  
+**Composability**: Combine specialized prompts with shared resources efficiently
 **Portability**: Work consistently across different environments and providers
 **Observability**: Built-in testing and performance tracking for continuous improvement
 **Maintainability**: Clear separation makes updates safer and easier

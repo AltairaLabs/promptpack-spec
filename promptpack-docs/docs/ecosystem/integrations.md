@@ -11,7 +11,7 @@ PromptPack is a **specification**, not a product or framework. The ecosystem con
 
 ### PromptPack Specification
 
-**Status**: ✅ v1.4 Available
+**Status**: v1.4 Available
 **Repository**: [altairalabs/promptpack-spec](https://github.com/altairalabs/promptpack-spec)
 
 The open specification defining the JSON format for packaging AI agent behavior — from multi-prompt routers to autonomous agent loops. Includes:
@@ -25,7 +25,7 @@ The open specification defining the JSON format for packaging AI agent behavior 
 
 ### PromptKit Toolkit
 
-**Status**: ✅ Available Now
+**Status**: Available Now
 **Separate Project**: Related but independent
 
 The reference toolkit for loading, executing, testing, and compiling PromptPacks. Ships:
@@ -43,7 +43,7 @@ npm install -g @altairalabs/promptarena @altairalabs/packc
 
 ### PromptArena Testing
 
-**Status**: ✅ Available Now
+**Status**: Available Now
 **Part of**: PromptKit toolkit
 
 CLI tool for systematic testing of agent behavior across multiple providers:
@@ -61,26 +61,26 @@ CLI tool for systematic testing of agent behavior across multiple providers:
 
 ```
 ┌─────────────────────────────────────┐
-│   PromptPack Specification (This)   │
-│   - Defines JSON format             │
-│   - Schema and validation           │
-│   - Documentation                   │
+│ PromptPack Specification (This) │
+│ - Defines JSON format │
+│ - Schema and validation │
+│ - Documentation │
 └───────────┬─────────────────────────┘
-            │ implements & tests
-            ↓
+ │ implements & tests
+ ↓
 ┌─────────────────────────────────────┐
-│         PromptKit Runtime           │
-│   - Executes PromptPacks            │
-│   - SDK libraries                   │
-│   - Validation tools                │
+│ PromptKit Runtime │
+│ - Executes PromptPacks │
+│ - SDK libraries │
+│ - Validation tools │
 └───────────┬─────────────────────────┘
-            │ uses for testing
-            ↓
+ │ uses for testing
+ ↓
 ┌─────────────────────────────────────┐
-│         PromptArena Testing         │
-│   - Multi-provider testing          │
-│   - Conversation simulation         │
-│   - Report generation               │
+│ PromptArena Testing │
+│ - Multi-provider testing │
+│ - Conversation simulation │
+│ - Report generation │
 └─────────────────────────────────────┘
 ```
 
@@ -98,17 +98,17 @@ As PromptPack adoption grows, the community is building compatible tools and int
 
 #### LangChain.js Integration
 
-**Status**: ✅ Available Now  
-**Package**: [`@promptpack/langchain`](https://www.npmjs.com/package/@promptpack/langchain)  
+**Status**: Available Now
+**Package**: [`@promptpack/langchain`](https://www.npmjs.com/package/@promptpack/langchain)
 **Repository**: [altairalabs/promptpack-langchainjs](https://github.com/AltairaLabs/promptpack-langchainjs)
 
 Native LangChain.js integration for loading and using PromptPacks with LangChain. Features:
 
-- 🎯 **Prompt Registry** - Load and manage PromptPacks from JSON/YAML
-- 🔧 **Tool Integration** - Built-in tool calling with governance policies
-- ✅ **Validation** - Response validation and guardrails
-- 🔄 **LangChain Native** - Seamless integration with LangChain templates
-- 📦 **Type Safe** - Full TypeScript support
+- **Prompt Registry** - Load and manage PromptPacks from JSON/YAML
+- **Tool Integration** - Built-in tool calling with governance policies
+- **Validation** - Response validation and guardrails
+- **LangChain Native** - Integrates with LangChain templates
+- **Type Safe** - Full TypeScript support
 
 **Installation:**
 
@@ -127,8 +127,8 @@ const pack = PromptPackRegistry.loadFromFile('./customer-support.json');
 
 // Create a template
 const template = new PromptPackTemplate({
-  pack,
-  promptId: 'support',
+ pack,
+ promptId: 'support',
 });
 
 // Use with LangChain
@@ -137,9 +137,9 @@ const chain = template.pipe(model);
 
 // Invoke with variables
 const response = await chain.invoke({
-  role: 'helpful support agent',
-  company: 'TechCorp',
-  issue_type: 'billing',
+ role: 'helpful support agent',
+ company: 'TechCorp',
+ issue_type: 'billing',
 });
 ```
 
@@ -169,7 +169,7 @@ As the ecosystem grows, we expect more community-contributed tools including:
 
 ### Orchestration Frameworks
 
-- ✅ LangChain.js adapter (available now - see above)
+- LangChain.js adapter (available now - see above)
 - LlamaIndex adapter (proposal in backlog)
 - Transformers adapter (proposal in backlog)
 - Custom framework integrations

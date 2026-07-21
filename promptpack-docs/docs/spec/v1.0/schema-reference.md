@@ -14,10 +14,10 @@ The root object of every PromptPack file.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `apiVersion` | string | ✅ | Must be "v1" |
-| `kind` | string | ✅ | Must be "PromptPack" |
-| `metadata` | [Metadata](#metadata) | ✅ | File metadata |
-| `spec` | [Spec](#spec) | ✅ | Specification content |
+| `apiVersion` | string | Yes | Must be "v1" |
+| `kind` | string | Yes | Must be "PromptPack" |
+| `metadata` | [Metadata](#metadata) | Yes | File metadata |
+| `spec` | [Spec](#spec) | Yes | Specification content |
 
 ### Metadata
 
@@ -25,14 +25,14 @@ File metadata and identification.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Unique identifier (lowercase, hyphens only) |
-| `version` | string | ✅ | Semantic version (MAJOR.MINOR.PATCH) |
-| `description` | string | ❌ | Human-readable description |
-| `authors` | string[] | ❌ | Author names or emails |
-| `license` | string | ❌ | License identifier (e.g., "MIT", "Apache-2.0") |
-| `tags` | string[] | ❌ | Classification tags |
-| `created` | string | ❌ | ISO 8601 creation timestamp |
-| `updated` | string | ❌ | ISO 8601 last updated timestamp |
+| `name` | string | Yes | Unique identifier (lowercase, hyphens only) |
+| `version` | string | Yes | Semantic version (MAJOR.MINOR.PATCH) |
+| `description` | string | No | Human-readable description |
+| `authors` | string[] | No | Author names or emails |
+| `license` | string | No | License identifier (e.g., "MIT", "Apache-2.0") |
+| `tags` | string[] | No | Classification tags |
+| `created` | string | No | ISO 8601 creation timestamp |
+| `updated` | string | No | ISO 8601 last updated timestamp |
 
 ### Spec
 
@@ -40,12 +40,12 @@ The main specification content.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `prompts` | [Prompt](#prompt)[] | ❌ | Prompt definitions |
-| `tools` | [Tool](#tool)[] | ❌ | Tool definitions |
-| `workflows` | [Workflow](#workflow)[] | ❌ | Workflow definitions |
-| `personas` | [Persona](#persona)[] | ❌ | Persona definitions |
-| `fragments` | [Fragment](#fragment)[] | ❌ | Reusable fragments |
-| `config` | [Config](#config) | ❌ | Runtime configuration |
+| `prompts` | [Prompt](#prompt)[] | No | Prompt definitions |
+| `tools` | [Tool](#tool)[] | No | Tool definitions |
+| `workflows` | [Workflow](#workflow)[] | No | Workflow definitions |
+| `personas` | [Persona](#persona)[] | No | Persona definitions |
+| `fragments` | [Fragment](#fragment)[] | No | Reusable fragments |
+| `config` | [Config](#config) | No | Runtime configuration |
 
 ## Entity Schemas
 
@@ -55,13 +55,13 @@ Defines a template-based instruction for AI systems.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Unique prompt identifier |
-| `template` | string | ✅ | Template with variable placeholders |
-| `description` | string | ❌ | Purpose and usage description |
-| `variables` | [Variable](#variable)[] | ❌ | Input variable definitions |
-| `outputs` | [Output](#output)[] | ❌ | Expected output definitions |
-| `examples` | [Example](#example)[] | ❌ | Test cases and examples |
-| `metadata` | object | ❌ | Additional key-value metadata |
+| `name` | string | Yes | Unique prompt identifier |
+| `template` | string | Yes | Template with variable placeholders |
+| `description` | string | No | Purpose and usage description |
+| `variables` | [Variable](#variable)[] | No | Input variable definitions |
+| `outputs` | [Output](#output)[] | No | Expected output definitions |
+| `examples` | [Example](#example)[] | No | Test cases and examples |
+| `metadata` | object | No | Additional key-value metadata |
 
 ### Variable
 
@@ -69,12 +69,12 @@ Defines an input variable for prompts or tools.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Variable name (supports dot notation) |
-| `type` | string | ✅ | Data type: "string", "number", "boolean", "array", "object" |
-| `required` | boolean | ❌ | Whether variable is required (default: false) |
-| `default` | any | ❌ | Default value if not provided |
-| `description` | string | ❌ | Variable purpose and usage |
-| `validation` | [Validation](#validation) | ❌ | Validation rules |
+| `name` | string | Yes | Variable name (supports dot notation) |
+| `type` | string | Yes | Data type: "string", "number", "boolean", "array", "object" |
+| `required` | boolean | No | Whether variable is required (default: false) |
+| `default` | any | No | Default value if not provided |
+| `description` | string | No | Variable purpose and usage |
+| `validation` | [Validation](#validation) | No | Validation rules |
 
 ### Tool
 
@@ -82,14 +82,14 @@ Defines an external function or API that can be called.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Unique tool identifier |
-| `description` | string | ✅ | What the tool does |
-| `parameters` | [Variable](#variable)[] | ❌ | Input parameters |
-| `returns` | [ReturnSchema](#returnschema) | ❌ | Return value schema |
-| `endpoint` | string | ❌ | API endpoint URL |
-| `method` | string | ❌ | HTTP method (GET, POST, PUT, DELETE) |
-| `headers` | object | ❌ | HTTP headers |
-| `authentication` | [Auth](#auth) | ❌ | Authentication configuration |
+| `name` | string | Yes | Unique tool identifier |
+| `description` | string | Yes | What the tool does |
+| `parameters` | [Variable](#variable)[] | No | Input parameters |
+| `returns` | [ReturnSchema](#returnschema) | No | Return value schema |
+| `endpoint` | string | No | API endpoint URL |
+| `method` | string | No | HTTP method (GET, POST, PUT, DELETE) |
+| `headers` | object | No | HTTP headers |
+| `authentication` | [Auth](#auth) | No | Authentication configuration |
 
 ### Workflow
 
@@ -97,11 +97,11 @@ Defines a multi-step conversational flow.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Unique workflow identifier |
-| `description` | string | ❌ | Workflow purpose |
-| `steps` | [Step](#step)[] | ✅ | Ordered execution steps |
-| `variables` | [Variable](#variable)[] | ❌ | Workflow-level variables |
-| `error_handling` | [ErrorHandling](#errorhandling) | ❌ | Error handling strategy |
+| `name` | string | Yes | Unique workflow identifier |
+| `description` | string | No | Workflow purpose |
+| `steps` | [Step](#step)[] | Yes | Ordered execution steps |
+| `variables` | [Variable](#variable)[] | No | Workflow-level variables |
+| `error_handling` | [ErrorHandling](#errorhandling) | No | Error handling strategy |
 
 ### Persona
 
@@ -109,12 +109,12 @@ Defines AI personality and behavioral characteristics.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Unique persona identifier |
-| `description` | string | ❌ | Persona description |
-| `traits` | [PersonaTraits](#personatraits) | ✅ | Personality characteristics |
-| `knowledge` | string[] | ❌ | Areas of expertise |
-| `constraints` | string[] | ❌ | Behavioral limitations |
-| `examples` | [PersonaExample](#personaexample)[] | ❌ | Example interactions |
+| `name` | string | Yes | Unique persona identifier |
+| `description` | string | No | Persona description |
+| `traits` | [PersonaTraits](#personatraits) | Yes | Personality characteristics |
+| `knowledge` | string[] | No | Areas of expertise |
+| `constraints` | string[] | No | Behavioral limitations |
+| `examples` | [PersonaExample](#personaexample)[] | No | Example interactions |
 
 ### Fragment
 
@@ -122,10 +122,10 @@ Defines reusable content that can be included in prompts.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Unique fragment identifier |
-| `content` | string | ✅ | Reusable content template |
-| `description` | string | ❌ | Fragment purpose |
-| `variables` | [Variable](#variable)[] | ❌ | Fragment-specific variables |
+| `name` | string | Yes | Unique fragment identifier |
+| `content` | string | Yes | Reusable content template |
+| `description` | string | No | Fragment purpose |
+| `variables` | [Variable](#variable)[] | No | Fragment-specific variables |
 
 ## Supporting Schemas
 
@@ -135,11 +135,11 @@ A single step in a workflow.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `prompt` | string | ❌ | Prompt to execute |
-| `tool` | string | ❌ | Tool to call |
-| `condition` | string | ❌ | Boolean condition for branching |
-| `then` | [Step](#step)[] | ❌ | Steps if condition is true |
-| `else` | [Step](#step)[] | ❌ | Steps if condition is false |
+| `prompt` | string | No | Prompt to execute |
+| `tool` | string | No | Tool to call |
+| `condition` | string | No | Boolean condition for branching |
+| `then` | [Step](#step)[] | No | Steps if condition is true |
+| `else` | [Step](#step)[] | No | Steps if condition is false |
 
 ### PersonaTraits
 
@@ -147,10 +147,10 @@ Personality characteristics for a persona.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `personality` | string | ❌ | Core personality description |
-| `communication_style` | string | ❌ | How the persona communicates |
-| `expertise` | string | ❌ | Areas of knowledge |
-| `tone` | string | ❌ | Communication tone |
+| `personality` | string | No | Core personality description |
+| `communication_style` | string | No | How the persona communicates |
+| `expertise` | string | No | Areas of knowledge |
+| `tone` | string | No | Communication tone |
 
 ### Validation
 
@@ -158,12 +158,12 @@ Validation rules for variables.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `min_length` | number | ❌ | Minimum string length |
-| `max_length` | number | ❌ | Maximum string length |
-| `pattern` | string | ❌ | Regular expression pattern |
-| `enum` | any[] | ❌ | Allowed values |
-| `min` | number | ❌ | Minimum numeric value |
-| `max` | number | ❌ | Maximum numeric value |
+| `min_length` | number | No | Minimum string length |
+| `max_length` | number | No | Maximum string length |
+| `pattern` | string | No | Regular expression pattern |
+| `enum` | any[] | No | Allowed values |
+| `min` | number | No | Minimum numeric value |
+| `max` | number | No | Maximum numeric value |
 
 ### Auth
 
@@ -171,9 +171,9 @@ Authentication configuration for tools.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `type` | string | ✅ | "api_key", "bearer_token", "basic", "oauth2" |
-| `key_location` | string | ❌ | "header", "query_parameter" |
-| `key_name` | string | ❌ | Header or parameter name |
+| `type` | string | Yes | "api_key", "bearer_token", "basic", "oauth2" |
+| `key_location` | string | No | "header", "query_parameter" |
+| `key_name` | string | No | Header or parameter name |
 
 ### ReturnSchema
 
@@ -181,9 +181,9 @@ Schema for tool return values.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `type` | string | ✅ | Return data type |
-| `schema` | object | ❌ | JSON schema for validation |
-| `description` | string | ❌ | Return value description |
+| `type` | string | Yes | Return data type |
+| `schema` | object | No | JSON schema for validation |
+| `description` | string | No | Return value description |
 
 ### Config {#config}
 
@@ -191,11 +191,11 @@ Runtime configuration settings.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `model` | string | ❌ | Default AI model |
-| `temperature` | number | ❌ | Generation temperature (0.0-1.0) |
-| `max_tokens` | number | ❌ | Maximum output tokens |
-| `timeout` | number | ❌ | Request timeout in seconds |
-| `retries` | number | ❌ | Number of retry attempts |
+| `model` | string | No | Default AI model |
+| `temperature` | number | No | Generation temperature (0.0-1.0) |
+| `max_tokens` | number | No | Maximum output tokens |
+| `timeout` | number | No | Request timeout in seconds |
+| `retries` | number | No | Number of retry attempts |
 
 ### Output {#output}
 
@@ -203,11 +203,11 @@ Expected output specification for prompts.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Output identifier |
-| `type` | string | ✅ | Expected data type |
-| `description` | string | ❌ | Output description |
-| `schema` | object | ❌ | JSON schema for validation |
-| `required` | boolean | ❌ | Whether output is required |
+| `name` | string | Yes | Output identifier |
+| `type` | string | Yes | Expected data type |
+| `description` | string | No | Output description |
+| `schema` | object | No | JSON schema for validation |
+| `required` | boolean | No | Whether output is required |
 
 ### Example {#example}
 
@@ -215,10 +215,10 @@ Test cases and usage examples.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | ✅ | Example identifier |
-| `inputs` | object | ✅ | Input variable values |
-| `expected_output` | any | ❌ | Expected result |
-| `description` | string | ❌ | Example description |
+| `name` | string | Yes | Example identifier |
+| `inputs` | object | Yes | Input variable values |
+| `expected_output` | any | No | Expected result |
+| `description` | string | No | Example description |
 
 ### ErrorHandling {#errorhandling}
 
@@ -226,10 +226,10 @@ Error handling configuration for workflows.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `strategy` | string | ✅ | "fail_fast", "continue", "retry" |
-| `max_retries` | number | ❌ | Maximum retry attempts |
-| `fallback` | string | ❌ | Fallback prompt or tool |
-| `timeout` | number | ❌ | Step timeout in seconds |
+| `strategy` | string | Yes | "fail_fast", "continue", "retry" |
+| `max_retries` | number | No | Maximum retry attempts |
+| `fallback` | string | No | Fallback prompt or tool |
+| `timeout` | number | No | Step timeout in seconds |
 
 ### PersonaExample {#personaexample}
 
@@ -237,10 +237,10 @@ Example interactions for personas.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `input` | string | ✅ | User input |
-| `output` | string | ✅ | Persona response |
-| `context` | object | ❌ | Interaction context |
-| `description` | string | ❌ | Example description |
+| `input` | string | Yes | User input |
+| `output` | string | Yes | Persona response |
+| `context` | object | No | Interaction context |
+| `description` | string | No | Example description |
 
 ## Data Types
 
@@ -263,5 +263,5 @@ Variables in templates use double curly braces:
 **Examples:**
 
 - **Dot Notation:** `{{user.profile.name}}`
-- **Array Access:** `{{items[0].title}}`  
+- **Array Access:** `{{items[0].title}}`
 - **Conditionals:** `{{#if condition}}content{{/if}}`

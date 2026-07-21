@@ -9,25 +9,25 @@ PromptPack uses a **manual versioning approach** for specification documentation
 ```
 docs/
 ├── spec/
-│   ├── versions.md          # Version index and migration guide
-│   ├── overview.md          # v1.1 (current) 
-│   ├── examples.md
-│   ├── file-format.md
-│   ├── schema-reference.md
-│   ├── schema-guide.md
-│   ├── structure.md
-│   │
-│   └── v1.0/                # Archived v1.0 docs
-│       ├── overview.md
-│       ├── examples.md
-│       ├── file-format.md
-│       ├── schema-reference.md
-│       ├── schema-guide.md
-│       └── structure.md
+│ ├── versions.md # Version index and migration guide
+│ ├── overview.md # v1.1 (current)
+│ ├── examples.md
+│ ├── file-format.md
+│ ├── schema-reference.md
+│ ├── schema-guide.md
+│ ├── structure.md
+│ │
+│ └── v1.0/ # Archived v1.0 docs
+│ ├── overview.md
+│ ├── examples.md
+│ ├── file-format.md
+│ ├── schema-reference.md
+│ ├── schema-guide.md
+│ └── structure.md
 │
-├── processes/               # Always current (not versioned)
-├── rfcs/                    # Always current (auto-generated)
-└── ecosystem/               # Always current (not versioned)
+├── processes/ # Always current (not versioned)
+├── rfcs/ # Always current (auto-generated)
+└── ecosystem/ # Always current (not versioned)
 ```
 
 ## Creating a New Specification Version
@@ -58,14 +58,14 @@ Edit `sidebars.ts` to add collapsed section for archived version:
 
 ```typescript
 {
-  type: 'category',
-  label: 'v1.1 (Archived)',
-  collapsed: true,
-  items: [
-    'spec/v1.1/overview',
-    'spec/v1.1/examples',
-    // ... other v1.1 docs
-  ],
+ type: 'category',
+ label: 'v1.1 (Archived)',
+ collapsed: true,
+ items: [
+ 'spec/v1.1/overview',
+ 'spec/v1.1/examples',
+ // ... other v1.1 docs
+ ],
 }
 ```
 
@@ -92,7 +92,7 @@ npm start
 ### Current Version (v1.1)
 
 ```markdown
-<span className="ppVersionBadge ppVersionBadge--current">📘 v1.1 (Current)</span>
+<span className="ppVersionBadge ppVersionBadge--current">v1.1 · current</span>
 
 :::info Version Information
 This documentation covers **v1.1** of the PromptPack specification.
@@ -103,7 +103,7 @@ Looking for the previous version? [View v1.0 docs →](./v1.0/overview)
 ### Archived Version (v1.0)
 
 ```markdown
-<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.0 (Stable)</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.0 · stable</span>
 
 :::warning Archived Version
 This is the **v1.0** documentation. For the latest features, see [v1.1 docs →](../overview)
@@ -114,16 +114,16 @@ This is the **v1.0** documentation. For the latest features, see [v1.1 docs →]
 
 ### Advantages
 
-✅ **Selective Versioning** - Only spec is versioned, not entire docs
-✅ **Simple Structure** - Easy to understand and maintain  
-✅ **Git History** - All versions in same repo
-✅ **No Build Complexity** - No special Docusaurus configuration needed
-✅ **Flexible** - Can version individual pages if needed
+- **Selective Versioning** - Only spec is versioned, not entire docs
+- **Simple Structure** - Easy to understand and maintain
+- **Git History** - All versions in same repo
+- **No Build Complexity** - No special Docusaurus configuration needed
+- **Flexible** - Can version individual pages if needed
 
 ### Tradeoffs
 
-⚠️ **Manual Process** - Requires copying files manually
-⚠️ **No Built-in Switcher** - Must implement version navigation manually
+ **Manual Process** - Requires copying files manually
+ **No Built-in Switcher** - Must implement version navigation manually
 
 ## Version Support Policy
 
@@ -148,10 +148,10 @@ If you want automatic version management in the future:
 npm run docusaurus docs:version 1.1
 
 # Structure becomes:
-# docs/              (next/current)
+# docs/ (next/current)
 # versioned_docs/
-#   version-1.1/
-#   version-1.0/
+# version-1.1/
+# version-1.0/
 ```
 
 See: https://docusaurus.io/docs/versioning

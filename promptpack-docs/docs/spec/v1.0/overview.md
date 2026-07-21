@@ -5,7 +5,7 @@ title: "Specification Overview (v1.0)"
 
 # Specification Overview
 
-<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.0 (Stable)</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.0 · stable</span>
 
 :::warning Archived Version
 This is the **v1.0** documentation (October 2024). For the latest features, see [v1.2 docs →](../overview)
@@ -34,42 +34,42 @@ PromptPacks solve this by providing a **single JSON file** that contains everyth
 
 ```json
 {
-  "id": "customer-support",
-  "name": "Customer Support Pack", 
-  "version": "1.0.0",
-  "prompts": {
-    "support": { /* specialized for general support */ },
-    "sales": { /* optimized for sales inquiries */ },
-    "technical": { /* focused on technical issues */ }
-  },
-  "tools": { /* shared external functions */ },
-  "fragments": { /* reusable text components */ }
+ "id": "customer-support",
+ "name": "Customer Support Pack",
+ "version": "1.0.0",
+ "prompts": {
+ "support": { /* specialized for general support */ },
+ "sales": { /* optimized for sales inquiries */ },
+ "technical": { /* focused on technical issues */ }
+ },
+ "tools": { /* shared external functions */ },
+ "fragments": { /* reusable text components */ }
 }
 ```
 
 ## Core Benefits
 
-### 🎯 **Multi-Prompt Architecture**
+### Multi-Prompt Architecture
 
 Instead of one generic prompt trying to handle everything, PromptPacks let you create **specialized prompts for specific tasks**. A customer service pack might have separate prompts for billing questions, technical support, and sales inquiries—each optimized for its specific purpose while sharing common tools and configuration.
 
-### 📦 **Complete Packaging**
+### Complete Packaging
 
 Everything needed to run your AI system is in one file. No more hunting for prompt templates, tool definitions, or configuration scattered across multiple files. Deploy once, run anywhere.
 
-### 🔄 **Reusability & Sharing**
+### Reusability & Sharing
 
 PromptPacks are portable. Build a customer support pack once, then use it across different applications, teams, or even organizations. Share best practices through standardized, tested packages.
 
-### 🛡️ **Built-in Safety**
+### Built-in Safety
 
 Each prompt can have its own validators (guardrails) to ensure safe, appropriate responses. Define content filters, length limits, and custom validation rules that travel with your prompts.
 
-### 🧪 **Testability**
+### Testability
 
 PromptPacks include testing metadata—which models have been tested, success rates, performance metrics. Know before you deploy whether your pack works well with different AI providers.
 
-### ⚡ **Tool Integration**
+### Tool Integration
 
 Define external tools once, reference them from any prompt in the pack. Whether it's looking up customer data, performing calculations, or calling external APIs, tools are reusable across all prompts.
 
@@ -104,11 +104,11 @@ An educational PromptPack might feature:
 
 ## Design Philosophy
 
-PromptPacks follow key principles that make them powerful and practical:
+PromptPacks follow a few principles:
 
 **Modularity**: Each prompt handles one domain well rather than trying to do everything
 
-**Composability**: Shared tools, fragments, and configuration reduce duplication  
+**Composability**: Shared tools, fragments, and configuration reduce duplication
 
 **Portability**: Works across different AI providers and runtime environments
 

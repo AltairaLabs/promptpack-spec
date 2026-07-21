@@ -50,15 +50,15 @@ Top-level multimodal configuration for a prompt:
 
 ```json
 {
-  "media": {
-    "enabled": true,
-    "supported_types": ["image", "audio", "video", "document"],
-    "image": { ... },
-    "audio": { ... },
-    "video": { ... },
-    "document": { ... },
-    "examples": [ ... ]
-  }
+ "media": {
+ "enabled": true,
+ "supported_types": ["image", "audio", "video", "document"],
+ "image": { ... },
+ "audio": { ... },
+ "video": { ... },
+ "document": { ... },
+ "examples": [ ... ]
+ }
 }
 ```
 
@@ -75,13 +75,13 @@ Image-specific constraints:
 
 ```json
 {
-  "image": {
-    "max_size_mb": 20,
-    "allowed_formats": ["jpeg", "png", "webp"],
-    "default_detail": "high",
-    "require_caption": false,
-    "max_images_per_msg": 5
-  }
+ "image": {
+ "max_size_mb": 20,
+ "allowed_formats": ["jpeg", "png", "webp"],
+ "default_detail": "high",
+ "require_caption": false,
+ "max_images_per_msg": 5
+ }
 }
 ```
 
@@ -91,12 +91,12 @@ Audio-specific constraints:
 
 ```json
 {
-  "audio": {
-    "max_size_mb": 25,
-    "allowed_formats": ["mp3", "wav", "opus"],
-    "max_duration_sec": 300,
-    "require_metadata": false
-  }
+ "audio": {
+ "max_size_mb": 25,
+ "allowed_formats": ["mp3", "wav", "opus"],
+ "max_duration_sec": 300,
+ "require_metadata": false
+ }
 }
 ```
 
@@ -106,12 +106,12 @@ Video-specific constraints:
 
 ```json
 {
-  "video": {
-    "max_size_mb": 100,
-    "allowed_formats": ["mp4", "webm"],
-    "max_duration_sec": 600,
-    "require_metadata": false
-  }
+ "video": {
+ "max_size_mb": 100,
+ "allowed_formats": ["mp4", "webm"],
+ "max_duration_sec": 600,
+ "require_metadata": false
+ }
 }
 ```
 
@@ -121,23 +121,23 @@ Document-specific constraints for PDFs, CAD files, spreadsheets, etc.:
 
 ```json
 {
-  "document": {
-    "max_size_mb": 50,
-    "allowed_formats": ["pdf", "docx", "step", "dwg"],
-    "max_pages": 100,
-    "require_metadata": false,
-    "extraction_mode": "text"
-  },
-  "archive": {
-    "max_size_mb": 200,
-    "allowed_formats": ["zip", "tar", "gz", "7z"],
-    "require_metadata": false,
-    "validation_params": {
-      "max_entries": 1000,
-      "allow_nested": true,
-      "max_depth": 5
-    }
-  }
+ "document": {
+ "max_size_mb": 50,
+ "allowed_formats": ["pdf", "docx", "step", "dwg"],
+ "max_pages": 100,
+ "require_metadata": false,
+ "extraction_mode": "text"
+ },
+ "archive": {
+ "max_size_mb": 200,
+ "allowed_formats": ["zip", "tar", "gz", "7z"],
+ "require_metadata": false,
+ "validation_params": {
+ "max_entries": 1000,
+ "allow_nested": true,
+ "max_depth": 5
+ }
+ }
 }
 ```
 
@@ -159,16 +159,16 @@ Generic configuration for custom media types not covered by specific configs:
 
 ```json
 {
-  "model3d": {
-    "max_size_mb": 100,
-    "allowed_formats": ["obj", "fbx", "gltf", "stl"],
-    "require_metadata": false,
-    "validation_params": {
-      "max_vertices": 100000,
-      "require_textures": false,
-      "allow_animations": true
-    }
-  }
+ "model3d": {
+ "max_size_mb": 100,
+ "allowed_formats": ["obj", "fbx", "gltf", "stl"],
+ "require_metadata": false,
+ "validation_params": {
+ "max_vertices": 100000,
+ "require_textures": false,
+ "allow_animations": true
+ }
+ }
 }
 ```
 
@@ -190,28 +190,28 @@ Example showing media usage:
 
 ```json
 {
-  "examples": [
-    {
-      "name": "image-analysis",
-      "description": "Basic image analysis",
-      "role": "user",
-      "parts": [
-        {
-          "type": "text",
-          "text": "What's in this image?"
-        },
-        {
-          "type": "image",
-          "media": {
-            "file_path": "examples/photo.jpg",
-            "mime_type": "image/jpeg",
-            "detail": "high",
-            "caption": "Sample photo"
-          }
-        }
-      ]
-    }
-  ]
+ "examples": [
+ {
+ "name": "image-analysis",
+ "description": "Basic image analysis",
+ "role": "user",
+ "parts": [
+ {
+ "type": "text",
+ "text": "What's in this image?"
+ },
+ {
+ "type": "image",
+ "media": {
+ "file_path": "examples/photo.jpg",
+ "mime_type": "image/jpeg",
+ "detail": "high",
+ "caption": "Sample photo"
+ }
+ }
+ ]
+ }
+ ]
 }
 ```
 
@@ -221,16 +221,16 @@ Individual content part (text or media):
 
 ```json
 {
-  "type": "text",
-  "text": "Describe this image"
+ "type": "text",
+ "text": "Describe this image"
 }
 
 {
-  "type": "image",
-  "media": {
-    "file_path": "path/to/image.jpg",
-    "mime_type": "image/jpeg"
-  }
+ "type": "image",
+ "media": {
+ "file_path": "path/to/image.jpg",
+ "mime_type": "image/jpeg"
+ }
 }
 ```
 
@@ -240,20 +240,20 @@ Reference to media file with three loading methods:
 
 ```json
 {
-  "file_path": "images/photo.jpg",
-  "mime_type": "image/jpeg",
-  "detail": "high",
-  "caption": "Product photo"
+ "file_path": "images/photo.jpg",
+ "mime_type": "image/jpeg",
+ "detail": "high",
+ "caption": "Product photo"
 }
 
 {
-  "url": "https://example.com/image.jpg",
-  "mime_type": "image/jpeg"
+ "url": "https://example.com/image.jpg",
+ "mime_type": "image/jpeg"
 }
 
 {
-  "base64": "iVBORw0KGgoAAAANSUhEUgAAAAUA...",
-  "mime_type": "image/png"
+ "base64": "iVBORw0KGgoAAAANSUhEUgAAAAUA...",
+ "mime_type": "image/png"
 }
 ```
 
@@ -265,19 +265,19 @@ Media configuration is optional at the prompt level:
 
 ```json
 {
-  "prompts": {
-    "text-only": {
-      "system_template": "Text-only prompt",
-      // No media field
-    },
-    "vision": {
-      "system_template": "Vision prompt",
-      "media": {
-        "enabled": true,
-        "supported_types": ["image"]
-      }
-    }
-  }
+ "prompts": {
+ "text-only": {
+ "system_template": "Text-only prompt",
+ // No media field
+ },
+ "vision": {
+ "system_template": "Vision prompt",
+ "media": {
+ "enabled": true,
+ "supported_types": ["image"]
+ }
+ }
+ }
 }
 ```
 
@@ -298,12 +298,12 @@ Messages consist of ordered content parts:
 
 ```json
 {
-  "parts": [
-    {"type": "text", "text": "Analyze these images:"},
-    {"type": "image", "media": {...}},
-    {"type": "image", "media": {...}},
-    {"type": "text", "text": "Provide detailed analysis."}
-  ]
+ "parts": [
+ {"type": "text", "text": "Analyze these images:"},
+ {"type": "image", "media": {...}},
+ {"type": "image", "media": {...}},
+ {"type": "text", "text": "Provide detailed analysis."}
+ ]
 }
 ```
 
@@ -315,10 +315,10 @@ The `supported_types` array and content part `type` field accept any lowercase a
 
 ```json
 {
-  "media": {
-    "enabled": true,
-    "supported_types": ["image", "document", "model3d", "custom_type"]
-  }
+ "media": {
+ "enabled": true,
+ "supported_types": ["image", "document", "model3d", "custom_type"]
+ }
 }
 ```
 
@@ -335,17 +335,17 @@ The schema uses `patternProperties` on `MediaConfig` to validate configuration o
 
 ```json
 {
-  "patternProperties": {
-    "^[a-z0-9_]+$": {
-      "oneOf": [
-        {"$ref": "#/$defs/ImageConfig"},
-        {"$ref": "#/$defs/AudioConfig"},
-        {"$ref": "#/$defs/VideoConfig"},
-        {"$ref": "#/$defs/DocumentConfig"},
-        {"$ref": "#/$defs/GenericMediaTypeConfig"}
-      ]
-    }
-  }
+ "patternProperties": {
+ "^[a-z0-9_]+$": {
+ "oneOf": [
+ {"$ref": "#/$defs/ImageConfig"},
+ {"$ref": "#/$defs/AudioConfig"},
+ {"$ref": "#/$defs/VideoConfig"},
+ {"$ref": "#/$defs/DocumentConfig"},
+ {"$ref": "#/$defs/GenericMediaTypeConfig"}
+ ]
+ }
+ }
 }
 ```
 
@@ -372,30 +372,30 @@ PackC compiler validates media references at compile time:
 
 ```json
 {
-  "id": "image-analyzer",
-  "name": "Image Analyzer",
-  "version": "1.0.0",
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}"
-  },
-  "prompts": {
-    "analyze": {
-      "id": "analyze",
-      "name": "Image Analyzer",
-      "version": "1.0.0",
-      "system_template": "You are an expert image analyst.",
-      "media": {
-        "enabled": true,
-        "supported_types": ["image"],
-        "image": {
-          "max_size_mb": 10,
-          "allowed_formats": ["jpeg", "png", "webp"],
-          "default_detail": "high"
-        }
-      }
-    }
-  }
+ "id": "image-analyzer",
+ "name": "Image Analyzer",
+ "version": "1.0.0",
+ "template_engine": {
+ "version": "v1",
+ "syntax": "{{variable}}"
+ },
+ "prompts": {
+ "analyze": {
+ "id": "analyze",
+ "name": "Image Analyzer",
+ "version": "1.0.0",
+ "system_template": "You are an expert image analyst.",
+ "media": {
+ "enabled": true,
+ "supported_types": ["image"],
+ "image": {
+ "max_size_mb": 10,
+ "allowed_formats": ["jpeg", "png", "webp"],
+ "default_detail": "high"
+ }
+ }
+ }
+ }
 }
 ```
 
@@ -403,29 +403,29 @@ PackC compiler validates media references at compile time:
 
 ```json
 {
-  "prompts": {
-    "assistant": {
-      "system_template": "You are a multimodal assistant.",
-      "media": {
-        "enabled": true,
-        "supported_types": ["image", "audio", "video"],
-        "image": {
-          "max_size_mb": 20,
-          "allowed_formats": ["jpeg", "png", "webp", "gif"]
-        },
-        "audio": {
-          "max_size_mb": 25,
-          "allowed_formats": ["mp3", "wav", "opus"],
-          "max_duration_sec": 300
-        },
-        "video": {
-          "max_size_mb": 100,
-          "allowed_formats": ["mp4", "webm"],
-          "max_duration_sec": 600
-        }
-      }
-    }
-  }
+ "prompts": {
+ "assistant": {
+ "system_template": "You are a multimodal assistant.",
+ "media": {
+ "enabled": true,
+ "supported_types": ["image", "audio", "video"],
+ "image": {
+ "max_size_mb": 20,
+ "allowed_formats": ["jpeg", "png", "webp", "gif"]
+ },
+ "audio": {
+ "max_size_mb": 25,
+ "allowed_formats": ["mp3", "wav", "opus"],
+ "max_duration_sec": 300
+ },
+ "video": {
+ "max_size_mb": 100,
+ "allowed_formats": ["mp4", "webm"],
+ "max_duration_sec": 600
+ }
+ }
+ }
+ }
 }
 ```
 
@@ -433,46 +433,46 @@ PackC compiler validates media references at compile time:
 
 ```json
 {
-  "prompts": {
-    "doc-analyzer": {
-      "system_template": "You are a document analysis assistant that can process PDFs, CAD files, and technical documents.",
-      "media": {
-        "enabled": true,
-        "supported_types": ["document", "image"],
-        "document": {
-          "max_size_mb": 50,
-          "allowed_formats": ["pdf", "step", "dwg", "dxf"],
-          "max_pages": 100,
-          "extraction_mode": "structured"
-        },
-        "image": {
-          "max_size_mb": 10,
-          "allowed_formats": ["jpeg", "png"]
-        },
-        "examples": [
-          {
-            "name": "cad-analysis",
-            "description": "Analyze a CAD file",
-            "role": "user",
-            "parts": [
-              {
-                "type": "text",
-                "text": "Analyze this mechanical part design and identify potential manufacturing issues."
-              },
-              {
-                "type": "document",
-                "media": {
-                  "file_path": "examples/part.step",
-                  "mime_type": "application/step",
-                  "caption": "Mechanical part CAD model"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
+ "prompts": {
+ "doc-analyzer": {
+ "system_template": "You are a document analysis assistant that can process PDFs, CAD files, and technical documents.",
+ "media": {
+ "enabled": true,
+ "supported_types": ["document", "image"],
+ "document": {
+ "max_size_mb": 50,
+ "allowed_formats": ["pdf", "step", "dwg", "dxf"],
+ "max_pages": 100,
+ "extraction_mode": "structured"
+ },
+ "image": {
+ "max_size_mb": 10,
+ "allowed_formats": ["jpeg", "png"]
+ },
+ "examples": [
+ {
+ "name": "cad-analysis",
+ "description": "Analyze a CAD file",
+ "role": "user",
+ "parts": [
+ {
+ "type": "text",
+ "text": "Analyze this mechanical part design and identify potential manufacturing issues."
+ },
+ {
+ "type": "document",
+ "media": {
+ "file_path": "examples/part.step",
+ "mime_type": "application/step",
+ "caption": "Mechanical part CAD model"
+ }
+ }
+ ]
+ }
+ ]
+ }
+ }
+ }
 }
 ```
 
@@ -482,84 +482,84 @@ PackC compiler validates media references at compile time:
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: PromptConfig
 metadata:
-  name: vision-assistant
-  version: 1.0.0
+ name: vision-assistant
+ version: 1.0.0
 
 spec:
-  system_template: "You are an expert image analyst."
-  
-  media:
-    enabled: true
-    supported_types:
-      - image
-    image:
-      max_size_mb: 10
-      allowed_formats:
-        - jpeg
-        - png
-        - webp
-      default_detail: high
-    
-    examples:
-      - name: simple-analysis
-        role: user
-        parts:
-          - type: text
-            text: "What's in this image?"
-          - type: image
-            media:
-              file_path: examples/photo.jpg
-              mime_type: image/jpeg
-              detail: high
+ system_template: "You are an expert image analyst."
+
+ media:
+ enabled: true
+ supported_types:
+ - image
+ image:
+ max_size_mb: 10
+ allowed_formats:
+ - jpeg
+ - png
+ - webp
+ default_detail: high
+
+ examples:
+ - name: simple-analysis
+ role: user
+ parts:
+ - type: text
+ text: "What's in this image?"
+ - type: image
+ media:
+ file_path: examples/photo.jpg
+ mime_type: image/jpeg
+ detail: high
 ```
 
 ### Custom Media Type (3D Models)
 
 ```json
 {
-  "prompts": {
-    "3d-analyzer": {
-      "system_template": "You are a 3D model analysis assistant.",
-      "media": {
-        "enabled": true,
-        "supported_types": ["model3d", "image"],
-        "model3d": {
-          "max_size_mb": 100,
-          "allowed_formats": ["obj", "fbx", "gltf", "stl"],
-          "validation_params": {
-            "max_vertices": 500000,
-            "require_textures": false,
-            "allow_animations": true
-          }
-        },
-        "image": {
-          "max_size_mb": 10,
-          "allowed_formats": ["jpeg", "png"]
-        },
-        "examples": [
-          {
-            "name": "model-analysis",
-            "description": "Analyze a 3D model",
-            "role": "user",
-            "parts": [
-              {
-                "type": "text",
-                "text": "Analyze this 3D model for structural integrity."
-              },
-              {
-                "type": "model3d",
-                "media": {
-                  "file_path": "examples/part.obj",
-                  "mime_type": "model/obj",
-                  "caption": "Mechanical component"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
+ "prompts": {
+ "3d-analyzer": {
+ "system_template": "You are a 3D model analysis assistant.",
+ "media": {
+ "enabled": true,
+ "supported_types": ["model3d", "image"],
+ "model3d": {
+ "max_size_mb": 100,
+ "allowed_formats": ["obj", "fbx", "gltf", "stl"],
+ "validation_params": {
+ "max_vertices": 500000,
+ "require_textures": false,
+ "allow_animations": true
+ }
+ },
+ "image": {
+ "max_size_mb": 10,
+ "allowed_formats": ["jpeg", "png"]
+ },
+ "examples": [
+ {
+ "name": "model-analysis",
+ "description": "Analyze a 3D model",
+ "role": "user",
+ "parts": [
+ {
+ "type": "text",
+ "text": "Analyze this 3D model for structural integrity."
+ },
+ {
+ "type": "model3d",
+ "media": {
+ "file_path": "examples/part.obj",
+ "mime_type": "model/obj",
+ "caption": "Mechanical component"
+ }
+ }
+ ]
+ }
+ ]
+ }
+ }
+ }
 }
 ```
 
@@ -601,7 +601,7 @@ Only support base64-encoded media.
 
 ### Backward Compatibility
 
-✅ Fully backward compatible:
+- Fully backward compatible:
 
 - Media field is optional
 - Existing packs without media continue to work
@@ -613,28 +613,24 @@ Existing text-only packs can add media support:
 
 ```json
 {
-  "prompts": {
-    "existing-prompt": {
-      "system_template": "...",
-      // Add media configuration
-      "media": {
-        "enabled": true,
-        "supported_types": ["image"]
-      }
-    }
-  }
+ "prompts": {
+ "existing-prompt": {
+ "system_template": "...",
+ // Add media configuration
+ "media": {
+ "enabled": true,
+ "supported_types": ["image"]
+ }
+ }
+ }
 }
 ```
 
 ## Implementation Plan
 
-1. **Phase 1:** Update JSON schema to v1.1.0 ✅
-2. **Phase 2:** Implement media validation in PackC ✅
-3. **Phase 3:** Update documentation ⏳
-4. **Phase 4:** Add example packs with media ⏳
-5. **Phase 5:** Runtime implementation (PromptKit) ✅
-
-## Testing Strategy
+1. **Phase 1:** Update JSON schema to v1.1.0 2. **Phase 2:** Implement media validation in PackC 3. **Phase 3:** Update documentation
+4. **Phase 4:** Add example packs with media
+5. **Phase 5:** Runtime implementation (PromptKit) ## Testing Strategy
 
 - Schema validation for all media types
 - Compile-time media reference validation

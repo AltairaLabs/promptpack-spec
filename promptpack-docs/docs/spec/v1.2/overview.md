@@ -5,7 +5,7 @@ title: "Specification Overview (v1.2)"
 
 # Specification Overview
 
-<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.2 (Stable)</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.2 · stable</span>
 
 :::warning Archived Version
 This is the **v1.2** documentation (February 2026). For the latest features, see [v1.3 docs →](../overview)
@@ -34,17 +34,17 @@ PromptPacks solve this by providing a **single JSON file** that contains everyth
 
 ```json
 {
-  "id": "customer-support",
-  "name": "Customer Support Pack",
-  "version": "1.0.0",
-  "prompts": {
-    "support": { /* specialized for general support */ },
-    "sales": { /* optimized for sales inquiries */ },
-    "technical": { /* focused on technical issues */ }
-  },
-  "tools": { /* shared external functions */ },
-  "fragments": { /* reusable text components */ },
-  "evals": [ /* automated quality checks (v1.2+) */ ]
+ "id": "customer-support",
+ "name": "Customer Support Pack",
+ "version": "1.0.0",
+ "prompts": {
+ "support": { /* specialized for general support */ },
+ "sales": { /* optimized for sales inquiries */ },
+ "technical": { /* focused on technical issues */ }
+ },
+ "tools": { /* shared external functions */ },
+ "fragments": { /* reusable text components */ },
+ "evals": [ /* automated quality checks (v1.2+) */ ]
 }
 ```
 
@@ -105,7 +105,7 @@ An educational PromptPack might feature:
 
 ## Design Philosophy
 
-PromptPacks follow key principles that make them powerful and practical:
+PromptPacks follow a few principles:
 
 **Modularity**: Each prompt handles one domain well rather than trying to do everything
 

@@ -5,7 +5,7 @@ sidebar_position: 4
 # Community Tools
 
 :::caution Status
-🚧 **Community-Driven** - This ecosystem is in early stages
+ **Community-Driven** - This ecosystem is in early stages
 :::
 
 ## Overview
@@ -18,15 +18,15 @@ PromptPack is a specification for structuring prompts, tools, and workflows in Y
 
 ### Available Now
 
-✅ **PromptPack Specification** - The file format is defined and documented  
-✅ **JSON Schema** - For validation of `.promptpack.yml` files  
-✅ **PromptArena** - CLI testing tool (see [Arena Testing](./arena-testing))  
-✅ **LangChain.js Integration** - [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) npm package  
-✅ **Documentation** - This site and the specification docs
+- **PromptPack Specification** - The file format is defined and documented
+- **JSON Schema** - For validation of `.promptpack.yml` files
+- **PromptArena** - CLI testing tool (see [Arena Testing](./arena-testing))
+- **LangChain.js Integration** - [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs) npm package
+- **Documentation** - This site and the specification docs
 
 ### LangChain.js Integration
 
-The first official integration is now available! Use PromptPacks directly with LangChain.js:
+The first official integration is available. Use PromptPacks directly with LangChain.js:
 
 ```bash
 npm install @promptpack/langchain
@@ -86,8 +86,8 @@ promptpack init --template basic
 
 ### JavaScript/TypeScript
 
-**Available Now:**  
-✅ **LangChain.js Integration** - [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs)
+**Available Now:**
+- **LangChain.js Integration** - [`@promptpack/langchain`](https://github.com/AltairaLabs/promptpack-langchainjs)
 
 - Parses PromptPack JSON/YAML files
 - Integrates with LangChain's LLM providers
@@ -130,8 +130,8 @@ npm install -g ajv-cli
 
 # Validate a PromptPack file
 ajv validate \
-  -s schema/promptpack.schema.json \
-  -d my-file.promptpack.yml
+ -s schema/promptpack.schema.json \
+ -d my-file.promptpack.yml
 ```
 
 ### CI/CD Integration
@@ -143,22 +143,22 @@ name: Validate PromptPack Files
 on: [push, pull_request]
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        
-      - name: Install validator
-        run: npm install -g ajv-cli
-        
-      - name: Validate files
-        run: |
-          for file in **/*.promptpack.yml; do
-            ajv validate -s schema/promptpack.schema.json -d "$file"
-          done
+ validate:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+
+ - name: Setup Node.js
+ uses: actions/setup-node@v4
+
+ - name: Install validator
+ run: npm install -g ajv-cli
+
+ - name: Validate files
+ run: |
+ for file in **/*.promptpack.yml; do
+ ajv validate -s schema/promptpack.schema.json -d "$file"
+ done
 ```
 
 ## How to Contribute
@@ -207,13 +207,13 @@ High-value contributions:
 
 PromptPack is a **file format specification**, not a framework. It:
 
-✅ Defines how to structure prompts in files
-✅ Provides JSON Schema for validation
-✅ Documents best practices
+- Defines how to structure prompts in files
+- Provides JSON Schema for validation
+- Documents best practices
 
-❌ Does NOT provide LLM provider integrations
-❌ Does NOT include a runtime/execution engine
-❌ Does NOT offer hosted services
+- Does NOT provide LLM provider integrations
+- Does NOT include a runtime/execution engine
+- Does NOT offer hosted services
 
 ### Provider Integrations
 
@@ -236,7 +236,7 @@ PromptPack just defines the **file format** for prompts.
 2. Read the specification in `docs/`
 3. Study the JSON Schema in `schema/`
 4. Look at example files
-5. Start building!
+5. Start building.
 
 ### As a User
 
@@ -267,4 +267,4 @@ These are aspirational goals, not commitments.
 
 ---
 
-**Note:** This page describes potential community tools and contribution opportunities. Most tools do not exist yet. If you're interested in building something, please join the discussion on GitHub!
+**Note:** This page describes potential community tools and contribution opportunities. Most tools do not exist yet. If you're interested in building something, please join the discussion on GitHub.
