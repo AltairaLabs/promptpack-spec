@@ -1,0 +1,55 @@
+/* ============================================================
+   Atlas — Typography tokens
+   "Geometric voice, cartographer's labels."
+   Space Grotesk for the interface — precise, slightly stellar.
+   Spline Sans Mono for machine data — coordinates on a chart.
+   ============================================================ */
+
+:root {
+  /* ---- Families ---- */
+  --font-sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: var(--font-sans);
+
+  /* ---- Weights ---- */
+  --fw-regular: 400;  /* @kind font */
+  --fw-medium:  500;  /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:    700;  /* @kind font */
+
+  /* ---- Display & heading scale (Space Grotesk, tight tracking) ---- */
+  --text-size-hero:    58px;  /* hero H1 — line-height 1.04, ls -0.03em */
+  --text-size-h1:      46px;
+  --text-size-h2:      34px;  /* section heading — lh 1.12, ls -0.02em */
+  --text-size-h3:      20px;  /* card title — lh 1.2 */
+  --text-size-h4:      16px;
+
+  /* ---- Body scale ---- */
+  --text-size-lead:    20px;  /* hero sub-paragraph — lh 1.6 */
+  --text-size-body:    16px;  /* default body — lh 1.6 */
+  --text-size-body-sm: 14px;  /* dense body / card copy — lh 1.55 */
+  --text-size-caption: 13px;
+
+  /* ---- Mono / label scale (Spline Sans Mono) ---- */
+  --text-size-mono:       14px;  /* data readouts */
+  --text-size-mono-sm:    13px;
+  --text-size-mono-xs:    12px;  /* pills, status */
+  --text-size-mono-label: 11px;  /* eyebrow / uppercase section labels */
+  --text-size-mono-micro: 10px;  /* node captions, fine labels */
+
+  /* ---- Tracking ---- */
+  --tracking-hero:   -0.03em; /* large display */
+  --tracking-tight:  -0.02em; /* section headings */
+  --tracking-snug:   -0.01em;
+  --tracking-label:  0.08em;  /* uppercase mono labels */
+  --tracking-eyebrow:0.14em;  /* section eyebrows */
+  --tracking-wide:   0.18em;  /* mark-system eyebrows */
+
+  /* ---- Line heights ---- */
+  --leading-hero:  1.04;
+  --leading-head:  1.12;
+  --leading-tight: 1.2;
+  --leading-body:  1.6;
+  --leading-snug:  1.5;
+  --leading-mono:  1.7;
+}

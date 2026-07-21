@@ -1,0 +1,46 @@
+/* ============================================================
+   Atlas — Spacing, radii & layout tokens
+   A 4px-based scale. Generous section rhythm (80px+), dense
+   instrument-grade interiors.
+   ============================================================ */
+
+:root {
+  /* ---- Space scale (4px base) ---- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  10px;
+  --space-4:  12px;
+  --space-5:  14px;
+  --space-6:  16px;
+  --space-7:  18px;
+  --space-8:  20px;
+  --space-9:  22px;
+  --space-10: 24px;
+  --space-12: 28px;
+  --space-14: 32px;
+  --space-16: 40px;
+  --space-20: 48px;
+  --space-24: 64px;
+  --space-32: 80px;   /* default section padding (y) */
+  --space-40: 104px;  /* hero padding (y) */
+
+  /* ---- Radii ---- */
+  --radius-xs:   4px;   /* tiny tags, code labels */
+  --radius-sm:   6px;   /* status pills, small tags */
+  --radius-md:   7px;   /* buttons */
+  --radius-lg:   8px;   /* code surfaces, panels (mark system) */
+  --radius-xl:   12px;  /* small cards, inputs */
+  --radius-2xl:  14px;  /* default card */
+  --radius-3xl:  16px;  /* large card / feature panel */
+  --radius-pill: 999px; /* pills, chips */
+  --radius-tile: 25%;   /* the Star Tile — corner radius = 25% of width */
+
+  /* ---- Border widths ---- */
+  --border-hairline: 1px;
+  --border-accent:   2px;  /* top-accent on lineage cards, active tab */
+
+  /* ---- Layout ---- */
+  --container:     1080px; /* design-system / marketing content width */
+  --container-wide:1180px; /* mark system / wide layouts */
+  --gutter:        32px;   /* page side padding */
+}

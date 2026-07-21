@@ -25,11 +25,13 @@
 .versionBadge {
   margin-left: 1rem;
   font-size: 0.5em;
-  background-color: #7045af;
-  color: #ffffff !important;
+  background-color: var(--starlight-tint);
+  border: var(--border-hairline) solid var(--starlight-border);
+  color: var(--pp-accent) !important;
+  font-family: var(--font-mono);
   padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-weight: normal;
+  border-radius: var(--radius-pill);
+  font-weight: var(--fw-medium);
   position: relative;
   z-index: 10;
   display: inline-block;
@@ -44,8 +46,9 @@
   width: 100%;
   max-width: 960px;
   height: auto;
-  border-radius: 12px;
-  box-shadow: 0 24px 64px rgba(67, 43, 105, 0.25);
+  border: var(--border-hairline) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
   display: block;
   margin: 0 auto;
 }

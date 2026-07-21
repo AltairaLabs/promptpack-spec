@@ -1,179 +1,372 @@
 /**
- * PromptPack Documentation Site Styles
- * Custom styling for the PromptPack specification documentation.
+ * PromptPack.org — Atlas theming layer
+ *
+ * The site is styled by mapping Infima's --ifm-* variables onto Atlas tokens
+ * rather than by overriding Infima's output. Because Atlas re-points its RAW
+ * ramps under [data-theme="light"] — the same attribute Docusaurus stamps on
+ * <html> — a single mapping below serves both colour modes. Add a
+ * [data-theme='dark'] block only where a value genuinely cannot be expressed
+ * as an Atlas semantic token.
+ *
+ * PromptPack's lead is starlight. Antique gold belongs to the AltairaLabs
+ * masterbrand and appears ONLY in the family bar — never elsewhere on this
+ * site. See design_handoff_promptpack_org/README.md.
  */
 
-/* PromptPack Brand Colors */
+@import './atlas/tokens/index.css';
+
 :root {
-  --ifm-color-primary: #7045af;
-  --ifm-color-primary-dark: #5d3991;
-  --ifm-color-primary-darker: #52347f;
-  --ifm-color-primary-darkest: #432b69;
-  --ifm-color-primary-light: #8659c1;
-  --ifm-color-primary-lighter: #9c6dd3;
-  --ifm-color-primary-lightest: #c9b1e8;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(112, 69, 175, 0.1);
-  
-  /* PromptPack-specific variables */
-  --promptpack-accent: #7045af;
-  --promptpack-success: #10B981;
-  --promptpack-warning: #F59E0B;
-  --promptpack-danger: #EF4444;
-  --promptpack-gray: #111111;
-  
-  /* Typography */
-  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
-  --ifm-heading-font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --ifm-font-weight-semibold: 600;
-  --ifm-font-weight-bold: 700;
+  /* ---- PromptPack accents ---------------------------------- */
+  /* --text-link / --accent-inter already resolve per theme in Atlas:
+     link  light #2563EB / dark #93C5FD
+     inter light #2563EB / dark #3B82F6 */
+  --pp-accent: var(--text-link);
+  --pp-accent-strong: var(--accent-inter);
+
+  /* Section rhythm from the handoff: 76px default, 108px "spacious". */
+  --pp-pad: 76px;
+  --pp-pad-spacious: 108px;
+
+  /* ---- Infima: colour ramp ---------------------------------- */
+  --ifm-color-primary: var(--accent-inter);
+  --ifm-color-primary-dark: var(--starlight-500);
+  --ifm-color-primary-darker: var(--starlight-500);
+  --ifm-color-primary-darkest: var(--starlight-500);
+  --ifm-color-primary-light: var(--starlight-300);
+  --ifm-color-primary-lighter: var(--starlight-300);
+  --ifm-color-primary-lightest: var(--starlight-200);
+
+  --ifm-background-color: var(--bg-app);
+  --ifm-background-surface-color: var(--surface-card);
+
+  --ifm-font-color-base: var(--text-body);
+  --ifm-heading-color: var(--text-heading);
+  --ifm-link-color: var(--pp-accent);
+  --ifm-link-hover-color: var(--pp-accent-strong);
+
+  --ifm-hr-border-color: var(--border-default);
+  --ifm-toc-border-color: var(--border-default);
+
+  /* ---- Infima: typography ----------------------------------- */
+  --ifm-font-family-base: var(--font-sans);
+  --ifm-font-family-monospace: var(--font-mono);
+  --ifm-heading-font-family: var(--font-display);
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: var(--leading-body);
+  --ifm-heading-font-weight: var(--fw-semibold);
+  --ifm-font-weight-semibold: var(--fw-semibold);
+  --ifm-font-weight-bold: var(--fw-bold);
+
+  --ifm-h1-font-size: var(--text-size-h1);
+  --ifm-h2-font-size: var(--text-size-h2);
+  --ifm-h3-font-size: var(--text-size-h3);
+  --ifm-h4-font-size: var(--text-size-h4);
+
+  /* ---- Infima: shape ---------------------------------------- */
+  --ifm-global-radius: var(--radius-lg);
+  --ifm-button-border-radius: var(--radius-md);
+  --ifm-code-border-radius: var(--radius-xs);
+
+  /* ---- Infima: code ----------------------------------------- */
+  --ifm-code-font-size: 90%;
+  --ifm-code-background: var(--ink-tile);
+  --ifm-pre-background: var(--surface-code);
+  --ifm-pre-color: var(--text-body);
+  --docusaurus-highlighted-code-line-bg: var(--starlight-tint);
+
+  /* ---- Infima: chrome --------------------------------------- */
+  --ifm-navbar-background-color: var(--bg-app);
+  --ifm-navbar-link-color: var(--text-muted);
+  --ifm-navbar-link-hover-color: var(--star-100);
+  --ifm-navbar-shadow: none;
+  --ifm-footer-background-color: var(--ink-void);
+  --ifm-footer-color: var(--text-muted);
+  --ifm-footer-link-color: var(--text-muted);
+  --ifm-footer-link-hover-color: var(--pp-accent);
+  --ifm-footer-title-color: var(--text-heading);
+
+  --ifm-menu-color: var(--text-muted);
+  --ifm-menu-color-active: var(--pp-accent);
+  --ifm-menu-color-background-active: var(--starlight-tint);
+  --ifm-menu-color-background-hover: var(--hairline-faint);
+
+  --ifm-table-border-color: var(--border-default);
+  --ifm-table-head-background: var(--ink-tile);
+  --ifm-table-stripe-background: var(--hairline-faint);
+
+  --ifm-blockquote-color: var(--text-muted);
+  --ifm-blockquote-border-color: var(--border-strong);
 }
 
-/* Dark mode colors */
-[data-theme='dark'] {
-  --ifm-color-primary: #8659c1;
-  --ifm-color-primary-dark: #7045af;
-  --ifm-color-primary-darker: #5d3991;
-  --ifm-color-primary-darkest: #52347f;
-  --ifm-color-primary-light: #9c6dd3;
-  --ifm-color-primary-lighter: #b388db;
-  --ifm-color-primary-lightest: #c9b1e8;
-  --docusaurus-highlighted-code-line-bg: rgba(134, 89, 193, 0.15);
-  
-  --promptpack-accent: #8659c1;
-  --promptpack-success: #34D399;
-  --promptpack-warning: #FBBF24;
-  --promptpack-danger: #F87171;
+/* Infima's emphasis ramp drives borders, muted text and disabled states
+   across components we do not style directly. Point it at the star ramp so
+   it inverts with the theme instead of staying grey. */
+:root {
+  --ifm-color-emphasis-0: var(--ink-canvas);
+  --ifm-color-emphasis-100: var(--ink-tile);
+  --ifm-color-emphasis-200: var(--star-dim);
+  --ifm-color-emphasis-300: var(--star-950);
+  --ifm-color-emphasis-400: var(--star-900);
+  --ifm-color-emphasis-500: var(--star-800);
+  --ifm-color-emphasis-600: var(--star-700);
+  --ifm-color-emphasis-700: var(--star-500);
+  --ifm-color-emphasis-800: var(--star-300);
+  --ifm-color-emphasis-900: var(--star-200);
+  --ifm-color-emphasis-1000: var(--star-100);
 }
 
-/* Custom styling */
+/* ---- Headings: Atlas tracking ------------------------------- */
 
-/* Hero section on homepage */
+h1,
+.hero__title {
+  letter-spacing: var(--tracking-hero);
+  line-height: var(--leading-hero);
+}
+
+h2 {
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-head);
+}
+
+h3,
+h4 {
+  letter-spacing: var(--tracking-snug);
+  line-height: var(--leading-tight);
+}
+
+/* ---- Hero ---------------------------------------------------
+   Interim: the homepage still uses Infima's .hero--primary, which fills with
+   the primary colour. The handoff calls for a two-column hero on plain canvas
+   with a starlight atmosphere behind it — that arrives with the homepage
+   rebuild. Until then, neutralise the fill so the page reads as Atlas. */
+
 .hero--primary {
-  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, #111111 100%);
+  --ifm-hero-background-color: transparent;
+  --ifm-hero-text-color: var(--text-body);
+  background: var(--bg-app);
+  background-image: var(--atmo-starlight);
+  border-bottom: var(--border-hairline) solid var(--border-default);
 }
 
 .hero__title {
-  font-weight: var(--ifm-font-weight-bold);
-  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
+  color: var(--text-heading);
+  font-size: var(--text-size-hero);
+  font-weight: var(--fw-semibold);
 }
 
-.hero__title .badge--version {
-  background: var(--promptpack-accent) !important;
-  color: white !important;
-  -webkit-text-fill-color: white !important;
+.hero__subtitle {
+  color: var(--text-muted);
+  font-size: var(--text-size-lead);
+  line-height: var(--leading-body);
+  margin-inline: auto;
+  max-width: 720px;
 }
 
-/* Navbar styling */
-.navbar__brand:hover {
-  color: var(--ifm-navbar-link-hover-color);
+/* ---- Code block ground --------------------------------------
+   Docusaurus takes the code surface from the Prism theme, not from
+   --ifm-pre-background, so pin it to the Atlas code surface in both modes. */
+
+:root {
+  --prism-background-color: var(--surface-code) !important;
+  --prism-color: var(--text-body) !important;
+}
+
+/* ---- Navbar ------------------------------------------------- */
+
+.navbar {
+  border-bottom: var(--border-hairline) solid var(--border-default);
+}
+
+.navbar__title {
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-snug);
 }
 
 .navbar__logo {
   height: 32px;
-  margin-right: 0.75rem;
+  margin-right: var(--space-3);
 }
 
-/* Code blocks */
+/* ---- Code ---------------------------------------------------- */
+
 .prism-code {
-  border-radius: 8px;
-  border: 1px solid var(--ifm-color-emphasis-300);
+  border: var(--border-hairline) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-size-mono-sm);
 }
 
-/* Tables */
+code {
+  border: var(--border-hairline) solid var(--border-default);
+  font-size: var(--text-size-mono-sm);
+}
+
+/* ---- Tables -------------------------------------------------- */
+
 table {
-  border-radius: 8px;
-  overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 table th {
-  background-color: var(--ifm-color-emphasis-100);
-  font-weight: var(--ifm-font-weight-semibold);
+  background-color: var(--ifm-table-head-background);
+  color: var(--text-heading);
+  font-family: var(--font-mono);
+  font-size: var(--text-size-mono-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
 }
 
-/* Sidebar */
+/* ---- Sidebar & TOC ------------------------------------------- */
+
 .theme-doc-sidebar-container {
-  border-right: 1px solid var(--ifm-color-emphasis-200);
+  border-right: var(--border-hairline) solid var(--border-default);
 }
 
-/* Table of contents */
+/* Active item reads as a starlight rule in the margin, per the handoff. */
+.menu__link--active:not(.menu__link--sublist) {
+  border-left: var(--border-accent) solid var(--pp-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-weight: var(--fw-medium);
+}
+
+.table-of-contents {
+  border-left: var(--border-hairline) solid var(--border-default);
+  font-size: var(--text-size-body-sm);
+}
+
 .table-of-contents__link--active {
-  color: var(--ifm-color-primary);
-  font-weight: var(--ifm-font-weight-semibold);
+  color: var(--pp-accent);
+  font-weight: var(--fw-medium);
 }
 
-/* Admonitions/callouts */
-.admonition {
-  border-radius: 8px;
-  border-left: 4px solid;
+/* ---- Admonitions --------------------------------------------- */
+
+.theme-admonition {
+  border: var(--border-hairline) solid var(--border-default);
+  border-left: 3px solid var(--pp-accent);
+  border-radius: var(--radius-xl);
+  box-shadow: none;
 }
 
 .admonition-heading h5 {
-  font-weight: var(--ifm-font-weight-semibold);
+  font-family: var(--font-mono);
+  font-size: var(--text-size-mono-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-label);
 }
 
-/* Custom badges */
+/* ---- Badges -------------------------------------------------- */
+
 .badge--version {
-  background-color: var(--promptpack-accent);
-  color: #ffffff;
-  font-weight: var(--ifm-font-weight-semibold);
-  border-radius: 12px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  background-color: var(--starlight-tint);
+  border: var(--border-hairline) solid var(--starlight-border);
+  border-radius: var(--radius-pill);
+  color: var(--pp-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-size-mono-xs);
+  font-weight: var(--fw-medium);
+  padding: var(--space-1) var(--space-3);
 }
 
 .badge--status-draft {
-  background-color: var(--promptpack-warning);
-  color: #ffffff;
+  background-color: rgba(180, 116, 10, 0.12);
+  border-color: var(--amber-500);
+  color: var(--amber-500);
 }
 
 .badge--status-stable {
-  background-color: var(--promptpack-success);
-  color: #ffffff;
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: var(--status-healthy);
+  color: var(--status-healthy-text);
 }
 
-/* Footer enhancements */
+/* Version badge used at the top of each spec page. Authored in MDX as
+   <span className="ppVersionBadge ppVersionBadge--current">; see
+   docs/spec/VERSIONING.md for the convention. Previously these carried
+   hardcoded hex fills that could not follow the theme. */
+
+.ppVersionBadge {
+  border: var(--border-hairline) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-size-mono-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-snug);
+  margin-bottom: var(--space-10);
+  padding: var(--space-1) var(--space-4);
+}
+
+.ppVersionBadge--current {
+  background-color: var(--starlight-tint);
+  border-color: var(--starlight-border);
+  color: var(--pp-accent);
+}
+
+.ppVersionBadge--archived {
+  background-color: var(--hairline-faint);
+  color: var(--text-muted);
+}
+
+/* ---- Buttons -------------------------------------------------
+   The handoff is explicit: the primary call to action is a starlight tint
+   fill with a starlight border — never gold, and never Infima's grey
+   secondary. */
+
+.button--secondary {
+  background-color: var(--starlight-tint);
+  border-color: var(--starlight-border);
+  color: var(--pp-accent);
+}
+
+.button--secondary:hover {
+  background-color: var(--starlight-border);
+  border-color: var(--pp-accent);
+  color: var(--pp-accent-strong);
+}
+
+.button--outline {
+  border-color: var(--border-strong);
+  color: var(--text-body);
+}
+
+.button--outline:hover {
+  background-color: var(--hairline-faint);
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+/* ---- Footer -------------------------------------------------- */
+
 .footer {
-  background-color: var(--ifm-color-emphasis-100);
-  color: var(--ifm-color-emphasis-800);
+  border-top: var(--border-hairline) solid var(--border-default);
 }
 
 .footer__title {
-  color: var(--ifm-color-primary);
-  font-weight: var(--ifm-font-weight-semibold);
+  font-family: var(--font-mono);
+  font-size: var(--text-size-mono-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
 }
 
-.footer__link-item {
-  color: var(--ifm-color-emphasis-700);
+/* ---- Accessibility ------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--pp-accent);
+  outline-offset: 2px;
 }
 
-.footer__link-item:hover {
-  color: var(--ifm-color-primary);
-}
-
-.footer__copyright {
-  color: var(--ifm-color-emphasis-600);
-}
-
-/* Responsive adjustments */
 @media screen and (max-width: 768px) {
-  .hero__title {
-    font-size: 2rem;
+  :root {
+    --pp-pad: 48px;
+    --ifm-h1-font-size: var(--text-size-h2);
   }
-  
+
   .navbar__logo {
     height: 28px;
   }
-}
-
-/* Focus and accessibility */
-:focus-visible {
-  outline: 2px solid var(--ifm-color-primary);
-  outline-offset: 2px;
 }

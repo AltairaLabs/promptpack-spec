@@ -1,0 +1,49 @@
+/* ============================================================
+   Atlas — Effects: shadows, glows, gradients, motion
+   Depth comes from charted star-maps & instrument readouts —
+   NOT ambient blur. Glow is reserved for the gold star.
+   ============================================================ */
+
+:root {
+  /* ---- Shadows (used sparingly; the night sky is mostly flat) ---- */
+  --shadow-card:   0 1px 0 rgba(147,197,253,0.04), 0 8px 30px -16px rgba(0,0,0,0.6);
+  --shadow-pop:    0 18px 50px -20px rgba(0,0,0,0.7);
+
+  /* ---- Glows — gold is the only thing that glows ---- */
+  --glow-gold:        0 8px 22px -8px rgba(227,179,65,0.5); /* primary button @kind shadow */
+  --glow-gold-soft:   0 0 8px rgba(227,179,65,0.9);          /* key star node @kind shadow */
+  --glow-gold-bloom:  drop-shadow(0 0 16px rgba(227,179,65,0.4)); /* @kind shadow */
+  --glow-starlight:   0 0 9px rgba(59,130,246,0.9);          /* cool node @kind shadow */
+
+  /* ---- Signature radial atmospheres (place behind heroes) ---- */
+  --atmo-gold:      radial-gradient(1100px 560px at 84% -14%, rgba(227,179,65,0.12), transparent 56%); /* @kind other */
+  --atmo-starlight: radial-gradient(1100px 540px at 86% -12%, rgba(59,130,246,0.16), transparent 58%); /* @kind other */
+  --atmo-violet:    radial-gradient(720px 420px at 6% 8%, rgba(139,92,246,0.08), transparent 55%); /* @kind other */
+  --atmo-footer:    radial-gradient(800px 420px at 50% 130%, rgba(227,179,65,0.12), transparent 60%); /* @kind other */
+
+  /* ---- Surface gradients ---- */
+  --grad-surface:   linear-gradient(180deg, #0A1120, #0C1526); /* @kind other */
+  --grad-card:      linear-gradient(180deg, #0D1828, #0A1322); /* @kind other */
+  --grad-gold-wash: linear-gradient(180deg, rgba(227,179,65,0.06), #0C1526); /* @kind other */
+  --grad-blue-wash: linear-gradient(180deg, rgba(59,130,246,0.05), #0C1526); /* @kind other */
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1); /* @kind other */
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --dur-fast:   120ms; /* @kind other */
+  --dur-base:   200ms; /* @kind other */
+  --dur-slow:   360ms; /* @kind other */
+  --twinkle:    3s; /* @kind other */
+}
+
+/* Signature keyframe — the gold star breathes */
+@keyframes atlas-twinkle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+/* Terminal cursor blink (TUI) */
+@keyframes atlas-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}

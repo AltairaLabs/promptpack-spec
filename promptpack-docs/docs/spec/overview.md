@@ -4,17 +4,7 @@ sidebar_position: 2
 
 # Specification Overview
 
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#10b981',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📘 v1.5.1 (Current)
-</div>
+<span className="ppVersionBadge ppVersionBadge--current">📘 v1.5.1 (Current)</span>
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 

@@ -92,17 +92,7 @@ npm start
 ### Current Version (v1.1)
 
 ```markdown
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#10b981',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📘 v1.1 (Current)
-</div>
+<span className="ppVersionBadge ppVersionBadge--current">📘 v1.1 (Current)</span>
 
 :::info Version Information
 This documentation covers **v1.1** of the PromptPack specification.
@@ -113,17 +103,7 @@ Looking for the previous version? [View v1.0 docs →](./v1.0/overview)
 ### Archived Version (v1.0)
 
 ```markdown
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#6b7280',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📦 v1.0 (Stable)
-</div>
+<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.0 (Stable)</span>
 
 :::warning Archived Version
 This is the **v1.0** documentation. For the latest features, see [v1.1 docs →](../overview)

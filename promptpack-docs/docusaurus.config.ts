@@ -90,6 +90,9 @@ const config: Config = {
       {name: 'twitter:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
     ],
     colorMode: {
+      // Atlas ships dark as its base ramp, but promptpack.org leads light —
+      // "the printed star chart" register for a standards document.
+      defaultMode: 'light',
       respectPrefersColorScheme: true,
     },
     navbar: {
@@ -190,11 +193,13 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `PromptPack is an open specification by AltairaLabs. Licensed under MIT. Building toward a community-driven future.`,
+      copyright: `PromptPack is an open specification by AltairaLabs. The specification is licensed CC-BY-4.0; code and reference implementations are MIT.`,
     },
     prism: {
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      // Night Owl's navy ground sits with the Atlas ink ramp; Dracula's
+      // purple fought it.
+      darkTheme: prismThemes.nightOwl,
     },
   } satisfies Preset.ThemeConfig,
 };

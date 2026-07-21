@@ -5,17 +5,7 @@ title: "Pack Structure (v1.4.0)"
 
 # Pack Structure & Design
 
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#6b7280',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📦 v1.4.0 (Stable)
-</div>
+<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.4.0 (Stable)</span>
 
 :::warning Archived Version
 This is the **v1.4.0** documentation. For the latest features, see [v1.4.1 docs →](../structure)

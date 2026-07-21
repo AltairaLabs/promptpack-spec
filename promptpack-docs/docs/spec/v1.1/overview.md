@@ -5,17 +5,7 @@ title: "Specification Overview (v1.1)"
 
 # Specification Overview
 
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#6b7280',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📦 v1.1 (Stable)
-</div>
+<span className="ppVersionBadge ppVersionBadge--archived">📦 v1.1 (Stable)</span>
 
 :::warning Archived Version
 This is the **v1.1** documentation (November 2024). For the latest features, see [v1.2 docs →](../overview)
