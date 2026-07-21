@@ -1,0 +1,140 @@
+<!doctype html>
+<!--
+  Hero video end card — Atlas scheme, 1124x720 (the video's native size).
+
+  Rendered to PNG with headless Chrome so the real Atlas typefaces are used:
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+      --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
+      --window-size=1124,720 --screenshot=endcard.png endcard.html   # from design/hero-endcard/
+
+  Light ground on purpose: it is --ink-void of the Atlas light ramp (#E9EEF6),
+  the same surface the video frame sits on in the page, so the card reads as
+  part of the panel rather than a pasted-in slide. Swap the two custom
+  properties in :root for the dark ramp if the video is ever re-cut for dark.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Space Grotesk'; font-style: normal; font-weight: 500;
+    src: url('../../promptpack-docs/src/css/atlas/assets/fonts/space-grotesk-500.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Space Grotesk'; font-style: normal; font-weight: 600;
+    src: url('../../promptpack-docs/src/css/atlas/assets/fonts/space-grotesk-600.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 400;
+    src: url('../../promptpack-docs/src/css/atlas/assets/fonts/spline-sans-mono-400.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 500;
+    src: url('../../promptpack-docs/src/css/atlas/assets/fonts/spline-sans-mono-500.woff2') format('woff2');
+  }
+
+  :root {
+    /* Atlas light ramp */
+    --ground: #070C16;   /* --ink-void (dark ramp) */
+    --heading: #F4F8FF;  /* --star-100 */
+    --body: #C7D5EA;     /* --star-500 */
+    --muted: #5E708C;    /* --star-900 */
+    --accent: #3B82F6;   /* --starlight-500 */
+    --hairline: rgba(147, 197, 253, 0.18);
+    --tint: rgba(59, 130, 246, 0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { width: 1124px; height: 720px; overflow: hidden; }
+
+  body {
+    align-items: center;
+    background: var(--ground);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    justify-content: center;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Signature starlight atmosphere, same gesture as the site hero. */
+  .atmo {
+    background:
+      radial-gradient(760px 380px at 84% -10%, rgba(59,130,246,0.16), transparent 60%),
+      radial-gradient(560px 320px at 6% 104%, rgba(59,130,246,0.08), transparent 58%);
+    inset: 0;
+    position: absolute;
+  }
+
+  .stack {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+  }
+
+  .mark { display: block; height: 60px; width: 60px; }
+
+  h1 {
+    color: var(--heading);
+    font-size: 46px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.14;
+    margin-top: 34px;
+    max-width: 830px;
+  }
+
+  /* Mirrors the homepage hero meta row. Machine data is lowercase mono. */
+  .meta {
+    align-items: center;
+    color: var(--muted);
+    display: flex;
+    font-family: 'Spline Sans Mono', ui-monospace, monospace;
+    font-size: 15px;
+    gap: 14px;
+    letter-spacing: 0.04em;
+    margin-top: 34px;
+  }
+
+  .sep { color: #2E3D54; }
+
+  .url {
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    color: var(--body);
+    font-family: 'Spline Sans Mono', ui-monospace, monospace;
+    font-size: 17px;
+    margin-top: 42px;
+    padding: 11px 22px;
+  }
+
+</style>
+</head>
+<body>
+  <div class="atmo"></div>
+
+  <div class="stack">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="4" y="4" width="56" height="56" rx="15" fill="none" stroke="#93C5FD" stroke-width="2"/>
+      <polygon points="32,12 36.5,27 51,32 36.5,37 32,52 27.5,37 13,32 27.5,27"
+               fill="none" stroke="#C7D5EA" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+
+    <h1>Any agent — managed like every other engineering artifact.</h1>
+
+    <div class="meta">
+      <span>one file</span><span class="sep">·</span>
+      <span>every provider</span><span class="sep">·</span>
+      <span>versioned</span><span class="sep">·</span>
+      <span>open</span>
+    </div>
+
+    <div class="url">promptpack.org</div>
+  </div>
+</body>
+</html>

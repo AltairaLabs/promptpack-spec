@@ -5,17 +5,7 @@ title: "Schema Guide (v1.4.1)"
 
 # Schema Guide
 
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#6b7280',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📦 v1.4.1 (Stable)
-</div>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.4.1 · stable</span>
 
 :::warning Archived Version
 This is the **v1.4.1** documentation. For the latest features, see [v1.5.0 docs →](../schema-guide)
@@ -53,22 +43,22 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 
 ```json
 {
-  "$schema": "https://promptpack.org/schema/latest/promptpack.schema.json",
-  "id": "my-pack",
-  "name": "My Pack",
-  "version": "1.0.0",
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}"
-  },
-  "prompts": {
-    "greeting": {
-      "id": "greeting",
-      "name": "Greeter",
-      "version": "1.0.0",
-      "system_template": "You are a friendly assistant for {{company}}."
-    }
-  }
+ "$schema": "https://promptpack.org/schema/latest/promptpack.schema.json",
+ "id": "my-pack",
+ "name": "My Pack",
+ "version": "1.0.0",
+ "template_engine": {
+ "version": "v1",
+ "syntax": "{{variable}}"
+ },
+ "prompts": {
+ "greeting": {
+ "id": "greeting",
+ "name": "Greeter",
+ "version": "1.0.0",
+ "system_template": "You are a friendly assistant for {{company}}."
+ }
+ }
 }
 ```
 
@@ -86,9 +76,9 @@ Configuration for how variables are substituted and fragments are resolved acros
 
 ```json
 "template_engine": {
-  "version": "v1",
-  "syntax": "{{variable}}",
-  "features": ["basic_substitution", "fragments"]
+ "version": "v1",
+ "syntax": "{{variable}}",
+ "features": ["basic_substitution", "fragments"]
 }
 ```
 
@@ -118,18 +108,18 @@ A single prompt configuration within a pack. Each prompt represents a specific t
 
 ```json
 "prompts": {
-  "support": {
-    "id": "support",
-    "name": "Support Bot",
-    "version": "1.0.0",
-    "system_template": "You are a {{role}} assistant for {{company}}.\n\nHelp resolve their issue.",
-    "variables": [
-      { "name": "role", "type": "string", "required": true, "example": "support agent" },
-      { "name": "company", "type": "string", "required": true, "default": "TechCo" }
-    ],
-    "tools": ["lookup_order", "create_ticket"],
-    "parameters": { "temperature": 0.7, "max_tokens": 1500 }
-  }
+ "support": {
+ "id": "support",
+ "name": "Support Bot",
+ "version": "1.0.0",
+ "system_template": "You are a {{role}} assistant for {{company}}.\n\nHelp resolve their issue.",
+ "variables": [
+ { "name": "role", "type": "string", "required": true, "example": "support agent" },
+ { "name": "company", "type": "string", "required": true, "default": "TechCo" }
+ ],
+ "tools": ["lookup_order", "create_ticket"],
+ "parameters": { "temperature": 0.7, "max_tokens": 1500 }
+ }
 }
 ```
 
@@ -176,26 +166,26 @@ Declares how a variable is auto-populated from runtime context, so the caller do
 
 ```json
 {
-  "name": "user_id",
-  "type": "string",
-  "required": true,
-  "binding": {
-    "kind": "session",
-    "field": "user_id",
-    "auto_populate": true
-  }
+ "name": "user_id",
+ "type": "string",
+ "required": true,
+ "binding": {
+ "kind": "session",
+ "field": "user_id",
+ "auto_populate": true
+ }
 }
 ```
 
 ```json
 {
-  "name": "priority",
-  "type": "string",
-  "required": true,
-  "description": "Support ticket priority level",
-  "validation": {
-    "enum": ["low", "medium", "high", "urgent"]
-  }
+ "name": "priority",
+ "type": "string",
+ "required": true,
+ "description": "Support ticket priority level",
+ "validation": {
+ "enum": ["low", "medium", "high", "urgent"]
+ }
 }
 ```
 
@@ -223,24 +213,24 @@ Tool parameters use standard JSON Schema format. The `parameters` object must ha
 
 ```json
 "tools": {
-  "create_ticket": {
-    "name": "create_ticket",
-    "description": "Create a support ticket with title, description, and priority",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "Ticket title"
-        },
-        "priority": {
-          "type": "string",
-          "enum": ["low", "medium", "high", "urgent"]
-        }
-      },
-      "required": ["title"]
-    }
-  }
+ "create_ticket": {
+ "name": "create_ticket",
+ "description": "Create a support ticket with title, description, and priority",
+ "parameters": {
+ "type": "object",
+ "properties": {
+ "title": {
+ "type": "string",
+ "description": "Ticket title"
+ },
+ "priority": {
+ "type": "string",
+ "enum": ["low", "medium", "high", "urgent"]
+ }
+ },
+ "required": ["title"]
+ }
+ }
 }
 ```
 
@@ -274,9 +264,9 @@ LLM generation parameters controlling the model's behavior and output characteri
 
 ```json
 "parameters": {
-  "temperature": 0.7,
-  "max_tokens": 1500,
-  "top_p": 0.9
+ "temperature": 0.7,
+ "max_tokens": 1500,
+ "top_p": 0.9
 }
 ```
 
@@ -296,19 +286,19 @@ A validation rule (guardrail) applied to LLM responses.
 
 ```json
 "validators": [
-  {
-    "type": "banned_words",
-    "enabled": true,
-    "fail_on_violation": true,
-    "params": {
-      "words": ["impossible", "can't help"]
-    }
-  },
-  {
-    "type": "pii_detection",
-    "enabled": true,
-    "fail_on_violation": true
-  }
+ {
+ "type": "banned_words",
+ "enabled": true,
+ "fail_on_violation": true,
+ "params": {
+ "words": ["impossible", "can't help"]
+ }
+ },
+ {
+ "type": "pii_detection",
+ "enabled": true,
+ "fail_on_violation": true
+ }
 ]
 ```
 
@@ -344,10 +334,10 @@ Model-specific template modifications. Allows customizing prompts for specific m
 
 ```json
 "model_overrides": {
-  "claude-3-opus": {
-    "system_template_prefix": "<thinking>\n",
-    "parameters": { "temperature": 0.5 }
-  }
+ "claude-3-opus": {
+ "system_template_prefix": "<thinking>\n",
+ "parameters": { "temperature": 0.5 }
+ }
 }
 ```
 
@@ -439,32 +429,32 @@ Optional pass/fail threshold attached to an eval. Runtimes compare the eval's nu
 
 ```json
 "evals": [
-  {
-    "id": "json_format",
-    "type": "json_valid",
-    "trigger": "every_turn",
-    "description": "Verify the assistant always returns valid JSON",
-    "metric": {
-      "name": "promptpack_json_valid",
-      "type": "boolean"
-    }
-  },
-  {
-    "id": "tone-check",
-    "type": "llm_judge",
-    "trigger": "sample_turns",
-    "sample_percentage": 10,
-    "params": {
-      "judge_prompt": "Rate the response tone on a 1-5 scale for professionalism.",
-      "model": "gpt-4o",
-      "passing_score": 4
-    },
-    "metric": {
-      "name": "promptpack_tone_score",
-      "type": "gauge",
-      "range": { "min": 1, "max": 5 }
-    }
-  }
+ {
+ "id": "json_format",
+ "type": "json_valid",
+ "trigger": "every_turn",
+ "description": "Verify the assistant always returns valid JSON",
+ "metric": {
+ "name": "promptpack_json_valid",
+ "type": "boolean"
+ }
+ },
+ {
+ "id": "tone-check",
+ "type": "llm_judge",
+ "trigger": "sample_turns",
+ "sample_percentage": 10,
+ "params": {
+ "judge_prompt": "Rate the response tone on a 1-5 scale for professionalism.",
+ "model": "gpt-4o",
+ "passing_score": 4
+ },
+ "metric": {
+ "name": "promptpack_tone_score",
+ "type": "gauge",
+ "range": { "min": 1, "max": 5 }
+ }
+ }
 ]
 ```
 
@@ -480,9 +470,9 @@ Fragments are shared, reusable template text blocks defined at the pack level. T
 
 ```json
 "fragments": {
-  "customer_context": "Customer: {{customer_name}}\nAccount Type: {{account_type}}",
-  "greeting": "Hello! How can I help you today?",
-  "escalation_notice": "I'm going to connect you with a specialist."
+ "customer_context": "Customer: {{customer_name}}\nAccount Type: {{account_type}}",
+ "greeting": "Hello! How can I help you today?",
+ "escalation_notice": "I'm going to connect you with a specialist."
 }
 ```
 
@@ -585,14 +575,14 @@ For custom media types not covered by the specific configs above.
 
 ```json
 "media": {
-  "enabled": true,
-  "supported_types": ["image"],
-  "image": {
-    "max_size_mb": 20,
-    "allowed_formats": ["jpeg", "png", "webp"],
-    "default_detail": "high",
-    "max_images_per_msg": 5
-  }
+ "enabled": true,
+ "supported_types": ["image"],
+ "image": {
+ "max_size_mb": 20,
+ "allowed_formats": ["jpeg", "png", "webp"],
+ "default_detail": "high",
+ "max_images_per_msg": 5
+ }
 }
 ```
 
@@ -628,39 +618,39 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 
 ```json
 "workflow": {
-  "version": 1,
-  "entry": "triage",
-  "states": {
-    "triage": {
-      "prompt_task": "triage",
-      "description": "Route incoming requests to the appropriate specialist",
-      "on_event": {
-        "billing": "billing_support",
-        "technical": "tech_support",
-        "resolved": "closing"
-      }
-    },
-    "billing_support": {
-      "prompt_task": "billing",
-      "on_event": { "resolved": "closing", "escalate": "human_handoff" },
-      "persistence": "persistent"
-    },
-    "tech_support": {
-      "prompt_task": "technical",
-      "on_event": { "resolved": "closing", "escalate": "human_handoff" },
-      "persistence": "persistent"
-    },
-    "closing": {
-      "prompt_task": "closing",
-      "on_event": {},
-      "orchestration": "internal"
-    },
-    "human_handoff": {
-      "prompt_task": "handoff",
-      "on_event": {},
-      "orchestration": "external"
-    }
-  }
+ "version": 1,
+ "entry": "triage",
+ "states": {
+ "triage": {
+ "prompt_task": "triage",
+ "description": "Route incoming requests to the appropriate specialist",
+ "on_event": {
+ "billing": "billing_support",
+ "technical": "tech_support",
+ "resolved": "closing"
+ }
+ },
+ "billing_support": {
+ "prompt_task": "billing",
+ "on_event": { "resolved": "closing", "escalate": "human_handoff" },
+ "persistence": "persistent"
+ },
+ "tech_support": {
+ "prompt_task": "technical",
+ "on_event": { "resolved": "closing", "escalate": "human_handoff" },
+ "persistence": "persistent"
+ },
+ "closing": {
+ "prompt_task": "closing",
+ "on_event": {},
+ "orchestration": "internal"
+ },
+ "human_handoff": {
+ "prompt_task": "handoff",
+ "on_event": {},
+ "orchestration": "external"
+ }
+ }
 }
 ```
 
@@ -676,13 +666,13 @@ Declares one named slot in a state's `artifacts` map. Artifacts carry lightweigh
 
 ```json
 "artifacts": {
-  "commit_sha":  { "type": "text/plain",       "description": "Latest generated commit" },
-  "test_report": { "type": "application/json", "description": "Test runner summary" },
-  "iteration_log": {
-    "type": "text/plain",
-    "mode": "append",
-    "description": "Per-visit log accumulated across the loop"
-  }
+ "commit_sha": { "type": "text/plain", "description": "Latest generated commit" },
+ "test_report": { "type": "application/json", "description": "Test runner summary" },
+ "iteration_log": {
+ "type": "text/plain",
+ "mode": "append",
+ "description": "Per-visit log accumulated across the loop"
+ }
 }
 ```
 
@@ -698,31 +688,31 @@ Resource budget for an entire workflow execution. Provides a global safety net i
 
 ```json
 "workflow": {
-  "version": 1,
-  "entry": "plan",
-  "states": {
-    "plan":      { "prompt_task": "plan",      "on_event": { "PlanReady": "implement" } },
-    "implement": {
-      "prompt_task":   "implement",
-      "max_visits":    5,
-      "on_max_visits": "review",
-      "artifacts": {
-        "commit_sha":  { "type": "text/plain",       "description": "Latest commit" },
-        "test_report": { "type": "application/json", "description": "Test runner output" }
-      },
-      "on_event": { "CodeReady": "test" }
-    },
-    "test":   { "prompt_task": "run_tests", "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
-    "review": { "prompt_task": "review",    "terminal": true },
-    "done":   { "prompt_task": "summarize", "terminal": true }
-  },
-  "engine": {
-    "budget": {
-      "max_total_visits":  50,
-      "max_tool_calls":   200,
-      "max_wall_time_sec": 600
-    }
-  }
+ "version": 1,
+ "entry": "plan",
+ "states": {
+ "plan": { "prompt_task": "plan", "on_event": { "PlanReady": "implement" } },
+ "implement": {
+ "prompt_task": "implement",
+ "max_visits": 5,
+ "on_max_visits": "review",
+ "artifacts": {
+ "commit_sha": { "type": "text/plain", "description": "Latest commit" },
+ "test_report": { "type": "application/json", "description": "Test runner output" }
+ },
+ "on_event": { "CodeReady": "test" }
+ },
+ "test": { "prompt_task": "run_tests", "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
+ "review": { "prompt_task": "review", "terminal": true },
+ "done": { "prompt_task": "summarize", "terminal": true }
+ },
+ "engine": {
+ "budget": {
+ "max_total_visits": 50,
+ "max_tool_calls": 200,
+ "max_wall_time_sec": 600
+ }
+ }
 }
 ```
 
@@ -755,25 +745,25 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 
 ```json
 "agents": {
-  "entry": "triage",
-  "members": {
-    "triage": {
-      "description": "Routes customer requests to the right specialist",
-      "tags": ["router", "customer-service"],
-      "input_modes": ["text/plain"],
-      "output_modes": ["text/plain"]
-    },
-    "billing": {
-      "description": "Handles billing inquiries and payment issues",
-      "tags": ["billing", "payments"],
-      "input_modes": ["text/plain"],
-      "output_modes": ["text/plain", "application/json"]
-    },
-    "technical": {
-      "description": "Provides technical troubleshooting assistance",
-      "tags": ["support", "technical"]
-    }
-  }
+ "entry": "triage",
+ "members": {
+ "triage": {
+ "description": "Routes customer requests to the right specialist",
+ "tags": ["router", "customer-service"],
+ "input_modes": ["text/plain"],
+ "output_modes": ["text/plain"]
+ },
+ "billing": {
+ "description": "Handles billing inquiries and payment issues",
+ "tags": ["billing", "payments"],
+ "input_modes": ["text/plain"],
+ "output_modes": ["text/plain", "application/json"]
+ },
+ "technical": {
+ "description": "Provides technical troubleshooting assistance",
+ "tags": ["support", "technical"]
+ }
+ }
 }
 ```
 
@@ -814,13 +804,13 @@ Each entry in the top-level `skills` array is one of three forms:
 
 ```json
 "skills": [
-  "./skills/billing",
-  { "path": "./skills/compliance", "preload": true },
-  {
-    "name": "escalation-protocol",
-    "description": "Steps for escalating unresolved customer issues",
-    "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket\n4. Provide the ticket reference to the customer"
-  }
+ "./skills/billing",
+ { "path": "./skills/compliance", "preload": true },
+ {
+ "name": "escalation-protocol",
+ "description": "Steps for escalating unresolved customer issues",
+ "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket\n4. Provide the ticket reference to the customer"
+ }
 ]
 ```
 

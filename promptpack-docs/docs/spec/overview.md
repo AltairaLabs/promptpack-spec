@@ -4,17 +4,7 @@ sidebar_position: 2
 
 # Specification Overview
 
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#10b981',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📘 v1.5.1 (Current)
-</div>
+<span className="ppVersionBadge ppVersionBadge--current">v1.5.1 · current</span>
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
@@ -45,38 +35,38 @@ A PromptPack is a **single JSON file** that contains everything needed to run an
 
 ```json
 {
-  "id": "code-agent",
-  "name": "Code Generation Agent",
-  "version": "1.0.0",
-  "prompts": {
-    "plan":      { /* break a task into steps */ },
-    "implement": { /* write code for the current step */ },
-    "test":      { /* run and interpret tests */ },
-    "review":    { /* summarize what's left if the loop is exhausted */ }
-  },
-  "workflow": {
-    "entry": "plan",
-    "states": {
-      "plan":      { "prompt_task": "plan",      "on_event": { "PlanReady":   "implement" } },
-      "implement": {
-        "prompt_task":   "implement",
-        "max_visits":    5,
-        "on_max_visits": "review",
-        "on_event":      { "CodeReady": "test" }
-      },
-      "test":      { "prompt_task": "test",      "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
-      "done":      { "prompt_task": "review",    "terminal": true },
-      "review":    { "prompt_task": "review",    "terminal": true }
-    },
-    "engine": { "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 } }
-  },
-  "tools":     { /* shared external functions */ },
-  "fragments": { /* reusable text components */ },
-  "evals":     [ /* automated quality checks (v1.2+) */ ],
-  "agents":    { /* A2A agent definitions (v1.3+) */ },
-  "skills":    [ /* progressive-disclosure knowledge (v1.3.1+) */ ],
-  "compositions": { /* declarative step-graph compositions (v1.5+) */ },
-  "requires":  { /* model providers the pack needs to run (v1.5.1+) */ }
+ "id": "code-agent",
+ "name": "Code Generation Agent",
+ "version": "1.0.0",
+ "prompts": {
+ "plan": { /* break a task into steps */ },
+ "implement": { /* write code for the current step */ },
+ "test": { /* run and interpret tests */ },
+ "review": { /* summarize what's left if the loop is exhausted */ }
+ },
+ "workflow": {
+ "entry": "plan",
+ "states": {
+ "plan": { "prompt_task": "plan", "on_event": { "PlanReady": "implement" } },
+ "implement": {
+ "prompt_task": "implement",
+ "max_visits": 5,
+ "on_max_visits": "review",
+ "on_event": { "CodeReady": "test" }
+ },
+ "test": { "prompt_task": "test", "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
+ "done": { "prompt_task": "review", "terminal": true },
+ "review": { "prompt_task": "review", "terminal": true }
+ },
+ "engine": { "budget": { "max_total_visits": 50, "max_tool_calls": 200, "max_wall_time_sec": 600 } }
+ },
+ "tools": { /* shared external functions */ },
+ "fragments": { /* reusable text components */ },
+ "evals": [ /* automated quality checks (v1.2+) */ ],
+ "agents": { /* A2A agent definitions (v1.3+) */ },
+ "skills": [ /* progressive-disclosure knowledge (v1.3.1+) */ ],
+ "compositions": { /* declarative step-graph compositions (v1.5+) */ },
+ "requires": { /* model providers the pack needs to run (v1.5.1+) */ }
 }
 ```
 
@@ -84,47 +74,47 @@ The same spec format expresses simpler shapes too — a single-prompt assistant,
 
 ## Core Capabilities
 
-### 🔌 **Provider Requirements** *(v1.5.1+)*
+### Provider Requirements *(v1.5.1+)*
 
 Declare the model providers a pack needs to run, runtime-agnostically. The optional top-level `requires.providers` block lists *logical* providers — each with a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (`llm`, `embedding`, `tts`, …), an optional human `description`, and optional advisory `capabilities` (modalities, minimum context, tool-use, embedding dimensions). A pack states *what it needs*, never which concrete provider satisfies it — resolution stays the host runtime's job. The block is optional and fully backward compatible; when present it's validated strictly, giving runtimes and deployers a contract for coverage checks, auto-binding, and test/deploy parity.
 
-### 🧱 **Workflow Composition** *(v1.5+)*
+### Workflow Composition *(v1.5+)*
 
 Express **procedural** flows declaratively. A workflow state can set `orchestration: composition` to hand its work to a named step graph in the new top-level `compositions` map — a directed, acyclic graph of typed steps: `prompt` (one-shot LLM call), `agent` (bounded LLM-tool loop), `tool` (deterministic call), `branch` (constrained predicate → then/else), and `parallel` (fan-out + reduce). Steps wire together with `${input.X}` and `${stepId.output.X}` bindings, conditionals use a constrained predicate language (no expression evaluation), and parallel blocks merge via `append`/`replace`/`barrier` reducers. Compositions are reached only through a workflow state, so a purely procedural pack is just a one-state terminal workflow — the workflow state machine stays the universal orchestration primitive.
 
-### 🔁 **Agent Loops** *(v1.4+)*
+### Agent Loops *(v1.4+)*
 
 Build iterative, self-correcting agents on top of the workflow state machine. Terminal states (`terminal: true`) mark exit points explicitly. Per-state visit limits (`max_visits` plus optional `on_max_visits` redirect) cap individual loops without killing the whole workflow. Named artifact slots flow structured metadata across visits, and a global execution budget (`engine.budget`) provides a safety net for total visits, tool calls, and wall time. Artifacts captured at every transition give you a complete, replayable execution trace — time-travel debugging for free.
 
-### 🔀 **Workflows & Multi-Agent Orchestration** *(v1.3+)*
+### Workflows & Multi-Agent Orchestration *(v1.3+)*
 
 Define state-machine workflows over prompts with event-driven transitions. Combine with A2A-compatible agent definitions to coordinate multi-agent systems — route between specialized prompts or agents based on events, with configurable persistence and orchestration modes.
 
-### 🎯 **Multi-Prompt Architecture**
+### Multi-Prompt Architecture
 
 Instead of one generic prompt trying to handle everything, PromptPacks let you create **specialized prompts** for specific tasks. A customer service pack might route between billing, technical support, and sales inquiries — each prompt optimized for its purpose while sharing tools and configuration.
 
-### 🧩 **Skills** *(v1.3.1+)*
+### Skills *(v1.3.1+)*
 
 Declare modular knowledge sources that agents load progressively on demand. Skills can be file paths, package references, or inline definitions — keeping system templates lean while giving agents deep domain expertise when needed. Workflow states can scope which skills are available in each context.
 
-### ⚡ **Tool Integration**
+### Tool Integration
 
 Define external tools once, reference them from any prompt in the pack. Whether it's looking up data, performing calculations, or calling external APIs, tools are reusable across all prompts and workflow states.
 
-### 🛡️ **Built-in Safety**
+### Built-in Safety
 
 Each prompt can have its own validators (guardrails) to block unsafe output inline. Define content filters, length limits, and custom validation rules that travel with the pack.
 
-### 🧪 **Evals & Testability** *(v1.2+)*
+### Evals & Testability *(v1.2+)*
 
 Ship quality policy alongside your prompts. Evals run asynchronously and produce scores via Prometheus metrics. Testing metadata tracks which models have been tested and how well they performed.
 
-### 📦 **Complete Packaging**
+### Complete Packaging
 
 Everything needed to run your agent — prompts, workflow, tools, fragments, evals, agents, skills — lives in one file. Deploy once, run anywhere.
 
-### 🔄 **Reusability & Sharing**
+### Reusability & Sharing
 
 PromptPacks are portable. Build a pack once, then use it across different applications, teams, or organizations. Share best practices through standardized, tested packages.
 
@@ -152,7 +142,7 @@ A tutoring pack pairs an adaptive-questioning prompt, an assessment prompt with 
 
 ## Design Philosophy
 
-PromptPacks follow key principles that make them powerful and practical:
+PromptPacks follow a few principles:
 
 **Modularity**: Each prompt handles one domain well rather than trying to do everything
 

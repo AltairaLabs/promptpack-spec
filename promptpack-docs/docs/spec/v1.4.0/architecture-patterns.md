@@ -5,17 +5,7 @@ title: "Architecture Patterns (v1.4.0)"
 
 # Architecture Patterns
 
-<div style={{
-  padding: '8px 16px',
-  backgroundColor: '#6b7280',
-  color: 'white',
-  borderRadius: '6px',
-  display: 'inline-block',
-  marginBottom: '24px',
-  fontWeight: 'bold'
-}}>
-  📦 v1.4.0 (Stable)
-</div>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.4.0 · stable</span>
 
 :::warning Archived Version
 This is the **v1.4.0** documentation. For the latest features, see [v1.4.1 docs →](../architecture-patterns)
@@ -29,21 +19,21 @@ A PromptPack is organized in layers. Lower layers are simpler and more universal
 
 ```
 ┌─────────────────────────────────────────────┐
-│  Agent Loops  Bounded iteration + artifacts │  v1.4
+│ Agent Loops Bounded iteration + artifacts │ v1.4
 ├─────────────────────────────────────────────┤
-│  Skills       Progressive knowledge loading │  v1.3.1
+│ Skills Progressive knowledge loading │ v1.3.1
 ├─────────────────────────────────────────────┤
-│  Agents       Inter-system discovery (A2A)  │  v1.3
+│ Agents Inter-system discovery (A2A) │ v1.3
 ├─────────────────────────────────────────────┤
-│  Workflow     Intra-pack state machine      │  v1.3
+│ Workflow Intra-pack state machine │ v1.3
 ├─────────────────────────────────────────────┤
-│  Evals        Async quality measurement     │  v1.2
+│ Evals Async quality measurement │ v1.2
 ├─────────────────────────────────────────────┤
-│  Validators   Inline guardrails             │  v1.0
+│ Validators Inline guardrails │ v1.0
 ├─────────────────────────────────────────────┤
-│  Tools & Fragments   Shared resources       │  v1.0
+│ Tools & Fragments Shared resources │ v1.0
 ├─────────────────────────────────────────────┤
-│  Prompts      Core behavior definitions     │  v1.0
+│ Prompts Core behavior definitions │ v1.0
 └─────────────────────────────────────────────┘
 ```
 
@@ -117,9 +107,9 @@ The workflow state machine supports several common multi-prompt patterns. Choose
 A triage prompt classifies requests and routes to specialized prompts.
 
 ```
-         ┌─ billing ─────┐
-triage ──┤               ├── closing
-         └─ technical ───┘
+ ┌─ billing ─────┐
+triage ──┤ ├── closing
+ └─ technical ───┘
 ```
 
 **When to use**: Customer support, help desks, any system where incoming requests need classification before handling.
@@ -150,7 +140,7 @@ Combine workflow orchestration internally with agent discovery externally.
 
 ```
 [Workflow: triage → specialist → closing]
-     ↕ A2A
+ ↕ A2A
 [External systems discover and invoke agents]
 ```
 
@@ -162,10 +152,10 @@ The workflow visits a state repeatedly until it succeeds or hits a guardrail. A 
 
 ```
 plan → implement ⇄ test → done (terminal)
-        │  ↑       │
-        │  └── TestsFailed (loop back, max_visits=5)
-        ↓
-       review (terminal, on_max_visits)
+ │ ↑ │
+ │ └── TestsFailed (loop back, max_visits=5)
+ ↓
+ review (terminal, on_max_visits)
 ```
 
 **When to use**: Self-correcting agents — codegen with test feedback, research crews that refine via critic feedback, drafting workflows where a reviewer sends edits back. Use `max_visits` + `on_max_visits` to bound each loop, declare `artifacts` to flow structured state across visits, and set `engine.budget` as a global runaway-loop safety net.

@@ -41,17 +41,17 @@ Before PromptPack, there was no standard format for packaging conversational AI 
 
 ```json
 {
-  "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
-  "id": "pack-identifier",
-  "name": "Human-readable name",
-  "version": "1.0.0",
-  "description": "Pack description",
-  "template_engine": { ... },
-  "prompts": { ... },
-  "tools": { ... },
-  "fragments": { ... },
-  "metadata": { ... },
-  "compilation": { ... }
+ "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
+ "id": "pack-identifier",
+ "name": "Human-readable name",
+ "version": "1.0.0",
+ "description": "Pack description",
+ "template_engine": { ... },
+ "prompts": { ... },
+ "tools": { ... },
+ "fragments": { ... },
+ "metadata": { ... },
+ "compilation": { ... }
 }
 ```
 
@@ -75,11 +75,11 @@ Each pack contains multiple prompts, not just one:
 
 ```json
 {
-  "prompts": {
-    "support": { "system_template": "..." },
-    "sales": { "system_template": "..." },
-    "technical": { "system_template": "..." }
-  }
+ "prompts": {
+ "support": { "system_template": "..." },
+ "sales": { "system_template": "..." },
+ "technical": { "system_template": "..." }
+ }
 }
 ```
 
@@ -91,13 +91,13 @@ Tools and fragments are defined once, used by all prompts:
 
 ```json
 {
-  "tools": {
-    "lookup_order": { ... }
-  },
-  "prompts": {
-    "support": { "tools": ["lookup_order"] },
-    "sales": { "tools": ["lookup_order"] }
-  }
+ "tools": {
+ "lookup_order": { ... }
+ },
+ "prompts": {
+ "support": { "tools": ["lookup_order"] },
+ "sales": { "tools": ["lookup_order"] }
+ }
 }
 ```
 
@@ -109,11 +109,11 @@ Each prompt can have its own version:
 
 ```json
 {
-  "version": "1.0.0",  // Pack version
-  "prompts": {
-    "support": { "version": "1.2.0" },  // Prompt version
-    "sales": { "version": "1.0.5" }
-  }
+ "version": "1.0.0", // Pack version
+ "prompts": {
+ "support": { "version": "1.2.0" }, // Prompt version
+ "sales": { "version": "1.0.5" }
+ }
 }
 ```
 
@@ -125,22 +125,22 @@ Each prompt can have its own version:
 
 ```json
 {
-  "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
-  "id": "hello-world",
-  "name": "Hello World Pack",
-  "version": "1.0.0",
-  "template_engine": {
-    "version": "v1",
-    "syntax": "{{variable}}"
-  },
-  "prompts": {
-    "greeting": {
-      "id": "greeting",
-      "name": "Greeter",
-      "version": "1.0.0",
-      "system_template": "Say hello to {{name}}."
-    }
-  }
+ "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
+ "id": "hello-world",
+ "name": "Hello World Pack",
+ "version": "1.0.0",
+ "template_engine": {
+ "version": "v1",
+ "syntax": "{{variable}}"
+ },
+ "prompts": {
+ "greeting": {
+ "id": "greeting",
+ "name": "Greeter",
+ "version": "1.0.0",
+ "system_template": "Say hello to {{name}}."
+ }
+ }
 }
 ```
 
@@ -186,12 +186,7 @@ N/A - No previous format to migrate from.
 
 ## Implementation Plan
 
-1. **Phase 1:** Define JSON Schema ✅
-2. **Phase 2:** Create validation tools ✅
-3. **Phase 3:** Write specification documentation ✅
-4. **Phase 4:** Implement reference runtime (PromptKit) ✅
-
-## Testing Strategy
+1. **Phase 1:** Define JSON Schema 2. **Phase 2:** Create validation tools 3. **Phase 3:** Write specification documentation 4. **Phase 4:** Implement reference runtime (PromptKit) ## Testing Strategy
 
 - JSON Schema validation against examples
 - Round-trip serialization tests

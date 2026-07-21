@@ -49,7 +49,7 @@ PromptPacks need to be both **executable by systems** and **readable by develope
 
 ### Validation and Tooling
 
-JSON's mature ecosystem provides powerful tooling:
+JSON's mature ecosystem provides established tooling:
 
 - **Schema Validation**: Catch errors before deployment using JSON Schema
 - **IDE Support**: Syntax highlighting, auto-completion, real-time validation

@@ -1,12 +1,27 @@
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+/**
+ * The spec version, read from the schema — the single source of truth.
+ *
+ * Surfaced to components via customFields so the standards strip, homepage and
+ * footer cannot drift from the schema on a version bump. version-check only
+ * guards the schema against README, so anything hardcoded in the site would go
+ * stale silently; this removes that class of drift rather than adding another
+ * checklist item.
+ */
+const SPEC_VERSION: string = JSON.parse(
+  readFileSync(path.join(__dirname, '../schema/promptpack.schema.json'), 'utf8'),
+).version;
+
 const config: Config = {
   title: 'PromptPack',
-  tagline: 'An open specification for packaging AI agent behavior—portable, testable, and framework-agnostic.',
+  tagline: 'One open spec to define, package, and ship an agent.',
   favicon: 'img/favicon.svg',
   markdown: {
     mermaid: true,
@@ -37,6 +52,8 @@ const config: Config = {
   // by GitHub Discussions. The footer no-ops until repoId + categoryId are set.
   // One-time setup: see promptpack-docs/src/theme/DocItem/Footer/SETUP-giscus.md
   customFields: {
+    // Read from schema/promptpack.schema.json at build time — never hardcode.
+    specVersion: SPEC_VERSION,
     giscus: {
       repo: 'altairalabs/promptpack-spec',
       repoId: 'R_kgDOQMvRhA',
@@ -77,28 +94,60 @@ const config: Config = {
     // Social card for sharing
     image: 'img/promptpack-social-card.svg',
     metadata: [
-      {name: 'description', content: 'Stop building AI agents from scratch. PromptPack lets you package, share, and deploy production-ready agent behavior with everything included: specialized prompts, tools, workflows, agent loops, and safety guardrails.'},
+      {name: 'description', content: 'PromptPack is the declarative format for a production agent — the models it requires, its prompts, tools, workflows, guardrails, and the quality checks it must pass — in a single portable, versioned artifact.'},
       {name: 'keywords', content: 'promptpack, prompts, ai agents, agent loops, llm, specification, json, workflows, testing, packaging, deployment'},
-      {property: 'og:title', content: 'PromptPack - Deploy Production-Ready AI Agents'},
-      {property: 'og:description', content: 'Stop building AI agents from scratch. Package, share, and deploy production-ready agent behavior with everything included.'},
+      {property: 'og:title', content: 'PromptPack — One open spec to define, package, and ship an agent'},
+      {property: 'og:description', content: 'The open, vendor-neutral format for a production agent — prompts, tools, workflows, guardrails and quality checks in one portable, versioned artifact.'},
       {property: 'og:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
       {property: 'og:url', content: 'https://promptpack.org'},
       {property: 'og:type', content: 'website'},
       {name: 'twitter:card', content: 'summary_large_image'},
-      {name: 'twitter:title', content: 'PromptPack - Deploy Production-Ready AI Agents'},
-      {name: 'twitter:description', content: 'Stop building AI agents from scratch. Package, share, and deploy production-ready agent behavior with everything included.'},
+      {name: 'twitter:title', content: 'PromptPack — One open spec to define, package, and ship an agent'},
+      {name: 'twitter:description', content: 'The open, vendor-neutral format for a production agent — prompts, tools, workflows, guardrails and quality checks in one portable, versioned artifact.'},
       {name: 'twitter:image', content: 'https://promptpack.org/img/promptpack-social-card.svg'},
     ],
     colorMode: {
+      // Atlas ships dark as its base ramp, but promptpack.org leads light —
+      // "the printed star chart" register for a standards document.
+      defaultMode: 'light',
       respectPrefersColorScheme: true,
+    },
+    mermaid: {
+      // 'base' is the only built-in theme that honours themeVariables. Set
+      // once here so diagrams inherit the Atlas palette instead of each
+      // carrying its own %%{init}%% block — which is how the old purple
+      // survived in RFC 0009 long after the rebrand.
+      theme: {light: 'base', dark: 'base'},
+      options: {
+        themeVariables: {
+          primaryColor: '#EAF0F8', // --ink-tile (light)
+          primaryTextColor: '#101C2F', // --star-200 (light)
+          primaryBorderColor: '#2563EB', // --starlight-500 (light)
+          lineColor: '#5E7091', // --star-700 (light)
+          secondaryColor: '#F3F6FB', // --ink-canvas (light)
+          tertiaryColor: '#FFFFFF', // --ink-surface (light)
+          background: '#FFFFFF',
+          mainBkg: '#EAF0F8',
+          edgeLabelBackground: '#F3F6FB',
+          fontFamily: "'Space Grotesk', system-ui, sans-serif",
+          fontSize: '14px',
+        },
+      },
     },
     navbar: {
       title: 'PromptPack',
       logo: {
-        alt: 'PromptPack Logo',
+        alt: 'PromptPack',
         src: 'img/logo.svg',
+        // The Atlas mark is outline-only, so its strokes have to change with
+        // the ramp — one file cannot serve both grounds.
+        srcDark: 'img/logo-dark.svg',
       },
       items: [
+        // The .org pill sits immediately after the wordmark, per the handoff
+        // masthead. Navbar titles cannot carry markup, so it rides as the
+        // first left-hand item.
+        {type: 'html', position: 'left', value: '<span class="navbarOrgPill">.org</span>'},
         {to: '/docs/spec/overview', label: 'Spec', position: 'left'},
         {to: '/docs/processes/rfc-process', label: 'Processes', position: 'left'},
         {to: '/docs/rfcs', label: 'RFCs', position: 'left'},
@@ -108,10 +157,17 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+        {
+          to: '/docs/spec/overview',
+          label: 'Read the spec',
+          position: 'right',
+          className: 'navbarCta',
+        },
       ],
     },
     footer: {
-      style: 'dark',
+      // No 'dark' style: Infima's .footer--dark pins a fixed #303846 that beats
+      // the Atlas mapping. The footer now follows --ink-void in both modes.
       links: [
         {
           title: 'Documentation',
@@ -185,16 +241,22 @@ const config: Config = {
             },
             {
               label: 'AltairaLabs',
-              href: 'https://altairalabs.com',
+              href: 'https://altairalabs.ai',
             },
           ],
         },
       ],
-      copyright: `PromptPack is an open specification by AltairaLabs. Licensed under MIT. Building toward a community-driven future.`,
+      copyright: `PromptPack is an open specification by AltairaLabs. The specification is licensed CC-BY-4.0; code and reference implementations are MIT.`,
     },
     prism: {
+      // 'diff' is not in Prism's default bundle, so ```diff fences rendered as
+      // plain text with no inserted/deleted tokens for CSS to colour. The docs
+      // use diff blocks on the file-format page.
+      additionalLanguages: ['diff'],
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      // Night Owl's navy ground sits with the Atlas ink ramp; Dracula's
+      // purple fought it.
+      darkTheme: prismThemes.nightOwl,
     },
   } satisfies Preset.ThemeConfig,
 };

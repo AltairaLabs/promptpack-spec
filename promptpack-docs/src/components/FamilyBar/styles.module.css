@@ -1,0 +1,229 @@
+/**
+ * AltairaLabs masterbrand strip and product switcher.
+ *
+ * Geometry and colour match the shipped bar at promptarena.altairalabs.ai so
+ * the band is identical across subsites. Fixed ink and gold in both colour
+ * modes — this belongs to the masterbrand, not the product, so it deliberately
+ * does not read the Atlas theme ramps.
+ */
+
+.bar {
+  align-items: center;
+  background: #05080e;
+  border-bottom: 1px solid rgba(147, 197, 253, 0.1);
+  display: flex;
+  height: 38px;
+  justify-content: space-between;
+  padding: 0 var(--space-14);
+  position: relative;
+  /* Above the sticky masthead so the menu is not clipped by it. */
+  z-index: 210;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.wordmark {
+  color: #e6edf8;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.wordmarkGold {
+  color: #e3b341;
+}
+
+.right {
+  align-items: center;
+  display: flex;
+  gap: var(--space-6);
+}
+
+/* Switcher trigger ------------------------------------------------ */
+
+.switcherWrap {
+  position: relative;
+}
+
+.switcher {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(147, 197, 253, 0.16);
+  border-radius: var(--radius-sm);
+  color: #c7d5ea;
+  cursor: pointer;
+  display: flex;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  gap: 6px;
+  line-height: 1;
+  padding: 5px 9px;
+  transition: background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+.switcher:hover,
+.switcher[aria-expanded='true'] {
+  background: rgba(147, 197, 253, 0.08);
+  border-color: rgba(147, 197, 253, 0.28);
+}
+
+.caret {
+  color: #5e708c;
+}
+
+/* 7px square swatch. Filled for the in-house products, outline for the
+   open spec — matching PromptPack's no-fill mark. */
+.dot {
+  border: 1px solid transparent;
+  border-radius: 2px;
+  flex: none;
+  height: 7px;
+  width: 7px;
+}
+
+/* Menu ------------------------------------------------------------- */
+
+.menu {
+  background: #0c1424;
+  border: 1px solid rgba(147, 197, 253, 0.14);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.8);
+  padding: 6px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 300px;
+  z-index: 220;
+}
+
+.menuHead {
+  padding: 9px 11px 10px;
+}
+
+.menuTitle {
+  color: #8195b0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.menuNote {
+  color: #93c5fd;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.group {
+  color: #5e708c;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 10px 11px 5px;
+  text-transform: uppercase;
+}
+
+.groupNote {
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  text-transform: none;
+}
+
+.row {
+  align-items: center;
+  border-radius: var(--radius-lg);
+  color: #dce6f5;
+  display: flex;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  gap: 11px;
+  padding: 10px 11px;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+a.row:hover {
+  background: rgba(147, 197, 253, 0.06);
+  color: #f4f8ff;
+  text-decoration: none;
+}
+
+.rowCurrent {
+  background: rgba(147, 197, 253, 0.08);
+  cursor: default;
+}
+
+.rowName {
+  flex: 1;
+}
+
+.rowOrg {
+  color: #8195b0;
+  font-weight: 400;
+}
+
+.rowRole {
+  color: #5e708c;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.menuFoot {
+  align-items: center;
+  border-top: 1px solid rgba(147, 197, 253, 0.1);
+  color: #8195b0;
+  display: flex;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 11px;
+}
+
+.menuFoot:hover {
+  color: #e6edf8;
+  text-decoration: none;
+}
+
+/* Top-level links --------------------------------------------------- */
+
+.link {
+  color: #8195b0;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  transition: color var(--dur-base) var(--ease-standard);
+}
+
+.link:hover {
+  color: #e6edf8;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 640px) {
+  .bar {
+    padding: 0 var(--space-6);
+  }
+
+  .link {
+    display: none;
+  }
+
+  .menu {
+    width: 268px;
+  }
+}

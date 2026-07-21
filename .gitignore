@@ -13,6 +13,8 @@ docs/node_modules/
 
 # Ignore OS and editor files
 .DS_Store
+.vscode/
+.idea/
 *.log
 node_modules/
 build/

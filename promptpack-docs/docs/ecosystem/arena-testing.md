@@ -5,7 +5,7 @@ sidebar_position: 2
 # Arena Testing
 
 :::info Status
-✅ **Available Now** - PromptArena is actively being used for LLM testing
+- **Available Now** - PromptArena is actively being used for LLM testing
 :::
 
 ## Overview
@@ -52,23 +52,23 @@ Create an `arena.yaml` configuration file:
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: Arena
 metadata:
-  name: my-arena
+ name: my-arena
 spec:
-  prompt_configs:
-    - id: assistant
-      file: prompts/assistant.yaml
+ prompt_configs:
+ - id: assistant
+ file: prompts/assistant.yaml
 
-  providers:
-    - file: providers/openai.yaml
-    - file: providers/anthropic.yaml
+ providers:
+ - file: providers/openai.yaml
+ - file: providers/anthropic.yaml
 
-  scenarios:
-    - file: scenarios/test.yaml
+ scenarios:
+ - file: scenarios/test.yaml
 
-  defaults:
-    output:
-      dir: out
-      formats: ["json", "html"]
+ defaults:
+ output:
+ dir: out
+ formats: ["json", "html"]
 ```
 
 ## Key Features
@@ -97,20 +97,20 @@ Define complex conversation flows in scenario files:
 apiVersion: promptkit.altairalabs.ai/v1alpha1
 kind: Scenario
 metadata:
-  name: customer-support
+ name: customer-support
 spec:
-  task_type: support
-  turns:
-    - role: user
-      parts:
-        - type: text
-          text: "I need help with my account"
-    - role: assistant
-      # Expected assistant response
-    - role: user
-      parts:
-        - type: text
-          text: "Can you reset my password?"
+ task_type: support
+ turns:
+ - role: user
+ parts:
+ - type: text
+ text: "I need help with my account"
+ - role: assistant
+ # Expected assistant response
+ - role: user
+ parts:
+ - type: text
+ text: "Can you reset my password?"
 ```
 
 ### Multimodal Content
@@ -119,14 +119,14 @@ Test with images, audio, and video:
 
 ```yaml
 turns:
-  - role: user
-    parts:
-      - type: text
-        text: "What's in this image?"
-      - type: image
-        media:
-          file_path: test-data/sample.jpg
-          detail: high
+ - role: user
+ parts:
+ - type: text
+ text: "What's in this image?"
+ - type: image
+ media:
+ file_path: test-data/sample.jpg
+ detail: high
 ```
 
 Supported media types:
@@ -214,11 +214,11 @@ PromptArena supports multiple assertion types:
 
 ```yaml
 assertions:
-  - type: content_includes
-    patterns: ["expected text", "another phrase"]
-  
-  - type: content_excludes
-    patterns: ["unwanted text"]
+ - type: content_includes
+ patterns: ["expected text", "another phrase"]
+
+ - type: content_excludes
+ patterns: ["unwanted text"]
 ```
 
 ### Media Assertions
@@ -228,36 +228,36 @@ Validate media outputs from generative models:
 ```yaml
 # Image validation
 assertions:
-  - type: image_format
-    params:
-      formats: [png, jpeg]
-  
-  - type: image_dimensions
-    params:
-      width: 1920
-      height: 1080
+ - type: image_format
+ params:
+ formats: [png, jpeg]
+
+ - type: image_dimensions
+ params:
+ width: 1920
+ height: 1080
 
 # Audio validation
 assertions:
-  - type: audio_format
-    params:
-      formats: [mp3, wav]
-  
-  - type: audio_duration
-    params:
-      min_seconds: 29
-      max_seconds: 31
+ - type: audio_format
+ params:
+ formats: [mp3, wav]
+
+ - type: audio_duration
+ params:
+ min_seconds: 29
+ max_seconds: 31
 
 # Video validation
 assertions:
-  - type: video_resolution
-    params:
-      presets: [4k, uhd]
-  
-  - type: video_duration
-    params:
-      min_seconds: 59
-      max_seconds: 61
+ - type: video_resolution
+ params:
+ presets: [4k, uhd]
+
+ - type: video_duration
+ params:
+ min_seconds: 59
+ max_seconds: 61
 ```
 
 ## CI/CD Integration
@@ -270,24 +270,24 @@ name: Arena Tests
 on: [push, pull_request]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run Arena Tests
-        run: promptarena run --ci --format junit
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          
-      - name: Publish Test Results
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Arena Test Results
-          path: out/junit.xml
-          reporter: java-junit
+ test:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+
+ - name: Run Arena Tests
+ run: promptarena run --ci --format junit
+ env:
+ OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+ ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+ - name: Publish Test Results
+ uses: dorny/test-reporter@v1
+ if: always()
+ with:
+ name: Arena Test Results
+ path: out/junit.xml
+ reporter: java-junit
 ```
 
 ### CI Mode

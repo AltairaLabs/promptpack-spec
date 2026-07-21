@@ -1,0 +1,122 @@
+/* ============================================================
+   Atlas — Color tokens
+   "Night sky, starlight, gold." A navy night-sky ramp (never pure
+   black), Starlight Blue + Antique Gold as the two leads, with a
+   nebula support set. Gold = "the one thing that matters most",
+   used once per view — never as filler.
+   ============================================================ */
+
+:root {
+  /* ---- Ink ramp — the night sky ---------------------------- */
+  --ink-void:      #070C16;  /* deepest — code surfaces, app shell edges */
+  --ink-canvas:    #0A1120;  /* primary page background */
+  --ink-surface:   #0C1526;  /* cards, panels */
+  --ink-raised:    #111C2E;  /* raised surfaces, popovers, inputs */
+  --ink-tile:      #101D30;  /* product mark tiles, chips */
+  --ink-hairline:  #1E3149;  /* solid hairline / mark tile stroke */
+
+  /* ---- Starlight text ramp (cool whites → muted) ----------- */
+  --star-100: #F4F8FF;  /* brightest — hero headings */
+  --star-200: #F2F6FC;  /* headings */
+  --star-300: #E6EDF8;  /* default body on dark */
+  --star-400: #DCE6F5;  /* emphasized body */
+  --star-500: #C7D5EA;  /* secondary text */
+  --star-600: #9FB1CC;  /* muted body */
+  --star-700: #8195B0;  /* muted / supporting copy */
+  --star-800: #73849F;  /* faint — inactive tabs */
+  --star-900: #5E708C;  /* mutest — mono labels, captions */
+  --star-950: #4A5A74;  /* faintest — fine print */
+  --star-dim: #2E3D54;  /* dividers in mono, disabled glyphs */
+
+  /* ---- Leads ----------------------------------------------- */
+  --gold-500:   #E3B341;  /* Antique Gold — THE star, primary action */
+  --gold-300:   #F0D79A;  /* light gold — gold text on dark */
+  --gold-200:   #F4D27A;  /* gradient highlight */
+  --gold-ink:   #06122A;  /* text/icon ON gold fills */
+
+  --starlight-500: #3B82F6;  /* Starlight Blue — links, interaction, wayfinding lines */
+  --starlight-300: #93C5FD;  /* light starlight — accents, agent nodes, borders */
+  --starlight-200: #BFD6F2;  /* faint starlight — mono data text */
+
+  /* ---- Nebula support -------------------------------------- */
+  --nebula-violet:  #C4B5FD;  /* prompts */
+  --nebula-violet-deep: #8B5CF6;
+  --ion-cyan:       #67E8F9;  /* tools */
+  --pulsar-500:     #34D399;  /* healthy / running */
+  --pulsar-300:     #7DD3A8;  /* healthy text on dark */
+  --amber-500:      #F59E0B;  /* pending */
+  --signal-red:     #EF4444;  /* error / destructive */
+  --signal-red-300: #FCA5A5;  /* error text on dark */
+
+  /* ---- Starlight tints (borders, glows, fills) ------------- */
+  /* base rgb of #93C5FD = 147 197 253 ; #3B82F6 = 59 130 246 ; #E3B341 = 227 179 65 */
+  --hairline:        rgba(147, 197, 253, 0.10);  /* default 1px border */
+  --hairline-strong: rgba(147, 197, 253, 0.18);  /* emphasized border */
+  --hairline-faint:  rgba(147, 197, 253, 0.06);  /* faintest divider */
+  --gold-tint:       rgba(227, 179, 65, 0.10);   /* gold panel wash */
+  --gold-border:     rgba(227, 179, 65, 0.30);   /* gold outline */
+  --starlight-tint:  rgba(59, 130, 246, 0.12);   /* blue panel wash */
+  --starlight-border:rgba(59, 130, 246, 0.30);
+
+  /* ============================================================
+     SEMANTIC ALIASES — reach for these in components
+     ============================================================ */
+
+  /* surfaces */
+  --bg-app:          var(--ink-canvas);
+  --surface-1:       var(--ink-surface);
+  --surface-2:       var(--ink-raised);
+  --surface-code:    var(--ink-void);
+  --surface-card:    var(--ink-surface);
+  --border-default:  var(--hairline);
+  --border-strong:   var(--hairline-strong);
+
+  /* overlays / scrims */
+  --scrim:        rgba(10, 17, 32, 0.72);  /* dim behind drag/drop + transient overlays */
+  --scrim-heavy:  rgba(4, 8, 18, 0.86);    /* heavy backdrop (lightbox) — dark in both themes */
+
+  /* text */
+  --text-heading:    var(--star-200);
+  --text-body:       var(--star-300);
+  --text-muted:      var(--star-700);
+  --text-faint:      var(--star-900);
+  --text-on-gold:    var(--gold-ink);
+  --text-on-accent:  #F4F8FF;  /* near-white text on --accent-inter fills (both themes) */
+  --text-link:       var(--starlight-300);
+
+  /* accents */
+  --accent-primary:  var(--gold-500);   /* the star — primary action / key node */
+  --accent-inter:    var(--starlight-500); /* interaction / links / lines */
+  --accent-node:     var(--starlight-300);
+
+  /* status */
+  --status-healthy:  var(--pulsar-500);
+  --status-healthy-text: var(--pulsar-300);
+  --status-pending:  var(--amber-500);
+  --status-error:    var(--signal-red);
+  --status-error-text: var(--signal-red-300);
+  --status-error-tint: rgba(239, 68, 68, 0.10);  /* faint red wash — error bubble surface */
+
+  /* node kinds (constellation graph) */
+  --node-prompt: var(--nebula-violet);
+  --node-agent:  var(--starlight-300);
+  --node-tool:   var(--ion-cyan);
+  --node-branch: var(--gold-500);
+  --node-output: var(--gold-500);
+
+  /* ---- Categorical palette — 8 distinct hues -----------------
+     A generic, ordered set for coloring N categories/series where the
+     categories are the consumer's domain (memory categories, resource
+     types, tags). Components stay generic: consumers map their own
+     category → a --category-N slot. Slot 8 reads as the neutral/"other"
+     bucket. Values here are the dark-mode defaults; [data-theme="light"]
+     re-points them. */
+  --category-1: #60A5FA;  /* blue */
+  --category-2: #A78BFA;  /* violet */
+  --category-3: #F472B6;  /* pink */
+  --category-4: #FBBF24;  /* amber */
+  --category-5: #34D399;  /* emerald */
+  --category-6: #22D3EE;  /* cyan */
+  --category-7: #F87171;  /* red */
+  --category-8: #9CA3AF;  /* neutral / "other" */
+}

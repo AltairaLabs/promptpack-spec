@@ -332,7 +332,7 @@ Look for issues labeled `good first issue` to get started.
 - **Website:** [promptpack.org](https://promptpack.org)
 - **Discussions:** [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
 - **Issues:** [Issue Tracker](https://github.com/altairalabs/promptpack-spec/issues)
-- **Contact:** [community@altairalabs.com](mailto:community@altairalabs.com)
+- **Contact:** [conduct@altairalabs.ai](mailto:conduct@altairalabs.ai)
 
 ## License
 
@@ -340,4 +340,4 @@ This project is licensed under the [MIT License](./LICENSE).
 
 ---
 
-**Built by [AltairaLabs](https://altairalabs.com) for the conversational AI community.**
+**Built by [AltairaLabs](https://altairalabs.ai) for the conversational AI community.**

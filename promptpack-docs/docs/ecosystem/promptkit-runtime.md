@@ -81,7 +81,7 @@ PromptKit ships GitHub Actions for both CLIs:
     output: dist/app.pack.json
 ```
 
-See the [GitHub Actions docs](https://altairalabs.github.io/PromptKit/devops/) for full usage.
+See the [GitHub Actions docs](https://promptkit.altairalabs.ai/devops/) for full usage.
 
 ## Get Involved
 

@@ -49,7 +49,18 @@ cp promptpack-docs/docs/spec/*.md promptpack-docs/docs/spec/{OLD_VTAG}/
 
 For **each** archived file:
 1. Frontmatter — add `title: "... ({OLD_VTAG})"` (keep `sidebar_position`).
-2. Version badge — color `#10b981` (green/current) → `#6b7280` (gray/stable); text `📘 {OLD_VTAG} (Current)` → `📦 {OLD_VTAG} (Stable)`.
+2. Version badge — swap the class, not a colour:
+   ```mdx
+   <span className="ppVersionBadge ppVersionBadge--current">{OLD_VTAG} · current</span>
+   ↓
+   <span className="ppVersionBadge ppVersionBadge--archived">{OLD_VTAG} · stable</span>
+   ```
+   These badges used to be `<div style={{...}}>` blocks with hardcoded
+   `#10b981` / `#6b7280` fills, which could not follow the light/dark theme.
+   The colours now live in `src/css/custom.css`. Do **not** reintroduce an
+   inline-styled badge, and do **not** add an emoji — the badges used to carry
+   📘/📦 glyphs, removed under the house rule "Emoji: never"
+   (see the AltairaLabs voice rules). Badge text is lowercase mono machine data.
 3. Add an archived warning right after the badge:
    ```mdx
    :::warning Archived Version
@@ -63,7 +74,15 @@ For **each** archived file:
 
 ### 4. Update the current spec docs to the new version
 
-In `promptpack-docs/docs/spec/`: `overview.md` (badge → `📘 {NEW_VTAG} (Current)`,
+> The site chrome needs **no** edit here. The standards strip, homepage and
+> footer read the version from `schema/promptpack.schema.json` at build time
+> (`docusaurus.config.ts` → `customFields.specVersion` → `useSpecVersion()`).
+> Never hardcode the current version in a component — `version-check` only
+> compares the schema against the README, so it would go stale silently.
+> Capability-card pills like `'v1.4'` are the version a feature *landed in* and
+> stay hardcoded on purpose.
+
+In `promptpack-docs/docs/spec/`: `overview.md` (badge → `{NEW_VTAG} · current`,
 "What's New" info box, feature in the solution snippet), `structure.md`,
 `architecture-patterns.md` (layer diagram, compatibility matrix), `examples.md`
 (a full example pack), `schema-guide.md` (property tables + feature section).
@@ -78,15 +97,37 @@ Move the old version to "Previous Versions" (link `./{OLD_VTAG}/overview`), make
 
 ### 6. Update `sidebars.ts`
 
-Add a collapsed category for the newly archived version:
+Add the newly archived version as the **first entry inside the `Archive`
+category** (newest first) — not as a sibling of the current spec pages:
+
 ```ts
-{ type: 'category', label: '{OLD_VTAG} (Archived)', collapsed: true, items: [
-  'spec/{OLD_VTAG}/overview', 'spec/{OLD_VTAG}/structure',
-  'spec/{OLD_VTAG}/architecture-patterns', 'spec/{OLD_VTAG}/examples',
-  'spec/{OLD_VTAG}/file-format', 'spec/{OLD_VTAG}/schema-reference',
-  'spec/{OLD_VTAG}/schema-guide',
-] },
+{
+  type: 'category',
+  label: 'Specification',
+  items: [
+    /* … current spec pages … */
+    {
+      type: 'category',
+      label: 'Archive',
+      collapsed: true,
+      items: [
+        { type: 'category', label: '{OLD_VTAG}', collapsed: true, items: [
+          'spec/{OLD_VTAG}/overview', 'spec/{OLD_VTAG}/structure',
+          'spec/{OLD_VTAG}/architecture-patterns', 'spec/{OLD_VTAG}/examples',
+          'spec/{OLD_VTAG}/file-format', 'spec/{OLD_VTAG}/schema-reference',
+          'spec/{OLD_VTAG}/schema-guide',
+        ] },
+        /* … older versions … */
+      ],
+    },
+  ],
+}
 ```
+
+The label is the bare version — **no "(Archived)" suffix**; the parent
+category already says it. Every archived version lives under `Archive` so the
+current spec pages are not outnumbered in the nav.
+
 If you add a how-to guide, register it in the Guides category too.
 
 ### 7. Update `README.md` (version-check lockstep)

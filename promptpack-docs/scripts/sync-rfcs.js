@@ -149,19 +149,23 @@ function syncRFC(filename) {
 }
 
 /**
- * Map status text to an emoji
+ * Normalise status text for the generated tables.
+ *
+ * Deliberately plain words: the AltairaLabs voice rules forbid emoji outright,
+ * and this map previously emitted a rocket into every "Implemented" row of the
+ * RFC index — the canonical anti-example of the house style.
  */
-const STATUS_EMOJI = {
-  'draft': '📝 Draft',
-  'review': '🔍 Review',
-  'accepted': '✅ Accepted',
-  'implemented': '🚀 Implemented',
-  'rejected': '❌ Rejected',
-  'deferred': '⏸️ Deferred',
+const STATUS_LABEL = {
+  'draft': 'Draft',
+  'review': 'Review',
+  'accepted': 'Accepted',
+  'implemented': 'Implemented',
+  'rejected': 'Rejected',
+  'deferred': 'Deferred',
 };
 
 function formatStatus(status) {
-  return STATUS_EMOJI[status.toLowerCase()] || `📝 ${status}`;
+  return STATUS_LABEL[status.toLowerCase()] || status;
 }
 
 /**

@@ -78,7 +78,6 @@ Together, these turn the workflow model from a conversational state machine into
 The generic agent loop pattern looks like this:
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7045af', 'primaryTextColor': '#fff', 'primaryBorderColor': '#5d3991', 'lineColor': '#8659c1', 'secondaryColor': '#c9b1e8', 'tertiaryColor': '#f3eefa', 'edgeLabelBackground': '#f3eefa' }}}%%
 stateDiagram-v2
     [*] --> Observe
     Observe --> Act : PlanReady
@@ -399,7 +398,6 @@ All three patterns work with the existing workflow model and the additions in th
 A code generation workflow that plans, implements, tests, and reviews — with the implement/test cycle bounded by `max_visits`.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7045af', 'primaryTextColor': '#fff', 'primaryBorderColor': '#5d3991', 'lineColor': '#8659c1', 'secondaryColor': '#c9b1e8', 'tertiaryColor': '#f3eefa', 'edgeLabelBackground': '#f3eefa' }}}%%
 stateDiagram-v2
     [*] --> plan
     plan --> implement : PlanReady
