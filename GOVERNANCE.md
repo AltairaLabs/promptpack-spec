@@ -28,7 +28,7 @@ This document describes the governance model for the PromptPack specification an
 
 **Current Core Maintainers**:
 - **AltairaLabs Team** (@altairalabs/core-maintainers)
-  - Primary contact: [community@altairalabs.ai](mailto:community@altairalabs.ai)
+  - Primary contact: [conduct@altairalabs.ai](mailto:conduct@altairalabs.ai)
 
 ### Spec Editors
 
@@ -117,7 +117,7 @@ PromptPack follows semantic versioning (SemVer):
 
 - **GitHub Issues**: Bug reports, feature requests
 - **GitHub Discussions**: General discussion, questions, ideas
-- **Email**: [community@altairalabs.ai](mailto:community@altairalabs.ai) for governance matters
+- **Email**: [conduct@altairalabs.ai](mailto:conduct@altairalabs.ai) for governance matters
 - **Security**: [security@altairalabs.ai](mailto:security@altairalabs.ai) for security issues
 
 ### Participation Guidelines
@@ -189,7 +189,7 @@ This governance model may evolve as the project grows:
 
 For questions about governance or to provide feedback:
 - Create a discussion in [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
-- Email the community team: [community@altairalabs.ai](mailto:community@altairalabs.ai)
+- Email the community team: [conduct@altairalabs.ai](mailto:conduct@altairalabs.ai)
 - Join our community meetings (schedule posted in discussions)
 
 **Last Updated**: October 2024
