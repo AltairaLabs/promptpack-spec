@@ -627,28 +627,47 @@
   border-color: var(--pp-accent-strong);
 }
 
-/* Each product's brand accent is passed in as --family-accent. */
+/* Linked cards (the three commercial products) lift on hover; PromptPack's
+   own card is not a link. */
+.familyLink {
+  display: block;
+  transition: border-color var(--dur-base) var(--ease-standard),
+    background var(--dur-base) var(--ease-standard);
+}
+
+.familyLink:hover {
+  background: var(--hairline-faint);
+  border-color: var(--pp-accent);
+  text-decoration: none;
+}
+
+.familyLink:hover .familyName {
+  color: var(--star-100);
+}
+
+/* Each product's real Atlas mark. The three commercial marks carry their own
+   ink tile; PromptPack's is outline-only and swaps with the ramp. */
 .familyMark {
-  align-items: center;
-  border: 1.5px solid var(--family-accent);
-  border-radius: var(--radius-sm);
-  display: flex;
-  height: 24px;
-  justify-content: center;
+  display: block;
+  height: 28px;
   margin-bottom: var(--space-5);
-  width: 24px;
+  width: 28px;
 }
 
-.familyMarkDot {
-  background: var(--family-accent);
-  border-radius: var(--radius-pill);
-  height: 7px;
-  width: 7px;
+/* Chained with .familyMark deliberately. A bare .markDark{display:none} ties
+   on specificity with .familyMark{display:block}, and the minifier groups
+   display:none rules into an earlier position in the bundle — so the base
+   rule won and both variants rendered. */
+.familyMark.markDark {
+  display: none;
 }
 
-.familyActive .familyMarkDot {
-  background: transparent;
-  border: 1.5px solid var(--family-accent);
+:global([data-theme='dark']) .familyMark.markLight {
+  display: none;
+}
+
+:global([data-theme='dark']) .familyMark.markDark {
+  display: block;
 }
 
 .familyName {

@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 
@@ -423,14 +424,82 @@ function ValueProps() {
   );
 }
 
-/* Brand accents are fixed product identifiers, not theme tokens. Altaira gold
-   is deliberately absent — it belongs to the masterbrand bar only. */
-const FAMILY: [string, string, string, boolean][] = [
-  ['PromptPack', 'the spec', '#93C5FD', true],
-  ['PromptKit', 'the runtime', '#C4B5FD', false],
-  ['PromptArena', 'the studio', '#67E8F9', false],
-  ['Omnia', 'the platform', '#3B82F6', false],
+/**
+ * The real product marks from the Atlas logo set, not generic swatches.
+ *
+ * PromptPack's mark is outline-only, so it needs the light/dark pair the
+ * navbar already uses. The three commercial marks are self-contained tiles
+ * (dark ink ground + coloured glyph) and read correctly on either ramp, so
+ * they ship as a single file each.
+ *
+ * Altaira's own mark is deliberately absent: the constellation shows the
+ * products, and gold belongs to the masterbrand bar alone.
+ */
+type FamilyMember = {
+  name: string;
+  role: string;
+  mark: string;
+  markDark?: string;
+  /** Canonical product site. Omitted for PromptPack — this is that site. */
+  href?: string;
+  active?: boolean;
+};
+
+const FAMILY: FamilyMember[] = [
+  {
+    name: 'PromptPack',
+    role: 'the spec',
+    mark: 'img/logo.svg',
+    markDark: 'img/logo-dark.svg',
+    active: true,
+  },
+  {
+    name: 'PromptKit',
+    role: 'the runtime',
+    mark: 'img/atlas/logos/logo-promptkit.svg',
+    href: 'https://promptkit.altairalabs.ai/',
+  },
+  {
+    name: 'PromptArena',
+    role: 'the studio',
+    mark: 'img/atlas/logos/logo-promptarena.svg',
+    href: 'https://promptarena.altairalabs.ai/',
+  },
+  {
+    name: 'Omnia',
+    role: 'the platform',
+    mark: 'img/atlas/logos/logo-omnia.svg',
+    href: 'https://omnia.altairalabs.ai/',
+  },
 ];
+
+function FamilyMark({member}: {member: FamilyMember}): ReactNode {
+  const src = useBaseUrl(member.mark);
+  const srcDark = useBaseUrl(member.markDark ?? member.mark);
+
+  if (!member.markDark) {
+    return <img className={styles.familyMark} src={src} alt="" width={28} height={28} />;
+  }
+
+  return (
+    <>
+      <img
+        className={clsx(styles.familyMark, styles.markLight)}
+        src={src}
+        alt=""
+        width={28}
+        height={28}
+      />
+      <img
+        className={clsx(styles.familyMark, styles.markDark)}
+        src={srcDark}
+        alt=""
+        width={28}
+        height={28}
+      />
+    </>
+  );
+}
 
 function Constellation() {
   return (
@@ -448,19 +517,35 @@ function Constellation() {
           </p>
         </div>
         <div className={styles.familyGrid}>
-          {FAMILY.map(([name, role, accent, active]) => (
-            <div
-              className={clsx(styles.family, active && styles.familyActive)}
-              key={name}
-              style={{['--family-accent' as string]: accent}}>
-              <div className={styles.familyMark}>
-                <span className={styles.familyMarkDot} />
+          {FAMILY.map((member) => {
+            const body = (
+              <>
+                <FamilyMark member={member} />
+                <div className={styles.familyName}>{member.name}</div>
+                <div className={styles.familyRole}>{member.role}</div>
+                {member.active && (
+                  <div className={styles.familyHere}>you are here</div>
+                )}
+              </>
+            );
+            const className = clsx(
+              styles.family,
+              member.active && styles.familyActive,
+              member.href && styles.familyLink,
+            );
+
+            // PromptPack has no href — linking a "you are here" card to the
+            // page you are on is a dead end.
+            return member.href ? (
+              <Link className={className} href={member.href} key={member.name}>
+                {body}
+              </Link>
+            ) : (
+              <div className={className} key={member.name}>
+                {body}
               </div>
-              <div className={styles.familyName}>{name}</div>
-              <div className={styles.familyRole}>{role}</div>
-              {active && <div className={styles.familyHere}>you are here</div>}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
