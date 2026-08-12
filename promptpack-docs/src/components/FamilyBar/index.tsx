@@ -54,8 +54,8 @@ const IN_HOUSE: Product[] = [
     accent: '#67E8F9',
   },
   {
-    // PromptArena's own switcher points at codegen.altairalabs.ai, which is
-    // NXDOMAIN; the live host is codegen-sandbox. Worth correcting there too.
+    // codegen.altairalabs.ai is NXDOMAIN; codegen-sandbox is the live host.
+    // The Omnia/PromptArena/PromptKit switchers had the dead one and are fixed.
     name: 'CodeGen',
     role: 'Codegen',
     href: 'https://codegen-sandbox.altairalabs.ai/',

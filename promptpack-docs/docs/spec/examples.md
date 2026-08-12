@@ -197,6 +197,7 @@ Marketing teams need to create various content types (blogs, social media, email
         {
           "name": "post_type",
           "type": "string",
+          "required": true,
           "validation": {
             "enum": ["how-to", "thought-leadership", "case-study", "news"]
           }
@@ -229,6 +230,7 @@ Marketing teams need to create various content types (blogs, social media, email
         {
           "name": "platform",
           "type": "string",
+          "required": true,
           "validation": {
             "enum": ["twitter", "linkedin", "instagram", "facebook"]
           }
@@ -259,6 +261,7 @@ Marketing teams need to create various content types (blogs, social media, email
         {
           "name": "email_type",
           "type": "string",
+          "required": true,
           "validation": {
             "enum": ["newsletter", "promotional", "onboarding", "announcement"]
           }
