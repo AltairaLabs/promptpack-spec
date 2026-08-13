@@ -27,8 +27,15 @@ PromptPacks need to be both **executable by systems** and **readable by develope
   "id": "customer-support",
   "name": "Customer Support Pack",
   "version": "1.0.0",
+  "template_engine": {
+    "version": "v1",
+    "syntax": "{{variable}}"
+  },
   "prompts": {
     "support": {
+      "id": "support",
+      "name": "Customer Support",
+      "version": "1.0.0",
       "system_template": "You are a helpful {{role}} for {{company}}.",
       "variables": [
         {

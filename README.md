@@ -41,10 +41,14 @@ Production AI systems need more than a single prompt — they need specialized p
   },
   "tools": {
     "lookup_order": {
-      "type": "function",
+      "name": "lookup_order",
       "description": "Look up a customer order by ID",
       "parameters": {
-        "order_id": { "type": "string", "required": true }
+        "type": "object",
+        "properties": {
+          "order_id": { "type": "string" }
+        },
+        "required": ["order_id"]
       }
     }
   },
@@ -53,6 +57,9 @@ Production AI systems need more than a single prompt — they need specialized p
   },
   "prompts": {
     "support": {
+      "id": "support",
+      "name": "Customer Support",
+      "version": "1.0.0",
       "system_template": "You are a {{role}} for {{company}}. {{fragments.brand_voice}}",
       "tools": ["lookup_order"],
       "variables": [
