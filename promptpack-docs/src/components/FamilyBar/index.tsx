@@ -194,9 +194,6 @@ export default function FamilyBar(): ReactNode {
             <div className={styles.menu}>
               <div className={styles.menuHead}>
                 <div className={styles.menuTitle}>Switch product</div>
-                <div className={styles.menuNote}>
-                  Every product open source · Apache-2.0
-                </div>
               </div>
 
               <div className={styles.group}>
