@@ -1,8 +1,8 @@
 ---
-sidebar_position: 0
+title: "Specification Versions"
+sidebar:
+  order: 0
 ---
-
-# Specification Versions
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 

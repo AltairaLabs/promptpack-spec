@@ -1,8 +1,8 @@
 ---
-sidebar_position: 1
+title: "Why PromptPack?"
+sidebar:
+  order: 1
 ---
-
-# Why PromptPack?
 
 ## The Engineering Challenge
 

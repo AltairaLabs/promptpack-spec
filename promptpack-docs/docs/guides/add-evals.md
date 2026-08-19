@@ -1,9 +1,8 @@
 ---
-sidebar_position: 3
 title: "How to Add Evals"
+sidebar:
+  order: 3
 ---
-
-# How to Add Evals
 
 Add async quality measurement to your PromptPack with evals that score and report on LLM output quality. Unlike validators (which block bad output inline), evals run asynchronously and produce Prometheus-style metrics for monitoring dashboards.
 

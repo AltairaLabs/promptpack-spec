@@ -1,9 +1,9 @@
 ---
-sidebar_position: 3
-title: Ecosystem Overview
+title: "PromptPack Ecosystem"
+sidebar:
+  label: "Ecosystem Overview"
+  order: 3
 ---
-
-# PromptPack Ecosystem
 
 PromptPack is a **specification**, not a product or framework. The ecosystem consists of the spec itself and tools that work with it.
 

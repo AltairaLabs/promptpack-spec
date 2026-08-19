@@ -1,9 +1,9 @@
 ---
-sidebar_position: 2
-title: "Pack Structure & Design (v1.2)"
+title: "Pack Structure & Design"
+sidebar:
+  label: "Pack Structure & Design (v1.2)"
+  order: 2
 ---
-
-# Pack Structure & Design
 
 Understanding how PromptPacks are structured helps you design better conversational AI systems. The JSON-based format isn't just about data storage—it's architected to support real-world AI development patterns and deployment needs.
 

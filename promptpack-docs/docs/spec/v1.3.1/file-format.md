@@ -1,9 +1,9 @@
 ---
-sidebar_position: 5
-title: "File Format (v1.3.1)"
+title: "File Format & Portability"
+sidebar:
+  label: "File Format (v1.3.1)"
+  order: 5
 ---
-
-# File Format & Portability
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
 

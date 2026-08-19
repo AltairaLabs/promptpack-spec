@@ -1,8 +1,8 @@
 ---
-sidebar_position: 5
+title: "Schema Guide (v1.0)"
+sidebar:
+  order: 5
 ---
-
-# Schema Guide (v1.0)
 
 Human-readable guide to PromptPack v1.0 entities and their properties. For the auto-generated technical reference, see [Schema Reference](./schema-reference.md).
 

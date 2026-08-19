@@ -1,9 +1,9 @@
 ---
-sidebar_position: 2
-title: "Pack Structure (v1.4.1)"
+title: "Pack Structure & Design"
+sidebar:
+  label: "Pack Structure (v1.4.1)"
+  order: 2
 ---
-
-# Pack Structure & Design
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.4.1 · stable</span>
 

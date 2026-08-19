@@ -1,9 +1,9 @@
 ---
-sidebar_position: 3
-title: "Real-World Examples (v1.2)"
+title: "Real-World Examples"
+sidebar:
+  label: "Real-World Examples (v1.2)"
+  order: 3
 ---
-
-# Real-World Examples
 
 These examples showcase how PromptPacks solve real business problems. Each demonstrates different benefits of the multi-prompt architecture and shared resource model.
 

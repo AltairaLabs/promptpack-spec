@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+title: "Versioning"
+sidebar:
+  order: 2
 ---
-
-# Versioning
 
 PromptPack follows semantic versioning (SemVer) to ensure compatibility and provide clear expectations for users and implementers.
 

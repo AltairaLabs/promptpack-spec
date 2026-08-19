@@ -1,7 +1,8 @@
 ---
-sidebar_position: 9
-title: Adopters
-description: Who is building on PromptPack, and how to get listed. Entries are named and attributable.
+title: "Adopters"
+description: "Who is building on PromptPack, and how to get listed. Entries are named and attributable."
+sidebar:
+  order: 9
 ---
 
 {/*

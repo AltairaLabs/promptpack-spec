@@ -1,9 +1,9 @@
 ---
-sidebar_position: 3
-title: "Architecture Patterns (v1.3.1)"
+title: "Architecture Patterns"
+sidebar:
+  label: "Architecture Patterns (v1.3.1)"
+  order: 3
 ---
-
-# Architecture Patterns
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
 

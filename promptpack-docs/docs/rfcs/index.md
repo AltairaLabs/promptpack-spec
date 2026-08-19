@@ -1,10 +1,8 @@
 ---
-title: RFC Index
-sidebar_position: 0
-slug: /rfcs
+title: "RFC Index"
+sidebar:
+  order: 0
 ---
-
-# RFC Index
 
 Request for Comments (RFCs) are how the PromptPack specification evolves. Each substantial change — a new entity type, a major capability, a breaking schema change — starts as an RFC, gets discussed in public, and lands in the spec when it's accepted and implemented.
 

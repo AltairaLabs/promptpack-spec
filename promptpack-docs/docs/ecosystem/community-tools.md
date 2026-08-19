@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+title: "Community Tools"
+sidebar:
+  order: 4
 ---
-
-# Community Tools
 
 :::caution Status
  **Community-Driven** - This ecosystem is in early stages

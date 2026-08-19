@@ -1,9 +1,8 @@
 ---
-sidebar_position: 1
 title: "How to Add a Workflow"
+sidebar:
+  order: 1
 ---
-
-# How to Add a Workflow
 
 Add state-machine orchestration to an existing PromptPack so that transitions between prompts happen automatically based on events, without the caller deciding which prompt to invoke.
 

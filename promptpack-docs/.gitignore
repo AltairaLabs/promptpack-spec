@@ -5,6 +5,9 @@
 /build
 
 # Generated files
+.astro
+# Kept after the Astro migration so a stale local .docusaurus/ from before it
+# cannot be committed by accident.
 .docusaurus
 .cache-loader
 

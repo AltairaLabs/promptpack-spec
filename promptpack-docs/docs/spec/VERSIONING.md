@@ -1,4 +1,6 @@
-# Specification Versioning
+---
+title: "Specification Versioning"
+---
 
 ## Overview
 

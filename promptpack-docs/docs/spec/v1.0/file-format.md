@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+title: "File Format & Portability"
+sidebar:
+  order: 4
 ---
-
-# File Format & Portability
 
 PromptPacks use JSON as their file format, optimized for both human readability and machine processing. This choice isn't arbitrary—JSON provides specific benefits that make PromptPacks practical for real-world AI development and deployment.
 

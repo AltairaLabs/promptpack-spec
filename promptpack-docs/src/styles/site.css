@@ -1,0 +1,56 @@
+/*
+ * promptpack.org — Starlight on the Atlas token layer.
+ *
+ * @altairalabs/atlas-tokens is loaded first (see astro.config.mjs customCss);
+ * this file only maps Starlight's own variables onto it. It replaces
+ * scripts/sync-atlas-tokens.sh, which copied a token snapshot into this repo
+ * and so drifted from the source the moment either side changed.
+ *
+ * Starlight names its greys `--sl-color-gray-1` (lightest text) through
+ * `--sl-color-gray-7` (darkest surface) in dark mode, inverted in light.
+ */
+
+:root {
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+
+  --sl-color-accent-low: var(--starlight-tint);
+  --sl-color-accent: var(--starlight-300);
+  --sl-color-accent-high: var(--starlight-200);
+
+  --sl-color-white: var(--text-heading);
+  --sl-color-gray-1: var(--text-heading);
+  --sl-color-gray-2: var(--text-body);
+  --sl-color-gray-3: var(--text-muted);
+  --sl-color-gray-4: var(--text-faint);
+  --sl-color-gray-5: var(--border-default);
+  --sl-color-gray-6: var(--surface-1);
+  --sl-color-gray-7: var(--surface-2);
+  --sl-color-black: var(--bg-app);
+
+  --sl-color-bg: var(--bg-app);
+  --sl-color-bg-nav: var(--surface-1);
+  --sl-color-bg-sidebar: var(--bg-app);
+  --sl-color-hairline: var(--border-default);
+  --sl-color-hairline-light: var(--border-default);
+  --sl-color-hairline-shade: var(--border-default);
+  --sl-color-text: var(--text-body);
+  --sl-color-text-accent: var(--text-link);
+}
+
+/*
+ * Starlight switches themes with data-theme on <html>, which is the same
+ * attribute Atlas light mode uses — so the token layer flips with it and
+ * nothing extra is needed here. This block exists only to say so, and to keep
+ * anyone from adding a second, competing light palette.
+ */
+
+/*
+ * The landing page is not a docs page: it renders its own hero and footer, and
+ * Starlight's content column would cap it at the prose measure.
+ */
+.landing {
+  background: var(--bg-app);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+}

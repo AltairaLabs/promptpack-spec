@@ -1,9 +1,8 @@
 ---
-sidebar_position: 2
 title: "How to Set Up Agents"
+sidebar:
+  order: 2
 ---
-
-# How to Set Up Agents
 
 Make your PromptPack prompts discoverable via the A2A (Agent-to-Agent) protocol so external systems can find and invoke them. Agents can be used with or without a workflow.
 

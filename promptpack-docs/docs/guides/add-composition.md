@@ -1,9 +1,8 @@
 ---
-sidebar_position: 2
 title: "How to Add a Composition"
+sidebar:
+  order: 2
 ---
-
-# How to Add a Composition
 
 Add a **composition** to a PromptPack so a workflow state runs a declarative step graph — classify → branch → extract, or parallel fan-out → synthesize — instead of a single prompt. Compositions express *procedural* flows (document pipelines, data extraction, request → reason → commit) that don't fit the turn-by-turn dialogue shape.
 

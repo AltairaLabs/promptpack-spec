@@ -1,0 +1,8 @@
+<!-- PromptPack mark — Atlas outline star. Light-mode variant: strokes deepened
+     for contrast on paper (starlight-300 / star-500 of the Atlas light ramp).
+     The mark is outline-only, never filled, and never gold — gold belongs to
+     the AltairaLabs masterbrand alone. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="PromptPack">
+  <rect x="4" y="4" width="56" height="56" rx="15" fill="none" stroke="#2E6BE0" stroke-width="2"/>
+  <polygon points="32,12 36.5,27 51,32 36.5,37 32,52 27.5,37 13,32 27.5,27" fill="none" stroke="#3A4C68" stroke-width="2" stroke-linejoin="round"/>
+</svg>
