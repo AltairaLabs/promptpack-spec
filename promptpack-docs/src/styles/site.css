@@ -1,41 +1,22 @@
-/*
- * promptpack.org — Starlight on the Atlas token layer.
- *
- * @altairalabs/atlas-tokens is loaded first (see astro.config.mjs customCss);
- * this file only maps Starlight's own variables onto it. It replaces
- * scripts/sync-atlas-tokens.sh, which copied a token snapshot into this repo
- * and so drifted from the source the moment either side changed.
- *
- * Starlight names its greys `--sl-color-gray-1` (lightest text) through
- * `--sl-color-gray-7` (darkest surface) in dark mode, inverted in light.
- */
+/* Starlight's variables are mapped once, in atlas-starlight.css, shared
+   byte-for-byte by all five docs sites. The block that used to be here mapped
+   the same variables again and — because this file loads afterwards — silently
+   won. Nothing here defined anything the shared file lacks; it only disagreed
+   with it, which is precisely the drift the shared file exists to end. */
 
+/* ---- PromptPack accents ----------------------------------
+   Consumed by landing.module.css. --text-link and --accent-inter already
+   resolve per theme in Atlas, so one mapping serves both colour modes.
+
+   PromptPack's lead is starlight. Antique gold belongs to the AltairaLabs
+   masterbrand and appears ONLY in the family bar — never elsewhere here. */
 :root {
-  --sl-font: var(--font-sans);
-  --sl-font-mono: var(--font-mono);
+  --pp-accent: var(--text-link);
+  --pp-accent-strong: var(--accent-inter);
 
-  --sl-color-accent-low: var(--starlight-tint);
-  --sl-color-accent: var(--starlight-300);
-  --sl-color-accent-high: var(--starlight-200);
-
-  --sl-color-white: var(--text-heading);
-  --sl-color-gray-1: var(--text-heading);
-  --sl-color-gray-2: var(--text-body);
-  --sl-color-gray-3: var(--text-muted);
-  --sl-color-gray-4: var(--text-faint);
-  --sl-color-gray-5: var(--border-default);
-  --sl-color-gray-6: var(--surface-1);
-  --sl-color-gray-7: var(--surface-2);
-  --sl-color-black: var(--bg-app);
-
-  --sl-color-bg: var(--bg-app);
-  --sl-color-bg-nav: var(--surface-1);
-  --sl-color-bg-sidebar: var(--bg-app);
-  --sl-color-hairline: var(--border-default);
-  --sl-color-hairline-light: var(--border-default);
-  --sl-color-hairline-shade: var(--border-default);
-  --sl-color-text: var(--text-body);
-  --sl-color-text-accent: var(--text-link);
+  /* Section rhythm from the design handoff: 76px default, 108px spacious. */
+  --pp-pad: 76px;
+  --pp-pad-spacious: 108px;
 }
 
 /*
@@ -53,4 +34,24 @@
   background: var(--bg-app);
   color: var(--text-body);
   font-family: var(--font-sans);
+}
+
+/*
+ * Base typography for pages OUTSIDE the Starlight layout — i.e. the landing
+ * page. Starlight sets its own on doc pages; the landing page had none once
+ * the Docusaurus base stylesheet was deleted, and rendered in Times.
+ */
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: var(--leading-body);
+  color: var(--text-body);
+  background: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  color: var(--text-heading);
 }

@@ -1,9 +1,0 @@
-/* Atlas — self-hosted fonts (OFL). Space Grotesk = interface; Spline Sans Mono = machine data. */
-@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 400; font-display: swap; src: url('../assets/fonts/space-grotesk-400.woff2') format('woff2'); }
-@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 500; font-display: swap; src: url('../assets/fonts/space-grotesk-500.woff2') format('woff2'); }
-@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 600; font-display: swap; src: url('../assets/fonts/space-grotesk-600.woff2') format('woff2'); }
-@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 700; font-display: swap; src: url('../assets/fonts/space-grotesk-700.woff2') format('woff2'); }
-@font-face { font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('../assets/fonts/spline-sans-mono-400.woff2') format('woff2'); }
-@font-face { font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('../assets/fonts/spline-sans-mono-500.woff2') format('woff2'); }
-@font-face { font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 600; font-display: swap; src: url('../assets/fonts/spline-sans-mono-600.woff2') format('woff2'); }
-@font-face { font-family: 'Spline Sans Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('../assets/fonts/spline-sans-mono-700.woff2') format('woff2'); }

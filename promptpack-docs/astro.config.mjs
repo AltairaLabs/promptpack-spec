@@ -36,14 +36,30 @@ export default defineConfig({
       title: 'PromptPack',
       description:
         'An open specification for the behavioural contract of an AI agent: prompts, tools, policies and evaluations in one portable, versioned artefact.',
-      logo: { src: './src/assets/logo-promptpack.svg', alt: 'PromptPack' },
+      // PromptPack's mark is OUTLINE-ONLY, so unlike the solid product tiles it
+      // needs a cut per theme — the same pair the deleted Docusaurus navbar
+      // used. A single file renders invisible on one of the two grounds.
+      logo: {
+        light: './src/assets/logo-promptpack-light.svg',
+        dark: './src/assets/logo-promptpack-dark.svg',
+        alt: 'PromptPack',
+      },
+      favicon: '/img/logo.svg',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/AltairaLabs/promptpack-spec' },
       ],
       customCss: [
         '@altairalabs/atlas-tokens/index.css',
+        '@altairalabs/brand/starlight-atlas.css',
+        // Reserves header height for the family bar strip. The package ships
+        // it precisely so this number cannot drift from the bar's own height —
+        // family-bar-height.test.ts fails if they disagree.
+        '@altairalabs/brand/family-bar-starlight.css',
         './src/styles/site.css',
       ],
+      components: {
+        Header: './src/components/Header.astro',
+      },
       // Mirrors sidebars.ts. Slugs carry the `docs/` prefix because the loader
       // adds it — see src/content.config.ts.
       sidebar: [

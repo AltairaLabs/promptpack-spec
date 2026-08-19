@@ -753,3 +753,9 @@
     display: none;
   }
 }
+
+/* Spacing only. The path nav owns its own type and colour — a host that
+   restyled it would be the start of four hosts restyling it differently. */
+.eyebrowSlot {
+  margin: 0 0 20px;
+}
