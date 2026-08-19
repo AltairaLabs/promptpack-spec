@@ -1,8 +1,8 @@
 ---
-sidebar_position: 3
+title: "Governance"
+sidebar:
+  order: 3
 ---
-
-# Governance
 
 The PromptPack specification is developed and maintained through an open governance model that encourages community participation while ensuring quality and consistency.
 

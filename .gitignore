@@ -1,8 +1,11 @@
 DEPLOYMENT.md
 PROJECT_SUMMARY.md
 
-# Ignore Docusaurus and Node build artifacts in promptpack-docs
+# Ignore Astro and Node build artifacts in promptpack-docs.
+# `build/` (not `dist/`) because astro.config.mjs sets outDir there, so that
+# deploy.yml keeps uploading the path it always did.
 promptpack-docs/build/
+promptpack-docs/.astro/
 promptpack-docs/.docusaurus/
 promptpack-docs/node_modules/
 
@@ -18,5 +21,6 @@ docs/node_modules/
 *.log
 node_modules/
 build/
+.astro/
 .docusaurus/
 /local-backlog/

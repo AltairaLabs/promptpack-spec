@@ -1,4 +1,6 @@
-# PromptPack Specification
+---
+title: "PromptPack Specification"
+---
 
 - [1. Property `PromptPack Specification > $schema`](#schema)
 - [2. Property `PromptPack Specification > id`](#id)

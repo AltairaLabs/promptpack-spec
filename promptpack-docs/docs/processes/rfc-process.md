@@ -1,8 +1,8 @@
 ---
-sidebar_position: 1
+title: "RFC Process"
+sidebar:
+  order: 1
 ---
-
-# RFC Process
 
 The PromptPack specification evolves through a Request for Comments (RFC) process that allows community members to propose, discuss, and implement changes.
 

@@ -1,9 +1,9 @@
 ---
-sidebar_position: 2
-title: "Specification Overview (v1.4.1)"
+title: "Specification Overview"
+sidebar:
+  label: "Specification Overview (v1.4.1)"
+  order: 2
 ---
-
-# Specification Overview
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.4.1 · stable</span>
 

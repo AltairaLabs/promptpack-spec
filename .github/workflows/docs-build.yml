@@ -8,6 +8,12 @@ on:
       - 'rfcs/**'
       - 'schema/**'
 
+permissions:
+  contents: read
+  # The site now installs @altairalabs/brand and atlas-tokens from GitHub
+  # Packages; without this the default token gets a 401 on download.
+  packages: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,13 +24,25 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          # Astro 6 requires >=22.12. Docusaurus ran fine on 20; this is part of
+          # the migration, not an incidental bump.
+          node-version: 22
           cache: npm
           cache-dependency-path: ./promptpack-docs/package-lock.json
 
       - name: Install dependencies
         run: npm ci
         working-directory: ./promptpack-docs
+        env:
+          # @altairalabs/brand and atlas-tokens come from GitHub Packages, which
+          # the Docusaurus site never needed — every dependency was public.
+          #
+          # The org-level NODE_AUTH_TOKEN, not the default GITHUB_TOKEN: the
+          # packages are `access: restricted`, and a workflow token only reaches
+          # packages its own repository owns. It gets a 403
+          # "permission_denied: read_package" here. Every sibling site that
+          # consumes @altairalabs/* uses this same secret.
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
       - name: Build website
         run: npm run build

@@ -1,10 +1,9 @@
 ---
-sidebar_position: 3
-title: PromptPack in Regulated Environments
-description: How a PromptPack maps onto inventory, change control, model risk, and supervisory evidence — and where the specification's responsibility ends.
+title: "PromptPack in Regulated Environments"
+description: "How a PromptPack maps onto inventory, change control, model risk, and supervisory evidence — and where the specification's responsibility ends."
+sidebar:
+  order: 3
 ---
-
-# PromptPack in Regulated Environments
 
 Most of this site is written for the engineer who has to build the thing. This
 page is written for the person who has to answer for it.

@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+title: "Arena Testing"
+sidebar:
+  order: 2
 ---
-
-# Arena Testing
 
 :::info Status
 - **Available Now** - PromptArena is actively being used for LLM testing

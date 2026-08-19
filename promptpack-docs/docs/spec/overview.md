@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+title: "Specification Overview"
+sidebar:
+  order: 2
 ---
-
-# Specification Overview
 
 <span className="ppVersionBadge ppVersionBadge--current">v1.5.1 · current</span>
 

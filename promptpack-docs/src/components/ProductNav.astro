@@ -1,0 +1,152 @@
+---
+/**
+ * The PromptPack row of the landing page's chrome: mark, wordmark, section
+ * links, theme toggle.
+ *
+ * The docs pages get this from Starlight's header. The landing page is not a
+ * Starlight page, so without this it had the family bar and then nothing — no
+ * mark, no product name, no way back into the docs.
+ *
+ * Mirrors the shape of ProductNav on the three sibling sites deliberately: the
+ * masterbrand strip, then a 62px product row, then the page.
+ */
+const links = [
+  { label: 'Specification', href: '/docs/spec/overview/' },
+  { label: 'Guides', href: '/docs/guides/add-workflow/' },
+  { label: 'RFCs', href: '/docs/rfcs/' },
+  { label: 'Docs', href: '/docs/getting-started/' },
+];
+---
+
+<nav class="product-nav">
+  <div class="row">
+    <div class="left">
+      <a class="brand" href="/">
+        {/* Outline-only mark: one cut per theme, like the Starlight header. */}
+        <img class="mark light" src="/img/logo.svg" width="26" height="26" alt="" />
+        <img class="mark dark" src="/img/logo-dark.svg" width="26" height="26" alt="" />
+        <span class="name">PromptPack</span>
+      </a>
+      <ul class="links">
+        {links.map((l) => (
+          <li><a href={l.href}>{l.label}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="right">
+      <button class="theme-toggle" type="button" aria-label="Toggle colour theme">
+        <span aria-hidden="true">◐</span>
+      </button>
+      <a class="cta" href="/docs/getting-started/">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<script is:inline>
+  (() => {
+    const btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = next;
+      // Starlight's key, so the choice carries into /docs and back.
+      localStorage.setItem('starlight-theme', next);
+    });
+  })();
+</script>
+
+<style>
+  .product-nav {
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border-default);
+  }
+  .row {
+    height: 62px;
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-14);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+  }
+  .name {
+    font-family: var(--font-sans);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-size-h4);
+    color: var(--text-heading);
+  }
+
+  /* One mark per theme; the other is removed from the flow entirely so the
+     wordmark does not shift by a mark's width. */
+  .mark.dark {
+    display: none;
+  }
+  :global(html[data-theme='light']) .mark.light {
+    display: none;
+  }
+  :global(html[data-theme='light']) .mark.dark {
+    display: block;
+  }
+
+  .links {
+    display: flex;
+    gap: var(--space-10);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .links a {
+    font-size: var(--text-size-body-sm);
+    font-weight: var(--fw-medium);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--dur-base) var(--ease-standard);
+  }
+  .links a:hover {
+    color: var(--text-heading);
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--text-size-body-sm);
+    padding: var(--space-1) var(--space-3);
+  }
+  .theme-toggle:hover {
+    color: var(--text-heading);
+  }
+  .cta {
+    padding: var(--space-2) var(--space-6);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--text-size-body-sm);
+    font-weight: var(--fw-medium);
+    color: var(--text-heading);
+    text-decoration: none;
+  }
+
+  @media (max-width: 780px) {
+    .links {
+      display: none;
+    }
+  }
+</style>

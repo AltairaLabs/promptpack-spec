@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+title: "Contributing"
+sidebar:
+  order: 4
 ---
-
-# Contributing
 
 How to contribute to the PromptPack specification and ecosystem.
 

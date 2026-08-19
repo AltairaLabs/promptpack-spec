@@ -1,8 +1,8 @@
 ---
-title: "Schema Reference (v1.4.0)"
+title: "PromptPack Specification"
+sidebar:
+  label: "Schema Reference (v1.4.0)"
 ---
-
-# PromptPack Specification
 
 - [1. Property `PromptPack Specification > $schema`](#schema)
 - [2. Property `PromptPack Specification > id`](#id)

@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+title: "Getting Started with PromptPack"
+sidebar:
+  order: 2
 ---
-
-# Getting Started with PromptPack
 
 PromptPack expresses a wide range of agent shapes — from single-prompt assistants to multi-state autonomous loops. This tutorial walks you through every section of the spec by building one concrete example: a customer feedback system that collects feedback, analyzes sentiment, drafts responses, and monitors quality. It's a multi-prompt routing pack — pedagogically the easiest shape to learn — but every feature you'll touch (prompts, tools, fragments, validators, evals, workflows, agents, skills) is the same machinery you'd use to build an autonomous agent. Once you're comfortable, see [Agent Loops](/docs/spec/structure#agent-loops-v14) for the v1.4 fields (`terminal`, `max_visits`, `artifacts`, `engine.budget`) that turn an unbounded workflow into a production-safe iterative agent.
 

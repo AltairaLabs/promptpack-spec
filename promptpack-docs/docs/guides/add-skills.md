@@ -1,9 +1,8 @@
 ---
-sidebar_position: 3
 title: "How to Add Skills"
+sidebar:
+  order: 3
 ---
-
-# How to Add Skills
 
 Add progressive-disclosure knowledge loading to an existing PromptPack so that agents can access domain expertise on demand without bloating system templates.
 

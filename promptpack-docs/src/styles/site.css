@@ -1,0 +1,57 @@
+/* Starlight's variables are mapped once, in atlas-starlight.css, shared
+   byte-for-byte by all five docs sites. The block that used to be here mapped
+   the same variables again and — because this file loads afterwards — silently
+   won. Nothing here defined anything the shared file lacks; it only disagreed
+   with it, which is precisely the drift the shared file exists to end. */
+
+/* ---- PromptPack accents ----------------------------------
+   Consumed by landing.module.css. --text-link and --accent-inter already
+   resolve per theme in Atlas, so one mapping serves both colour modes.
+
+   PromptPack's lead is starlight. Antique gold belongs to the AltairaLabs
+   masterbrand and appears ONLY in the family bar — never elsewhere here. */
+:root {
+  --pp-accent: var(--text-link);
+  --pp-accent-strong: var(--accent-inter);
+
+  /* Section rhythm from the design handoff: 76px default, 108px spacious. */
+  --pp-pad: 76px;
+  --pp-pad-spacious: 108px;
+}
+
+/*
+ * Starlight switches themes with data-theme on <html>, which is the same
+ * attribute Atlas light mode uses — so the token layer flips with it and
+ * nothing extra is needed here. This block exists only to say so, and to keep
+ * anyone from adding a second, competing light palette.
+ */
+
+/*
+ * The landing page is not a docs page: it renders its own hero and footer, and
+ * Starlight's content column would cap it at the prose measure.
+ */
+.landing {
+  background: var(--bg-app);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+}
+
+/*
+ * Base typography for pages OUTSIDE the Starlight layout — i.e. the landing
+ * page. Starlight sets its own on doc pages; the landing page had none once
+ * the Docusaurus base stylesheet was deleted, and rendered in Times.
+ */
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: var(--leading-body);
+  color: var(--text-body);
+  background: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  color: var(--text-heading);
+}

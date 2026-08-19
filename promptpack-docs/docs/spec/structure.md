@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+title: "Pack Structure & Design"
+sidebar:
+  order: 2
 ---
-
-# Pack Structure & Design
 
 Understanding how PromptPacks are structured helps you design better AI agent behavior — from simple multi-prompt routers to autonomous agent loops. The JSON-based format isn't just about data storage; it's architected to support real-world agent development patterns and deployment needs.
 

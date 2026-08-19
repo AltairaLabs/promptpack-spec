@@ -1,9 +1,9 @@
 ---
-sidebar_position: 7
-title: "Schema Guide (v1.3.1)"
+title: "Schema Guide"
+sidebar:
+  label: "Schema Guide (v1.3.1)"
+  order: 7
 ---
-
-# Schema Guide
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
 

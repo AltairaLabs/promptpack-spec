@@ -1,0 +1,7 @@
+<!-- PromptPack mark — Atlas outline star. Dark-mode variant, matching
+     design_handoff_promptpack_org/assets/logo-promptpack.svg verbatim
+     (starlight-300 / star-500 of the Atlas night-sky ramp). -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="PromptPack">
+  <rect x="4" y="4" width="56" height="56" rx="15" fill="none" stroke="#93C5FD" stroke-width="2"/>
+  <polygon points="32,12 36.5,27 51,32 36.5,37 32,52 27.5,37 13,32 27.5,27" fill="none" stroke="#C7D5EA" stroke-width="2" stroke-linejoin="round"/>
+</svg>

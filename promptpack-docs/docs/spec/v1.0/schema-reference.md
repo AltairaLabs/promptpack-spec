@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+title: "Schema Reference"
+sidebar:
+  order: 4
 ---
-
-# Schema Reference
 
 Complete field-by-field reference for all PromptPack entities and their properties.
 

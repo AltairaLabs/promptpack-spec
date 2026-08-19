@@ -1,9 +1,8 @@
 ---
-sidebar_position: 3
-title: Architecture Patterns
+title: "Architecture Patterns"
+sidebar:
+  order: 3
 ---
-
-# Architecture Patterns
 
 PromptPack has grown from a simple prompt-packaging format into a full-stack specification for conversational AI systems. This page explains how the major building blocks relate to each other and when to use each one.
 

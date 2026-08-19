@@ -1,9 +1,9 @@
 ---
-sidebar_position: 3
-title: "Examples (v1.4.0)"
+title: "Real-World Examples"
+sidebar:
+  label: "Examples (v1.4.0)"
+  order: 3
 ---
-
-# Real-World Examples
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.4.0 · stable</span>
 

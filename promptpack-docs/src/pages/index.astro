@@ -1,0 +1,434 @@
+---
+/**
+ * promptpack.org homepage, ported from the Docusaurus React page.
+ *
+ * The section structure, copy and CSS module are the originals; what changed:
+ *
+ *   - The hero eyebrow was a hand-written `define → prove → run → operate`
+ *     spine. That spine is retired; it is now <PathNav>, from the registry.
+ *   - The H1 is the v5 line from site-heroes.md §2 (AltairaLabs/planning#37).
+ *   - The constellation's four cards were a hardcoded list of names, roles and
+ *     URLs. They come from the product registry now — a second hand-written
+ *     product list on a site that already renders the family bar is exactly
+ *     how codegen.altairalabs.ai stayed live on three sites after it went
+ *     NXDOMAIN.
+ *   - Chrome (family bar, footer) came from Docusaurus Navbar/Footer swizzles.
+ *     Those are deleted; the shared components replace them.
+ *
+ * Claims here are constrained by #37 and checked against the schema: a
+ * promptpack does NOT carry `memory`, and it does NOT install "into any
+ * cluster over OCI" — neither is in promptpack.schema.json.
+ */
+import { path as productPath } from '@altairalabs/brand/products';
+import FamilyBar from '@altairalabs/brand/FamilyBar.astro';
+import PathNav from '@altairalabs/brand/PathNav.astro';
+import SiteFooter from '@altairalabs/brand/SiteFooter.astro';
+import ProductNav from '../components/ProductNav.astro';
+import StandardsStrip from '../components/StandardsStrip.astro';
+import '@altairalabs/atlas-tokens/index.css';
+// The same two files the docs pages load, in the same order. Starlight's
+// customCss only reaches Starlight pages, and this is not one — without these
+// the landing page had no border-box reset and every container rendered 64px
+// wide, and no shared typography.
+import '@altairalabs/brand/starlight-atlas.css';
+import '../styles/site.css';
+import styles from '../styles/landing.module.css';
+
+/**
+ * The spec version, read from the schema — the single source of truth. Never
+ * hardcode it: version-check only compares the schema against the README, so a
+ * stale copy here would go unnoticed.
+ *
+ * Read from the SYNCED copy under static/, not the repo root, for two reasons:
+ * it is the exact file this site publishes at /schema/latest/, so the number
+ * shown can never disagree with the schema served; and a plain import is
+ * resolved by the bundler, where a readFileSync on import.meta.url is not —
+ * that resolves to the built chunk's location and fails at build time.
+ */
+import schema from '../../static/schema/latest/promptpack.schema.json';
+const specVersion = 'v' + schema.version;
+
+const MANIFEST_ROWS: [string, string, boolean][] = [
+  ['id · name · version', 'identity & semver', false],
+  ['template_engine', 'variable syntax', false],
+  ['tools', 'define once, reuse', false],
+  ['fragments', 'shared text blocks', false],
+  ['prompts', 'specialized, per scenario', false],
+  ['evals', 'quality checks travel along', false],
+  ['workflow · agents', 'orchestration', true],
+  ['skills · requires', 'knowledge & providers', true],
+];
+
+const ANNOTATIONS: [string, string, string][] = [
+  ['01', 'id · name · version', 'Identity and semantic version — required, alongside template_engine and prompts.'],
+  ['02', 'tools', 'External functions defined once, referenced by any prompt.'],
+  ['03', 'fragments', 'Reusable text blocks interpolated into templates for consistency.'],
+  ['04', 'prompts', 'Specialized, templated system prompts with typed variables and tool bindings.'],
+  ['05', 'evals', 'Automated quality checks with Prometheus metrics — shipped alongside the prompts.'],
+];
+
+const CAPABILITIES: [string, string, string][] = [
+  ['Agent Loops', 'v1.4', 'Terminal states, retry budgets, replayable artifacts.'],
+  ['Workflows & Multi-Agent', 'v1.3', 'State-machine orchestration with A2A definitions.'],
+  ['Multi-Prompt Architecture', 'core', 'Specialized prompts per scenario or workflow stage.'],
+  ['Tool Integration', 'core', 'Define tools once, reference them across all prompts.'],
+  ['Evals & Guardrails', 'v1.2', 'Quality policy and safety travel with the pack.'],
+  ['Provider Requirements', 'v1.5.1', 'Declare needed providers for coverage and parity.'],
+];
+
+const VALUES: [string, string, string][] = [
+  ['01 / reuse', 'Stop building the same agents over and over.',
+   'Package prompts, tools, workflows, and agent loops into one deployable unit. Share proven behavior across teams and organizations.'],
+  ['02 / package', 'Deploy agents, not just prompts.',
+   'Specialized prompts, external tools, workflow state machines, and guardrails — all in one file. No more scattered configuration.'],
+  ['03 / verify', 'Know your agent works before you deploy.',
+   'Built-in evals and testing metadata show which models perform best and how reliably — no "works on my machine" surprises.'],
+];
+
+/**
+ * The constellation, derived. `category` supplies each product's one-word role
+ * ("Spec", "Runtime"), which is what the hand-written cards said in lower case.
+ * PromptPack gets no href: linking a "you are here" card to the page you are
+ * on is a dead end.
+ */
+const family = productPath().map((p) => ({
+  name: p.name,
+  role: 'the ' + p.category.toLowerCase(),
+  href: p.id === 'promptpack' ? undefined : p.href,
+  active: p.id === 'promptpack',
+  mark: p.id === 'promptpack' ? '/img/logo.svg' : `/img/atlas/logos/logo-${p.id}.svg`,
+  markDark: p.id === 'promptpack' ? '/img/logo-dark.svg' : undefined,
+}));
+
+const pageTitle = 'PromptPack — the open specification for AI agent behaviour';
+const description =
+  'PromptPack is the open specification for packaging, testing, and running AI agent behavior — from multi-prompt routers to autonomous agent loops. Framework-agnostic, portable, and production-ready.';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Pre-hydration theme init, matching Starlight's storage key so the
+      // landing page and the docs agree on the reader's choice.
+      const t =
+        localStorage.getItem('starlight-theme') ||
+        (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';
+    </script>
+  </head>
+
+  <body>
+    <FamilyBar current="promptpack" docsHref="/docs/getting-started/" />
+    <StandardsStrip />
+    <ProductNav />
+
+    <div class={styles.page}>
+      <main>
+        <section class={styles.section}>
+          <div class={styles.heroAtmosphere} aria-hidden="true"></div>
+          <div class:list={[styles.container, styles.hero]}>
+            <div>
+              <div class={styles.eyebrowSlot}><PathNav current="promptpack" /></div>
+              <h1 class={styles.heroTitle}>
+                You can't govern what you
+                <span class={styles.heroAccent}>haven't&nbsp;defined.</span>
+              </h1>
+              <p class={styles.heroSub}>
+                PromptPack is the declarative format for a production agent — the models it
+                requires, its prompts, tools, workflows, guardrails, and the quality checks it
+                must pass — in a single portable, versioned artifact. Author once, run it on any
+                PromptPack-compatible runtime.
+              </p>
+              <div class={styles.heroMeta}>
+                <span>one file</span>
+                <span class={styles.heroMetaSep}>·</span>
+                <span>every provider</span>
+                <span class={styles.heroMetaSep}>·</span>
+                <span>versioned</span>
+                <span class={styles.heroMetaSep}>·</span>
+                <span>open</span>
+              </div>
+              <div class={styles.heroActions}>
+                <a class={styles.btnPrimary} href="/docs/spec/overview/">Read the spec</a>
+                <a class={styles.btnGhost} href="/docs/spec/examples/">See an example</a>
+                <a class={styles.btnBare} href="https://github.com/altairalabs/promptpack-spec">
+                  git clone ↗
+                </a>
+              </div>
+            </div>
+
+            <div class={styles.manifest}>
+              <div class={styles.manifestCard}>
+                <div class={styles.manifestBar}>
+                  <span class={styles.manifestFile}>customer-support.promptpack.json</span>
+                  <span class={styles.manifestPill}>1 file</span>
+                </div>
+                <div class={styles.manifestBody}>
+                  <div class={styles.manifestComment}>
+                    // everything the agent needs, declared once
+                  </div>
+                  {
+                    MANIFEST_ROWS.map(([key, note, muted]) => (
+                      <div class={styles.manifestRow}>
+                        <span class={muted ? styles.manifestKeyMuted : styles.manifestKey}>
+                          {key}
+                        </span>
+                        <span class={styles.manifestNote}>{note}</span>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class:list={[styles.section, styles.videoSection]}>
+          <div class={styles.container}>
+            <div class={styles.eyebrow}>the format in motion</div>
+            <div class={styles.videoFrame}>
+              <video autoplay muted loop playsinline preload="metadata" poster="/img/hero.jpg">
+                <source src="/img/hero.webm" type="video/webm" />
+                <source src="/img/hero.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </section>
+
+        <section class:list={[styles.section, styles.band]}>
+          <div class:list={[styles.container, styles.split]}>
+            <div class={styles.splitLeft}>
+              <div class={styles.eyebrow}>§ 01 — the problem</div>
+              <h2 class={styles.splitTitle}>AI agent development is fragmented.</h2>
+              <p class={styles.splitBody}>
+                Each framework has its own format for prompts, tools, workflows, and test
+                scenarios. When you change frameworks or providers, you rebuild from scratch.
+              </p>
+              <p class={styles.splitBody}>
+                Agent logic — now critical business logic — lacks engineering discipline.
+              </p>
+            </div>
+            <div class={styles.splitRight}>
+              <div class={styles.eyebrow}>
+                <span class={styles.eyebrowNum}>§ 02</span>&nbsp;— the solution
+              </div>
+              <h2 class={styles.splitTitle}>A vendor-neutral JSON format.</h2>
+              <p class={styles.splitBody}>
+                PromptPack packages AI agent behavior into one portable file:
+              </p>
+              <ul class={styles.checkList}>
+                <li>Framework-agnostic prompt definitions</li>
+                <li>Reusable tool specifications</li>
+                <li>Workflow and agent-loop orchestration</li>
+                <li>Version-controlled agent logic</li>
+                <li>Works with any runtime or provider</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class={styles.section}>
+          <div class={styles.container}>
+            <div class={styles.sectionHead}>
+              <div class={styles.eyebrow}>
+                <span class={styles.eyebrowNum}>§ 03</span>&nbsp;— anatomy of a promptpack
+              </div>
+              <h2 class={styles.sectionTitle}>One file describes the whole agent.</h2>
+              <p class={styles.sectionLead}>
+                A promptpack is plain JSON validated against a published schema. A valid pack
+                needs only identity, a template engine and one prompt — everything beyond that is
+                optional, so you can grow into full multi-agent orchestration without changing
+                format.
+              </p>
+            </div>
+
+            <div class={styles.anatomyGrid}>
+              <div class={styles.codeCard}>
+                <div class={styles.codeBar}>
+                  <span class={styles.codeDot}></span>
+                  <span class={styles.manifestFile}>customer-support.promptpack.json</span>
+                  <span class={styles.codeValid}>validated · schema {specVersion}</span>
+                </div>
+                {/* Hand-coloured rather than syntax-highlighted: the design
+                    calls for a muted key/value read, not full highlighting. */}
+                <pre class={styles.code}>{`{
+  "$schema": "https://promptpack.org/schema/latest/…",
+  "id": "customer-support",
+  "name": "Customer Support Pack",
+  "version": "1.0.0",
+  "template_engine": { "syntax": "{{variable}}" },
+  "tools": {
+    "lookup_order": { "type": "function" }
+  },
+  "fragments": {
+    "brand_voice": "Friendly, professional tone."
+  },
+  "prompts": {
+    "support": {
+      "system_template": "You are a {{role}}. {{fragments.brand_voice}}",
+      "tools": ["lookup_order"]
+    }
+  },
+  "evals": [
+    { "id": "tone-check", "type": "llm_judge" }
+  ]
+}`}</pre>
+              </div>
+
+              <div class={styles.annList}>
+                {
+                  ANNOTATIONS.map(([num, field, body]) => (
+                    <div class={styles.ann}>
+                      <span class={styles.annNum}>{num}</span>
+                      <div>
+                        <div class={styles.annField}>{field}</div>
+                        <div class={styles.annBody}>{body}</div>
+                      </div>
+                    </div>
+                  ))
+                }
+                <div class:list={[styles.ann, styles.annMore]}>
+                  <span class={styles.annNum}>+</span>
+                  <div>
+                    <div class={styles.annBody}>
+                      Add <span class={styles.annCode}>workflow</span>,
+                      <span class={styles.annCode}>agents</span>,
+                      <span class={styles.annCode}>skills</span> and
+                      <span class={styles.annCode}>requires</span> as the pack grows.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class:list={[styles.section, styles.band]}>
+          <div class={styles.container}>
+            <div class={styles.capsHead}>
+              <div class={styles.capsHeadText}>
+                <div class={styles.eyebrow}>
+                  <span class={styles.eyebrowNum}>§ 04</span>&nbsp;— capabilities
+                </div>
+                <h2 class={styles.sectionTitle}>
+                  New capabilities arrive as optional sections.
+                </h2>
+              </div>
+              <div class={styles.capsVersions}>
+                spec versions<br />
+                <span class={styles.capsVersionsValue}>v1.0 → {specVersion}</span>
+              </div>
+            </div>
+            <div class={styles.capsGrid}>
+              {
+                CAPABILITIES.map(([capTitle, version, body]) => (
+                  <div class={styles.cap}>
+                    <div class={styles.capTop}>
+                      <span class={styles.capDot} />
+                      <span class={styles.capVersion}>{version}</span>
+                    </div>
+                    <div class={styles.capTitle}>{capTitle}</div>
+                    <div class={styles.capBody}>{body}</div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class={styles.section}>
+          <div class={styles.container}>
+            <div class={styles.valueGrid}>
+              {
+                VALUES.map(([num, valueTitle, body]) => (
+                  <div class={styles.value}>
+                    <div class={styles.valueNum}>{num}</div>
+                    <h3 class={styles.valueTitle}>{valueTitle}</h3>
+                    <p class={styles.valueBody}>{body}</p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class:list={[styles.section, styles.band]}>
+          <div class={styles.container}>
+            <div class={styles.sectionHead}>
+              <div class={styles.eyebrow}>§ 05 — the constellation</div>
+              <h2 class={styles.sectionTitle}>The open spec at the base of the family.</h2>
+              <p class={styles.sectionLead}>
+                PromptPack is neutral by design — the community standard everything else builds
+                on. The commercial products in the AltairaLabs constellation each add their own
+                layer on top of the same file.
+              </p>
+            </div>
+            <div class={styles.familyGrid}>
+              {
+                family.map((member) => (
+                  <a
+                    class:list={[
+                      styles.family,
+                      member.active && styles.familyActive,
+                      member.href && styles.familyLink,
+                    ]}
+                    href={member.href}
+                  >
+                    {
+                      member.markDark ? (
+                        <>
+                          <img class:list={[styles.familyMark, styles.markLight]} src={member.mark} alt="" width="28" height="28" />
+                          <img class:list={[styles.familyMark, styles.markDark]} src={member.markDark} alt="" width="28" height="28" />
+                        </>
+                      ) : (
+                        <img class={styles.familyMark} src={member.mark} alt="" width="28" height="28" />
+                      )
+                    }
+                    <div class={styles.familyName}>{member.name}</div>
+                    <div class={styles.familyRole}>{member.role}</div>
+                    {member.active && <div class={styles.familyHere}>you are here</div>}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <SiteFooter
+      current="promptpack"
+      tagline="Standardise agent behaviour, not infrastructure."
+      columns={[
+        {
+          title: 'Specification',
+          links: [
+            { text: 'Overview', href: '/docs/spec/overview/' },
+            { text: 'Schema reference', href: '/docs/spec/schema-reference/' },
+            { text: 'Versions', href: '/docs/spec/versions/' },
+          ],
+        },
+        {
+          title: 'Community',
+          links: [
+            { text: 'RFC process', href: '/docs/processes/rfc-process/' },
+            { text: 'Governance', href: '/docs/processes/governance/' },
+            { text: 'Contributing', href: '/docs/processes/contributing/' },
+          ],
+        },
+      ]}
+    />
+
+    <style>
+      body {
+        margin: 0;
+        background: var(--bg-app);
+      }
+    </style>
+  </body>
+</html>
