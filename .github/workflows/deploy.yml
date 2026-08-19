@@ -51,9 +51,14 @@ jobs:
           npm ci
         env:
           # @altairalabs/brand and atlas-tokens come from GitHub Packages, which
-          # the Docusaurus site never needed — every dependency was public. The
-          # default GITHUB_TOKEN can read packages in this org.
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # the Docusaurus site never needed — every dependency was public.
+          #
+          # The org-level NODE_AUTH_TOKEN, not the default GITHUB_TOKEN: the
+          # packages are `access: restricted`, and a workflow token only reaches
+          # packages its own repository owns. It gets a 403
+          # "permission_denied: read_package" here. Every sibling site that
+          # consumes @altairalabs/* uses this same secret.
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       
       - name: Sync RFCs to docs
         run: |
