@@ -4,6 +4,7 @@
 - **Author(s):** [Your name and email/GitHub handle]
 - **Created:** [YYYY-MM-DD]
 - **Updated:** [YYYY-MM-DD]
+- **Discussion:** [Link to the GitHub Discussion in the RFC Comments category, once opened]
 - **Related Issues:** [Links to related GitHub issues]
 
 ## Summary
