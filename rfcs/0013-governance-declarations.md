@@ -28,7 +28,7 @@ Four things break as a result.
 
 1. **Policy has to enumerate names.** A rule as ordinary as "stop and ask a human before anything that cannot be undone" must be written as a list of tool names, because nothing says which tools those are. The list is correct the day it is written and silently wrong the next time an irreversible tool is added.
 
-2. **Telemetry cannot tell a refusal from a refusal.** A dismissed file read and a blocked payment are the same event to a counter that knows only tool names. Aggregate tool-call statistics carry no signal about consequence.
+2. **Every refusal looks alike in telemetry.** A dismissed file read and a blocked payment are the same event to a counter that knows only tool names. Aggregate tool-call statistics carry no signal about consequence.
 
 3. **Deployment is unguarded.** Nothing in a pack says which environments it has been cleared for, so nothing can stop a pack built and reviewed for staging from being deployed against production data. The check exists only in whatever discipline surrounds the pipeline.
 
