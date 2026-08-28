@@ -46,7 +46,9 @@ Each RFC has one of the following statuses:
 
 ## Active RFCs
 
-_None — all current RFCs are Implemented._
+| Number | Title | Status | Author | Created |
+|--------|-------|--------|--------|---------|
+| 0013 | [Governance Declarations](0013-governance-declarations.md) | Draft | Charlie Holland | 2026-08-28 |
 
 ## Process
 

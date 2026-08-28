@@ -1,0 +1,557 @@
+# RFC 0013: Governance Declarations
+
+- **Status:** Draft
+- **Author(s):** Charlie Holland (chaholl)
+- **Created:** 2026-08-28
+- **Updated:** 2026-08-28
+- **Related Issues:** N/A
+
+## Summary
+
+Extend a pack so it records the governance facts about an agent alongside the behaviour it already describes: what the agent is for, what it must not be used for, how far it acts without a human, who is accountable for it, how it has been classified, which environments it is cleared to run in, and whether it must disclose that it is an AI. A companion field on each tool, `action_scope`, records what that tool can affect — whether it changes state, whether the change can be undone, and what class of data it touches.
+
+The point is a single artifact. A pack already carries the model, the instructions, the tools, the guardrails, the eval definitions and the test evidence; adding the governance facts makes it the authoritative, versioned record of everything that constitutes an agent, which logs, telemetry and audit can key back to by version and content digest.
+
+Two consequences follow that the schema alone does not deliver. A runtime can make admission decisions from declarations rather than from out-of-band configuration — refusing a pack cleared only for staging when it is deployed to production. And a policy can act on consequence rather than on tool names: "approve anything irreversible" stays correct when the next irreversible tool is added.
+
+## Motivation
+
+A pack describes **capability** in detail and **consequence** not at all.
+
+It carries the model (`model_overrides`, `parameters`), the instructions (`system_template`, `fragments`, `variables`), the tools (`tools`), the guardrails (`validators`, `tool_policy.blocklist`), the autonomy budget (`tool_policy.max_rounds`, `max_tool_calls_per_turn`), the modality (`media`), the test evidence (`tested_models` — per-model success rate with a date), the eval definitions (`evals`), and the version history (`version`, `metadata.changelog`).
+
+It cannot say what any of that is for, what it must not be used for, who answers for it, or what happens when a tool actually runs. `description` is prose written to help a human browse. `metadata.domain` is a discovery tag, routinely a development label rather than a statement about where the agent is meant to operate.
+
+Those facts exist. They live in wikis, spreadsheets, ticket fields and registries — none of which are versioned with the content they describe, and all of which drift from it. An agent is then documented in one place and defined in another, and the two disagree the first time either changes.
+
+Four things break as a result.
+
+1. **Policy has to enumerate names.** A rule as ordinary as "stop and ask a human before anything that cannot be undone" must be written as a list of tool names, because nothing says which tools those are. The list is correct the day it is written and silently wrong the next time an irreversible tool is added.
+
+2. **Telemetry cannot tell a refusal from a refusal.** A dismissed file read and a blocked payment are the same event to a counter that knows only tool names. Aggregate tool-call statistics carry no signal about consequence.
+
+3. **Deployment is unguarded.** Nothing in a pack says which environments it has been cleared for, so nothing can stop a pack built and reviewed for staging from being deployed against production data. The check exists only in whatever discipline surrounds the pipeline.
+
+4. **Audit has no anchor.** Logs, eval results and tool-call records can be tied to a pack version and digest, but that version resolves to behaviour only. The governance context an auditor needs sits in a separate system with its own history, and reconstructing what was true at the time of an incident means reconciling two timelines.
+
+This RFC closes the gap at the two levels where the answers are actually known: the pack as a whole, and the individual tool.
+
+One note on why the pack rather than the runtime. PromptPack is an open specification, and a pack is executed by runtimes its author did not choose. A governance record that lives in one runtime's configuration is not a record of the agent; it is a record of that deployment.
+
+### Goals
+
+- Make the pack the authoritative, versioned record of an agent's governance facts as well as its behaviour.
+- Let a tool declare what it affects, in terms a policy expression can rely on.
+- Give a runtime enough to make admission decisions — environment, risk, autonomy — from the artifact itself.
+- Reuse an existing maintained vocabulary for open-ended values instead of inventing legal taxonomy.
+- Give every declaration an extension point, so tooling can annotate packs without waiting for a spec revision.
+- Stay fully backward compatible.
+
+### Non-Goals
+
+- **Provenance and attestation are deferred.** Who declared a value, when, against which framework, and under what review is a substantial design of its own and belongs in a separate RFC. This one records the values; it does not evidence them. See [Future Considerations](#provenance-and-attestation).
+- **Not a compliance schema.** This RFC models no regulation, and declaring these fields makes nothing compliant with anything.
+- **Not an export format.** Emitting a bill of materials or a technical-documentation record operates on a deployed system. See [Related formats](#related-formats).
+- **Not an enforcement mechanism.** The spec says what a runtime MAY act on, never how it enforces. Blocking, warning and auditing are runtime decisions.
+- No change to `tool_policy`, `validators`, `evals`, `workflow`, or any existing execution semantics.
+
+## Detailed Design
+
+### What the pack is the record of
+
+The pack is the description of the agent. Everything that is true of the agent by design — what it does, what it is for, what it may affect, what it is cleared for, who answers for it — is recorded in it and versioned with it.
+
+Two kinds of fact stay outside, and only two:
+
+- **Identity bindings.** The pack declares that irreversible actions require approval. It does not name the individual who approves. A named person in a versioned artifact is stale the day they change team, and the pack would need a new version to record a fact about the agent that has not changed.
+- **Per-interface resolution.** The pack declares that the agent must disclose it is an AI. It does not decide which of a runtime's interfaces face a human — one runtime commonly serves several at once, and that mapping is the runtime's to make. The requirement is the pack's; the resolution is not.
+
+In both cases the pack remains authoritative for the *policy*. What sits outside is the binding of that policy to a particular deployment's people and interfaces.
+
+```mermaid
+flowchart LR
+    subgraph pack [PromptPack — the record]
+      direction TB
+      b[behaviour<br/>prompts, tools, evals,<br/>tool_policy, tested_models]
+      g[governance<br/>purpose, misuse, autonomy,<br/>owner, risk, environments,<br/>disclosure, action_scope]
+    end
+
+    pack --> admit{runtime<br/>admission}
+    admit -->|cleared for<br/>this environment| run[running agent]
+    admit -->|not cleared| deny[refused]
+    run --> tel[logs, telemetry,<br/>eval results, audit]
+    tel -.->|keyed by version<br/>and content digest| pack
+```
+
+### Declared intent, not enforced configuration
+
+Every field here is a statement about the agent as designed. None of them configures anything.
+
+`autonomy_level: acts_with_approval` says the pack was built and tested to act only with a human gate. It does not create the gate. `requires_ai_disclosure: true` says the agent must tell people it is an AI. It does not emit the disclosure. `approved_environments` says where the agent has been cleared to run. It does not deploy it.
+
+The distinction matters because it is what keeps a declaration honest across deployments. Enforcement lives in `tool_policy`, in runtime policy, and in the deployment pipeline; those can be stricter than the pack asks, and the pack still describes the agent correctly. A runtime that ignores every field in this RFC still executes the pack identically.
+
+It also sets the correctness bar. These fields are asserted by people, and a runtime that treats `risk_classification` as something it computed rather than something it was told will be wrong in a way that matters.
+
+### Schema changes
+
+Three additions, all optional.
+
+**1. `metadata.governance`** — a closed object inside the existing open `metadata`:
+
+```json
+{
+  "governance": {
+    "type": "object",
+    "description": "Governance facts about the agent this pack defines. Human-declared: a conforming implementation MUST NOT infer these values.",
+    "additionalProperties": false,
+    "properties": {
+      "vocabularies": {
+        "type": "object",
+        "description": "Prefix to IRI map for CURIE values used in this block. Well-known prefixes have documented defaults and need not be declared.",
+        "additionalProperties": { "type": "string", "format": "uri" }
+      },
+      "intended_purpose": {
+        "type": "string",
+        "description": "What the agent is built to do, stated by its author. Free text."
+      },
+      "foreseeable_misuse": {
+        "type": "array",
+        "description": "Uses the author considers out of bounds and reasonably foreseeable.",
+        "items": { "type": "string" }
+      },
+      "autonomy_level": {
+        "type": "string",
+        "description": "How far the agent acts without a human in the loop, as designed and tested.",
+        "enum": ["suggests", "acts_with_approval", "acts_with_oversight", "acts_autonomously"]
+      },
+      "accountable_owner": {
+        "type": "string",
+        "description": "The role, team or function answerable for this agent. Prefer a durable identifier over a named individual.",
+        "examples": ["payments-risk", "Head of Customer Operations"]
+      },
+      "operator_role": {
+        "type": "string",
+        "description": "The declaring organisation's role for this agent, as a vocabulary term or free string.",
+        "examples": ["eu-aiact:AIProvider", "eu-aiact:AIDeployer"]
+      },
+      "risk_classification": {
+        "type": "array",
+        "description": "Risk classifications assigned to this agent, as vocabulary terms or free strings. An array because an agent may be classified under more than one framework.",
+        "items": { "type": "string" }
+      },
+      "intended_deployment_contexts": {
+        "type": "array",
+        "description": "Sectors or settings the agent is built for, as vocabulary terms or free strings. Distinct from metadata.domain, which is a discovery tag.",
+        "items": { "type": "string" }
+      },
+      "approved_environments": {
+        "type": "array",
+        "description": "Environments this pack has been cleared to run in. Open strings, because environment names are organisation-specific.",
+        "items": { "type": "string" },
+        "examples": [["staging"], ["staging", "production"]]
+      },
+      "requires_ai_disclosure": {
+        "type": "boolean",
+        "description": "Whether the agent must disclose that it is an AI to the people interacting with it. The runtime decides which of its interfaces this applies to."
+      },
+      "requires_approval_for": {
+        "type": "array",
+        "description": "Classes of action that require human approval, named by Tool.action_scope values. The pack states the requirement; the deployment supplies the approver.",
+        "items": {
+          "type": "string",
+          "enum": ["write", "external", "compensable", "irreversible"]
+        },
+        "examples": [["irreversible"], ["external", "irreversible"]]
+      },
+      "extensions": {
+        "type": "object",
+        "description": "Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced.",
+        "additionalProperties": true
+      }
+    }
+  }
+}
+```
+
+`autonomy_level` values:
+
+| Value | Meaning |
+|---|---|
+| `suggests` | Produces output. A human performs any action. |
+| `acts_with_approval` | Acts, but each consequential action is approved by a human first. |
+| `acts_with_oversight` | Acts on its own. A human monitors and can intervene or reverse. |
+| `acts_autonomously` | Acts without a human in the loop. |
+
+The split between `acts_with_approval` and `acts_with_oversight` is the difference between a human gate before the fact and a human check after it, which is what most oversight arrangements actually turn on.
+
+**2. `Tool.action_scope`** — a closed object on `$defs.Tool`:
+
+```json
+{
+  "action_scope": {
+    "type": "object",
+    "description": "What this tool can affect. Describes consequence; does not gate anything. Absence means undeclared, not safe.",
+    "additionalProperties": false,
+    "properties": {
+      "effect": {
+        "type": "string",
+        "description": "read: retrieves, changes nothing. write: changes state the operator controls. external: causes an effect outside the operator's systems (implies write).",
+        "enum": ["read", "write", "external"]
+      },
+      "reversibility": {
+        "type": "string",
+        "description": "reversible: the tool can undo it. compensable: cannot be undone, but a compensating action exists. irreversible: neither.",
+        "enum": ["reversible", "compensable", "irreversible"]
+      },
+      "data_classes": {
+        "type": "array",
+        "description": "Classes of data the tool touches, as vocabulary terms or free strings.",
+        "items": { "type": "string" }
+      },
+      "extensions": {
+        "type": "object",
+        "description": "Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced.",
+        "additionalProperties": true
+      }
+    }
+  }
+}
+```
+
+**3. `AgentDef.governance`** — the same shape as `metadata.governance`, overriding it for one agent (RFC 0007).
+
+### Why some values are closed and others open
+
+`autonomy_level`, `effect`, `reversibility` and the members of `requires_approval_for` are closed enums because their whole value is that a policy expression can depend on them. "Approve anything irreversible" is durable only if `irreversible` means one thing across packs from different authors. Anything richer — magnitude, blast radius, an organisation's own severity scale — goes in `extensions` until a future RFC has evidence to promote it.
+
+`risk_classification`, `intended_deployment_contexts`, `data_classes` and `operator_role` are open because their content is legal and sectoral taxonomy that PromptPack has no business maintaining and no ability to keep current. `approved_environments` and `accountable_owner` are open because they name things only the declaring organisation can name.
+
+### Vocabulary terms
+
+Open-list values are **terms**, expressed as a CURIE (`eu-aiact:AIDeployer`) or an absolute IRI. `vocabularies` maps prefixes to namespace IRIs. These prefixes are well-known defaults and need not be declared:
+
+| Prefix | Namespace |
+|---|---|
+| `dpv` | `https://w3id.org/dpv#` |
+| `eu-aiact` | `https://w3id.org/dpv/legal/eu/aiact#` |
+| `ai` | `https://w3id.org/dpv/ai#` |
+
+DPV is **recommended, never required**. A value that is not a CURIE is a free string and remains valid. The specification does not resolve, dereference or validate terms against any vocabulary — the prefix map exists so a consumer can, if it wants to.
+
+This is a deliberate hedge. DPV's `eu-aiact` extension is a Community Group Report, not a standards-track document, and it does not track legislative amendment quickly. Binding the schema to it would be a mistake. Referencing it, with the mapping declared inside the pack, is not: if the vocabulary moves or is replaced, packs change one URL and the schema is untouched.
+
+### Override semantics
+
+`AgentDef.governance` overrides `metadata.governance` by **per-field replacement**. A field present on the agent replaces the pack value for that field; a field absent inherits. Arrays and `extensions` replace whole — there is no element-wise or key-wise merge.
+
+Predictability over expressiveness: deep-merging `foreseeable_misuse` across two levels would produce a list no one wrote, which is the wrong property for a declaration whose purpose is to state what a human intended.
+
+### Absence is not a safe default
+
+An omitted field means **undeclared**. An omitted `action_scope` does not mean `read`, and does not mean `reversible`. An omitted `approved_environments` does not mean "cleared everywhere", and equally does not mean "cleared nowhere".
+
+How undeclared is treated when a value is used to gate something is a runtime decision. The same undeclared tool may warrant fail-closed in a regulated deployment and fail-open on a developer's machine. Runtimes that gate on these fields SHOULD treat undeclared as the most conservative class they support, and MUST document the choice.
+
+### Runtime Support Levels
+
+- **Level 0 — Ignore.** A runtime may ignore both blocks entirely. Packs carrying them remain valid and execute identically. Correct for any runtime that does not surface governance information.
+- **Level 1 — Validate and surface.** Validate structure and enum values, reject unknown enum members, and make declarations available to tooling — listings, registries, agent cards, documentation generators, audit exports. No effect on execution.
+- **Level 2 — Consume.** Act on the declarations. A Level 2 runtime MUST document how it treats undeclared values, and MAY:
+  - **Admission control.** Refuse to load or run a pack whose `approved_environments` does not include the environment it is being deployed into, or whose `risk_classification` exceeds what the deployment permits.
+  - **Approval routing.** Enforce `requires_approval_for` by matching it against each tool's `action_scope`, and bind the approver from deployment configuration.
+  - **Disclosure.** Honour `requires_ai_disclosure` on those of its interfaces that face a human.
+  - **Telemetry.** Label tool-call metrics and audit records by `action_scope`, so consequence is visible in aggregate.
+
+Levels are cumulative. A runtime advertising Level 2 for admission control need not implement all four.
+
+### Specification impact
+
+- **`metadata`** — one new optional property, `governance`. `metadata` remains `additionalProperties: true`; only the `governance` sub-object is closed.
+- **`$defs.Tool`** — one new optional property, `action_scope`. `Tool` is `additionalProperties: false`, so the schema change must land before packs validate.
+- **`$defs.AgentDef`** (RFC 0007) — one new optional property, `governance`.
+- Everything else is untouched. No existing field changes meaning.
+
+### Validation rules
+
+1. `autonomy_level`, `action_scope.effect`, `action_scope.reversibility` and each member of `requires_approval_for` MUST be one of their enumerated values. Unknown values are an error, not a warning.
+2. `metadata.governance`, `AgentDef.governance` and `action_scope` are closed objects: unknown properties are an error. Unrecognised information belongs in `extensions`.
+3. `extensions` accepts any JSON object. Its contents MUST NOT be validated or interpreted by a conforming implementation.
+4. `vocabularies` values MUST be absolute IRIs; keys MUST be valid CURIE prefixes.
+5. A value containing a colon is treated as a CURIE. If its prefix is neither declared in `vocabularies` nor a well-known default, a validator SHOULD warn and MUST NOT error — free strings remain valid values.
+6. Every field in `governance` is human-declared. A conforming implementation MUST NOT infer, compute or default these values from other pack content, and MUST NOT present a value it generated as if it had been declared.
+7. `AgentDef.governance` follows per-field replacement over `metadata.governance`.
+8. Every field in this RFC is optional. A pack declaring none of them is valid and unchanged.
+
+## Examples
+
+> YAML shown for readability (per [RFC 0002](./0002-yaml-format.md)). Equally valid as JSON.
+
+### Example 1: Basic usage
+
+A support pack that answers questions and raises disputes, with one tool that moves money.
+
+```yaml
+id: card-support
+name: Cardholder Support
+version: 2.1.0
+template_engine:
+  version: v1
+  syntax: "{{variable}}"
+
+metadata:
+  domain: finance
+  governance:
+    intended_purpose: >
+      Answers cardholder questions about settled transactions and raises
+      disputes on the cardholder's explicit instruction.
+    foreseeable_misuse:
+      - Credit, pricing or eligibility decisioning
+      - Adjudicating a dispute without a human reviewer
+    autonomy_level: acts_with_approval
+    accountable_owner: payments-risk
+    operator_role: eu-aiact:AIDeployer
+    approved_environments: [staging, production]
+    requires_ai_disclosure: true
+    requires_approval_for: [irreversible, external]
+
+prompts:
+  support:
+    id: support
+    name: Support
+    version: 2.1.0
+    system_template: "..."
+    tools: [lookup_transaction, issue_refund]
+
+tools:
+  lookup_transaction:
+    description: Look up a settled transaction by reference
+    action_scope:
+      effect: read
+      data_classes: [dpv:FinancialData]
+  issue_refund:
+    description: Issue a refund against a settled transaction
+    action_scope:
+      effect: external
+      reversibility: compensable
+      data_classes: [dpv:FinancialData]
+```
+
+`requires_approval_for: [irreversible, external]` matches `issue_refund` through its `action_scope` without naming it, and keeps matching when the next external tool is added. `lookup_transaction` is untouched — a dismissed read is no longer indistinguishable from a blocked payment.
+
+### Example 2: Admission control and a per-agent override
+
+A pack cleared only for staging, exposing two agents with different autonomy.
+
+```yaml
+metadata:
+  governance:
+    vocabularies:
+      acme: https://acme.example/vocab#
+    intended_purpose: >
+      Triages inbound security findings and drafts remediation plans.
+    foreseeable_misuse:
+      - Automated remediation in production without review
+    autonomy_level: acts_with_oversight
+    accountable_owner: platform-security
+    operator_role: eu-aiact:AIProvider
+    risk_classification: [eu-aiact:HighRiskAI]
+    intended_deployment_contexts: [eu-aiact:CriticalInfrastructure]
+    approved_environments: [staging]
+    requires_approval_for: [irreversible]
+    extensions:
+      acme.example/control-set: SOC2-CC7
+
+agents:
+  entry: triage
+  members:
+    triage: {}
+    remediator:
+      description: Applies an approved remediation plan
+      governance:
+        autonomy_level: acts_with_approval
+        foreseeable_misuse:
+          - Applying a plan that no reviewer approved
+
+tools:
+  apply_patch:
+    description: Apply an approved remediation patch to a host
+    action_scope:
+      effect: external
+      reversibility: irreversible
+      data_classes: [acme:InfrastructureState]
+      extensions:
+        acme.example/blast-radius: fleet
+```
+
+A Level 2 runtime deploying this into production refuses it: `approved_environments` lists `staging` only. The same runtime in staging admits it, and enforces approval on `apply_patch` because its `reversibility` is `irreversible`.
+
+The `remediator` agent inherits everything except `autonomy_level` and `foreseeable_misuse`, which it replaces wholesale.
+
+## Related formats
+
+Non-normative, and included to make the boundary explicit rather than to create an obligation.
+
+Two machine-readable inventory formats are relevant to anyone assembling a record of a deployed system: the OWASP **CycloneDX ML-BOM** (v1.7, standardised as ECMA-424, 2nd edition) and the **SPDX 3.0 AI Profile**. Both describe a deployed system — weights, datasets, dependencies — which a pack does not know. **Emitting either is an export concern and deliberately not a pack concern.**
+
+The mapping below exists so an exporter is a transform rather than an interpretation:
+
+| PromptPack | DPV | CycloneDX `modelCard` |
+|---|---|---|
+| `governance.intended_purpose` | `eu-aiact:IntendedPurpose` | `considerations.useCases` |
+| `governance.foreseeable_misuse` | `eu-aiact:ReasonablyForeseeableMisuse` | nearest is `considerations.ethicalConsiderations`; no exact equivalent |
+| `governance.operator_role` | `eu-aiact:AIProvider` / `AIDeployer` | no equivalent |
+| `governance.risk_classification` | `eu-aiact` risk terms | no equivalent |
+| `governance.autonomy_level` | no equivalent | no equivalent |
+| `governance.approved_environments` | no equivalent | no equivalent |
+| `tool.action_scope` | no equivalent | no equivalent |
+| existing `tested_models` | — | `quantitativeAnalysis.performanceMetrics` |
+
+The gaps are informative. Model cards describe a model; the AI Act vocabulary describes a system in a legal context. Neither describes **what an agent may do with a tool, or where it is cleared to run** — the layer a prompt pack is uniquely positioned to record, and the reason `autonomy_level`, `approved_environments`, `effect` and `reversibility` are defined here rather than borrowed.
+
+## Drawbacks
+
+- **Declarations are unverified.** Nothing checks that a tool marked `reversible` can be reversed, that `risk_classification` reflects a real assessment, or that anyone reviewed `approved_environments`. These are assertions, exactly as `description` is today. Without provenance the pack records *what was claimed*, not *that the claim was made responsibly* — which is precisely the gap the deferred provenance RFC has to close, and until it does, a governance block is weaker evidence than it looks.
+- **A field nobody fills in is worse than none.** Optional declarative fields have a poor track record. If `action_scope` is blank across an ecosystem, consumers learn to ignore it and the fields become noise that implies more assurance than exists. Mitigated by keeping the closed set small, making every field independently useful, and stating that absence means undeclared.
+- **Admission control invites a false sense of safety.** A runtime refusing a staging pack in production is a useful guardrail and not a security boundary: the field is author-declared and trivially editable by anyone who can edit the pack. It catches mistakes, not adversaries, and should be documented that way.
+- **Governance facts change on a different clock from behaviour.** An ownership change now bumps a pack version for content whose behaviour is identical, and CI that stamps per-environment values produces several artifacts from one source. Both are workable; neither is free.
+- **A vocabulary dependency, however loose.** Recommending DPV creates a soft coupling to a Community Group deliverable. The prefix map confines the blast radius to one URL per pack, but the recommendation would need revisiting if DPV stalls.
+
+## Alternatives
+
+### Alternative 1: A new top-level `governance` block
+
+Make governance a sibling of `metadata` and `compilation` rather than nesting it inside `metadata`.
+
+Rejected. The house preference is to extend an existing surface rather than add a top-level primitive, and nesting costs nothing: the closed sub-object gets strict validation whether or not its parent is permissive. Nesting also has a useful side effect — because `metadata` is already `additionalProperties: true`, packs can begin writing `metadata.governance` against today's schema and simply become validated when the change lands.
+
+### Alternative 2: Keep governance facts out of the pack entirely
+
+Leave purpose, owner, risk and environment to the agent card, a registry or a deployment manifest, and keep the pack to behaviour.
+
+Rejected, and this was an earlier draft of this RFC. It produces exactly the problem in the Motivation: the agent is defined in one artifact and described in another, the two are versioned separately, and reconstructing what was true during an incident means reconciling two timelines. It also makes admission control impossible — a runtime cannot refuse a staging pack in production if the pack does not say it is a staging pack. The registry view is still available to anyone who wants it, and is better fed from a pack that carries the facts than from a second system that has to be kept in step.
+
+### Alternative 3: Free-form governance metadata only
+
+Ship the `extensions` bag and no closed fields, letting conventions emerge.
+
+Rejected. It defeats the purpose. The value of `reversibility` is that a policy expression can depend on it meaning one thing across packs from different authors; a convention emerging independently in three organisations produces three incompatible spellings. `extensions` is the right home for what is not yet agreed, not for what is.
+
+### Alternative 4: Adopt DPV or CycloneDX wholesale
+
+Model the governance block directly on `eu-aiact` terms, or embed a CycloneDX `modelCard` in the pack.
+
+Rejected on both counts. DPV is an RDF vocabulary whose expressive model does not fit a closed JSON Schema. A `modelCard` describes a deployed model, including weights, datasets and dependencies a pack does not have. Referencing both — terms by CURIE, formats by a documented mapping — gets the interoperability without the coupling.
+
+### Alternative 5: Put action scope in `tool_policy`
+
+Express consequence as policy rules alongside `blocklist` and `max_rounds`.
+
+Rejected. It inverts the relationship. Reversibility is a property of the tool, true wherever the tool is called; policy is the decision about what to do about it. Putting the property in the policy means restating it in every policy that mentions the tool, which is how the enumerate-the-names problem started.
+
+## Adoption Strategy
+
+Nothing to migrate. Every field is optional and additive; existing packs remain valid and behave identically.
+
+Adoption is expected in stages, each useful alone:
+
+1. **Tools first.** `action_scope` on tools that obviously warrant it — anything external or irreversible. Immediately useful for policy and telemetry, independent of any governance block.
+2. **Purpose and autonomy.** `intended_purpose`, `foreseeable_misuse`, `autonomy_level`. Useful for registries and listings before any compliance consumer exists.
+3. **Operational facts.** `accountable_owner`, `approved_environments`, `requires_approval_for` — the fields a runtime can act on, and the point at which admission control becomes possible.
+4. **Legal classifications.** `operator_role`, `risk_classification`, `intended_deployment_contexts`, moved to vocabulary terms where a term exists. Free strings stay valid indefinitely.
+
+Because `metadata` is already permissive, stage 2 can begin before the schema change ships; those packs become validated rather than newly valid.
+
+### Backward Compatibility
+
+- [x] Fully backward compatible
+- [ ] Requires migration (describe migration path)
+- [ ] Breaking change (describe impact and migration)
+
+### Migration Path
+
+Not applicable.
+
+## Unresolved Questions
+
+- **Is `requires_approval_for` the right shape?** Naming `action_scope` values keeps it declarative and machine-checkable, but it cannot express "irreversible actions over £10,000". Richer conditions need an expression language, which is a much larger commitment. Is the coarse version useful enough to ship?
+- **Should `approved_environments` have any reserved names?** Leaving it fully open means two organisations spell production differently and no cross-org tooling can compare. Reserving a small set risks assuming a deployment model.
+- **Should `risk_classification` be an array?** It allows classification under several frameworks at once, at the cost of ambiguity about which one a consumer should read. A single term plus a framework field is the obvious alternative and starts to look like the deferred provenance design.
+- **Does `magnitude` belong in `action_scope`?** The most-requested fourth axis and the hardest to define without inventing an organisation-specific severity scale. Parked in `extensions` pending evidence from real usage.
+- **Are four autonomy levels right?** Three (`suggests`, `supervised`, `autonomous`) is simpler; four preserves the before/after-the-fact oversight distinction. Feedback from anyone routing approvals on this field would settle it.
+- **How should a runtime report an admission refusal?** Nothing here says what a Level 2 runtime returns when it refuses a pack, and consistent behaviour would help operators more than it constrains implementers.
+
+## Implementation Plan
+
+1. **Phase 1: Schema**
+   - [ ] Add `governance` to `metadata`, `action_scope` to `$defs.Tool`, `governance` to `$defs.AgentDef`
+   - [ ] Bump schema `version` to the next minor
+   - [ ] Update the README spec badge and versioned schema URL in lockstep
+
+2. **Phase 2: Documentation**
+   - [ ] Spec documentation for both blocks, including declared-intent-versus-enforcement and the two things that stay outside
+   - [ ] Documented well-known prefix defaults
+   - [ ] Docs version snapshot for the outgoing spec version
+
+3. **Phase 3: Validation**
+   - [ ] Enum and closed-object validation
+   - [ ] CURIE prefix warning (warn, never error)
+   - [ ] `AgentDef.governance` per-field replacement resolution
+
+## Testing Strategy
+
+### Validation Tests
+
+- A pack with no governance fields validates unchanged.
+- Each enum rejects an unknown member, including `requires_approval_for`.
+- An unknown property inside `governance` or `action_scope` is rejected; the same property inside `extensions` is accepted.
+- `extensions` accepts arbitrarily nested JSON without interpretation.
+- A CURIE with an undeclared, non-well-known prefix warns and validates.
+- `AgentDef.governance` replaces per field and inherits the rest; arrays replace whole.
+
+### Compatibility Tests
+
+- Every existing example pack in the repository validates against the new schema unchanged.
+- A pack carrying governance fields executes identically on a Level 0 runtime.
+
+## Documentation Impact
+
+- [ ] New spec section covering both declaration surfaces
+- [ ] Runtime Support Levels documented, including the admission-control behaviour
+- [ ] Well-known vocabulary prefixes documented
+- [ ] Schema reference regenerated
+
+## Future Considerations
+
+### Provenance and attestation
+
+Everything here is an assertion, and the pack does not record who made it, when, against which framework, or under what review. That is the difference between a governance record and governance evidence, and it is a design of its own: a shared declaration wrapper, signing, and a story for what a consumer does with an unattested claim. Deliberately deferred to its own RFC; the fields defined here are the values it would attest.
+
+### Promotion from `extensions`
+
+`extensions` is designed to be mined. If a namespaced key appears across independent authors with consistent meaning — `blast-radius` being the obvious candidate — that is the evidence a future RFC needs to promote it into the closed set. The bag is a staging area, not a permanent dumping ground.
+
+### Verified rather than asserted declarations
+
+A tool's `reversibility` could in principle be corroborated — by an eval that exercises the undo path, by a runtime observing compensating calls. Substantially larger than provenance, and noted only to mark the direction.
+
+### Packs as inventory components
+
+AI bill-of-materials tooling is beginning to track prompts alongside models and datasets. A pack carrying a version, a content digest and a declared purpose is a natural first-class component in such an inventory. Worth its own RFC if the tooling settles.
+
+---
+
+## Revision History
+
+- **2026-08-28:** Initial draft
+
+## References
+
+- [RFC 0002: YAML File Format](./0002-yaml-format.md)
+- [RFC 0007: Agents Extension](./0007-agents-extension.md)
+- [RFC 0012: Provider Requirements](./0012-provider-requirements.md)
+- [Data Privacy Vocabulary — EU AI Act extension](https://w3id.org/dpv/legal/eu/aiact) (W3C Community Group Report)
+- [Data Privacy Vocabulary — AI extension](https://w3id.org/dpv/ai) (W3C Community Group Report)
+- [OWASP CycloneDX ML-BOM](https://cyclonedx.org/capabilities/mlbom/)
+- [ECMA-424 — CycloneDX Bill of Materials Specification](https://ecma-international.org/publications-and-standards/standards/ecma-424/)
+- [SPDX 3.0 AI Profile](https://spdxai.github.io/)
