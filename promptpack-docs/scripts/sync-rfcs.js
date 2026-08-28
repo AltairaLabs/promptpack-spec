@@ -90,7 +90,7 @@ function extractMetadata(filename, content) {
   const created = createdMatch ? createdMatch[1] : '—';
   const updated = updatedMatch ? updatedMatch[1] : '—';
 
-  return { position, title, description, status, created, updated };
+  return { position, title, description, status, created, updated, hasTitleHeading: Boolean(titleFromHeading) };
 }
 
 /**
@@ -125,6 +125,23 @@ function rfcDestName(filename) {
 }
 
 /**
+ * Remove the source file's own `# RFC NNNN: Title` heading.
+ *
+ * The heading has to stay in /rfcs/*.md — those are read directly on GitHub,
+ * where nothing else supplies a title. On the docs site Starlight renders the
+ * frontmatter `title` as the page <h1>, so carrying the heading through gave
+ * every RFC page two <h1> elements with identical text. Docusaurus did not
+ * render the frontmatter title as a heading, so this only became wrong at the
+ * Astro migration.
+ *
+ * Anchored at the start of the string, not /m: only a heading that is the very
+ * first thing in the file is removed, never a `# RFC ...` line occurring later.
+ */
+function stripTitleHeading(content) {
+  return content.replace(/^#\s+RFC\s+\d{4}:.*\r?\n(?:\r?\n)*/, '');
+}
+
+/**
  * Sync a single RFC file
  */
 function syncRFC(filename) {
@@ -148,8 +165,11 @@ function syncRFC(filename) {
     // Generate frontmatter
     const frontmatter = generateFrontmatter(metadata);
     
-    // Combine frontmatter + content
-    const outputContent = frontmatter + content;
+    // Combine frontmatter + content. The source heading is dropped only when it
+    // is what produced the frontmatter title, so the filename-fallback path
+    // cannot leave a page with no title at all.
+    const body = metadata.hasTitleHeading ? stripTitleHeading(content) : content;
+    const outputContent = frontmatter + body;
     
     // Write to destination
     fs.writeFileSync(destPath, outputContent, 'utf8');
