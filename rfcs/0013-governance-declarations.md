@@ -36,6 +36,16 @@ Four things break as a result.
 
 This RFC closes the gap at the two levels where the answers are actually known: the pack as a whole, and the individual tool.
 
+### Formalising what was already possible
+
+Almost none of this was previously impossible. `metadata` accepts arbitrary properties, so a pack author could already write purpose, owner, risk or environment into a pack and have a runtime read them back. Several presumably have.
+
+What was missing is agreement. A field only one author writes and only one runtime reads is a private convention: it cannot be validated, a second author spells it differently, and no tool that did not grow up alongside it can act on it. Governance is where that hurts most, because the consumer is frequently *not* the author — an auditor, a procurement reviewer, a registry, a runtime deciding whether to admit the pack at all.
+
+Responsible-AI obligations are also close to universal now. They are not a vertical concern that a handful of packs carry and the rest can ignore, which is the case where a convention is the right answer and a specification is over-reach. When every serious deployment needs the same handful of facts, leaving each author to invent them produces a dozen incompatible spellings of the same idea and no interoperability at all.
+
+So this RFC is an instance of the promotion path it describes for `extensions`: a need common enough across independent authors that agreeing the spelling is worth more than the flexibility of leaving it open. The fields are named and closed for exactly that reason, and the `extensions` bags remain for what has not yet earned it.
+
 One note on why the pack rather than the runtime. PromptPack is an open specification, and a pack is executed by runtimes its author did not choose. A governance record that lives in one runtime's configuration is not a record of the agent; it is a record of that deployment.
 
 ### Goals
