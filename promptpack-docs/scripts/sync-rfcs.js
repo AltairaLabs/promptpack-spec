@@ -18,6 +18,12 @@ const RFC_SOURCE_DIR = path.join(__dirname, '../../rfcs');
 const RFC_DEST_DIR = path.join(__dirname, '../docs/rfcs');
 const RFC_INDEX_PATH = path.join(__dirname, '../docs/rfcs/index.md');
 
+// Where RFC feedback goes. Discussions has an "RFC Comments" category; before
+// this, nothing pointed at it and it sat empty while people improvised in
+// Issues instead.
+const REPO_URL = 'https://github.com/AltairaLabs/promptpack-spec';
+const DISCUSSION_CATEGORY = 'rfc-comments';
+
 // Hand-maintained mapping of RFC number → spec version that implemented it.
 // Update when a new RFC ships in a spec release.
 const RFC_SPEC_VERSION = {
@@ -90,7 +96,12 @@ function extractMetadata(filename, content) {
   const created = createdMatch ? createdMatch[1] : '—';
   const updated = updatedMatch ? updatedMatch[1] : '—';
 
-  return { position, title, description, status, created, updated, hasTitleHeading: Boolean(titleFromHeading) };
+  // An RFC may name its own discussion thread. Once one exists, everyone should
+  // land in it rather than opening a second.
+  const discussionMatch = content.match(/[-*]\s*\*\*Discussion[:]?\*\*[:\s]*(\S+)/i);
+  const discussion = discussionMatch ? discussionMatch[1].trim() : null;
+
+  return { position, title, description, status, created, updated, discussion, hasTitleHeading: Boolean(titleFromHeading) };
 }
 
 /**
@@ -133,6 +144,23 @@ sidebar:
  */
 function rfcDestName(filename) {
   return filename.replace(/^\d{4}-/, '');
+}
+
+/**
+ * A line telling a reader where to comment.
+ *
+ * The published RFC used to say it was open for comment while offering nowhere
+ * to leave one: the PR that carried it is merged and closed, and the page is
+ * static. If the RFC names a thread, link it; otherwise link a pre-filled new
+ * discussion in the RFC Comments category, so the first commenter does not have
+ * to work out where it belongs.
+ */
+function discussionBanner(metadata) {
+  const all = `${REPO_URL}/discussions/categories/${DISCUSSION_CATEGORY}`;
+  const link = metadata.discussion
+    ? `[join the discussion](${metadata.discussion})`
+    : `[start a discussion](${REPO_URL}/discussions/new?category=${DISCUSSION_CATEGORY}&title=${encodeURIComponent(metadata.title)})`;
+  return `> **Comments on this RFC:** ${link} — or browse [all RFC discussions](${all}).\n\n`;
 }
 
 /**
@@ -180,7 +208,7 @@ function syncRFC(filename) {
     // is what produced the frontmatter title, so the filename-fallback path
     // cannot leave a page with no title at all.
     const body = metadata.hasTitleHeading ? stripTitleHeading(content) : content;
-    const outputContent = frontmatter + body;
+    const outputContent = frontmatter + discussionBanner(metadata) + body;
     
     // Write to destination
     fs.writeFileSync(destPath, outputContent, 'utf8');

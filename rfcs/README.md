@@ -66,11 +66,14 @@ See [RFC Process Documentation](../promptpack-docs/docs/processes/rfc-process.md
 - [RFC Index](../promptpack-docs/docs/processes/rfc-index.md)
 - [Contributing Guidelines](../CONTRIBUTING.md)
 
-## GitHub Issue Templates
+## Commenting on an RFC
 
-For convenience, you can also use the GitHub issue templates to start RFC discussions:
+Feedback on a published RFC goes in the **[RFC Comments](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/rfc-comments)** discussion category, not in this repository's issues. Each RFC page on [promptpack.org](https://promptpack.org/docs/rfcs/) links to its thread, or to a pre-filled one if nobody has started it yet.
 
-- [RFC Proposal Issue Template](../.github/ISSUE_TEMPLATE/rfc-proposal.md)
-- [Detailed RFC Issue Template](../.github/ISSUE_TEMPLATE/rfc_proposal.md)
+An RFC that has a thread names it in its header:
 
-These templates help gather initial feedback before creating a formal RFC file.
+```markdown
+- **Discussion:** https://github.com/AltairaLabs/promptpack-spec/discussions/NN
+```
+
+To float an idea *before* writing an RFC, open a discussion in [Ideas](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/ideas). That is cheaper than a draft RFC and easier to abandon.

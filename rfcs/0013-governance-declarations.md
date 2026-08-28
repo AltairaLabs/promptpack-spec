@@ -4,6 +4,7 @@
 - **Author(s):** Charlie Holland (chaholl)
 - **Created:** 2026-08-28
 - **Updated:** 2026-08-28
+- **Discussion:** https://github.com/AltairaLabs/promptpack-spec/discussions/64
 - **Related Issues:** N/A
 
 ## Summary
