@@ -180,7 +180,7 @@ That is not an arbitrary place to divide the scale. The EU AI Act defines no aut
 
 So `acts_with_oversight` is the 14(4) shape — intervention available, not required, which is what optional approval means — and `acts_with_approval` is the 14(5) shape. The specification borrows the distinction, not the legal thresholds.
 
-**2. `Tool.action_scope`** — a closed object on `$defs.Tool`:
+**2. `Tool.action_scope` and `Tool.extensions`** — two properties on `$defs.Tool`:
 
 ```json
 {
@@ -213,6 +213,25 @@ So `acts_with_oversight` is the 14(4) shape — intervention available, not requ
   }
 }
 ```
+
+`extensions` sits beside it, on the tool rather than inside `action_scope`:
+
+```json
+{
+  "extensions": {
+    "type": "object",
+    "description": "Opaque annotations about this tool. Never interpreted by this specification. Keys SHOULD be namespaced.",
+    "additionalProperties": true
+  }
+}
+```
+
+Two bags on one entity needs one rule to keep authors from guessing:
+**`action_scope.extensions`** is for annotations about *consequence* — a blast radius, a severity score, anything that qualifies what the tool affects. **`Tool.extensions`** is for everything else about the tool, including the hints a runtime needs to implement its own policy (`acme.example/approval-threshold: 10000`).
+
+That second bag exists because of how `autonomy_level` is enforced. The pack states that the agent acts only with approval; the runtime decides which calls that bites on, and a tool policy over `action_scope` is the obvious mechanism. Where a runtime needs something the closed fields do not carry, it goes here rather than into the specification. Per-tool oversight is deliberately *not* a field: it would be derivable from a policy over `effect`, `reversibility` and `data_classes`, and a declaration that restates what another field already implies is indirection, not information.
+
+The cost is that extension keys do not interoperate — two runtimes will spell the same hint differently, and no cross-runtime tooling can act on them. That is also the promotion path: a namespaced key appearing across independent authors with consistent meaning is the evidence a future RFC needs. See [Promotion from `extensions`](#promotion-from-extensions).
 
 **3. `AgentDef.governance`** — the same shape as `metadata.governance`, overriding it for one agent (RFC 0007).
 
@@ -266,7 +285,7 @@ Partial support is conformant: a runtime may enforce `approved_environments` and
 ### Specification impact
 
 - **`metadata`** — one new optional property, `governance`. `metadata` remains `additionalProperties: true`; only the `governance` sub-object is closed.
-- **`$defs.Tool`** — one new optional property, `action_scope`. `Tool` is `additionalProperties: false`, so the schema change must land before packs validate.
+- **`$defs.Tool`** — two new optional properties, `action_scope` and `extensions`. `Tool` is `additionalProperties: false`, so the schema change must land before packs validate.
 - **`$defs.AgentDef`** (RFC 0007) — one new optional property, `governance`.
 - Everything else is untouched. No existing field changes meaning.
 
@@ -274,7 +293,7 @@ Partial support is conformant: a runtime may enforce `approved_environments` and
 
 1. `autonomy_level`, `action_scope.effect` and `action_scope.reversibility` MUST be one of their enumerated values. Unknown values are an error, not a warning.
 2. `metadata.governance`, `AgentDef.governance` and `action_scope` are closed objects: unknown properties are an error. Unrecognised information belongs in `extensions`.
-3. `extensions` accepts any JSON object. Its contents MUST NOT be validated or interpreted by a conforming implementation.
+3. Every `extensions` object — on `governance`, on `action_scope`, and on a tool — accepts any JSON object. Its contents MUST NOT be validated or interpreted by a conforming implementation.
 4. `vocabularies` values MUST be absolute IRIs; keys MUST be valid CURIE prefixes.
 5. A value containing a colon is treated as a CURIE. If its prefix is neither declared in `vocabularies` nor a well-known default, a validator SHOULD warn and MUST NOT error — free strings remain valid values.
 6. Every field in `governance` is human-declared. A conforming implementation MUST NOT infer, compute or default these values from other pack content, and MUST NOT present a value it generated as if it had been declared.
@@ -378,9 +397,11 @@ tools:
       data_classes: [acme:InfrastructureState]
       extensions:
         acme.example/blast-radius: fleet
+    extensions:
+      acme.example/approver-group: platform-security-oncall
 ```
 
-A Level 2 runtime enforcing `approved_environments` refuses this pack in production: it lists `staging` only. The same runtime in staging admits it, and — enforcing `autonomy_level` — gates `apply_patch` on a human, because its `action_scope` says the change is irreversible.
+A Level 2 runtime enforcing `approved_environments` refuses this pack in production: it lists `staging` only. The same runtime in staging admits it, and — enforcing `autonomy_level` — gates `apply_patch` on a human, because its `action_scope` says the change is irreversible. Nothing in the pack told it to gate that specific tool; it applied its own policy to the declared consequence. The two `extensions` keys are invisible to the specification and available to whichever runtime wrote them.
 
 The `remediator` agent inherits everything except `autonomy_level` and `foreseeable_misuse`, which it replaces wholesale.
 
