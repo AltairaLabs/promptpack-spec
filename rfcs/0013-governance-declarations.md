@@ -155,6 +155,12 @@ Three additions, all optional.
         "description": "Sectors or settings the agent is built for, as vocabulary terms or free strings. Distinct from metadata.domain, which is a discovery tag.",
         "items": { "type": "string" }
       },
+      "capabilities": {
+        "type": "array",
+        "description": "Capabilities the agent exercises, as vocabulary terms or free strings. Some capabilities carry obligations regardless of sector, so this is not covered by intended_deployment_contexts.",
+        "items": { "type": "string" },
+        "examples": [["eu-aiact:EmotionRecognition"], ["eu-aiact:DeepFake"]]
+      },
       "approved_environments": {
         "type": "array",
         "description": "Environments this pack has been cleared to run in. Open strings, because environment names are organisation-specific.",
@@ -245,11 +251,19 @@ The cost is that extension keys do not interoperate — two runtimes will spell 
 
 **3. `AgentDef.governance`** — the same shape as `metadata.governance`, overriding it for one agent (RFC 0007).
 
+### Capabilities carry obligations of their own
+
+`intended_deployment_contexts` says where an agent is meant to operate. It does not say what the agent *does*, and for a handful of capabilities that distinction is the whole point: some obligations attach to the capability regardless of sector.
+
+Generating synthetic media, recognising emotion, and categorising people biometrically are the clear cases. An agent that produces deepfakes owes a marking duty whether it is deployed in marketing or in education; emotion recognition is prohibited outright in some settings rather than merely regulated. None of that is reliably recoverable from free-text `intended_purpose`, and a reader should not have to infer it from the tool list.
+
+So `capabilities` is an open list of terms, on the same footing as `data_classes` and `intended_deployment_contexts`, with the `eu-aiact` and `ai` DPV extensions supplying vocabulary for the cases that matter. It is a record, not a constraint — there is nothing for a runtime to contradict — though a runtime is free to treat a declared capability as an admission input.
+
 ### Why some values are closed and others open
 
 `autonomy_level`, `effect` and `reversibility` are closed enums because their whole value is that a policy expression can depend on them. "Approve anything irreversible" is durable only if `irreversible` means one thing across packs from different authors. Anything richer — magnitude, blast radius, an organisation's own severity scale — goes in `extensions` until a future RFC has evidence to promote it.
 
-`risk_classification`, `intended_deployment_contexts`, `data_classes` and `operator_role` are open because their content is legal and sectoral taxonomy that PromptPack has no business maintaining and no ability to keep current. `approved_environments` and `accountable_owner` are open because they name things only the declaring organisation can name.
+`risk_classification`, `intended_deployment_contexts`, `capabilities`, `data_classes` and `operator_role` are open because their content is legal and sectoral taxonomy that PromptPack has no business maintaining and no ability to keep current. `approved_environments` and `accountable_owner` are open because they name things only the declaring organisation can name.
 
 ### Vocabulary terms
 
@@ -290,7 +304,7 @@ How undeclared is treated when a value is used to gate something is a runtime de
 
 Partial support is conformant: a runtime may enforce `approved_environments` and not `autonomy_level`. What it may not do is claim a constraint and then contradict it. The specification does not prescribe the mechanism — refusal at load or at call, hard block or operator override, and the error surface, are all runtime choices.
 
-**Not every field is a constraint.** `intended_purpose`, `foreseeable_misuse`, `accountable_owner`, `operator_role`, `risk_classification` and `intended_deployment_contexts` are records: there is nothing for a runtime to contradict, only to carry and surface. `action_scope` is neither — it is the input the constraints above are evaluated against.
+**Not every field is a constraint.** `intended_purpose`, `foreseeable_misuse`, `accountable_owner`, `operator_role`, `risk_classification`, `capabilities` and `intended_deployment_contexts` are records: there is nothing for a runtime to contradict, only to carry and surface. `action_scope` is neither — it is the input the constraints above are evaluated against.
 
 ### Specification impact
 
@@ -429,6 +443,7 @@ The mapping below exists so an exporter is a transform rather than an interpreta
 | `governance.foreseeable_misuse` | `eu-aiact:ReasonablyForeseeableMisuse` | nearest is `considerations.ethicalConsiderations`; no exact equivalent |
 | `governance.operator_role` | `eu-aiact:AIProvider` / `AIDeployer` | no equivalent |
 | `governance.risk_classification` | `eu-aiact` risk terms | no equivalent |
+| `governance.capabilities` | `eu-aiact` capability terms, `ai` extension | nearest is `modelParameters.task`; no exact equivalent |
 | `governance.autonomy_level` | no equivalent | no equivalent |
 | `governance.approved_environments` | no equivalent | no equivalent |
 | `tool.action_scope` | no equivalent | no equivalent |
@@ -485,7 +500,7 @@ Adoption is expected in stages, each useful alone:
 1. **Tools first.** `action_scope` on tools that obviously warrant it — anything external or irreversible. Immediately useful for policy and telemetry, independent of any governance block.
 2. **Purpose and autonomy.** `intended_purpose`, `foreseeable_misuse`, `autonomy_level`. Useful for registries and listings before any compliance consumer exists.
 3. **Operational facts.** `accountable_owner` and `approved_environments` — the point at which admission control becomes possible.
-4. **Legal classifications.** `operator_role`, `risk_classification`, `intended_deployment_contexts`, moved to vocabulary terms where a term exists. Free strings stay valid indefinitely.
+4. **Legal classifications.** `operator_role`, `risk_classification`, `intended_deployment_contexts` and `capabilities`, moved to vocabulary terms where a term exists. Free strings stay valid indefinitely.
 
 Because `metadata` is already permissive, stage 2 can begin before the schema change ships; those packs become validated rather than newly valid.
 
@@ -503,6 +518,7 @@ Not applicable.
 
 - **Is `approved_environments` enough on its own?** It answers "may this pack run here", which is the case that prompted it. It does not express staged promotion — that a pack cleared for staging is *a candidate for* production — which is how most pipelines actually work. Whether that belongs in the spec or in the pipeline is unresolved.
 - **What does a runtime do with `risk_classification`?** Admission control on environments is unambiguous. "Refuse a pack whose classification exceeds what the deployment permits" assumes classifications are ordered, and a namespaced term from an arbitrary framework is not.
+- **Is `requires_ai_disclosure` doing too much as a boolean?** Disclosing that a person is talking to a machine and marking a machine-generated artefact as synthetic are different duties with different triggers, and a single flag cannot distinguish them. `capabilities` now makes the second case visible without resolving it.
 - **Should the Article 14(4) oversight affordances be declarable?** A pack states an `autonomy_level` but not whether a stop button exists or output can be reversed. Those are properties of the runtime and its interfaces, not of pack content, so a pack claiming them would be claiming something it cannot honour — but their absence means the record is incomplete on the point Article 14 cares most about.
 
 Resolved during review, recorded here because the reasoning matters more than the outcome:
