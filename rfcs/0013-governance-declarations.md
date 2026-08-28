@@ -52,7 +52,7 @@ One note on why the pack rather than the runtime. PromptPack is an open specific
 - **Provenance and attestation are deferred.** Who declared a value, when, against which framework, and under what review is a substantial design of its own and belongs in a separate RFC. This one records the values; it does not evidence them. See [Future Considerations](#provenance-and-attestation).
 - **Not a compliance schema.** This RFC models no regulation, and declaring these fields makes nothing compliant with anything.
 - **Not an export format.** Emitting a bill of materials or a technical-documentation record operates on a deployed system. See [Related formats](#related-formats).
-- **Not an enforcement mechanism.** The spec says what a runtime MAY act on, never how it enforces. Blocking, warning and auditing are runtime decisions.
+- **Does not prescribe enforcement mechanisms.** A runtime that claims to enforce a constraint must honour it (see [Runtime Support Levels](#runtime-support-levels)), but how — refusal at load or at call, hard block or operator override, and the error surface — is the runtime's to choose.
 - No change to `tool_policy`, `validators`, `evals`, `workflow`, or any existing execution semantics.
 
 ## Detailed Design
@@ -136,9 +136,9 @@ Three additions, all optional.
         "examples": ["eu-aiact:AIProvider", "eu-aiact:AIDeployer"]
       },
       "risk_classification": {
-        "type": "array",
-        "description": "Risk classifications assigned to this agent, as vocabulary terms or free strings. An array because an agent may be classified under more than one framework.",
-        "items": { "type": "string" }
+        "type": "string",
+        "description": "The risk classification assigned to this agent, as a vocabulary term or free string. A namespaced term carries both the framework and the value, so no separate framework field is needed; a second classification under another framework belongs in extensions.",
+        "examples": ["eu-aiact:HighRiskAI"]
       },
       "intended_deployment_contexts": {
         "type": "array",
@@ -154,15 +154,6 @@ Three additions, all optional.
       "requires_ai_disclosure": {
         "type": "boolean",
         "description": "Whether the agent must disclose that it is an AI to the people interacting with it. The runtime decides which of its interfaces this applies to."
-      },
-      "requires_approval_for": {
-        "type": "array",
-        "description": "Classes of action that require human approval, named by Tool.action_scope values. The pack states the requirement; the deployment supplies the approver.",
-        "items": {
-          "type": "string",
-          "enum": ["write", "external", "compensable", "irreversible"]
-        },
-        "examples": [["irreversible"], ["external", "irreversible"]]
       },
       "extensions": {
         "type": "object",
@@ -183,7 +174,11 @@ Three additions, all optional.
 | `acts_with_oversight` | Acts on its own. A human monitors and can intervene or reverse. |
 | `acts_autonomously` | Acts without a human in the loop. |
 
-The split between `acts_with_approval` and `acts_with_oversight` is the difference between a human gate before the fact and a human check after it, which is what most oversight arrangements actually turn on.
+The split between `acts_with_approval` and `acts_with_oversight` is the difference between a human gate before the fact and a human check after it.
+
+That is not an arbitrary place to divide the scale. The EU AI Act defines no autonomy taxonomy — it describes systems as operating with "varying levels of autonomy" and never enumerates them, requiring instead that oversight be "commensurate with the risks, level of autonomy and context of use". What it does specify is oversight *capability*, and it draws exactly this line. Article 14(4) requires, for high-risk systems generally, that a human be able to monitor for anomalies, correctly interpret output, "disregard, override or reverse the output", and stop the system — capabilities that must exist, with no mandatory gate before each action. Article 14(5) imposes a gate in one narrow case: for remote biometric identification, no action may be taken unless separately verified by at least two natural persons.
+
+So `acts_with_oversight` is the 14(4) shape — intervention available, not required, which is what optional approval means — and `acts_with_approval` is the 14(5) shape. The specification borrows the distinction, not the legal thresholds.
 
 **2. `Tool.action_scope`** — a closed object on `$defs.Tool`:
 
@@ -201,7 +196,7 @@ The split between `acts_with_approval` and `acts_with_oversight` is the differen
       },
       "reversibility": {
         "type": "string",
-        "description": "reversible: the tool can undo it. compensable: cannot be undone, but a compensating action exists. irreversible: neither.",
+        "description": "reversible: the prior state can be restored. compensable: it cannot, but a defined compensating action limits the harm. irreversible: nothing restores the state and nothing compensates. Declare against the world, not the API.",
         "enum": ["reversible", "compensable", "irreversible"]
       },
       "data_classes": {
@@ -223,7 +218,7 @@ The split between `acts_with_approval` and `acts_with_oversight` is the differen
 
 ### Why some values are closed and others open
 
-`autonomy_level`, `effect`, `reversibility` and the members of `requires_approval_for` are closed enums because their whole value is that a policy expression can depend on them. "Approve anything irreversible" is durable only if `irreversible` means one thing across packs from different authors. Anything richer — magnitude, blast radius, an organisation's own severity scale — goes in `extensions` until a future RFC has evidence to promote it.
+`autonomy_level`, `effect` and `reversibility` are closed enums because their whole value is that a policy expression can depend on them. "Approve anything irreversible" is durable only if `irreversible` means one thing across packs from different authors. Anything richer — magnitude, blast radius, an organisation's own severity scale — goes in `extensions` until a future RFC has evidence to promote it.
 
 `risk_classification`, `intended_deployment_contexts`, `data_classes` and `operator_role` are open because their content is legal and sectoral taxonomy that PromptPack has no business maintaining and no ability to keep current. `approved_environments` and `accountable_owner` are open because they name things only the declaring organisation can name.
 
@@ -257,13 +252,16 @@ How undeclared is treated when a value is used to gate something is a runtime de
 
 - **Level 0 — Ignore.** A runtime may ignore both blocks entirely. Packs carrying them remain valid and execute identically. Correct for any runtime that does not surface governance information.
 - **Level 1 — Validate and surface.** Validate structure and enum values, reject unknown enum members, and make declarations available to tooling — listings, registries, agent cards, documentation generators, audit exports. No effect on execution.
-- **Level 2 — Consume.** Act on the declarations. A Level 2 runtime MUST document how it treats undeclared values, and MAY:
-  - **Admission control.** Refuse to load or run a pack whose `approved_environments` does not include the environment it is being deployed into, or whose `risk_classification` exceeds what the deployment permits.
-  - **Approval routing.** Enforce `requires_approval_for` by matching it against each tool's `action_scope`, and bind the approver from deployment configuration.
-  - **Disclosure.** Honour `requires_ai_disclosure` on those of its interfaces that face a human.
-  - **Telemetry.** Label tool-call metrics and audit records by `action_scope`, so consequence is visible in aggregate.
+- **Level 2 — Enforce.** Act on the declarations. A Level 2 runtime MUST declare which constraints it enforces, MUST NOT execute in a way that contradicts one it has declared, and MUST document how it treats undeclared values. The enforceable constraints are:
+  - **`approved_environments`.** Do not run the pack in an environment it does not list.
+  - **`autonomy_level`.** Do not take a consequential action without the oversight the level implies, using each tool's `action_scope` to decide which calls are consequential and binding the approver from deployment configuration.
+  - **`requires_ai_disclosure`.** Do not face a human without disclosing, on whichever of its interfaces do so.
 
-Levels are cumulative. A runtime advertising Level 2 for admission control need not implement all four.
+  A Level 2 runtime MAY additionally label tool-call metrics and audit records by `action_scope`, so consequence is visible in aggregate. That is reporting, not a constraint.
+
+Partial support is conformant: a runtime may enforce `approved_environments` and not `autonomy_level`. What it may not do is claim a constraint and then contradict it. The specification does not prescribe the mechanism — refusal at load or at call, hard block or operator override, and the error surface, are all runtime choices.
+
+**Not every field is a constraint.** `intended_purpose`, `foreseeable_misuse`, `accountable_owner`, `operator_role`, `risk_classification` and `intended_deployment_contexts` are records: there is nothing for a runtime to contradict, only to carry and surface. `action_scope` is neither — it is the input the constraints above are evaluated against.
 
 ### Specification impact
 
@@ -274,7 +272,7 @@ Levels are cumulative. A runtime advertising Level 2 for admission control need 
 
 ### Validation rules
 
-1. `autonomy_level`, `action_scope.effect`, `action_scope.reversibility` and each member of `requires_approval_for` MUST be one of their enumerated values. Unknown values are an error, not a warning.
+1. `autonomy_level`, `action_scope.effect` and `action_scope.reversibility` MUST be one of their enumerated values. Unknown values are an error, not a warning.
 2. `metadata.governance`, `AgentDef.governance` and `action_scope` are closed objects: unknown properties are an error. Unrecognised information belongs in `extensions`.
 3. `extensions` accepts any JSON object. Its contents MUST NOT be validated or interpreted by a conforming implementation.
 4. `vocabularies` values MUST be absolute IRIs; keys MUST be valid CURIE prefixes.
@@ -313,7 +311,6 @@ metadata:
     operator_role: eu-aiact:AIDeployer
     approved_environments: [staging, production]
     requires_ai_disclosure: true
-    requires_approval_for: [irreversible, external]
 
 prompts:
   support:
@@ -337,7 +334,7 @@ tools:
       data_classes: [dpv:FinancialData]
 ```
 
-`requires_approval_for: [irreversible, external]` matches `issue_refund` through its `action_scope` without naming it, and keeps matching when the next external tool is added. `lookup_transaction` is untouched — a dismissed read is no longer indistinguishable from a blocked payment.
+`autonomy_level: acts_with_approval` states that the agent acts only behind a human gate, and `action_scope` says which calls that bites on: `issue_refund` is external and only compensable, `lookup_transaction` changes nothing. Neither statement names the other, and both stay correct when the next tool is added. A dismissed read is also no longer indistinguishable from a blocked payment in telemetry.
 
 ### Example 2: Admission control and a per-agent override
 
@@ -355,10 +352,9 @@ metadata:
     autonomy_level: acts_with_oversight
     accountable_owner: platform-security
     operator_role: eu-aiact:AIProvider
-    risk_classification: [eu-aiact:HighRiskAI]
+    risk_classification: eu-aiact:HighRiskAI
     intended_deployment_contexts: [eu-aiact:CriticalInfrastructure]
     approved_environments: [staging]
-    requires_approval_for: [irreversible]
     extensions:
       acme.example/control-set: SOC2-CC7
 
@@ -384,7 +380,7 @@ tools:
         acme.example/blast-radius: fleet
 ```
 
-A Level 2 runtime deploying this into production refuses it: `approved_environments` lists `staging` only. The same runtime in staging admits it, and enforces approval on `apply_patch` because its `reversibility` is `irreversible`.
+A Level 2 runtime enforcing `approved_environments` refuses this pack in production: it lists `staging` only. The same runtime in staging admits it, and — enforcing `autonomy_level` — gates `apply_patch` on a human, because its `action_scope` says the change is irreversible.
 
 The `remediator` agent inherits everything except `autonomy_level` and `foreseeable_misuse`, which it replaces wholesale.
 
@@ -457,7 +453,7 @@ Adoption is expected in stages, each useful alone:
 
 1. **Tools first.** `action_scope` on tools that obviously warrant it — anything external or irreversible. Immediately useful for policy and telemetry, independent of any governance block.
 2. **Purpose and autonomy.** `intended_purpose`, `foreseeable_misuse`, `autonomy_level`. Useful for registries and listings before any compliance consumer exists.
-3. **Operational facts.** `accountable_owner`, `approved_environments`, `requires_approval_for` — the fields a runtime can act on, and the point at which admission control becomes possible.
+3. **Operational facts.** `accountable_owner` and `approved_environments` — the point at which admission control becomes possible.
 4. **Legal classifications.** `operator_role`, `risk_classification`, `intended_deployment_contexts`, moved to vocabulary terms where a term exists. Free strings stay valid indefinitely.
 
 Because `metadata` is already permissive, stage 2 can begin before the schema change ships; those packs become validated rather than newly valid.
@@ -474,12 +470,16 @@ Not applicable.
 
 ## Unresolved Questions
 
-- **Is `requires_approval_for` the right shape?** Naming `action_scope` values keeps it declarative and machine-checkable, but it cannot express "irreversible actions over £10,000". Richer conditions need an expression language, which is a much larger commitment. Is the coarse version useful enough to ship?
-- **Should `approved_environments` have any reserved names?** Leaving it fully open means two organisations spell production differently and no cross-org tooling can compare. Reserving a small set risks assuming a deployment model.
-- **Should `risk_classification` be an array?** It allows classification under several frameworks at once, at the cost of ambiguity about which one a consumer should read. A single term plus a framework field is the obvious alternative and starts to look like the deferred provenance design.
-- **Does `magnitude` belong in `action_scope`?** The most-requested fourth axis and the hardest to define without inventing an organisation-specific severity scale. Parked in `extensions` pending evidence from real usage.
-- **Are four autonomy levels right?** Three (`suggests`, `supervised`, `autonomous`) is simpler; four preserves the before/after-the-fact oversight distinction. Feedback from anyone routing approvals on this field would settle it.
-- **How should a runtime report an admission refusal?** Nothing here says what a Level 2 runtime returns when it refuses a pack, and consistent behaviour would help operators more than it constrains implementers.
+- **Is `approved_environments` enough on its own?** It answers "may this pack run here", which is the case that prompted it. It does not express staged promotion — that a pack cleared for staging is *a candidate for* production — which is how most pipelines actually work. Whether that belongs in the spec or in the pipeline is unresolved.
+- **What does a runtime do with `risk_classification`?** Admission control on environments is unambiguous. "Refuse a pack whose classification exceeds what the deployment permits" assumes classifications are ordered, and a namespaced term from an arbitrary framework is not.
+- **Should the Article 14(4) oversight affordances be declarable?** A pack states an `autonomy_level` but not whether a stop button exists or output can be reversed. Those are properties of the runtime and its interfaces, not of pack content, so a pack claiming them would be claiming something it cannot honour — but their absence means the record is incomplete on the point Article 14 cares most about.
+
+Resolved during review, recorded here because the reasoning matters more than the outcome:
+
+- **`requires_approval_for` was removed.** It named `action_scope` values that a pack-level rule would match against each tool. Because a tool's `action_scope` is fixed when the pack is written, the match resolves statically — it was always true or always false per tool, and so added indirection rather than information. `autonomy_level` states the requirement, `action_scope` states the facts, and the runtime composes them.
+- **`risk_classification` is a single term, not an array.** A namespaced term already carries both framework and value; a second classification under another framework belongs in `extensions`.
+- **`approved_environments` reserves no names, and `action_scope` gains no `magnitude` axis.** Both would have the specification inventing vocabulary that varies by organisation. `extensions` covers them.
+- **How a runtime reports an admission refusal is out of scope.** The specification says which constraints must be honoured, not what a refusal looks like.
 
 ## Implementation Plan
 
@@ -503,7 +503,7 @@ Not applicable.
 ### Validation Tests
 
 - A pack with no governance fields validates unchanged.
-- Each enum rejects an unknown member, including `requires_approval_for`.
+- Each enum rejects an unknown member.
 - An unknown property inside `governance` or `action_scope` is rejected; the same property inside `extensions` is accepted.
 - `extensions` accepts arbitrarily nested JSON without interpretation.
 - A CURIE with an undeclared, non-well-known prefix warns and validates.
