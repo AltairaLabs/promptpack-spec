@@ -22,8 +22,8 @@ jobs:
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           echo "Publishing schema for version: $VERSION"
-          mkdir -p promptpack-docs/static/schema/$VERSION
-          cp schema/promptpack.schema.json promptpack-docs/static/schema/$VERSION/promptpack.schema.json
+          mkdir -p "promptpack-docs/static/schema/$VERSION"
+          cp schema/promptpack.schema.json "promptpack-docs/static/schema/$VERSION/promptpack.schema.json"
           cp schema/promptpack.schema.json promptpack-docs/static/schema/latest/promptpack.schema.json
       - name: Commit and push
         run: |
@@ -37,3 +37,25 @@ jobs:
             git commit -m "Publish schema for $VERSION"
             git push origin main
           fi
+
+      # Runtimes embed a copy of this schema for offline validation, and a copy
+      # nobody refreshes silently stops being the spec. PromptKit's embedded copy
+      # sat 143 leaves from the release for two and a half months, rejecting
+      # packs that were valid against promptpack.org, because the only thing
+      # watching was a CI step that emitted a warning and passed.
+      #
+      # This tells it to pick the release up now rather than on its next daily
+      # poll. continue-on-error because publishing the schema is the job — a
+      # downstream notification failing must not fail the release, and PromptKit's
+      # schedule is the backstop that makes a missed dispatch self-healing.
+      - name: Notify PromptKit of the new schema release
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "Notifying AltairaLabs/PromptKit of schema $VERSION..."
+          gh api repos/AltairaLabs/PromptKit/dispatches \
+            -f event_type=promptpack-release \
+            -f "client_payload[version]=$VERSION"
+          echo "✓ Dispatched to PromptKit"
