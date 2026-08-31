@@ -62,7 +62,7 @@ Never hand-edit `static/schema/**` or the generated `schema-reference` docs — 
 
 ## Docs site versioning
 
-The docs site **is** versioned, but **manually** — only `docs/spec/` is versioned (processes, RFCs, ecosystem stay current). It does **not** use Docusaurus `docs:version` (no `versioned_docs/`); deliberate choice. When the implementation PR bumps the spec version, you archive the outgoing `docs/spec/*` into `docs/spec/v<previous>/`, advance the current docs, and update `versions.md` + `sidebars.ts` — all in that same PR. **[`release-runbook.md`](./release-runbook.md) (steps 3–6) has the exact per-file edits; `promptpack-docs/docs/spec/VERSIONING.md` is the canonical guide for badge markup.**
+The docs site **is** versioned, but **manually** — only `docs/spec/` is versioned (processes, RFCs, ecosystem stay current). There is no framework versioning primitive (no `versioned_docs/`); deliberate choice. When the implementation PR bumps the spec version, you archive the outgoing `docs/spec/*` into `docs/spec/v<previous>/`, advance the current docs, and update `versions.md` + the `Archive` list in `promptpack-docs/astro.config.mjs` — all in that same PR. **[`release-runbook.md`](./release-runbook.md) (steps 3–6) has the exact per-file edits; `promptpack-docs/docs/spec/VERSIONING.md` is the canonical guide for badge markup.**
 
 `static/schema/` (machine schema) and `docs/spec/` (human docs) version independently but in step — both advance in the implementation PR.
 
@@ -74,12 +74,17 @@ The docs site **is** versioned, but **manually** — only `docs/spec/` is versio
 | `rfcs/NNNN-slug.md` | the RFC (hand) |
 | `rfcs/README.md` | index tables (hand) |
 | `promptpack-docs/docs/rfcs/*` | docs copies (auto — leave alone) |
-| `promptpack-docs/scripts/sync-rfcs.js` | generator + `RFC_SPEC_VERSION` map |
+| `promptpack-docs/scripts/sync-rfcs.js` | generator + `RFC_SPEC_VERSION` map (add `NN: 'vX.Y.Z'` or the site contradicts the RFC) |
+| `promptpack-docs/astro.config.mjs` | sidebar, including the `Archive` list |
+| `promptpack-docs/src/styles/site.css` | `.ppVersionBadge` rules |
 | `schema/promptpack.schema.json` | schema source of truth (separate impl PR) |
 
 ## Common mistakes
 
 - Hand-editing the docs-site RFC index → merge conflicts. It's generated.
+- Writing `:::info` / `:::warning`, or a space-separated aside title. Starlight
+  takes `note`/`tip`/`caution`/`danger` with a **bracketed** label
+  (`:::note[Title]`); anything else renders as literal `:::` text mid-prose.
 - Bundling the schema change into the RFC PR → diverges from the process; split it.
 - Bumping the schema version without the README badge + URL → red CI.
 - A `stateDiagram-v2` with notes on composite states → won't render. Use `flowchart LR`.
