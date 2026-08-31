@@ -59,6 +59,17 @@ All fields are optional and additive. Packs written against v1.5.x remain valid 
 
 [View v1.5.1 Spec →](./v1.5.1/overview)
 
+### v1.5.0
+
+**Status:** stable
+**Released:** June 2026
+**Schema:** `https://promptpack.org/schema/v1.5.0/promptpack.schema.json`
+
+- Workflow Composition — a `composition` orchestration mode on a workflow state, driven by a declarative step graph of LLM calls, tool invocations, conditionals and parallel fan-out
+- New top-level `compositions` map, bringing procedural flows into the spec while keeping the workflow state machine as the universal orchestration primitive
+
+[View v1.5.0 Spec →](./v1.5.0/overview)
+
 ### v1.4.1
 
 **Status:** stable
