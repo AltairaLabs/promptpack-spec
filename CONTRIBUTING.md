@@ -51,6 +51,12 @@ npm start
 ## 📋 Contribution Process
 
 ### For Specification Changes (RFCs)
+
+Not every spec change needs an RFC — a change that carries no new runtime
+semantics can go straight to a pull request. See
+[When to Submit an RFC](https://promptpack.org/docs/processes/rfc-process#when-to-submit-an-rfc)
+for the criteria, which [GOVERNANCE.md](GOVERNANCE.md) restates verbatim.
+
 1. **Discuss**: Start a discussion in [GitHub Discussions](https://github.com/altairalabs/promptpack-spec/discussions)
 2. **RFC**: Create an RFC using our [template](https://github.com/altairalabs/promptpack-spec/issues/new?template=rfc.yml)
 3. **Review**: Gather community feedback and iterate

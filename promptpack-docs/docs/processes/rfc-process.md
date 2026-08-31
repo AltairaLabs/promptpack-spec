@@ -17,14 +17,28 @@ The RFC process provides a structured way to:
 
 ## When to Submit an RFC
 
-Submit an RFC when you want to make a substantial change to PromptPack, such as:
+Which path a change takes depends on what it touches, not on how large the diff is.
 
-- **New entity types** (beyond prompts, tools, workflows, personas, fragments)
-- **Breaking changes** to existing schemas or behavior
-- **Major new features** that affect multiple parts of the specification
-- **Significant changes** to validation rules or processing requirements
+**Submit an RFC when the change:**
 
-For smaller changes like documentation fixes, clarifications, or minor schema additions, consider opening a regular issue or pull request instead.
+- **Adds or removes an entity type** — prompts, tools, workflows, agents, skills, compositions, evals, and their peers
+- **Introduces new runtime semantics** — anything a conforming runtime must newly *do*, including new validation or processing requirements
+- **Changes, deprecates, or removes existing behavior**
+- **Breaks backward compatibility** in any schema or behavior
+
+**A normal issue or pull request is enough when the change:**
+
+- Fixes documentation, typos, or examples
+- Clarifies wording without changing meaning
+- Adds an optional schema field that carries **no new runtime semantics** — annotation, description, or metadata a runtime may ignore
+
+The third bullet on each side is where the line actually falls, and it is the one that catches people out. A single optional field still needs an RFC if a conforming runtime has to behave differently because of it. Diff size is not the test; new behavior is.
+
+:::note[Worked example]
+Adding an optional `control` property to workflow states looks like a one-field addition. But `control: agent` tells the runtime to run another agent round instead of yielding to the user — new turn-taking behavior a conforming runtime must implement. That needs an RFC. Adding an optional `description` to the same state would not.
+:::
+
+To float an idea *before* writing an RFC, open a thread in [Ideas](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/ideas). That is cheaper than a draft RFC and easier to abandon.
 
 ## RFC Lifecycle
 
