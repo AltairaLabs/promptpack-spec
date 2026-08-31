@@ -6,13 +6,23 @@ sidebar:
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.5.1
+## Current Version: v1.6.0
 
 **Status:** current
-**Released:** June 2026
-**Schema:** `https://promptpack.org/schema/v1.5.1/promptpack.schema.json`
+**Released:** August 2026
+**Schema:** `https://promptpack.org/schema/v1.6.0/promptpack.schema.json`
 
-### What's New in v1.5.1
+### What's New in v1.6.0
+
+- **Governance Declarations** ([RFC-0013](/docs/rfcs/governance-declarations)) — an optional `metadata.governance` block records what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, how it is classified, and which environments it is cleared to run in
+- **`Tool.action_scope`** — a companion block on each tool declaring what it can affect: `effect` (read / write / external), `reversibility` (reversible / compensable / irreversible) and the `data_classes` it touches. Lets a policy act on consequence instead of enumerating tool names, so "approve anything irreversible" stays correct when the next irreversible tool is added
+- **`AgentDef.governance`** — overrides `metadata.governance` for one agent, by per-field replacement
+- **Extension points** — `extensions` bags on `governance`, on `action_scope` and on `Tool`, never interpreted by this specification
+- **Vocabulary terms** — open-list values may be a CURIE (`eu-aiact:AIDeployer`) or an absolute IRI, with `vocabularies` mapping prefixes. DPV is recommended, never required; a value that is not a CURIE remains a valid free string
+
+All fields are optional and additive. Packs written against v1.5.x remain valid and behave identically.
+
+### Also in v1.5 (v1.5.1)
 
 - **Provider Requirements** ([RFC-0012](/docs/rfcs/provider-requirements)) — An optional top-level `requires.providers` block lets a pack declare, runtime-agnostically, the model providers it needs to run
 - **Logical `ProviderRequirement`** — each entry has a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (open set: `llm`, `embedding`, `tts`, `stt`, `image`, `inference`, …), optional `required` (default `true`), and a human `description`

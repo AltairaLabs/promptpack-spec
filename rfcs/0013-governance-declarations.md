@@ -1,9 +1,9 @@
 # RFC 0013: Governance Declarations
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland (chaholl)
 - **Created:** 2026-08-28
-- **Updated:** 2026-08-28
+- **Updated:** 2026-08-31
 - **Discussion:** https://github.com/AltairaLabs/promptpack-spec/discussions/64
 - **Related Issues:** N/A
 
@@ -251,6 +251,14 @@ That second bag exists because of how `autonomy_level` is enforced. The pack sta
 The cost is that extension keys do not interoperate — two runtimes will spell the same hint differently, and no cross-runtime tooling can act on them. That is also the promotion path: a namespaced key appearing across independent authors with consistent meaning is the evidence a future RFC needs. See [Promotion from `extensions`](#promotion-from-extensions).
 
 **3. `AgentDef.governance`** — the same shape as `metadata.governance`, overriding it for one agent (RFC 0007).
+
+The shape is defined once as `$defs/Governance` and `$ref`-ed from both
+`metadata.governance` and `AgentDef.governance`, rather than written inline in
+`metadata` and described as "the same shape" for the agent. Two copies of a
+closed object drift, and a JSON Pointer into `#/properties/metadata/properties/
+governance` is not resolvable by most tooling — code generators commonly handle
+only `#/$defs/<Name>`. `action_scope` is hoisted to `$defs/ActionScope` for the
+same reason.
 
 ### Capabilities carry obligations of their own
 
@@ -532,9 +540,9 @@ Resolved during review, recorded here because the reasoning matters more than th
 ## Implementation Plan
 
 1. **Phase 1: Schema**
-   - [ ] Add `governance` to `metadata`, `action_scope` to `$defs.Tool`, `governance` to `$defs.AgentDef`
-   - [ ] Bump schema `version` to the next minor
-   - [ ] Update the README spec badge and versioned schema URL in lockstep
+   - [x] Add `governance` to `metadata`, `action_scope` to `$defs.Tool`, `governance` to `$defs.AgentDef`
+   - [x] Bump schema `version` to the next minor
+   - [x] Update the README spec badge and versioned schema URL in lockstep
 
 2. **Phase 2: Documentation**
    - [ ] Spec documentation for both blocks, including declared-intent-versus-enforcement and the two things that stay outside
@@ -592,6 +600,9 @@ AI bill-of-materials tooling is beginning to track prompts alongside models and 
 ## Revision History
 
 - **2026-08-28:** Initial draft
+- **2026-08-31:** Implemented in schema v1.6.0. `Governance` and `ActionScope`
+  are hoisted to `$defs` and referenced, rather than inlined — see Schema
+  changes.
 
 ## References
 

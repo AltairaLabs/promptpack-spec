@@ -43,12 +43,13 @@ Each RFC has one of the following statuses:
 | 0010 | [Workflow Composition Extension](0010-workflow-composition.md) | Implemented | Charlie Holland | 2026-04-28 |
 | 0011 | [Workflow States as Agents](0011-workflow-states-as-agents.md) | Implemented | Charlie Holland | 2026-06-13 |
 | 0012 | [Provider Requirements](0012-provider-requirements.md) | Implemented | Charlie Holland | 2026-06-25 |
+| 0013 | [Governance Declarations](0013-governance-declarations.md) | Implemented | Charlie Holland | 2026-08-28 |
 
 ## Active RFCs
 
 | Number | Title | Status | Author | Created |
 |--------|-------|--------|--------|---------|
-| 0013 | [Governance Declarations](0013-governance-declarations.md) | Draft | Charlie Holland | 2026-08-28 |
+| _none_ | | | | |
 
 ## Process
 
