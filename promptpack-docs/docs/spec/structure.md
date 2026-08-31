@@ -521,6 +521,8 @@ Every field here states something about the agent as designed. None of them conf
 
 `AgentDef.governance` carries the same shape for a single agent, overriding `metadata.governance` by **per-field replacement** — a field present on the agent replaces the pack value; a field absent inherits. Arrays and `extensions` replace whole, because deep-merging `foreseeable_misuse` across two levels would produce a list no one wrote.
 
+`vocabularies` is the exception and merges. It is a prefix-to-IRI map that makes CURIEs resolvable rather than a declaration in its own right, so replacing it would put an agent's *inherited* values out of scope — a pack declaring `acme:` and a `risk_classification: acme:tier-3`, under an agent declaring only `other:`, would leave that inherited value unresolvable. Prefixes accumulate; an agent that redeclares one still wins on it.
+
 See the [Governance schema reference](./schema-guide#governance-v160).
 
 ## Deployment Benefits
