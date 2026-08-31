@@ -135,7 +135,10 @@ const description =
             <div>
               <div class={styles.eyebrowSlot}><PathNav current="promptpack" /></div>
               <h1 class={styles.heroTitle}>
-                You can't govern what you
+                {/* Astro 7's compressHTML strips the newline between a text node
+                    and an inline element, so the separating space has to be
+                    explicit — otherwise this renders as "youhaven't". */}
+                You can't govern what you{' '}
                 <span class={styles.heroAccent}>haven't&nbsp;defined.</span>
               </h1>
               <p class={styles.heroSub}>
@@ -296,9 +299,11 @@ const description =
                   <span class={styles.annNum}>+</span>
                   <div>
                     <div class={styles.annBody}>
-                      Add <span class={styles.annCode}>workflow</span>,
-                      <span class={styles.annCode}>agents</span>,
-                      <span class={styles.annCode}>skills</span> and
+                      {/* Explicit spaces for the same compressHTML reason as the
+                          hero headline above. */}
+                      Add <span class={styles.annCode}>workflow</span>,{' '}
+                      <span class={styles.annCode}>agents</span>,{' '}
+                      <span class={styles.annCode}>skills</span> and{' '}
                       <span class={styles.annCode}>requires</span> as the pack grows.
                     </div>
                   </div>
