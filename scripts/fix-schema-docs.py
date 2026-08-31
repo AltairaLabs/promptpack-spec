@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Post-process generated schema-reference.md for Docusaurus MDX compatibility.
+"""Post-process generated schema-reference.md for the docs site.
 
-Fixes two classes of issues that json-schema-for-humans output creates:
-1. Unescaped {{variable}} patterns outside code blocks that MDX interprets as JSX
-2. Orphaned [](#...additionalProperties) links with no corresponding heading target
+Fixes three classes of issue that json-schema-for-humans output creates:
+1. Missing frontmatter — the generator emits none, and Astro's content
+   collection rejects an entry without a title
+2. Unescaped {{variable}} patterns outside code blocks that MDX interprets as JSX
+3. Orphaned [](#...additionalProperties) links with no corresponding heading target
 """
 
 import re
@@ -69,6 +71,25 @@ def fix_orphaned_additional_properties_links(content: str) -> str:
     )
 
 
+TITLE = "PromptPack Specification"
+
+
+def ensure_frontmatter(content: str) -> str:
+    """Add the frontmatter Astro requires, if the generator did not.
+
+    json-schema-for-humans emits a bare `# Heading` document. Astro's content
+    collection requires a title, so a regeneration without this silently
+    strips the frontmatter a previous pass added and the site stops building.
+
+    That is not hypothetical: the Generate Schema Docs workflow did exactly
+    that on 2026-08-31, and the failure surfaced on an unrelated PR rather
+    than on the commit that caused it.
+    """
+    if content.startswith("---\n"):
+        return content
+    return f'---\ntitle: "{TITLE}"\n---\n\n' + content
+
+
 def main():
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <path-to-schema-reference.md>")
@@ -78,6 +99,7 @@ def main():
     with open(filepath, "r") as f:
         content = f.read()
 
+    content = ensure_frontmatter(content)
     content = fix_mdx_curly_braces(content)
     content = fix_orphaned_additional_properties_links(content)
 
