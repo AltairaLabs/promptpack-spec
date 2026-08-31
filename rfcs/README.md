@@ -51,7 +51,7 @@ Each RFC has one of the following statuses:
 
 | Number | Title | Status | Author | Created |
 |--------|-------|--------|--------|---------|
-| _none_ | | | | |
+| 0016 | [Governance Obligations, Vocabulary and Policy Annotation](0016-governance-and-policy-annotation.md) | Draft | Charlie Holland | 2026-08-31 |
 
 ## Process
 
