@@ -1,6 +1,4 @@
----
-title: "PromptPack Specification"
----
+# PromptPack Specification
 
 - [1. Property `PromptPack Specification > $schema`](#schema)
 - [2. Property `PromptPack Specification > id`](#id)
@@ -176,6 +174,13 @@ title: "PromptPack Specification"
         - [9.1.3.2.1. Property `PromptPack Specification > tools > additionalProperties > parameters > properties > additionalProperties`](#tools_additionalProperties_parameters_properties_additionalProperties)
       - [9.1.3.3. Property `PromptPack Specification > tools > additionalProperties > parameters > required`](#tools_additionalProperties_parameters_required)
         - [9.1.3.3.1. PromptPack Specification > tools > additionalProperties > parameters > required > required items](#tools_additionalProperties_parameters_required_items)
+    - [9.1.4. Property `PromptPack Specification > tools > additionalProperties > action_scope`](#tools_additionalProperties_action_scope)
+      - [9.1.4.1. Property `PromptPack Specification > tools > additionalProperties > action_scope > effect`](#tools_additionalProperties_action_scope_effect)
+      - [9.1.4.2. Property `PromptPack Specification > tools > additionalProperties > action_scope > reversibility`](#tools_additionalProperties_action_scope_reversibility)
+      - [9.1.4.3. Property `PromptPack Specification > tools > additionalProperties > action_scope > data_classes`](#tools_additionalProperties_action_scope_data_classes)
+        - [9.1.4.3.1. PromptPack Specification > tools > additionalProperties > action_scope > data_classes > data_classes items](#tools_additionalProperties_action_scope_data_classes_items)
+      - [9.1.4.4. Property `PromptPack Specification > tools > additionalProperties > action_scope > extensions`](#tools_additionalProperties_action_scope_extensions)
+    - [9.1.5. Property `PromptPack Specification > tools > additionalProperties > extensions`](#tools_additionalProperties_extensions)
 - [10. Property `PromptPack Specification > metadata`](#metadata)
   - [10.1. Property `PromptPack Specification > metadata > domain`](#metadata_domain)
   - [10.2. Property `PromptPack Specification > metadata > language`](#metadata_language)
@@ -185,6 +190,24 @@ title: "PromptPack Specification"
     - [10.4.1. Property `PromptPack Specification > metadata > cost_estimate > min_cost_usd`](#metadata_cost_estimate_min_cost_usd)
     - [10.4.2. Property `PromptPack Specification > metadata > cost_estimate > max_cost_usd`](#metadata_cost_estimate_max_cost_usd)
     - [10.4.3. Property `PromptPack Specification > metadata > cost_estimate > avg_cost_usd`](#metadata_cost_estimate_avg_cost_usd)
+  - [10.5. Property `PromptPack Specification > metadata > governance`](#metadata_governance)
+    - [10.5.1. Property `PromptPack Specification > metadata > governance > vocabularies`](#metadata_governance_vocabularies)
+      - [10.5.1.1. Property `PromptPack Specification > metadata > governance > vocabularies > additionalProperties`](#metadata_governance_vocabularies_additionalProperties)
+    - [10.5.2. Property `PromptPack Specification > metadata > governance > intended_purpose`](#metadata_governance_intended_purpose)
+    - [10.5.3. Property `PromptPack Specification > metadata > governance > foreseeable_misuse`](#metadata_governance_foreseeable_misuse)
+      - [10.5.3.1. PromptPack Specification > metadata > governance > foreseeable_misuse > foreseeable_misuse items](#metadata_governance_foreseeable_misuse_items)
+    - [10.5.4. Property `PromptPack Specification > metadata > governance > autonomy_level`](#metadata_governance_autonomy_level)
+    - [10.5.5. Property `PromptPack Specification > metadata > governance > accountable_owner`](#metadata_governance_accountable_owner)
+    - [10.5.6. Property `PromptPack Specification > metadata > governance > operator_role`](#metadata_governance_operator_role)
+    - [10.5.7. Property `PromptPack Specification > metadata > governance > risk_classification`](#metadata_governance_risk_classification)
+    - [10.5.8. Property `PromptPack Specification > metadata > governance > intended_deployment_contexts`](#metadata_governance_intended_deployment_contexts)
+      - [10.5.8.1. PromptPack Specification > metadata > governance > intended_deployment_contexts > intended_deployment_contexts items](#metadata_governance_intended_deployment_contexts_items)
+    - [10.5.9. Property `PromptPack Specification > metadata > governance > capabilities`](#metadata_governance_capabilities)
+      - [10.5.9.1. PromptPack Specification > metadata > governance > capabilities > capabilities items](#metadata_governance_capabilities_items)
+    - [10.5.10. Property `PromptPack Specification > metadata > governance > approved_environments`](#metadata_governance_approved_environments)
+      - [10.5.10.1. PromptPack Specification > metadata > governance > approved_environments > approved_environments items](#metadata_governance_approved_environments_items)
+    - [10.5.11. Property `PromptPack Specification > metadata > governance > requires_ai_disclosure`](#metadata_governance_requires_ai_disclosure)
+    - [10.5.12. Property `PromptPack Specification > metadata > governance > extensions`](#metadata_governance_extensions)
 - [11. Property `PromptPack Specification > compilation`](#compilation)
   - [11.1. Property `PromptPack Specification > compilation > compiled_with`](#compilation_compiled_with)
   - [11.2. Property `PromptPack Specification > compilation > created_at`](#compilation_created_at)
@@ -234,6 +257,7 @@ title: "PromptPack Specification"
       - [14.2.1.4. Property `PromptPack Specification > agents > members > additionalProperties > output_modes`](#agents_members_additionalProperties_output_modes)
         - [14.2.1.4.1. PromptPack Specification > agents > members > additionalProperties > output_modes > output_modes items](#agents_members_additionalProperties_output_modes_items)
       - [14.2.1.5. Property `PromptPack Specification > agents > members > additionalProperties > state`](#agents_members_additionalProperties_state)
+      - [14.2.1.6. Property `PromptPack Specification > agents > members > additionalProperties > governance`](#agents_members_additionalProperties_governance)
 - [15. Property `PromptPack Specification > skills`](#skills)
   - [15.1. PromptPack Specification > skills > SkillSource](#skills_items)
     - [15.1.1. Property `PromptPack Specification > skills > skills items > oneOf > item 0`](#skills_items_oneOf_i0)
@@ -341,7 +365,7 @@ title: "PromptPack Specification"
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012).
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012). Packs may declare governance facts (metadata.governance) and per-tool action scope (Tool.action_scope) so consequence is recorded alongside capability.
 
 **Examples:**
 
@@ -3993,11 +4017,13 @@ Must be one of:
 
 **Description:** A tool definition following OpenAI's function calling format. Tools enable the LLM to call external functions to retrieve data or perform actions.
 
-| Property                                                  | Pattern | Type   | Deprecated | Definition | Title/Description                                                                           |
-| --------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------------------------------------------- |
-| + [name](#tools_additionalProperties_name )               | No      | string | No         | -          | Tool name used for referencing and calling                                                  |
-| + [description](#tools_additionalProperties_description ) | No      | string | No         | -          | Clear description of what the tool does. The LLM uses this to decide when to call the tool. |
-| - [parameters](#tools_additionalProperties_parameters )   | No      | object | No         | -          | JSON Schema defining the tool's parameters. Follows JSON Schema specification.              |
+| Property                                                    | Pattern | Type   | Deprecated | Definition             | Title/Description                                                                                       |
+| ----------------------------------------------------------- | ------- | ------ | ---------- | ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| + [name](#tools_additionalProperties_name )                 | No      | string | No         | -                      | Tool name used for referencing and calling                                                              |
+| + [description](#tools_additionalProperties_description )   | No      | string | No         | -                      | Clear description of what the tool does. The LLM uses this to decide when to call the tool.             |
+| - [parameters](#tools_additionalProperties_parameters )     | No      | object | No         | -                      | JSON Schema defining the tool's parameters. Follows JSON Schema specification.                          |
+| - [action_scope](#tools_additionalProperties_action_scope ) | No      | object | No         | In #/$defs/ActionScope | What this tool can affect (RFC 0013). Describes consequence; does not gate anything.                    |
+| - [extensions](#tools_additionalProperties_extensions )     | No      | object | No         | -                      | Opaque annotations about this tool. Never interpreted by this specification. Keys SHOULD be namespaced. |
 
 #### <a name="tools_additionalProperties_name"></a>9.1.1. Property `PromptPack Specification > tools > additionalProperties > name`
 
@@ -4127,6 +4153,132 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | No       |
 
+#### <a name="tools_additionalProperties_action_scope"></a>9.1.4. Property `PromptPack Specification > tools > additionalProperties > action_scope`
+
+|                           |                     |
+| ------------------------- | ------------------- |
+| **Type**                  | `object`            |
+| **Required**              | No                  |
+| **Additional properties** | Not allowed         |
+| **Defined in**            | #/$defs/ActionScope |
+
+**Description:** What this tool can affect (RFC 0013). Describes consequence; does not gate anything.
+
+| Property                                                                   | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                       |
+| -------------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [effect](#tools_additionalProperties_action_scope_effect )               | No      | enum (of string) | No         | -          | 'read': retrieves, changes nothing. 'write': changes state the operator controls. 'external': causes an effect outside the operator's systems (implies write).                                                                          |
+| - [reversibility](#tools_additionalProperties_action_scope_reversibility ) | No      | enum (of string) | No         | -          | 'reversible': the prior state can be restored. 'compensable': it cannot, but a defined compensating action limits the harm. 'irreversible': nothing restores the state and nothing compensates. Declare against the world, not the API. |
+| - [data_classes](#tools_additionalProperties_action_scope_data_classes )   | No      | array of string  | No         | -          | Classes of data the tool touches, as vocabulary terms or free strings.                                                                                                                                                                  |
+| - [extensions](#tools_additionalProperties_action_scope_extensions )       | No      | object           | No         | -          | Opaque annotations about this tool's consequence — a blast radius, a severity score, anything that qualifies what it affects. Never interpreted by this specification. Keys SHOULD be namespaced.                                       |
+
+##### <a name="tools_additionalProperties_action_scope_effect"></a>9.1.4.1. Property `PromptPack Specification > tools > additionalProperties > action_scope > effect`
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+
+**Description:** 'read': retrieves, changes nothing. 'write': changes state the operator controls. 'external': causes an effect outside the operator's systems (implies write).
+
+Must be one of:
+* "read"
+* "write"
+* "external"
+
+##### <a name="tools_additionalProperties_action_scope_reversibility"></a>9.1.4.2. Property `PromptPack Specification > tools > additionalProperties > action_scope > reversibility`
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+
+**Description:** 'reversible': the prior state can be restored. 'compensable': it cannot, but a defined compensating action limits the harm. 'irreversible': nothing restores the state and nothing compensates. Declare against the world, not the API.
+
+Must be one of:
+* "reversible"
+* "compensable"
+* "irreversible"
+
+##### <a name="tools_additionalProperties_action_scope_data_classes"></a>9.1.4.3. Property `PromptPack Specification > tools > additionalProperties > action_scope > data_classes`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Classes of data the tool touches, as vocabulary terms or free strings.
+
+**Example:**
+
+```json
+[
+    "dpv:FinancialData"
+]
+```
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                                   | Description |
+| --------------------------------------------------------------------------------- | ----------- |
+| [data_classes items](#tools_additionalProperties_action_scope_data_classes_items) | -           |
+
+###### <a name="tools_additionalProperties_action_scope_data_classes_items"></a>9.1.4.3.1. PromptPack Specification > tools > additionalProperties > action_scope > data_classes > data_classes items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+##### <a name="tools_additionalProperties_action_scope_extensions"></a>9.1.4.4. Property `PromptPack Specification > tools > additionalProperties > action_scope > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque annotations about this tool's consequence — a blast radius, a severity score, anything that qualifies what it affects. Never interpreted by this specification. Keys SHOULD be namespaced.
+
+**Example:**
+
+```json
+{
+    "acme.example/blast-radius": "fleet"
+}
+```
+
+| Property                                                                        | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
+#### <a name="tools_additionalProperties_extensions"></a>9.1.5. Property `PromptPack Specification > tools > additionalProperties > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque annotations about this tool. Never interpreted by this specification. Keys SHOULD be namespaced.
+
+**Example:**
+
+```json
+{
+    "acme.example/approver-group": "platform-security-oncall"
+}
+```
+
+| Property                                                           | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ------------------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
 ## <a name="metadata"></a>10. Property `PromptPack Specification > metadata`
 
 |                           |                  |
@@ -4137,13 +4289,14 @@ Must be one of:
 
 **Description:** Optional pack-level metadata for categorization, discovery, and operational planning.
 
-| Property                                    | Pattern | Type            | Deprecated | Definition | Title/Description                     |
-| ------------------------------------------- | ------- | --------------- | ---------- | ---------- | ------------------------------------- |
-| - [domain](#metadata_domain )               | No      | string          | No         | -          | Domain or category for this pack      |
-| - [language](#metadata_language )           | No      | string          | No         | -          | Primary language code (ISO 639-1)     |
-| - [tags](#metadata_tags )                   | No      | array of string | No         | -          | Tags for categorization and discovery |
-| - [cost_estimate](#metadata_cost_estimate ) | No      | object          | No         | -          | Cost estimation for using this pack   |
-| - - additionalProperties       | No      | object          | No         | -          | -                                     |
+| Property                                    | Pattern | Type            | Deprecated | Definition            | Title/Description                                              |
+| ------------------------------------------- | ------- | --------------- | ---------- | --------------------- | -------------------------------------------------------------- |
+| - [domain](#metadata_domain )               | No      | string          | No         | -                     | Domain or category for this pack                               |
+| - [language](#metadata_language )           | No      | string          | No         | -                     | Primary language code (ISO 639-1)                              |
+| - [tags](#metadata_tags )                   | No      | array of string | No         | -                     | Tags for categorization and discovery                          |
+| - [cost_estimate](#metadata_cost_estimate ) | No      | object          | No         | -                     | Cost estimation for using this pack                            |
+| - [governance](#metadata_governance )       | No      | object          | No         | In #/$defs/Governance | Governance facts about the agent this pack defines (RFC 0013). |
+| - - additionalProperties       | No      | object          | No         | -                     | -                                                              |
 
 ### <a name="metadata_domain"></a>10.1. Property `PromptPack Specification > metadata > domain`
 
@@ -4287,6 +4440,334 @@ Must be one of:
 | Restrictions |        |
 | ------------ | ------ |
 | **Minimum**  | &ge; 0 |
+
+### <a name="metadata_governance"></a>10.5. Property `PromptPack Specification > metadata > governance`
+
+|                           |                    |
+| ------------------------- | ------------------ |
+| **Type**                  | `object`           |
+| **Required**              | No                 |
+| **Additional properties** | Not allowed        |
+| **Defined in**            | #/$defs/Governance |
+
+**Description:** Governance facts about the agent this pack defines (RFC 0013).
+
+| Property                                                                             | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------ | ------- | ---------------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [vocabularies](#metadata_governance_vocabularies )                                 | No      | object           | No         | -          | Prefix to IRI map for CURIE values used in this block. The dpv, eu-aiact and ai prefixes are well-known defaults and need not be declared.                                                                                                                                                                                                                       |
+| - [intended_purpose](#metadata_governance_intended_purpose )                         | No      | string           | No         | -          | What the agent is built to do, stated by its author. Free text.                                                                                                                                                                                                                                                                                                  |
+| - [foreseeable_misuse](#metadata_governance_foreseeable_misuse )                     | No      | array of string  | No         | -          | Uses the author considers out of bounds and reasonably foreseeable.                                                                                                                                                                                                                                                                                              |
+| - [autonomy_level](#metadata_governance_autonomy_level )                             | No      | enum (of string) | No         | -          | How far the agent acts without a human in the loop, as designed and tested. 'suggests': produces output, a human performs any action. 'acts_with_approval': acts, but each consequential action is approved first. 'acts_with_oversight': acts on its own, a human monitors and can intervene or reverse. 'acts_autonomously': acts without a human in the loop. |
+| - [accountable_owner](#metadata_governance_accountable_owner )                       | No      | string           | No         | -          | The role, team or function answerable for this agent. Prefer a durable identifier over a named individual.                                                                                                                                                                                                                                                       |
+| - [operator_role](#metadata_governance_operator_role )                               | No      | string           | No         | -          | The declaring organisation's role for this agent, as a vocabulary term or free string.                                                                                                                                                                                                                                                                           |
+| - [risk_classification](#metadata_governance_risk_classification )                   | No      | string           | No         | -          | The risk classification assigned to this agent, as a vocabulary term or free string. A namespaced term carries both the framework and the value, so no separate framework field is needed; a second classification under another framework belongs in extensions.                                                                                                |
+| - [intended_deployment_contexts](#metadata_governance_intended_deployment_contexts ) | No      | array of string  | No         | -          | Sectors or settings the agent is built for, as vocabulary terms or free strings. Distinct from metadata.domain, which is a discovery tag.                                                                                                                                                                                                                        |
+| - [capabilities](#metadata_governance_capabilities )                                 | No      | array of string  | No         | -          | Capabilities the agent exercises, as vocabulary terms or free strings. Some capabilities carry obligations regardless of sector, so this is not covered by intended_deployment_contexts.                                                                                                                                                                         |
+| - [approved_environments](#metadata_governance_approved_environments )               | No      | array of string  | No         | -          | Environments this pack has been cleared to run in. Open strings, because environment names are organisation-specific. Absence means undeclared, not cleared everywhere and not cleared nowhere.                                                                                                                                                                  |
+| - [requires_ai_disclosure](#metadata_governance_requires_ai_disclosure )             | No      | boolean          | No         | -          | Whether the agent must disclose that it is an AI to the people interacting with it. The runtime decides which of its interfaces this applies to.                                                                                                                                                                                                                 |
+| - [extensions](#metadata_governance_extensions )                                     | No      | object           | No         | -          | Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced.                                                                                                                                                                                                                                                     |
+
+#### <a name="metadata_governance_vocabularies"></a>10.5.1. Property `PromptPack Specification > metadata > governance > vocabularies`
+
+|                           |                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Type**                  | `object`                                                                                                      |
+| **Required**              | No                                                                                                            |
+| **Additional properties** | [Each additional property must conform to the schema](#metadata_governance_vocabularies_additionalProperties) |
+
+**Description:** Prefix to IRI map for CURIE values used in this block. The dpv, eu-aiact and ai prefixes are well-known defaults and need not be declared.
+
+**Example:**
+
+```json
+{
+    "acme": "https://acme.example/vocab#"
+}
+```
+
+| Property                                                      | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | string | No         | -          | -                 |
+
+##### <a name="metadata_governance_vocabularies_additionalProperties"></a>10.5.1.1. Property `PromptPack Specification > metadata > governance > vocabularies > additionalProperties`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+| **Format**   | `uri`    |
+
+#### <a name="metadata_governance_intended_purpose"></a>10.5.2. Property `PromptPack Specification > metadata > governance > intended_purpose`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** What the agent is built to do, stated by its author. Free text.
+
+**Example:**
+
+```json
+"Answers cardholder questions about settled transactions and raises disputes on the cardholder's explicit instruction."
+```
+
+#### <a name="metadata_governance_foreseeable_misuse"></a>10.5.3. Property `PromptPack Specification > metadata > governance > foreseeable_misuse`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Uses the author considers out of bounds and reasonably foreseeable.
+
+**Example:**
+
+```json
+[
+    "Credit, pricing or eligibility decisioning",
+    "Adjudicating a dispute without a human reviewer"
+]
+```
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                           | Description |
+| ------------------------------------------------------------------------- | ----------- |
+| [foreseeable_misuse items](#metadata_governance_foreseeable_misuse_items) | -           |
+
+##### <a name="metadata_governance_foreseeable_misuse_items"></a>10.5.3.1. PromptPack Specification > metadata > governance > foreseeable_misuse > foreseeable_misuse items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+#### <a name="metadata_governance_autonomy_level"></a>10.5.4. Property `PromptPack Specification > metadata > governance > autonomy_level`
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+
+**Description:** How far the agent acts without a human in the loop, as designed and tested. 'suggests': produces output, a human performs any action. 'acts_with_approval': acts, but each consequential action is approved first. 'acts_with_oversight': acts on its own, a human monitors and can intervene or reverse. 'acts_autonomously': acts without a human in the loop.
+
+Must be one of:
+* "suggests"
+* "acts_with_approval"
+* "acts_with_oversight"
+* "acts_autonomously"
+
+#### <a name="metadata_governance_accountable_owner"></a>10.5.5. Property `PromptPack Specification > metadata > governance > accountable_owner`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** The role, team or function answerable for this agent. Prefer a durable identifier over a named individual.
+
+**Examples:**
+
+```json
+"payments-risk"
+```
+
+```json
+"Head of Customer Operations"
+```
+
+#### <a name="metadata_governance_operator_role"></a>10.5.6. Property `PromptPack Specification > metadata > governance > operator_role`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** The declaring organisation's role for this agent, as a vocabulary term or free string.
+
+**Examples:**
+
+```json
+"eu-aiact:AIProvider"
+```
+
+```json
+"eu-aiact:AIDeployer"
+```
+
+#### <a name="metadata_governance_risk_classification"></a>10.5.7. Property `PromptPack Specification > metadata > governance > risk_classification`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** The risk classification assigned to this agent, as a vocabulary term or free string. A namespaced term carries both the framework and the value, so no separate framework field is needed; a second classification under another framework belongs in extensions.
+
+**Example:**
+
+```json
+"eu-aiact:HighRiskAI"
+```
+
+#### <a name="metadata_governance_intended_deployment_contexts"></a>10.5.8. Property `PromptPack Specification > metadata > governance > intended_deployment_contexts`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Sectors or settings the agent is built for, as vocabulary terms or free strings. Distinct from metadata.domain, which is a discovery tag.
+
+**Example:**
+
+```json
+[
+    "eu-aiact:CriticalInfrastructure"
+]
+```
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                                               | Description |
+| --------------------------------------------------------------------------------------------- | ----------- |
+| [intended_deployment_contexts items](#metadata_governance_intended_deployment_contexts_items) | -           |
+
+##### <a name="metadata_governance_intended_deployment_contexts_items"></a>10.5.8.1. PromptPack Specification > metadata > governance > intended_deployment_contexts > intended_deployment_contexts items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+#### <a name="metadata_governance_capabilities"></a>10.5.9. Property `PromptPack Specification > metadata > governance > capabilities`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Capabilities the agent exercises, as vocabulary terms or free strings. Some capabilities carry obligations regardless of sector, so this is not covered by intended_deployment_contexts.
+
+**Examples:**
+
+```json
+[
+    "eu-aiact:EmotionRecognition"
+]
+```
+
+```json
+[
+    "eu-aiact:DeepFake"
+]
+```
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                               | Description |
+| ------------------------------------------------------------- | ----------- |
+| [capabilities items](#metadata_governance_capabilities_items) | -           |
+
+##### <a name="metadata_governance_capabilities_items"></a>10.5.9.1. PromptPack Specification > metadata > governance > capabilities > capabilities items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+#### <a name="metadata_governance_approved_environments"></a>10.5.10. Property `PromptPack Specification > metadata > governance > approved_environments`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Environments this pack has been cleared to run in. Open strings, because environment names are organisation-specific. Absence means undeclared, not cleared everywhere and not cleared nowhere.
+
+**Examples:**
+
+```json
+[
+    "staging"
+]
+```
+
+```json
+[
+    "staging",
+    "production"
+]
+```
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                                 | Description |
+| ------------------------------------------------------------------------------- | ----------- |
+| [approved_environments items](#metadata_governance_approved_environments_items) | -           |
+
+##### <a name="metadata_governance_approved_environments_items"></a>10.5.10.1. PromptPack Specification > metadata > governance > approved_environments > approved_environments items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+#### <a name="metadata_governance_requires_ai_disclosure"></a>10.5.11. Property `PromptPack Specification > metadata > governance > requires_ai_disclosure`
+
+|              |           |
+| ------------ | --------- |
+| **Type**     | `boolean` |
+| **Required** | No        |
+
+**Description:** Whether the agent must disclose that it is an AI to the people interacting with it. The runtime decides which of its interfaces this applies to.
+
+#### <a name="metadata_governance_extensions"></a>10.5.12. Property `PromptPack Specification > metadata > governance > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced.
+
+**Example:**
+
+```json
+{
+    "acme.example/control-set": "SOC2-CC7"
+}
+```
+
+| Property                                                    | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ----------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
 
 ## <a name="compilation"></a>11. Property `PromptPack Specification > compilation`
 
@@ -5007,13 +5488,14 @@ Must be one of:
 
 **Description:** Agent definition for a single prompt, providing A2A Agent Card metadata. Overrides or extends the prompt's own metadata for agent discovery.
 
-| Property                                                             | Pattern | Type            | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                              |
-| -------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [description](#agents_members_additionalProperties_description )   | No      | string          | No         | -          | Agent description published in the A2A Agent Card. Overrides the prompt's description if set.                                                                                                                                                                                                                  |
-| - [tags](#agents_members_additionalProperties_tags )                 | No      | array of string | No         | -          | Discovery tags for the agent, used by A2A registries and routers.                                                                                                                                                                                                                                              |
-| - [input_modes](#agents_members_additionalProperties_input_modes )   | No      | array of string | No         | -          | MIME types the agent accepts as input. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                                  |
-| - [output_modes](#agents_members_additionalProperties_output_modes ) | No      | array of string | No         | -          | MIME types the agent can produce as output. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                             |
-| - [state](#agents_members_additionalProperties_state )               | No      | string          | No         | -          | Reference to a state key in the pack's workflow.states. When set, invoking this agent runs the pack workflow starting at the named state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level workflow. If omitted, the agent is a single-prompt agent. |
+| Property                                                             | Pattern | Type            | Deprecated | Definition                                  | Title/Description                                                                                                                                                                                                                                                                                              |
+| -------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [description](#agents_members_additionalProperties_description )   | No      | string          | No         | -                                           | Agent description published in the A2A Agent Card. Overrides the prompt's description if set.                                                                                                                                                                                                                  |
+| - [tags](#agents_members_additionalProperties_tags )                 | No      | array of string | No         | -                                           | Discovery tags for the agent, used by A2A registries and routers.                                                                                                                                                                                                                                              |
+| - [input_modes](#agents_members_additionalProperties_input_modes )   | No      | array of string | No         | -                                           | MIME types the agent accepts as input. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                                  |
+| - [output_modes](#agents_members_additionalProperties_output_modes ) | No      | array of string | No         | -                                           | MIME types the agent can produce as output. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                             |
+| - [state](#agents_members_additionalProperties_state )               | No      | string          | No         | -                                           | Reference to a state key in the pack's workflow.states. When set, invoking this agent runs the pack workflow starting at the named state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level workflow. If omitted, the agent is a single-prompt agent. |
+| - [governance](#agents_members_additionalProperties_governance )     | No      | object          | No         | Same as [governance](#metadata_governance ) | Governance facts for this agent, overriding metadata.governance by per-field replacement: a field present here replaces the pack value for that field, a field absent inherits. Arrays and extensions replace whole (RFC 0013).                                                                                |
 
 ##### <a name="agents_members_additionalProperties_description"></a>14.2.1.1. Property `PromptPack Specification > agents > members > additionalProperties > description`
 
@@ -5174,6 +5656,17 @@ Must be one of:
 ```json
 "diagnose"
 ```
+
+##### <a name="agents_members_additionalProperties_governance"></a>14.2.1.6. Property `PromptPack Specification > agents > members > additionalProperties > governance`
+
+|                           |                                    |
+| ------------------------- | ---------------------------------- |
+| **Type**                  | `object`                           |
+| **Required**              | No                                 |
+| **Additional properties** | Not allowed                        |
+| **Same definition as**    | [governance](#metadata_governance) |
+
+**Description:** Governance facts for this agent, overriding metadata.governance by per-field replacement: a field present here replaces the pack value for that field, a field absent inherits. Arrays and extensions replace whole (RFC 0013).
 
 ## <a name="skills"></a>15. Property `PromptPack Specification > skills`
 
@@ -6482,4 +6975,4 @@ Specific value: `"parallel"`
 | **Minimum**  | &ge; 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-06-25 at 18:42:47 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-08-31 at 09:33:20 +0000
