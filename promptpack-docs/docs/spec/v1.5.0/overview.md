@@ -7,7 +7,7 @@ sidebar:
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.5.0 · stable</span>
 
-:::warning Archived Version
+:::caution[Archived Version]
 This is the **v1.5.0** documentation. For the latest features, see [v1.6.0 docs →](../overview)
 :::
 

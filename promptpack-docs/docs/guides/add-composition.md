@@ -25,7 +25,7 @@ A workflow state's `orchestration` value chooses the shape of its flow. `composi
 
 Choose `composition` when the flow is deterministic and procedural — the steps and their order are known up front, not driven by conversation events. Choose `internal`/`external`/`hybrid` when the flow is dialogue that converges over turns.
 
-:::info Workflow is still the universal entry point
+:::note[Workflow is still the universal entry point]
 Compositions are reached *only* through a workflow state. A purely procedural pack is just a one-state terminal workflow whose state is in composition mode — see the [Function-mode wrapper](#function-mode-the-one-state-wrapper-idiom) below.
 :::
 
@@ -168,7 +168,7 @@ Steps wire together with `${...}` references — a strict subset of the template
 }
 ```
 
-:::tip Lifting complex conditions
+:::tip[Lifting complex conditions]
 Need a condition the predicate language can't express? Emit a boolean from a `prompt` step and branch on it: `{ "path": "${gate.output.proceed}", "op": "equals", "value": true }`. This keeps business logic out of the spec while staying declarative.
 :::
 
@@ -302,7 +302,7 @@ A document analyzer that classifies and routes to a type-specific extractor:
 - [ ] The composition graph is acyclic
 - [ ] Pack validates against the v1.5 JSON schema
 
-:::warning Common Mistakes
+:::caution[Common Mistakes]
 - **Missing `termination` on an agent step**: agent steps require it — without it the loop is unbounded and the pack fails validation.
 - **Single-branch `parallel`**: a `parallel` needs at least two branches and a `reduce`.
 - **Expression in a predicate**: `${a < 0.8 || b > 7}` is not valid. Use a compare/combinator predicate, or lift the logic into a `prompt` step that emits a boolean.

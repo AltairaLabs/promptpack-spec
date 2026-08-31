@@ -7,7 +7,7 @@ sidebar:
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
 
-:::warning Archived Version
+:::caution[Archived Version]
 This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../schema-guide)
 :::
 
@@ -35,7 +35,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 | `agents` | [AgentsConfig](#agentsconfig) | No | Agent configuration mapping prompts to A2A-compatible agent definitions. *(v1.3+)* |
 | `skills` | [SkillSource](#skillsource)[] | No | Skill sources for progressive-disclosure knowledge loading. *(v1.3.1+)* |
 
-:::info Collections are keyed maps, not arrays
+:::note[Collections are keyed maps, not arrays]
 `prompts`, `fragments`, and `tools` are all **objects** (keyed maps), not arrays. Each key serves as the identifier for the entry. For example, `prompts` maps task type strings like `"support"` or `"billing"` to their Prompt definitions.
 :::
 
@@ -419,7 +419,7 @@ The `metric` object uses `additionalProperties: true`, so runtimes can attach ex
 ]
 ```
 
-:::info Validators vs Evals
+:::note[Validators vs Evals]
 Both sit on the quality spectrum: **validators** run inline on every response and can block output (`fail_on_violation`), while **evals** run asynchronously and produce scores/metrics without blocking. Use validators for hard guardrails, evals for quality measurement and monitoring.
 :::
 
@@ -657,7 +657,7 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 }
 ```
 
-:::info Workflow + Agents
+:::note[Workflow + Agents]
 `workflow` and `agents` are independent features — you can use either or both. When used together, the workflow drives state transitions while agent definitions provide A2A discoverability metadata for each prompt.
 :::
 
@@ -704,7 +704,7 @@ Each entry in the top-level `skills` array is one of three forms:
 ]
 ```
 
-:::info Skills + Workflow
+:::note[Skills + Workflow]
 When a `WorkflowState` declares a `skills` field, it scopes which skills are available in that state. Use `"none"` to disable skills for a state. Without a `skills` field, all pack-level skills are available.
 :::
 

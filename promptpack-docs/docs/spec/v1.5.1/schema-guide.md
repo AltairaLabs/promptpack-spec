@@ -30,7 +30,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 | `skills` | [SkillSource](#skillsource)[] | No | Skill sources for progressive-disclosure knowledge loading. *(v1.3.1+)* |
 | `requires` | [Requires](#provider-requirements-v151) | No | External resources the pack needs to run. Currently carries `providers` (logical model-provider requirements). *(v1.5.1+)* |
 
-:::info Collections are keyed maps, not arrays
+:::note[Collections are keyed maps, not arrays]
 `prompts`, `fragments`, and `tools` are all **objects** (keyed maps), not arrays. Each key serves as the identifier for the entry. For example, `prompts` maps task type strings like `"support"` or `"billing"` to their Prompt definitions.
 :::
 
@@ -453,7 +453,7 @@ Optional pass/fail threshold attached to an eval. Runtimes compare the eval's nu
 ]
 ```
 
-:::info Validators vs Evals
+:::note[Validators vs Evals]
 Both sit on the quality spectrum: **validators** run inline on every response and can block output (`fail_on_violation`), while **evals** run asynchronously and produce scores/metrics without blocking. Use validators for hard guardrails, evals for quality measurement and monitoring.
 :::
 
@@ -711,7 +711,7 @@ Resource budget for an entire workflow execution. Provides a global safety net i
 }
 ```
 
-:::info Loop guards vs. budgets
+:::note[Loop guards vs. budgets]
 `max_visits` bounds a single state — useful for "give the implementer up to 5 attempts before forcing review". `engine.budget` bounds the entire workflow — the runaway-loop safety net that catches cycles `max_visits` couldn't predict. Use both together: per-state caps for normal flow control, the budget as a backstop.
 :::
 
@@ -762,7 +762,7 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 }
 ```
 
-:::info Workflow + Agents
+:::note[Workflow + Agents]
 `workflow` and `agents` are independent features — you can use either or both. When used together, the workflow drives state transitions while agent definitions provide A2A discoverability metadata for each prompt.
 :::
 
@@ -809,7 +809,7 @@ Each entry in the top-level `skills` array is one of three forms:
 ]
 ```
 
-:::info Skills + Workflow
+:::note[Skills + Workflow]
 When a `WorkflowState` declares a `skills` field, it scopes which skills are available in that state. Use `"none"` to disable skills for a state. Without a `skills` field, all pack-level skills are available.
 :::
 
@@ -980,7 +980,7 @@ References resolve against:
 
 This is a strict subset of the RFC 0003 template-variable system — no expressions, arithmetic, or function calls.
 
-:::info Composition validation rules
+:::note[Composition validation rules]
 A `composition`-mode state must set `composition` and may omit `prompt_task`; every other state must set `prompt_task` and must not set `composition`. Step IDs must be unique within the composition; every `prompt_task`, `tool`, `eval`, `then`/`else`/`depends_on`, and `${...}` reference must resolve. `agent` steps require `termination`; `parallel` steps require ≥2 branches and a `reduce`; the graph must be acyclic.
 :::
 
@@ -1024,7 +1024,7 @@ Structured, **advisory** hints the satisfying provider should have. The `descrip
 | `structured_output` | boolean | Whether the provider must support structured/JSON output. |
 | `embedding_dimensions` | integer | Required embedding vector dimensionality, for `role: embedding` (≥1). |
 
-:::info Requirements vs. tested models
+:::note[Requirements vs. tested models]
 `requires.providers` is the pack's **contract** (what it needs to run); `tested_models` is **provenance** (what a prompt was tested against). They're complementary and independent — a runtime MAY cross-check the provider it resolves against `tested_models` to warn on test/deploy divergence.
 :::
 

@@ -231,7 +231,7 @@ A full pack with three standalone agents:
 - [ ] MIME types in `input_modes`/`output_modes` are valid
 - [ ] Pack validates against the v1.3+ JSON schema
 
-:::warning Common Mistakes
+:::caution[Common Mistakes]
 - **Agent key doesn't match prompt key**: `members.billing_agent` won't work if the prompt key is `billing`. The keys must match exactly.
 - **Missing description**: The schema technically allows agent members without a `description`, but you almost always want one — it becomes the A2A Agent Card's description and is what registries and routers use for discovery.
 - **Confusing workflow entry with agent entry**: `workflow.entry` is the first *state* in the state machine. `agents.entry` is the default agent for *incoming external requests*. They can reference different prompts.

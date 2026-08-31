@@ -28,7 +28,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 | `workflow` | [WorkflowConfig](#workflowconfig) | No | State-machine workflow over the pack's prompts with event-driven transitions. *(v1.3+)* |
 | `agents` | [AgentsConfig](#agentsconfig) | No | Agent configuration mapping prompts to A2A-compatible agent definitions. *(v1.3+)* |
 
-:::info Collections are keyed maps, not arrays
+:::note[Collections are keyed maps, not arrays]
 `prompts`, `fragments`, and `tools` are all **objects** (keyed maps), not arrays. Each key serves as the identifier for the entry. For example, `prompts` maps task type strings like `"support"` or `"billing"` to their Prompt definitions.
 :::
 
@@ -412,7 +412,7 @@ The `metric` object uses `additionalProperties: true`, so runtimes can attach ex
 ]
 ```
 
-:::info Validators vs Evals
+:::note[Validators vs Evals]
 Both sit on the quality spectrum: **validators** run inline on every response and can block output (`fail_on_violation`), while **evals** run asynchronously and produce scores/metrics without blocking. Use validators for hard guardrails, evals for quality measurement and monitoring.
 :::
 
@@ -649,7 +649,7 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 }
 ```
 
-:::info Workflow + Agents
+:::note[Workflow + Agents]
 `workflow` and `agents` are independent features — you can use either or both. When used together, the workflow drives state transitions while agent definitions provide A2A discoverability metadata for each prompt.
 :::
 

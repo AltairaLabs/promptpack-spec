@@ -75,7 +75,7 @@ Each state can be `transient` (default) or `persistent`:
 }
 ```
 
-:::warning
+:::caution
 Persistent states consume more tokens because the full conversation history is maintained. Use `transient` for stateless operations like classification or routing.
 :::
 
@@ -318,7 +318,7 @@ And **after** adding workflow orchestration:
 - [ ] On v1.4: every key in an `artifacts` map declares a `type` (MIME type)
 - [ ] Pack validates against the v1.4 JSON schema (or v1.3 if you're not using agent-loop fields)
 
-:::warning Common Mistakes
+:::caution[Common Mistakes]
 - **Circular loops without exit**: Make sure there's always a path to a terminal state. A `billing → triage → billing` cycle with no `resolved` event creates an infinite loop.
 - **Missing prompt_task**: Every state must have a `prompt_task` that matches a key in `prompts`. A typo here will fail schema validation.
 - **Prompt doesn't emit expected events**: The workflow routes based on events like `"billing"` or `"resolved"`, but these must actually appear in the prompt's output. Update your `system_template` to instruct the model to emit the right event strings.

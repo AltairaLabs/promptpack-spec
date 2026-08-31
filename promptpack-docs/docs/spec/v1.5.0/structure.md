@@ -7,7 +7,7 @@ sidebar:
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.5.0 · stable</span>
 
-:::warning Archived Version
+:::caution[Archived Version]
 This is the **v1.5.0** documentation. For the latest features, see [v1.6.0 docs →](../overview)
 :::
 
@@ -370,7 +370,7 @@ Four building blocks turn an unbounded workflow into a production-safe agent loo
 - **`artifacts`** — named slots for lightweight, structured metadata (commit SHAs, file paths, JSON summaries, diffs). Each entry declares a MIME `type`, an optional `description`, and an optional `mode`: `"replace"` (default — overwrite on each visit) or `"append"` (accumulate across visits, e.g. a log). Values are accessible to prompts as `{{artifacts.<name>}}`.
 - **`engine.budget`** — a global safety net independent of per-state caps. Supports `max_total_visits`, `max_tool_calls`, and `max_wall_time_sec`. Reaching any limit terminates the workflow with a budget-exhausted status.
 
-:::info Time-travel debugging for free
+:::note[Time-travel debugging for free]
 Because artifacts are captured at every state transition, runtimes that persist them produce a structured, replayable execution trace. You get audit, replay, and step-back debugging without writing any extra orchestration code.
 :::
 

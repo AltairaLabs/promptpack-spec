@@ -7,7 +7,7 @@ sidebar:
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.4.0 · stable</span>
 
-:::warning Archived Version
+:::caution[Archived Version]
 This is the **v1.4.0** documentation. For the latest features, see [v1.4.1 docs →](../architecture-patterns)
 :::
 
@@ -65,7 +65,7 @@ These two v1.3 features solve different problems and can be used independently o
 | Automated routing *and* external discovery | Yes | Yes |
 | Standalone agents communicating via A2A (no internal state machine) | — | Yes |
 
-:::info
+:::note
 Workflow and agents are orthogonal. A prompt can participate in a workflow state *and* be an agent member simultaneously. The workflow manages intra-pack state; agents manage inter-system discovery.
 :::
 
@@ -94,7 +94,7 @@ Both assess LLM output quality, but they operate at different points in the pipe
 | Sample 10% of responses for LLM-judge quality scoring | — | Yes |
 | Both block bad output *and* track quality trends | Yes | Yes |
 
-:::info
+:::note
 Validators and evals are complementary, not competitive. Use validators for hard safety guardrails and evals for continuous quality monitoring. The same prompt engineer typically authors both.
 :::
 
@@ -170,7 +170,7 @@ The `media` configuration (v1.1+) composes with all other features:
 - **With Workflow**: A workflow state can route to a prompt that accepts images, while another state routes to a text-only prompt
 - **With Agents**: Agent input/output modes (`input_modes`, `output_modes`) declare which MIME types the agent supports, complementing the prompt-level `media` config
 
-:::info
+:::note
 Multimodal and text-only prompts can coexist in the same pack. A pack might have an image-aware `product_lookup` prompt and a text-only `catalog_writer` prompt — the media config is per-prompt, not per-pack.
 :::
 
@@ -199,7 +199,7 @@ Skills provide progressive-disclosure knowledge loading — modular expertise th
 | Small reusable text blocks | Yes | — |
 | Large knowledge bases scoped per workflow state | — | Yes |
 
-:::info
+:::note
 Fragments and skills are complementary. Use fragments for compile-time text substitution and skills for runtime knowledge loading. A pack can use both.
 :::
 
@@ -227,7 +227,7 @@ Agent loops are not a new top-level section — they are four small fields layer
 | Long-running batch jobs that must hard-stop after N minutes | — | — | — | Yes |
 | Anything where a model could loop forever in production | Strongly recommend | Strongly recommend | Optional | Strongly recommend |
 
-:::info Backwards compatibility
+:::note[Backwards compatibility]
 v1.3 packs are valid v1.4 packs unchanged. The new fields are opt-in. A state without `terminal`/`max_visits` behaves exactly as it did in v1.3.
 :::
 
