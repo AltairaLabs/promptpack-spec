@@ -17,16 +17,16 @@
   "dependencies": {
     "@altairalabs/atlas-tokens": "^0.4.1",
     "@altairalabs/brand": "^0.8.0",
-    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/mdx": "^7.0.8",
     "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/starlight": "~0.40.0",
+    "@astrojs/starlight": "~0.41.10",
     "@fontsource/space-grotesk": "^5.2.10",
     "@fontsource/spline-sans-mono": "^5.2.8",
-    "astro": "^6.4.6",
+    "astro": "^7.2.9",
     "mermaid": "^11.16.0"
   },
   "devDependencies": {
-    "typescript": "~5.9.3"
+    "typescript": "~7.0.2"
   },
   "browserslist": {
     "production": [
@@ -41,6 +41,6 @@
     ]
   },
   "engines": {
-    "node": ">=20.0"
+    "node": ">=22.12.0"
   }
 }
