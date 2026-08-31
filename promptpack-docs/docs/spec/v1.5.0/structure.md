@@ -1,8 +1,15 @@
 ---
 title: "Pack Structure & Design"
 sidebar:
+  label: "Pack Structure & Design (v1.5.0)"
   order: 2
 ---
+
+<span className="ppVersionBadge ppVersionBadge--archived">v1.5.0 · stable</span>
+
+:::caution[Archived Version]
+This is the **v1.5.0** documentation. For the latest features, see [v1.6.0 docs →](../overview)
+:::
 
 Understanding how PromptPacks are structured helps you design better AI agent behavior — from simple multi-prompt routers to autonomous agent loops. The JSON-based format isn't just about data storage; it's architected to support real-world agent development patterns and deployment needs.
 
@@ -421,107 +428,6 @@ A composition is a directed **acyclic** graph of typed steps. v1 defines five st
 Steps wire together with reference bindings — `${input.X}` reads the composition's structured input; `${stepId.output.X}` reads a prior step's output. Optional per-step `modifiers` add `retry` (max attempts) and `eval` (attach pack-level eval keys). Compositions are reached *only* through a workflow state, so a purely procedural ("Function-mode") pack is simply a one-state terminal workflow whose state is in composition mode — the workflow state machine remains the universal orchestration primitive.
 
 See the [Compositions schema reference](./schema-guide#compositions-v15), the [worked example](./examples#procedural-document-analyzer-with-composition-v15), and [How to Add a Composition](/docs/guides/add-composition) for the full vocabulary.
-
-## Provider Requirements *(v1.5.1+)*
-
-A pack is portable, but its model-provider needs have always been implicit — every runtime and deployment rediscovered "this needs an LLM, and an embedding model for retrieval, and maybe a judge model" by hand, and failed late when a binding was missing or pointed at the wrong kind of model. PromptPack v1.5.1 adds an optional top-level `requires` block so a pack can declare those needs once, runtime-agnostically:
-
-```json
-{
-  "requires": {
-    "providers": [
-      "default",
-      {
-        "key": "embeddings",
-        "role": "embedding",
-        "description": "Embeds the knowledge base for retrieval.",
-        "capabilities": { "embedding_dimensions": 1536 }
-      },
-      {
-        "key": "judge",
-        "role": "llm",
-        "required": false,
-        "description": "Optional LLM judge for the eval suite."
-      }
-    ]
-  }
-}
-```
-
-Each entry under `requires.providers` is either a **string shorthand** (a bare key, which expands to a required `llm` requirement) or a **`ProviderRequirement` object**:
-
-- **`key`** — the logical name the runtime resolves the provider by (`default`, `embeddings`, `judge`, …). `default` is reserved for the primary LLM. Keys must be unique within the list — `key` is the sole discriminator, so a fast and a strong model are just two `llm` requirements with different keys.
-- **`role`** — the *kind* of model (`llm`, `embedding`, `tts`, `stt`, `image`, `inference`, …). The set is **open**: validators must not reject unknown roles.
-- **`required`** — defaults to `true`. An optional requirement (`false`) degrades a feature rather than blocking startup.
-- **`description`** — human guidance on the provider's purpose and the capabilities it should have. This stays the primary signal for an operator wiring things up.
-- **`capabilities`** — optional, advisory, structured hints for automatic matching: `modalities` (reusing the RFC 0004 media vocabulary), `min_context_tokens`, `tool_use`, `structured_output`, `embedding_dimensions`. The object is **open** — provider-specific keys are allowed and SHOULD be namespaced (e.g. an `x-` prefix) to avoid clashing with fields the spec may define later.
-
-A requirement declares *what the pack needs*, never *which concrete provider satisfies it* — resolution is the host runtime's job. The block is fully backward compatible (optional; validated strictly only when present) and complements `tested_models`: `tested_models` records provenance (what a prompt was tested against), `requires.providers` records the contract (what the pack needs), so a runtime can warn when the resolved provider diverges from what the pack was tested on. See the [Provider Requirements schema reference](./schema-guide#provider-requirements-v151).
-
-## Governance Declarations *(v1.6.0+)*
-
-A pack has always described **capability** in detail and **consequence** not at all. It carries the model, the instructions, the tools, the guardrails and the test evidence — but nothing states what the agent is *for*, what it must not be used for, who answers for it, or what happens when a tool actually runs. Those facts existed, in wikis and spreadsheets and ticket fields, none of them versioned with the pack they describe.
-
-PromptPack v1.6.0 adds two optional blocks so they live with the thing they describe.
-
-### `metadata.governance`
-
-```yaml
-metadata:
-  domain: finance
-  governance:
-    intended_purpose: >
-      Answers cardholder questions about settled transactions and raises
-      disputes on the cardholder's explicit instruction.
-    foreseeable_misuse:
-      - Credit, pricing or eligibility decisioning
-      - Adjudicating a dispute without a human reviewer
-    autonomy_level: acts_with_approval
-    accountable_owner: payments-risk
-    operator_role: eu-aiact:AIDeployer
-    approved_environments: [staging, production]
-    requires_ai_disclosure: true
-```
-
-- **`intended_purpose`** / **`foreseeable_misuse`** — what the agent is built to do, and the uses its author considers out of bounds.
-- **`autonomy_level`** — `suggests` (a human acts), `acts_with_approval` (each consequential action is approved first), `acts_with_oversight` (acts alone, a human can intervene or reverse), `acts_autonomously`. The split between approval and oversight is a gate *before* the fact versus a check *after* it.
-- **`accountable_owner`** — the role or team answerable for the agent. Prefer a durable identifier over a named individual, who changes team without the agent changing.
-- **`operator_role`**, **`risk_classification`**, **`intended_deployment_contexts`**, **`capabilities`** — open values, expressed as a CURIE (`eu-aiact:AIDeployer`) or an absolute IRI. The spec neither resolves nor validates terms; `vocabularies` maps prefixes so a consumer can if it wants to. DPV is recommended, never required, and a value that is not a CURIE remains a valid free string.
-- **`approved_environments`** — where the pack has been cleared to run. Lets a runtime refuse a staging-only pack in production.
-- **`requires_ai_disclosure`** — whether the agent must tell people it is an AI. The runtime decides which of its interfaces that applies to.
-
-### `Tool.action_scope`
-
-```yaml
-tools:
-  lookup_transaction:
-    description: Look up a settled transaction by reference
-    action_scope:
-      effect: read
-      data_classes: [dpv:FinancialData]
-  issue_refund:
-    description: Issue a refund against a settled transaction
-    action_scope:
-      effect: external
-      reversibility: compensable
-      data_classes: [dpv:FinancialData]
-```
-
-- **`effect`** — `read` (changes nothing), `write` (changes state the operator controls), `external` (causes an effect outside the operator's systems; implies write).
-- **`reversibility`** — `reversible`, `compensable` (the prior state cannot be restored, but a defined compensating action limits the harm), or `irreversible`. Declare it against the world, not the API.
-- **`data_classes`** — what the tool touches, as vocabulary terms or free strings.
-
-This is what earns the block its keep. A rule as ordinary as "stop and ask a human before anything that cannot be undone" previously had to be written as a **list of tool names** — correct the day it was written and silently wrong the next time an irreversible tool was added. With `action_scope`, the policy is written against consequence and stays correct.
-
-### Declared intent, not enforced configuration
-
-Every field here states something about the agent as designed. None of them configures anything. `autonomy_level: acts_with_approval` says the pack was built and tested to act behind a human gate; it does not create the gate. `approved_environments` says where the agent is cleared; it does not deploy it. Enforcement lives in `tool_policy`, in runtime policy and in the deployment pipeline — any of which may be stricter than the pack asks while the pack still describes the agent correctly.
-
-**Absence means undeclared.** An omitted `action_scope` does not mean `read`, and does not mean `reversible`. An omitted `approved_environments` means neither "cleared everywhere" nor "cleared nowhere". A runtime that gates on these values should treat undeclared as the most conservative class it supports, and document that choice.
-
-`AgentDef.governance` carries the same shape for a single agent, overriding `metadata.governance` by **per-field replacement** — a field present on the agent replaces the pack value; a field absent inherits. Arrays and `extensions` replace whole, because deep-merging `foreseeable_misuse` across two levels would produce a list no one wrote.
-
-See the [Governance schema reference](./schema-guide#governance-v160).
 
 ## Deployment Benefits
 

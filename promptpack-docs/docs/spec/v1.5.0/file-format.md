@@ -1,14 +1,14 @@
 ---
 title: "File Format & Portability"
 sidebar:
-  label: "File Format (v1.3.1)"
-  order: 5
+  label: "File Format & Portability (v1.5.0)"
+  order: 4
 ---
 
-<span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.5.0 · stable</span>
 
 :::caution[Archived Version]
-This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../file-format)
+This is the **v1.5.0** documentation. For the latest features, see [v1.6.0 docs →](../overview)
 :::
 
 PromptPacks use JSON as their file format, optimized for both human readability and machine processing. This choice isn't arbitrary—JSON provides specific benefits that make PromptPacks practical for real-world AI development and deployment.
@@ -31,22 +31,22 @@ PromptPacks need to be both **executable by systems** and **readable by develope
 
 ```json
 {
- "id": "customer-support",
- "name": "Customer Support Pack",
- "version": "1.0.0",
- "prompts": {
- "support": {
- "system_template": "You are a helpful {{role}} for {{company}}.",
- "variables": [
- {
- "name": "role",
- "type": "string",
- "required": true,
- "description": "The assistant's role"
- }
- ]
- }
- }
+  "id": "customer-support",
+  "name": "Customer Support Pack",
+  "version": "1.0.0",
+  "prompts": {
+    "support": {
+      "system_template": "You are a helpful {{role}} for {{company}}.",
+      "variables": [
+        {
+          "name": "role",
+          "type": "string", 
+          "required": true,
+          "description": "The assistant's role"
+        }
+      ]
+    }
+  }
 }
 ```
 
@@ -55,7 +55,7 @@ PromptPacks need to be both **executable by systems** and **readable by develope
 
 ### Validation and Tooling
 
-JSON's mature ecosystem provides established tooling:
+JSON's mature ecosystem provides powerful tooling:
 
 - **Schema Validation**: Catch errors before deployment using JSON Schema
 - **IDE Support**: Syntax highlighting, auto-completion, real-time validation
@@ -70,10 +70,10 @@ Everything your AI system needs is in one file:
 
 ```json
 {
- "prompts": { "support": {...}, "sales": {...} },
- "tools": { "lookup_order": {...}, "create_ticket": {...} },
- "fragments": { "greeting": "...", "policies": "..." },
- "template_engine": { "version": "v1", "syntax": "{{var}}" }
+  "prompts": { "support": {...}, "sales": {...} },
+  "tools": { "lookup_order": {...}, "create_ticket": {...} },
+  "fragments": { "greeting": "...", "policies": "..." },
+  "template_engine": { "version": "v1", "syntax": "{{var}}" }
 }
 ```
 
@@ -85,16 +85,16 @@ JSON diffs clearly show what changed:
 
 ```diff
  {
- "prompts": {
- "support": {
-- "system_template": "You are a support agent.",
-+ "system_template": "You are a friendly support agent.",
- "parameters": {
-- "temperature": 0.7
-+ "temperature": 0.8
- }
- }
- }
+   "prompts": {
+     "support": {
+-      "system_template": "You are a support agent.",
++      "system_template": "You are a friendly support agent.",
+       "parameters": {
+-        "temperature": 0.7
++        "temperature": 0.8
+       }
+     }
+   }
  }
 ```
 
@@ -107,10 +107,10 @@ JSON diffs clearly show what changed:
 Use descriptive names that indicate purpose and version:
 
 ```text
-customer-support-v1.pack.json # Recommended
-support-pack-2025-10-31.json # Date-based versioning
-cs-pack.json # Too generic
-mypack.json # Not descriptive
+customer-support-v1.pack.json      # Recommended
+support-pack-2025-10-31.json       # Date-based versioning
+cs-pack.json                       # Too generic
+mypack.json                        # Not descriptive
 ```
 
 ### Internal Organization
@@ -119,25 +119,25 @@ Structure your JSON for maintainability:
 
 ```json
 {
- // Identity first - what this pack does
- "id": "customer-support",
- "name": "Customer Support Pack",
- "version": "1.0.0",
- "description": "Complete customer service solution",
-
- // Shared configuration
- "template_engine": { ... },
-
- // Core content - prompts grouped logically
- "prompts": {
- "support": { ... }, // General support
- "technical": { ... }, // Technical issues
- "billing": { ... } // Payment problems
- },
-
- // Supporting resources
- "tools": { ... },
- "fragments": { ... }
+  // Identity first - what this pack does
+  "id": "customer-support",
+  "name": "Customer Support Pack",
+  "version": "1.0.0",
+  "description": "Complete customer service solution",
+  
+  // Shared configuration
+  "template_engine": { ... },
+  
+  // Core content - prompts grouped logically
+  "prompts": {
+    "support": { ... },    // General support
+    "technical": { ... },  // Technical issues  
+    "billing": { ... }     // Payment problems
+  },
+  
+  // Supporting resources
+  "tools": { ... },
+  "fragments": { ... }
 }
 ```
 
@@ -154,13 +154,13 @@ Structure your JSON for maintainability:
 
 ```json
 {
- "prompts": {
- "support": {
- "name": "General Support Assistant",
- "description": "Handles general customer inquiries and directs to specialists",
- "system_template": "..."
- }
- }
+  "prompts": {
+    "support": {
+      "name": "General Support Assistant",
+      "description": "Handles general customer inquiries and directs to specialists",
+      "system_template": "..."
+    }
+  }
 }
 ```
 
@@ -195,7 +195,7 @@ vim customer-support.pack.json
 # 2. Validate structure
 promptpack validate customer-support.pack.json
 
-# 3. Test functionality
+# 3. Test functionality  
 promptpack test customer-support.pack.json
 
 # 4. Deploy
@@ -210,11 +210,11 @@ The same pack file works across:
 
 ```json
 {
- "compilation": {
- "compiled_with": "packc-v1.0.0",
- "created_at": "2025-10-31T12:00:00Z",
- "schema": "v1"
- }
+  "compilation": {
+    "compiled_with": "packc-v1.0.0",
+    "created_at": "2025-10-31T12:00:00Z",
+    "schema": "v1"
+  }
 }
 ```
 
@@ -229,23 +229,23 @@ Packs adapt to different environments through variable substitution:
 
 ```json
 {
- "prompts": {
- "support": {
- "system_template": "You work for {{company_name}} in {{environment}}.",
- "variables": [
- {
- "name": "company_name",
- "type": "string",
- "required": true
- },
- {
- "name": "environment",
- "type": "string",
- "default": "production"
- }
- ]
- }
- }
+  "prompts": {
+    "support": {
+      "system_template": "You work for {{company_name}} in {{environment}}.",
+      "variables": [
+        {
+          "name": "company_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "environment", 
+          "type": "string",
+          "default": "production"
+        }
+      ]
+    }
+  }
 }
 ```
 
@@ -270,10 +270,10 @@ Store packs in databases for dynamic loading:
 
 ```sql
 CREATE TABLE promptpacks (
- id VARCHAR PRIMARY KEY,
- version VARCHAR,
- pack_data JSONB, -- Full pack as JSON
- created_at TIMESTAMP
+  id VARCHAR PRIMARY KEY,
+  version VARCHAR,
+  pack_data JSONB,  -- Full pack as JSON
+  created_at TIMESTAMP
 );
 ```
 
@@ -286,14 +286,14 @@ Integrate with configuration systems:
 apiVersion: v1
 kind: ConfigMap
 metadata:
- name: ai-packs
+  name: ai-packs
 data:
- customer-support.json: |
- {
- "id": "customer-support",
- "version": "1.0.0",
- ...
- }
+  customer-support.json: |
+    {
+      "id": "customer-support",
+      "version": "1.0.0",
+      ...
+    }
 ```
 
 ## Performance Considerations
@@ -314,11 +314,11 @@ data:
 
 ```json
 {
- "metadata": {
- "compression": "gzip",
- "content_type": "application/json",
- "size_kb": 245
- }
+  "metadata": {
+    "compression": "gzip",
+    "content_type": "application/json",
+    "size_kb": 245
+  }
 }
 ```
 
@@ -334,7 +334,7 @@ Converting existing prompt systems:
 # From YAML
 yq eval -o=json promptpack.yaml > promptpack.json
 
-# From CSV/spreadsheets
+# From CSV/spreadsheets  
 python convert_prompts.py --input prompts.csv --output pack.json
 
 # From plain text files
@@ -347,13 +347,13 @@ JSON structure supports backward-compatible evolution:
 
 ```json
 {
- "version": "2.0.0",
- "compatibility": {
- "min_runtime": "1.5.0",
- "deprecated_fields": ["old_field"],
- "migration_notes": "Use new_field instead of old_field"
- }
+  "version": "2.0.0",
+  "compatibility": {
+    "min_runtime": "1.5.0",
+    "deprecated_fields": ["old_field"],
+    "migration_notes": "Use new_field instead of old_field"
+  }
 }
 ```
 
-The JSON format makes PromptPacks a practical, production-ready solution for packaging and deploying conversational AI systems at scale.
+The JSON format makes PromptPacks a practical, production-ready solution for packaging and deploying AI agent behavior at scale.

@@ -6,13 +6,23 @@ sidebar:
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.5.1
+## Current Version: v1.6.0
 
 **Status:** current
-**Released:** June 2026
-**Schema:** `https://promptpack.org/schema/v1.5.1/promptpack.schema.json`
+**Released:** August 2026
+**Schema:** `https://promptpack.org/schema/v1.6.0/promptpack.schema.json`
 
-### What's New in v1.5.1
+### What's New in v1.6.0
+
+- **Governance Declarations** ([RFC-0013](/docs/rfcs/governance-declarations)) — an optional `metadata.governance` block records what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, how it is classified, and which environments it is cleared to run in
+- **`Tool.action_scope`** — a companion block on each tool declaring what it can affect: `effect` (read / write / external), `reversibility` (reversible / compensable / irreversible) and the `data_classes` it touches. Lets a policy act on consequence instead of enumerating tool names, so "approve anything irreversible" stays correct when the next irreversible tool is added
+- **`AgentDef.governance`** — overrides `metadata.governance` for one agent, by per-field replacement
+- **Extension points** — `extensions` bags on `governance`, on `action_scope` and on `Tool`, never interpreted by this specification
+- **Vocabulary terms** — open-list values may be a CURIE (`eu-aiact:AIDeployer`) or an absolute IRI, with `vocabularies` mapping prefixes. DPV is recommended, never required; a value that is not a CURIE remains a valid free string
+
+All fields are optional and additive. Packs written against v1.5.x remain valid and behave identically.
+
+### Also in v1.5 (v1.5.1)
 
 - **Provider Requirements** ([RFC-0012](/docs/rfcs/provider-requirements)) — An optional top-level `requires.providers` block lets a pack declare, runtime-agnostically, the model providers it needs to run
 - **Logical `ProviderRequirement`** — each entry has a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (open set: `llm`, `embedding`, `tts`, `stt`, `image`, `inference`, …), optional `required` (default `true`), and a human `description`
@@ -31,11 +41,34 @@ The PromptPack specification evolves over time. This page helps you find the rig
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.5.1 Spec →](./overview)
+[View v1.6.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.5.1
+
+**Status:** stable
+**Released:** June 2026
+**Schema:** `https://promptpack.org/schema/v1.5.1/promptpack.schema.json`
+
+- Provider Requirements — an optional top-level `requires.providers` block lets a pack declare, runtime-agnostically, the model providers it needs to run
+- String shorthand for a plain `llm` requirement; `default` reserved for the primary LLM
+- Advisory `ProviderCapabilities` hints for automatic matching
+
+[View v1.5.1 Spec →](./v1.5.1/overview)
+
+### v1.5.0
+
+**Status:** stable
+**Released:** June 2026
+**Schema:** `https://promptpack.org/schema/v1.5.0/promptpack.schema.json`
+
+- Workflow Composition — a `composition` orchestration mode on a workflow state, driven by a declarative step graph of LLM calls, tool invocations, conditionals and parallel fan-out
+- New top-level `compositions` map, bringing procedural flows into the spec while keeping the workflow state machine as the universal orchestration primitive
+
+[View v1.5.0 Spec →](./v1.5.0/overview)
 
 ### v1.4.1
 
@@ -146,7 +179,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.5.1 | current | Full support | - |
+| v1.6.0 | current | Full support | - |
+| v1.5.1 | stable | Security fixes only | TBD |
 | v1.5.0 | stable | Security fixes only | TBD |
 | v1.4.1 | stable | Security fixes only | TBD |
 | v1.4.0 | stable | Security fixes only | TBD |
@@ -159,6 +193,40 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.5.1 to v1.6.0
+
+**No migration required.** Every field added in v1.6.0 is optional and additive; a v1.5.x pack is a valid v1.6.0 pack and behaves identically.
+
+To adopt governance declarations, add what you can state truthfully and leave the rest out — an omitted field means *undeclared*, which is a different claim from a default.
+
+```yaml
+metadata:
+  governance:
+    intended_purpose: >
+      Answers cardholder questions about settled transactions.
+    autonomy_level: acts_with_approval
+    accountable_owner: payments-risk
+    approved_environments: [staging, production]
+
+tools:
+  issue_refund:
+    description: Issue a refund against a settled transaction
+    action_scope:
+      effect: external
+      reversibility: compensable
+```
+
+A sensible order of adoption, each step useful on its own:
+
+1. **`action_scope` on tools that obviously warrant it** — anything `external` or `irreversible`. Immediately useful for policy and telemetry, independent of any governance block.
+2. **`intended_purpose`, `foreseeable_misuse`, `autonomy_level`** — useful for registries and listings before any compliance consumer exists.
+3. **`accountable_owner` and `approved_environments`** — the point at which admission control becomes possible.
+4. **The legal classifications** (`operator_role`, `risk_classification`, `intended_deployment_contexts`, `capabilities`), moved to vocabulary terms where a term exists. Free strings stay valid indefinitely.
+
+Nothing in v1.6.0 changes how a pack executes. A runtime that ignores both blocks runs the pack identically.
 
 ---
 

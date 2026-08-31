@@ -7,7 +7,7 @@ sidebar:
 
 <span className="ppVersionBadge ppVersionBadge--archived">v1.1 · stable</span>
 
-:::warning Archived Version
+:::caution[Archived Version]
 This is the **v1.1** documentation (November 2024). For the latest features, see [v1.2 docs →](../overview)
 :::
 

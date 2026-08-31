@@ -109,7 +109,7 @@ npm start
 ```markdown
 <span className="ppVersionBadge ppVersionBadge--current">v1.1 · current</span>
 
-:::info Version Information
+:::note[Version Information]
 This documentation covers **v1.1** of the PromptPack specification.
 Looking for the previous version? [View v1.0 docs →](./v1.0/overview)
 :::
@@ -120,7 +120,7 @@ Looking for the previous version? [View v1.0 docs →](./v1.0/overview)
 ```markdown
 <span className="ppVersionBadge ppVersionBadge--archived">v1.0 · stable</span>
 
-:::warning Archived Version
+:::caution[Archived Version]
 This is the **v1.0** documentation. For the latest features, see [v1.1 docs →](../overview)
 :::
 ```

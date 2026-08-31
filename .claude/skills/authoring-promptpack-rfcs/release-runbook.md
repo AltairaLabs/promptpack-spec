@@ -49,7 +49,9 @@ cp promptpack-docs/docs/spec/*.md promptpack-docs/docs/spec/{OLD_VTAG}/
 
 For **each** archived file:
 1. Frontmatter — add `title: "... ({OLD_VTAG})"` (keep `sidebar_position`).
-2. Version badge — swap the class, not a colour:
+2. Version badge — swap the class, not a colour. The rules live in
+   `promptpack-docs/src/styles/site.css` (`.ppVersionBadge`,
+   `--current`, `--archived`), written in Atlas tokens so both themes follow:
    ```mdx
    <span className="ppVersionBadge ppVersionBadge--current">{OLD_VTAG} · current</span>
    ↓
@@ -57,17 +59,30 @@ For **each** archived file:
    ```
    These badges used to be `<div style={{...}}>` blocks with hardcoded
    `#10b981` / `#6b7280` fills, which could not follow the light/dark theme.
-   The colours now live in `src/css/custom.css`. Do **not** reintroduce an
-   inline-styled badge, and do **not** add an emoji — the badges used to carry
-   📘/📦 glyphs, removed under the house rule "Emoji: never"
+   Do **not** reintroduce an inline-styled badge, and do **not** add an emoji —
+   the badges used to carry glyphs, removed under the house rule "Emoji: never"
    (see the AltairaLabs voice rules). Badge text is lowercase mono machine data.
+
+   > The Astro migration moved these classes over but left the rules behind, so
+   > every spec badge rendered as unstyled text until they were restored. If a
+   > badge looks like plain text, check that `site.css` still defines them —
+   > this runbook pointed at a Docusaurus path (`src/css/custom.css`) for
+   > several releases while nothing defined them at all.
 3. Add an archived warning right after the badge:
    ```mdx
-   :::warning Archived Version
+   :::caution[Archived Version]
    This is the **{OLD_VTAG}** documentation. For the latest features, see [{NEW_VTAG} docs →](../overview)
    :::
    ```
-4. Remove any `:::info Version Information` block (a current-version element).
+4. Remove any `:::note[Version Information]` block (a current-version element).
+
+> **Aside syntax is Starlight's, not Docusaurus's.** The only valid types are
+> `note`, `tip`, `caution` and `danger` — `info` and `warning` are Docusaurus
+> spellings, and an unrecognised type is not an error: the whole block falls
+> through as literal `:::` text in the middle of the prose. The title is a
+> remark-directive label and must be **bracketed** (`:::note[Title]`); written
+> space-separated it is silently dropped. 130 asides across 52 files carried one
+> or both of these faults after the migration.
 
 > `schema-reference.md` is auto-generated from the schema (don't hand-write it);
 > regenerate and copy the new version into both `docs/spec/` and the archive dir.
@@ -95,34 +110,25 @@ Move the old version to "Previous Versions" (link `./{OLD_VTAG}/overview`), make
 "Migration from {OLD_VTAG} to {NEW_VTAG}" section, and a Version History row.
 `versions.md` is the canonical version index — keep it accurate.
 
-### 6. Update `sidebars.ts`
+### 6. Register the archive in the sidebar
 
-Add the newly archived version as the **first entry inside the `Archive`
-category** (newest first) — not as a sibling of the current spec pages:
+The nav lives in `promptpack-docs/astro.config.mjs` (Starlight's `sidebar`
+array), not in a `sidebars.ts` — that file went with Docusaurus. Add the newly
+archived version as the **first entry inside the `Archive` category** (newest
+first), using the `archive()` helper at the bottom of the file:
 
-```ts
-{
-  type: 'category',
-  label: 'Specification',
-  items: [
-    /* … current spec pages … */
-    {
-      type: 'category',
-      label: 'Archive',
-      collapsed: true,
-      items: [
-        { type: 'category', label: '{OLD_VTAG}', collapsed: true, items: [
-          'spec/{OLD_VTAG}/overview', 'spec/{OLD_VTAG}/structure',
-          'spec/{OLD_VTAG}/architecture-patterns', 'spec/{OLD_VTAG}/examples',
-          'spec/{OLD_VTAG}/file-format', 'spec/{OLD_VTAG}/schema-reference',
-          'spec/{OLD_VTAG}/schema-guide',
-        ] },
-        /* … older versions … */
-      ],
-    },
-  ],
-}
+```js
+label: 'Archive',
+collapsed: true,
+items: [
+  archive('{OLD_VTAG}'),      // ← newest first
+  archive('v1.4.1'),
+  /* … older versions … */
+],
 ```
+
+`archive(version, pages?)` defaults to the full seven-page set; pass an explicit
+list only for an older version that never had all seven.
 
 The label is the bare version — **no "(Archived)" suffix**; the parent
 category already says it. Every archived version lives under `Archive` so the
@@ -163,7 +169,8 @@ Never hand-edit `static/schema/**`.
 ### 10. How-to guide (if the feature warrants one)
 
 Add `promptpack-docs/docs/guides/{name}.md` following an existing guide
-(`add-workflow.md`, `setup-agents.md`), and register it in `sidebars.ts`.
+(`add-workflow.md`, `setup-agents.md`), and register it in the Guides
+category in `astro.config.mjs`.
 
 ## Verification
 
@@ -172,14 +179,16 @@ cat schema/promptpack.schema.json | python3 -m json.tool > /dev/null   # valid J
 node scripts/check-version-consistency.mjs                              # version lockstep
 npm --prefix promptpack-docs run build                                  # links + MDX + SSR
 ```
-Spot-check locally (`npm --prefix promptpack-docs run serve`): `/docs/spec/overview`
+Spot-check locally (`npm --prefix promptpack-docs run dev`, or `preview`
+after a build — there is no `serve` script; that was Docusaurus): `/docs/spec/overview`
 (current badge), `/docs/spec/{OLD_VTAG}/overview` (archived badge + warning),
 `/docs/spec/versions`, `/docs/rfcs/{RFC_SLUG}`.
 
 ## Notes
 
-- `schema-reference.md` uses generated `<a name="...">` anchors Docusaurus can't
-  resolve, hence `onBrokenAnchors: 'warn'` — expected.
+- `schema-reference.md` uses generated `<a name="...">` anchors the site cannot
+  resolve; the resulting link warnings are expected. (`onBrokenAnchors` was a
+  Docusaurus option and no longer exists in `astro.config.mjs`.)
 - All new schema properties must be optional (never in `required`) to stay
   backward compatible within a major version.
 - After merge, tag the release `v{NEW_VERSION}` to trigger the schema publish.

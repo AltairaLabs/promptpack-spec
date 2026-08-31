@@ -230,7 +230,7 @@ For the analyzer, add a prompt-level eval:
 }
 ```
 
-:::info
+:::note
 Validators block bad output inline. Evals score and report asynchronously. Use both together — validators for hard safety, evals for continuous quality monitoring. See [Architecture Patterns](/docs/spec/architecture-patterns) for more on this distinction.
 :::
 

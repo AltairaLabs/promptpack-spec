@@ -109,7 +109,7 @@ Supported metric types:
 - **`histogram`**: Distribution of values with buckets (response lengths, latencies)
 - **`boolean`**: Pass/fail checks (structure validity, compliance)
 
-:::info
+:::note
 The `metric` object supports `additionalProperties`, so runtimes can add fields like `labels`, `help`, `slo`, or `alert_threshold` without breaking the spec.
 :::
 
@@ -316,7 +316,7 @@ A full pack with pack-level and prompt-level evals:
 - [ ] `metric.range.min` &le; `metric.range.max` when range is specified
 - [ ] Pack validates against the v1.2+ JSON schema
 
-:::warning Common Mistakes
+:::caution[Common Mistakes]
 - **Using evals for hard safety**: If bad output must *never* reach users, use a validator with `fail_on_violation: true`. Evals score and report but don't block.
 - **Running expensive evals on every turn**: LLM-judge evals call another model for each evaluation. On high-traffic prompts, use `sample_turns` instead of `every_turn` to control costs.
 - **Forgetting metric type**: A score from 0–1 is a `gauge`, not a `counter`. Counters only increase. Choose the type that matches your eval's output semantics.

@@ -55,3 +55,47 @@ h1, h2, h3, h4 {
   font-weight: var(--fw-semibold);
   color: var(--text-heading);
 }
+
+/* ---- Spec version badges ---------------------------------
+   Every page under docs/spec/ opens with one of these, marking the version the
+   page documents:
+
+     <span className="ppVersionBadge ppVersionBadge--current">v1.6.0 · current</span>
+     <span className="ppVersionBadge ppVersionBadge--archived">v1.5.1 · stable</span>
+
+   They used to be inline-styled <div> blocks with hardcoded #10b981 / #6b7280
+   fills, which could not follow the light/dark theme. The Astro migration
+   replaced them with these classes but the rules never came across, so the
+   badges rendered as bare unstyled text on every spec page — current and
+   archived alike. (The release runbook still points at src/css/custom.css, a
+   Docusaurus path that does not exist here; it should say this file.)
+
+   Tokens, not hex, so both themes follow Atlas. Badge text is lowercase
+   machine data, hence the mono face and no uppercasing. */
+.ppVersionBadge {
+  display: inline-block;
+  margin-block-end: 1.5rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: var(--leading-mono);
+  color: var(--text-body);
+  background: var(--surface-2);
+}
+
+/* The version this page documents is the live one. */
+.ppVersionBadge--current {
+  color: var(--text-link);
+  border-color: var(--border-accent);
+  background: var(--starlight-tint);
+}
+
+/* Superseded but still supported — muted, deliberately not alarming. The
+   archived-version warning directly beneath carries that message. */
+.ppVersionBadge--archived {
+  color: var(--text-faint);
+  border-color: var(--border-hairline);
+  background: transparent;
+}

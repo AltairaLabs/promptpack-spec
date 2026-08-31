@@ -1,15 +1,9 @@
 ---
 title: "Architecture Patterns"
 sidebar:
-  label: "Architecture Patterns (v1.4.0)"
+  label: "Architecture Patterns (v1.5.1)"
   order: 3
 ---
-
-<span className="ppVersionBadge ppVersionBadge--archived">v1.4.0 · stable</span>
-
-:::caution[Archived Version]
-This is the **v1.4.0** documentation. For the latest features, see [v1.4.1 docs →](../architecture-patterns)
-:::
 
 PromptPack has grown from a simple prompt-packaging format into a full-stack specification for conversational AI systems. This page explains how the major building blocks relate to each other and when to use each one.
 
@@ -17,27 +11,22 @@ PromptPack has grown from a simple prompt-packaging format into a full-stack spe
 
 A PromptPack is organized in layers. Lower layers are simpler and more universal; higher layers are optional and compose on top of the lower ones.
 
-```
-┌─────────────────────────────────────────────┐
-│ Agent Loops Bounded iteration + artifacts │ v1.4
-├─────────────────────────────────────────────┤
-│ Skills Progressive knowledge loading │ v1.3.1
-├─────────────────────────────────────────────┤
-│ Agents Inter-system discovery (A2A) │ v1.3
-├─────────────────────────────────────────────┤
-│ Workflow Intra-pack state machine │ v1.3
-├─────────────────────────────────────────────┤
-│ Evals Async quality measurement │ v1.2
-├─────────────────────────────────────────────┤
-│ Validators Inline guardrails │ v1.0
-├─────────────────────────────────────────────┤
-│ Tools & Fragments Shared resources │ v1.0
-├─────────────────────────────────────────────┤
-│ Prompts Core behavior definitions │ v1.0
-└─────────────────────────────────────────────┘
-```
+| Layer | What it does | Since |
+| --- | --- | --- |
+| **Composition** | Declarative step graphs | v1.5 |
+| **Agent Loops** | Bounded iteration + artifacts | v1.4 |
+| **Skills** | Progressive knowledge loading | v1.3.1 |
+| **Agents** | Inter-system discovery (A2A) | v1.3 |
+| **Workflow** | Intra-pack state machine | v1.3 |
+| **Evals** | Async quality measurement | v1.2 |
+| **Validators** | Inline guardrails | v1.0 |
+| **Tools & Fragments** | Shared resources | v1.0 |
+| **Prompts** | Core behavior definitions | v1.0 |
 
-**Prompts** define what the LLM does. **Tools & Fragments** provide shared resources that prompts reference. **Validators** add inline guardrails that block bad output. **Evals** add async quality measurement that scores and reports. **Workflow** orchestrates transitions between prompts via a state machine. **Agents** expose prompts as discoverable services via the A2A protocol. **Skills** provide progressive-disclosure knowledge that agents load on demand. **Agent Loops** layer terminal states, visit guards, artifact slots, and execution budgets onto the workflow so iterative, self-correcting patterns stay production-safe.
+Higher layers sit on top of lower ones — the table reads top-down from the most
+recent and most specialised to the foundation.
+
+**Prompts** define what the LLM does. **Tools & Fragments** provide shared resources that prompts reference. **Validators** add inline guardrails that block bad output. **Evals** add async quality measurement that scores and reports. **Workflow** orchestrates transitions between prompts via a state machine. **Agents** expose prompts as discoverable services via the A2A protocol. **Skills** provide progressive-disclosure knowledge that agents load on demand. **Agent Loops** layer terminal states, visit guards, artifact slots, and execution budgets onto the workflow so iterative, self-correcting patterns stay production-safe. **Composition** lets a workflow state run a declarative step graph (prompt / agent / tool / branch / parallel) instead of a single prompt, bringing procedural flows into the spec without leaving the workflow model.
 
 Each layer is optional — a valid PromptPack only requires `id`, `name`, `version`, `template_engine`, and at least one prompt. You adopt higher layers only when you need them.
 
@@ -106,10 +95,12 @@ The workflow state machine supports several common multi-prompt patterns. Choose
 
 A triage prompt classifies requests and routes to specialized prompts.
 
-```
- ┌─ billing ─────┐
-triage ──┤ ├── closing
- └─ technical ───┘
+```mermaid
+flowchart LR
+    triage[triage] --> billing[billing]
+    triage --> technical[technical]
+    billing --> closing[closing]
+    technical --> closing
 ```
 
 **When to use**: Customer support, help desks, any system where incoming requests need classification before handling.
@@ -118,8 +109,9 @@ triage ──┤ ├── closing
 
 Prompts execute in sequence, each processing the output of the previous one.
 
-```
-intake ── analyze ── draft ── review
+```mermaid
+flowchart LR
+    intake[intake] --> analyze[analyze] --> draft[draft] --> review[review]
 ```
 
 **When to use**: Document processing, content generation pipelines, multi-step analysis.
@@ -128,8 +120,10 @@ intake ── analyze ── draft ── review
 
 Multiple agents communicate via A2A without a central workflow. Each agent discovers and invokes others through tool references.
 
-```
-researcher ←→ fact_checker ←→ writer
+```mermaid
+flowchart LR
+    researcher[researcher] <--> fact_checker[fact_checker]
+    fact_checker <--> writer[writer]
 ```
 
 **When to use**: Loosely coupled agents that need to collaborate without rigid sequencing. Use the `agents` section *without* `workflow`.
@@ -138,10 +132,13 @@ researcher ←→ fact_checker ←→ writer
 
 Combine workflow orchestration internally with agent discovery externally.
 
-```
-[Workflow: triage → specialist → closing]
- ↕ A2A
-[External systems discover and invoke agents]
+```mermaid
+flowchart TB
+    subgraph pack [pack workflow]
+        direction LR
+        triage[triage] --> specialist[specialist] --> closing[closing]
+    end
+    external[external systems] <-. A2A .-> pack
 ```
 
 **When to use**: Systems that need both internal routing logic and external interoperability.
@@ -150,12 +147,13 @@ Combine workflow orchestration internally with agent discovery externally.
 
 The workflow visits a state repeatedly until it succeeds or hits a guardrail. A code-generation loop, a research-and-refine cycle, a generate-test-fix cycle.
 
-```
-plan → implement ⇄ test → done (terminal)
- │ ↑ │
- │ └── TestsFailed (loop back, max_visits=5)
- ↓
- review (terminal, on_max_visits)
+```mermaid
+flowchart LR
+    plan[plan] --> implement[implement]
+    implement --> test[test]
+    test -- TestsFailed --> implement
+    test -- TestsPassed --> done([done])
+    implement -- on_max_visits --> review([review])
 ```
 
 **When to use**: Self-correcting agents — codegen with test feedback, research crews that refine via critic feedback, drafting workflows where a reviewer sends edits back. Use `max_visits` + `on_max_visits` to bound each loop, declare `artifacts` to flow structured state across visits, and set `engine.budget` as a global runaway-loop safety net.
@@ -231,6 +229,47 @@ Agent loops are not a new top-level section — they are four small fields layer
 v1.3 packs are valid v1.4 packs unchanged. The new fields are opt-in. A state without `terminal`/`max_visits` behaves exactly as it did in v1.3.
 :::
 
+## Workflow Composition Integration *(v1.5+)*
+
+Workflow remains the universal orchestration primitive: every pack flow is a workflow. v1.5 adds a fourth value to a state's existing `orchestration` dial — `composition` — that delegates the state's work to a declarative step graph in the top-level `compositions` map. This is about *how a single state is driven*, not a new top-level primitive.
+
+### Procedural vs Conversational Orchestration
+
+The `orchestration` value chooses the shape of a state's flow:
+
+| Orchestration | Shape | Driven by | Use for |
+|--------------|-------|-----------|---------|
+| `internal` (default) | Conversational, event-driven | The agent (LLM) emits transitions | Turn-by-turn dialogue, agent loops with cycles |
+| `external` | Conversational, event-driven | A system/caller emits transitions | Human-in-the-loop, system-controlled routing |
+| `hybrid` | Conversational, event-driven | Both agent and system | Mixed control dialogue |
+| `composition` *(v1.5)* | **Procedural**, step-graph | A declarative step graph | Document pipelines, data extraction, request → reason → commit, Function-mode packs |
+
+`internal`/`external`/`hybrid` are peers in the "who emits the transitions" sense — they describe *event-driven dialogue*. `composition` is different in kind: it is not about who emits events but about replacing the per-state prompt with a directed, acyclic **step graph**. Selecting it hands the *entire* orchestration of that state to the composition; mixing it with the other modes on the same state is not meaningful.
+
+### How Compositions Fit
+
+| Pack flow | Encoded as |
+|-----------|-----------|
+| Conversational, turn-driven, possibly cyclic (agent loops with revision) | Multi-state workflow with `internal` states |
+| Procedural request/response (intent → retrieval → reasoning → commit) | One-state terminal workflow with `orchestration: composition` |
+| Mixed conversational + procedural (greet, then dispatch to procedural reasoning) | Multi-state workflow mixing `internal` and `composition` states |
+| Inter-pack A2A delegation | `agents` (RFC 0007), orthogonal to the above |
+
+### Composition vs Agent Loop
+
+Both express multi-step work, but at different layers and for different shapes:
+
+| Aspect | Agent Loop (v1.4) | Composition (v1.5) |
+|--------|-------------------|---------------------|
+| **Layer** | Workflow state machine (cycles via `on_event` + `max_visits`) | A step graph inside one workflow state |
+| **Flow shape** | Cyclic — revisit a state until success/guard | Acyclic — sequential, branch, static parallel |
+| **Control** | LLM/system emits events to transition | Declarative graph; conditionals via constrained predicates |
+| **Best for** | Self-correcting loops (codegen + tests, critique cycles) | Procedural pipelines (classify → extract → synthesize) |
+
+:::note[Backwards compatibility]
+v1.4 packs are valid v1.5 packs unchanged. Composition is opt-in: a state only behaves differently when it explicitly sets `orchestration: composition`. `prompt_task` is now optional, but is still required for every non-composition state.
+:::
+
 ## Feature Compatibility Matrix
 
 | Feature | Version | Combines With |
@@ -247,12 +286,14 @@ v1.3 packs are valid v1.4 packs unchanged. The new fields are opt-in. A state wi
 | Agents | v1.3 | Prompts (via `members`), Workflow |
 | Skills | v1.3.1 | Workflow (state-scoped filtering), Agents |
 | Agent Loops (`terminal`, `max_visits`, `artifacts`, `engine.budget`) | v1.4 | Workflow (extends `WorkflowState` and `WorkflowConfig.engine`) |
+| Composition (`compositions`, `orchestration: composition`, `WorkflowState.composition`) | v1.5 | Workflow (a state delegates to a step graph), Prompts/Tools/Evals (step references) |
 
 ## Next Steps
 
 - **Build your first workflow**: [How to Add a Workflow](/docs/guides/add-workflow)
+- **Add a composition**: [How to Add a Composition](/docs/guides/add-composition)
 - **Set up agents**: [How to Set Up Agents](/docs/guides/setup-agents)
 - **Add skills**: [How to Add Skills](/docs/guides/add-skills)
 - **Add quality monitoring**: [How to Add Evals](/docs/guides/add-evals)
 - **See full examples**: [Real-World Examples](/docs/spec/examples)
-- **Design rationale**: [RFC 0005: Workflow Extension](/docs/rfcs/workflow-extension) · [RFC 0007: Agents Extension](/docs/rfcs/agents-extension) · [RFC 0006: Evals Extension](/docs/rfcs/evals-extension) · [RFC 0009: Agent Loop Extension](/docs/rfcs/agent-loops)
+- **Design rationale**: [RFC 0005: Workflow Extension](/docs/rfcs/workflow-extension) · [RFC 0007: Agents Extension](/docs/rfcs/agents-extension) · [RFC 0006: Evals Extension](/docs/rfcs/evals-extension) · [RFC 0009: Agent Loop Extension](/docs/rfcs/agent-loops) · [RFC 0010: Workflow Composition](/docs/rfcs/workflow-composition)

@@ -4,7 +4,7 @@ sidebar:
   order: 1
 ---
 
-:::info Status
+:::note[Status]
 PromptKit is the open-source reference toolkit for PromptPack — **shipped and actively maintained**. Repo: [github.com/AltairaLabs/PromptKit](https://github.com/AltairaLabs/PromptKit).
 :::
 

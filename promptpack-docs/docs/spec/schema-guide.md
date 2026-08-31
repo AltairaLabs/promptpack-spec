@@ -29,7 +29,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 | `skills` | [SkillSource](#skillsource)[] | No | Skill sources for progressive-disclosure knowledge loading. *(v1.3.1+)* |
 | `requires` | [Requires](#provider-requirements-v151) | No | External resources the pack needs to run. Currently carries `providers` (logical model-provider requirements). *(v1.5.1+)* |
 
-:::info Collections are keyed maps, not arrays
+:::note[Collections are keyed maps, not arrays]
 `prompts`, `fragments`, and `tools` are all **objects** (keyed maps), not arrays. Each key serves as the identifier for the entry. For example, `prompts` maps task type strings like `"support"` or `"billing"` to their Prompt definitions.
 :::
 
@@ -452,7 +452,7 @@ Optional pass/fail threshold attached to an eval. Runtimes compare the eval's nu
 ]
 ```
 
-:::info Validators vs Evals
+:::note[Validators vs Evals]
 Both sit on the quality spectrum: **validators** run inline on every response and can block output (`fail_on_violation`), while **evals** run asynchronously and produce scores/metrics without blocking. Use validators for hard guardrails, evals for quality measurement and monitoring.
 :::
 
@@ -710,7 +710,7 @@ Resource budget for an entire workflow execution. Provides a global safety net i
 }
 ```
 
-:::info Loop guards vs. budgets
+:::note[Loop guards vs. budgets]
 `max_visits` bounds a single state — useful for "give the implementer up to 5 attempts before forcing review". `engine.budget` bounds the entire workflow — the runaway-loop safety net that catches cycles `max_visits` couldn't predict. Use both together: per-state caps for normal flow control, the budget as a backstop.
 :::
 
@@ -761,7 +761,7 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 }
 ```
 
-:::info Workflow + Agents
+:::note[Workflow + Agents]
 `workflow` and `agents` are independent features — you can use either or both. When used together, the workflow drives state transitions while agent definitions provide A2A discoverability metadata for each prompt.
 :::
 
@@ -808,7 +808,7 @@ Each entry in the top-level `skills` array is one of three forms:
 ]
 ```
 
-:::info Skills + Workflow
+:::note[Skills + Workflow]
 When a `WorkflowState` declares a `skills` field, it scopes which skills are available in that state. Use `"none"` to disable skills for a state. Without a `skills` field, all pack-level skills are available.
 :::
 
@@ -979,7 +979,7 @@ References resolve against:
 
 This is a strict subset of the RFC 0003 template-variable system — no expressions, arithmetic, or function calls.
 
-:::info Composition validation rules
+:::note[Composition validation rules]
 A `composition`-mode state must set `composition` and may omit `prompt_task`; every other state must set `prompt_task` and must not set `composition`. Step IDs must be unique within the composition; every `prompt_task`, `tool`, `eval`, `then`/`else`/`depends_on`, and `${...}` reference must resolve. `agent` steps require `termination`; `parallel` steps require ≥2 branches and a `reduce`; the graph must be acyclic.
 :::
 
@@ -1023,8 +1023,69 @@ Structured, **advisory** hints the satisfying provider should have. The `descrip
 | `structured_output` | boolean | Whether the provider must support structured/JSON output. |
 | `embedding_dimensions` | integer | Required embedding vector dimensionality, for `role: embedding` (≥1). |
 
-:::info Requirements vs. tested models
+:::note[Requirements vs. tested models]
 `requires.providers` is the pack's **contract** (what it needs to run); `tested_models` is **provenance** (what a prompt was tested against). They're complementary and independent — a runtime MAY cross-check the provider it resolves against `tested_models` to warn on test/deploy divergence.
+:::
+
+## Governance *(v1.6.0+)*
+
+PromptPack v1.6.0 adds two optional blocks so a pack records **consequence** alongside the capability it already describes: `metadata.governance` for the agent as a whole, and `action_scope` on each tool. Both are declarations about the agent as designed — neither configures nor enforces anything. Fully backward compatible: every field is optional.
+
+### Governance
+
+Referenced from `metadata.governance` and from `AgentDef.governance`.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `intended_purpose` | string | No | What the agent is built to do, stated by its author. |
+| `foreseeable_misuse` | string[] | No | Uses the author considers out of bounds and reasonably foreseeable. |
+| `autonomy_level` | string | No | `suggests`, `acts_with_approval`, `acts_with_oversight` or `acts_autonomously`. |
+| `accountable_owner` | string | No | The role, team or function answerable for the agent. Prefer a durable identifier over a named individual. |
+| `operator_role` | string | No | The declaring organisation's role, as a vocabulary term or free string (e.g. `eu-aiact:AIDeployer`). |
+| `risk_classification` | string | No | The risk classification assigned, as a vocabulary term or free string. A namespaced term carries both framework and value. |
+| `intended_deployment_contexts` | string[] | No | Sectors or settings the agent is built for. Distinct from `metadata.domain`, which is a discovery tag. |
+| `capabilities` | string[] | No | Capabilities the agent exercises. Some carry obligations regardless of sector, so this is not covered by deployment contexts. |
+| `approved_environments` | string[] | No | Environments the pack has been cleared to run in. Open strings — environment names are organisation-specific. |
+| `requires_ai_disclosure` | boolean | No | Whether the agent must disclose that it is an AI. The runtime decides which of its interfaces this applies to. |
+| `vocabularies` | object | No | Prefix → IRI map for CURIE values. `dpv`, `eu-aiact` and `ai` are well-known defaults and need not be declared. |
+| `extensions` | object | No | Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced. |
+
+The object is closed (`additionalProperties: false`) — unrecognised information belongs in `extensions`.
+
+**`autonomy_level` values**
+
+| Value | Meaning |
+|---|---|
+| `suggests` | Produces output. A human performs any action. |
+| `acts_with_approval` | Acts, but each consequential action is approved by a human first. |
+| `acts_with_oversight` | Acts on its own. A human monitors and can intervene or reverse. |
+| `acts_autonomously` | Acts without a human in the loop. |
+
+### ActionScope
+
+Referenced from `Tool.action_scope`.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `effect` | string | No | `read` (changes nothing), `write` (changes operator-controlled state), `external` (effect outside the operator's systems; implies write). |
+| `reversibility` | string | No | `reversible`, `compensable` (cannot be restored, but a defined compensating action limits harm), or `irreversible`. Declare against the world, not the API. |
+| `data_classes` | string[] | No | Classes of data the tool touches, as vocabulary terms or free strings. |
+| `extensions` | object | No | Opaque annotations about consequence — a blast radius, a severity score. Never interpreted by this specification. |
+
+`Tool` also gains its own `extensions` bag, for annotations that are not about consequence — including hints a runtime needs for its own policy (`acme.example/approval-threshold: 10000`).
+
+### Why the values are closed
+
+`autonomy_level`, `effect` and `reversibility` are **closed enums** because their whole value is that a policy expression can depend on them. "Approve anything irreversible" is durable only if `irreversible` means one thing across packs from different authors.
+
+`risk_classification`, `intended_deployment_contexts`, `capabilities`, `data_classes` and `operator_role` are **open** because their content is legal and sectoral taxonomy that PromptPack has no business maintaining. `approved_environments` and `accountable_owner` are open because only the declaring organisation can name those things.
+
+:::note[Absence is not a safe default]
+An omitted field means **undeclared**. An omitted `action_scope` does not mean `read`, and does not mean `reversible`. An omitted `approved_environments` means neither "cleared everywhere" nor "cleared nowhere". A runtime that gates on these values SHOULD treat undeclared as the most conservative class it supports, and MUST document that choice.
+:::
+
+:::note[Declarations are asserted, not verified]
+Nothing checks that a tool marked `reversible` can be reversed, or that `risk_classification` reflects a real assessment. These are assertions, exactly as `description` is. Recording *who* declared a value, when, and under what review is deliberately deferred to a future RFC.
 :::
 
 ---

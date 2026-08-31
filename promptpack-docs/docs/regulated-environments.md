@@ -13,7 +13,7 @@ throughout these docs, read through the four questions an oversight function
 usually asks first: **what do we have, how does it change, what could it get
 wrong, and what can we show a supervisor.**
 
-:::info What this page is not
+:::note[What this page is not]
 PromptPack is a **file format**, not a control framework and not a compliance
 product. It does not certify anything, does not map to any named regulation,
 and cannot enforce a policy on its own — enforcement is the runtime's job. What

@@ -1,17 +1,18 @@
 ---
 title: "Specification Overview"
 sidebar:
+  label: "Specification Overview (v1.5.1)"
   order: 2
 ---
 
-<span className="ppVersionBadge ppVersionBadge--current">v1.6.0 · current</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.5.1 · stable</span>
+
+:::caution[Archived Version]
+This is the **v1.5.1** documentation. For the latest features, see [v1.6.0 docs →](../overview)
+:::
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
-:::note[Version Information]
-This documentation covers **v1.6.0** of the PromptPack specification. **v1.6.0** adds **governance declarations** (RFC 0013): an optional `metadata.governance` block recording what an agent is for, what it must not be used for, how far it acts without a human, who is accountable for it, and which environments it is cleared to run in — plus `action_scope` on each tool, declaring what that tool can affect. Together they let a policy act on *consequence* rather than on tool names, so "approve anything irreversible" stays correct when the next irreversible tool is added. **v1.5.1** added an optional top-level `requires.providers` block, letting a pack declare — runtime-agnostically — the model providers it needs to run (RFC 0012).
-Looking for previous versions? [View v1.5.1 docs →](./v1.5.1/overview) | [Version History →](./versions)
-:::
 
 ## Why PromptPacks?
 

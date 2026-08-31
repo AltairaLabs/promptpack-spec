@@ -1,14 +1,14 @@
 ---
 title: "Schema Guide"
 sidebar:
-  label: "Schema Guide (v1.3.1)"
-  order: 7
+  label: "Schema Guide (v1.5.0)"
+  order: 5
 ---
 
-<span className="ppVersionBadge ppVersionBadge--archived">v1.3.1 · stable</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.5.0 · stable</span>
 
 :::caution[Archived Version]
-This is the **v1.3.1** documentation. For the latest features, see [v1.4 docs →](../schema-guide)
+This is the **v1.5.0** documentation. For the latest features, see [v1.6.0 docs →](../overview)
 :::
 
 Human-readable guide to PromptPack entities and their properties. For the auto-generated technical reference, see [Schema Reference](./schema-reference).
@@ -19,7 +19,7 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `$schema` | string | No | JSON Schema reference for validation and IDE support. Default: `https://promptpack.org/schema/v1/promptpack.schema.json` |
+| `$schema` | string | No | JSON Schema reference for validation and IDE support. Default: `https://promptpack.org/schema/latest/promptpack.schema.json` |
 | `id` | string | **Yes** | Unique identifier for the pack. Lowercase with hyphens only. Pattern: `^[a-z][a-z0-9-]*$` (1--100 chars). |
 | `name` | string | **Yes** | Human-readable display name for the pack (1--200 chars). |
 | `version` | string | **Yes** | Pack version following [Semantic Versioning 2.0.0](https://semver.org/). Optional `v` prefix. Examples: `"1.0.0"`, `"v2.1.3"`. |
@@ -43,22 +43,22 @@ The root object of every PromptPack file. Required fields are `id`, `name`, `ver
 
 ```json
 {
- "$schema": "https://promptpack.org/schema/v1/promptpack.schema.json",
- "id": "my-pack",
- "name": "My Pack",
- "version": "1.0.0",
- "template_engine": {
- "version": "v1",
- "syntax": "{{variable}}"
- },
- "prompts": {
- "greeting": {
- "id": "greeting",
- "name": "Greeter",
- "version": "1.0.0",
- "system_template": "You are a friendly assistant for {{company}}."
- }
- }
+  "$schema": "https://promptpack.org/schema/latest/promptpack.schema.json",
+  "id": "my-pack",
+  "name": "My Pack",
+  "version": "1.0.0",
+  "template_engine": {
+    "version": "v1",
+    "syntax": "{{variable}}"
+  },
+  "prompts": {
+    "greeting": {
+      "id": "greeting",
+      "name": "Greeter",
+      "version": "1.0.0",
+      "system_template": "You are a friendly assistant for {{company}}."
+    }
+  }
 }
 ```
 
@@ -76,9 +76,9 @@ Configuration for how variables are substituted and fragments are resolved acros
 
 ```json
 "template_engine": {
- "version": "v1",
- "syntax": "{{variable}}",
- "features": ["basic_substitution", "fragments"]
+  "version": "v1",
+  "syntax": "{{variable}}",
+  "features": ["basic_substitution", "fragments"]
 }
 ```
 
@@ -108,18 +108,18 @@ A single prompt configuration within a pack. Each prompt represents a specific t
 
 ```json
 "prompts": {
- "support": {
- "id": "support",
- "name": "Support Bot",
- "version": "1.0.0",
- "system_template": "You are a {{role}} assistant for {{company}}.\n\nHelp resolve their issue.",
- "variables": [
- { "name": "role", "type": "string", "required": true, "example": "support agent" },
- { "name": "company", "type": "string", "required": true, "default": "TechCo" }
- ],
- "tools": ["lookup_order", "create_ticket"],
- "parameters": { "temperature": 0.7, "max_tokens": 1500 }
- }
+  "support": {
+    "id": "support",
+    "name": "Support Bot",
+    "version": "1.0.0",
+    "system_template": "You are a {{role}} assistant for {{company}}.\n\nHelp resolve their issue.",
+    "variables": [
+      { "name": "role", "type": "string", "required": true, "example": "support agent" },
+      { "name": "company", "type": "string", "required": true, "default": "TechCo" }
+    ],
+    "tools": ["lookup_order", "create_ticket"],
+    "parameters": { "temperature": 0.7, "max_tokens": 1500 }
+  }
 }
 ```
 
@@ -132,12 +132,13 @@ A template variable definition with type information and validation rules.
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `name` | string | **Yes** | Variable name used in templates (e.g., `{{name}}`). Pattern: `^[a-zA-Z_][a-zA-Z0-9_]*$`. |
-| `type` | string | **Yes** | Data type. One of: `"string"`, `"number"`, `"boolean"`, `"object"`, `"array"`. |
+| `type` | string | **Yes** | Data type. Schema is open — common values are `"string"`, `"number"`, `"boolean"`, `"object"`, `"array"`. |
 | `required` | boolean | **Yes** | Whether this variable must be provided at runtime. |
-| `default` | any | No | Default value when the variable is not provided. |
+| `default` | any | No | Default value when the variable is not provided. Should not be set when `required: true`. |
 | `description` | string | No | Human-readable description of the variable's purpose. |
 | `example` | any | No | Example value showing expected format and content. |
 | `validation` | [Validation](#validation) | No | Validation rules applied to the variable value at runtime. |
+| `binding` | [Binding](#binding) | No | Declares how this variable is automatically populated from runtime context (e.g., session, env, request header) without caller input. |
 
 ### Validation
 
@@ -152,15 +153,39 @@ Rules applied to variable values at runtime.
 | `maximum` | number | Maximum numeric value (for number types). |
 | `enum` | any[] | List of allowed values. |
 
+### Binding
+
+Declares how a variable is auto-populated from runtime context, so the caller doesn't have to supply it explicitly.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | No | The binding source kind. Schema is open — common values are `"context"`, `"session"`, `"env"`, `"header"`. |
+| `field` | string | No | The field name within the binding source to extract (e.g., `"user_id"`, `"locale"`). |
+| `auto_populate` | boolean | No | Whether this variable is automatically populated at runtime without caller input. Default: `false`. |
+| `filter` | string | No | Optional filter expression applied to the bound value (e.g., `"lowercase"`, `"trim"`). |
+
 ```json
 {
- "name": "priority",
- "type": "string",
- "required": true,
- "description": "Support ticket priority level",
- "validation": {
- "enum": ["low", "medium", "high", "urgent"]
- }
+  "name": "user_id",
+  "type": "string",
+  "required": true,
+  "binding": {
+    "kind": "session",
+    "field": "user_id",
+    "auto_populate": true
+  }
+}
+```
+
+```json
+{
+  "name": "priority",
+  "type": "string",
+  "required": true,
+  "description": "Support ticket priority level",
+  "validation": {
+    "enum": ["low", "medium", "high", "urgent"]
+  }
 }
 ```
 
@@ -188,24 +213,24 @@ Tool parameters use standard JSON Schema format. The `parameters` object must ha
 
 ```json
 "tools": {
- "create_ticket": {
- "name": "create_ticket",
- "description": "Create a support ticket with title, description, and priority",
- "parameters": {
- "type": "object",
- "properties": {
- "title": {
- "type": "string",
- "description": "Ticket title"
- },
- "priority": {
- "type": "string",
- "enum": ["low", "medium", "high", "urgent"]
- }
- },
- "required": ["title"]
- }
- }
+  "create_ticket": {
+    "name": "create_ticket",
+    "description": "Create a support ticket with title, description, and priority",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Ticket title"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "urgent"]
+        }
+      },
+      "required": ["title"]
+    }
+  }
 }
 ```
 
@@ -239,9 +264,9 @@ LLM generation parameters controlling the model's behavior and output characteri
 
 ```json
 "parameters": {
- "temperature": 0.7,
- "max_tokens": 1500,
- "top_p": 0.9
+  "temperature": 0.7,
+  "max_tokens": 1500,
+  "top_p": 0.9
 }
 ```
 
@@ -254,25 +279,26 @@ A validation rule (guardrail) applied to LLM responses.
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `type` | string | **Yes** | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own types. Examples: `"banned_words"`, `"max_length"`, `"length"`, `"max_sentences"`, `"regex_match"`, `"sentiment"`, `"custom"`. |
-| `enabled` | boolean | **Yes** | Whether this validator is active. |
-| `fail_on_violation` | boolean | No | If true, violations cause an error. Default: false. |
+| `enabled` | boolean | No | Whether this validator is active. Default: `true`. |
+| `fail_on_violation` | boolean | No | If true, violations cause an error. If false, violations are logged but allowed. Default: `false`. |
+| `message` | string | No | User-facing message returned when the validator blocks content (e.g., `"Response contains banned words"`). |
 | `params` | object | No | Validator-specific parameters (e.g., word lists, character limits). |
 
 ```json
 "validators": [
- {
- "type": "banned_words",
- "enabled": true,
- "fail_on_violation": true,
- "params": {
- "words": ["impossible", "can't help"]
- }
- },
- {
- "type": "pii_detection",
- "enabled": true,
- "fail_on_violation": true
- }
+  {
+    "type": "banned_words",
+    "enabled": true,
+    "fail_on_violation": true,
+    "params": {
+      "words": ["impossible", "can't help"]
+    }
+  },
+  {
+    "type": "pii_detection",
+    "enabled": true,
+    "fail_on_violation": true
+  }
 ]
 ```
 
@@ -308,10 +334,10 @@ Model-specific template modifications. Allows customizing prompts for specific m
 
 ```json
 "model_overrides": {
- "claude-3-opus": {
- "system_template_prefix": "<thinking>\n",
- "parameters": { "temperature": 0.5 }
- }
+  "claude-3-opus": {
+    "system_template_prefix": "<thinking>\n",
+    "parameters": { "temperature": 0.5 }
+  }
 }
 ```
 
@@ -370,13 +396,17 @@ Evals are automated quality checks on LLM outputs. Unlike validators (which run 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | string | **Yes** | Unique identifier for this eval within its scope. |
-| `type` | string | **Yes** | Assertion type determining how the eval runs. Not an enum — runtimes register their own types (e.g., `"contains"`, `"regex"`, `"json_valid"`, `"llm_judge"`). |
-| `trigger` | string | **Yes** | When this eval fires. One of: `"every_turn"`, `"on_session_complete"`, `"sample_turns"`, `"sample_sessions"`. |
+| `type` | string | **Yes** | Assertion type determining how the eval runs. Not an enum — runtimes register their own types (e.g., `"contains"`, `"regex"`, `"json_valid"`, `"llm_judge"`, `"cosine_similarity"`). |
+| `trigger` | string | **Yes** | When this eval fires. Schema is open — common values are `"every_turn"`, `"on_session_complete"`, `"on_conversation_complete"`, `"on_workflow_step"`, `"sample_turns"`, `"sample_sessions"`. |
 | `description` | string | No | Human-readable description of what this eval measures. |
 | `enabled` | boolean | No | Whether this eval is active. Default: `true`. |
 | `sample_percentage` | number | No | Percentage of turns/sessions to sample (0–100). Only used with `sample_turns` and `sample_sessions` triggers. Default: `5`. |
 | `params` | object | No | Type-specific configuration. Structure depends on the eval `type`. |
 | `metric` | [MetricDef](#metric-def) | No | Prometheus-style metric declaration for exposing eval results. |
+| `threshold` | [Threshold](#threshold) | No | Pass/fail threshold for the eval score. |
+| `message` | string | No | Human-readable message describing the eval result or failure reason. |
+| `when` | object | No | Conditional expression that determines whether this eval runs for a given turn or session (e.g., `{ "has_variable": "customer_tier" }`, `{ "turn_count_gte": 3 }`). Free-form — runtimes interpret. |
+| `groups` | string[] | No | Eval group tags for organizing and filtering evals (e.g., `["quality", "tone"]`, `["safety", "compliance"]`). |
 
 ### Metric Def
 
@@ -388,34 +418,43 @@ Evals are automated quality checks on LLM outputs. Unlike validators (which run 
 
 The `metric` object uses `additionalProperties: true`, so runtimes can attach extra fields (e.g., `labels`, `help`, `buckets`).
 
+### Threshold
+
+Optional pass/fail threshold attached to an eval. Runtimes compare the eval's numeric score against `value` using `operator`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `operator` | string | Comparison operator. Common values: `"gte"`, `"lte"`, `"gt"`, `"lt"`, `"eq"`. |
+| `value` | number | The threshold value to compare against (e.g., `0.8`, `4`, `0.95`). |
+
 ```json
 "evals": [
- {
- "id": "json_format",
- "type": "json_valid",
- "trigger": "every_turn",
- "description": "Verify the assistant always returns valid JSON",
- "metric": {
- "name": "promptpack_json_valid",
- "type": "boolean"
- }
- },
- {
- "id": "tone-check",
- "type": "llm_judge",
- "trigger": "sample_turns",
- "sample_percentage": 10,
- "params": {
- "judge_prompt": "Rate the response tone on a 1-5 scale for professionalism.",
- "model": "gpt-4o",
- "passing_score": 4
- },
- "metric": {
- "name": "promptpack_tone_score",
- "type": "gauge",
- "range": { "min": 1, "max": 5 }
- }
- }
+  {
+    "id": "json_format",
+    "type": "json_valid",
+    "trigger": "every_turn",
+    "description": "Verify the assistant always returns valid JSON",
+    "metric": {
+      "name": "promptpack_json_valid",
+      "type": "boolean"
+    }
+  },
+  {
+    "id": "tone-check",
+    "type": "llm_judge",
+    "trigger": "sample_turns",
+    "sample_percentage": 10,
+    "params": {
+      "judge_prompt": "Rate the response tone on a 1-5 scale for professionalism.",
+      "model": "gpt-4o",
+      "passing_score": 4
+    },
+    "metric": {
+      "name": "promptpack_tone_score",
+      "type": "gauge",
+      "range": { "min": 1, "max": 5 }
+    }
+  }
 ]
 ```
 
@@ -431,9 +470,9 @@ Fragments are shared, reusable template text blocks defined at the pack level. T
 
 ```json
 "fragments": {
- "customer_context": "Customer: {{customer_name}}\nAccount Type: {{account_type}}",
- "greeting": "Hello! How can I help you today?",
- "escalation_notice": "I'm going to connect you with a specialist."
+  "customer_context": "Customer: {{customer_name}}\nAccount Type: {{account_type}}",
+  "greeting": "Hello! How can I help you today?",
+  "escalation_notice": "I'm going to connect you with a specialist."
 }
 ```
 
@@ -536,14 +575,14 @@ For custom media types not covered by the specific configs above.
 
 ```json
 "media": {
- "enabled": true,
- "supported_types": ["image"],
- "image": {
- "max_size_mb": 20,
- "allowed_formats": ["jpeg", "png", "webp"],
- "default_detail": "high",
- "max_images_per_msg": 5
- }
+  "enabled": true,
+  "supported_types": ["image"],
+  "image": {
+    "max_size_mb": 20,
+    "allowed_formats": ["jpeg", "png", "webp"],
+    "default_detail": "high",
+    "max_images_per_msg": 5
+  }
 }
 ```
 
@@ -560,7 +599,7 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 | `version` | integer | **Yes** | Workflow schema version. Use `1` for the current stable format. |
 | `entry` | string | **Yes** | Name of the initial state. Must match a key in the `states` object. |
 | `states` | object&lt;string, [WorkflowState](#workflowstate)&gt; | **Yes** | Map of state name to state definition. Must contain at least one entry. |
-| `engine` | object | No | Optional runtime engine hints for workflow execution (e.g., timeout, concurrency settings). |
+| `engine` | object | No | Optional runtime engine configuration. Hosts the standardized [`budget`](#workflowbudget) field *(v1.4+)* alongside runtime-specific hints (timeout, concurrency, etc.). |
 
 ### WorkflowState
 
@@ -568,48 +607,118 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 |-------|------|----------|-------------|
 | `prompt_task` | string | **Yes** | Reference to a prompt key defined in the pack's `prompts` object. |
 | `description` | string | No | Human-readable description of this state's purpose. |
-| `on_event` | object&lt;string, string&gt; | **Yes** | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. |
+| `on_event` | object&lt;string, string&gt; | No | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. Terminal states should omit it (or set it to `{}`). |
 | `persistence` | string | No | Whether conversation context is kept (`persistent`) or reset (`transient`) on entry. |
 | `orchestration` | string | No | How this state is orchestrated: `internal` (runtime manages), `external` (caller manages), or `hybrid`. |
 | `skills` | string | No | Skill filter for this state. A path scoping which skills are available, or `"none"` to disable skills. *(v1.3.1+)* |
+| `terminal` | boolean | No | If `true`, this state is a terminal state — the workflow completes after its prompt executes. Terminal states should not declare `on_event` transitions. Default: `false`. *(v1.4+)* |
+| `max_visits` | integer | No | Maximum number of times this state may be entered during a single workflow execution. Minimum: 1. When the limit is reached the workflow transitions to `on_max_visits`, or terminates with a budget-exhausted status if `on_max_visits` is not set. *(v1.4+)* |
+| `on_max_visits` | string | No | Target state to transition to when `max_visits` is reached. Must reference a key in the `states` object. *(v1.4+)* |
+| `artifacts` | object&lt;string, [ArtifactDef](#artifactdef)&gt; | No | Named artifact slots for lightweight, structured metadata that flows across state visits. Values are exposed to the prompt as `{{artifacts.<name>}}`. *(v1.4+)* |
 
 ```json
 "workflow": {
- "version": 1,
- "entry": "triage",
- "states": {
- "triage": {
- "prompt_task": "triage",
- "description": "Route incoming requests to the appropriate specialist",
- "on_event": {
- "billing": "billing_support",
- "technical": "tech_support",
- "resolved": "closing"
- }
- },
- "billing_support": {
- "prompt_task": "billing",
- "on_event": { "resolved": "closing", "escalate": "human_handoff" },
- "persistence": "persistent"
- },
- "tech_support": {
- "prompt_task": "technical",
- "on_event": { "resolved": "closing", "escalate": "human_handoff" },
- "persistence": "persistent"
- },
- "closing": {
- "prompt_task": "closing",
- "on_event": {},
- "orchestration": "internal"
- },
- "human_handoff": {
- "prompt_task": "handoff",
- "on_event": {},
- "orchestration": "external"
- }
- }
+  "version": 1,
+  "entry": "triage",
+  "states": {
+    "triage": {
+      "prompt_task": "triage",
+      "description": "Route incoming requests to the appropriate specialist",
+      "on_event": {
+        "billing": "billing_support",
+        "technical": "tech_support",
+        "resolved": "closing"
+      }
+    },
+    "billing_support": {
+      "prompt_task": "billing",
+      "on_event": { "resolved": "closing", "escalate": "human_handoff" },
+      "persistence": "persistent"
+    },
+    "tech_support": {
+      "prompt_task": "technical",
+      "on_event": { "resolved": "closing", "escalate": "human_handoff" },
+      "persistence": "persistent"
+    },
+    "closing": {
+      "prompt_task": "closing",
+      "on_event": {},
+      "orchestration": "internal"
+    },
+    "human_handoff": {
+      "prompt_task": "handoff",
+      "on_event": {},
+      "orchestration": "external"
+    }
+  }
 }
 ```
+
+### ArtifactDef *(v1.4+)*
+
+Declares one named slot in a state's `artifacts` map. Artifacts carry lightweight, structured metadata across state visits — pointers (commit SHAs, file paths, URIs), compact representations (schemas, summaries, diffs), or small structured results. They are not bulk data. Values persist across loop iterations and are accessible to prompts as `{{artifacts.<name>}}`.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `type` | string | **Yes** | MIME type indicating the artifact's content type (e.g., `"text/plain"`, `"application/json"`, `"text/markdown"`, `"text/x-python"`). Used by runtimes to determine serialization and presentation. |
+| `description` | string | No | Human-readable description of what this artifact contains and how it's used. |
+| `mode` | string | No | How the artifact is updated across visits. `"replace"` (default) overwrites the previous value on each visit; `"append"` accumulates content across visits (e.g., a log). |
+
+```json
+"artifacts": {
+  "commit_sha":  { "type": "text/plain",       "description": "Latest generated commit" },
+  "test_report": { "type": "application/json", "description": "Test runner summary" },
+  "iteration_log": {
+    "type": "text/plain",
+    "mode": "append",
+    "description": "Per-visit log accumulated across the loop"
+  }
+}
+```
+
+### WorkflowBudget *(v1.4+)*
+
+Resource budget for an entire workflow execution. Provides a global safety net independent of per-state `max_visits` — when any limit is reached the workflow terminates with a budget-exhausted status. All fields are optional; omitting a field means no limit for that resource. The budget lives at `workflow.engine.budget`.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `max_total_visits` | integer | No | Maximum total state visits across all states in the workflow. Minimum: 1. |
+| `max_tool_calls` | integer | No | Maximum total tool calls across all states. Minimum: 1. |
+| `max_wall_time_sec` | integer | No | Maximum wall-clock time in seconds for the entire workflow execution. Minimum: 1. |
+
+```json
+"workflow": {
+  "version": 1,
+  "entry": "plan",
+  "states": {
+    "plan":      { "prompt_task": "plan",      "on_event": { "PlanReady": "implement" } },
+    "implement": {
+      "prompt_task":   "implement",
+      "max_visits":    5,
+      "on_max_visits": "review",
+      "artifacts": {
+        "commit_sha":  { "type": "text/plain",       "description": "Latest commit" },
+        "test_report": { "type": "application/json", "description": "Test runner output" }
+      },
+      "on_event": { "CodeReady": "test" }
+    },
+    "test":   { "prompt_task": "run_tests", "on_event": { "TestsFailed": "implement", "TestsPassed": "done" } },
+    "review": { "prompt_task": "review",    "terminal": true },
+    "done":   { "prompt_task": "summarize", "terminal": true }
+  },
+  "engine": {
+    "budget": {
+      "max_total_visits":  50,
+      "max_tool_calls":   200,
+      "max_wall_time_sec": 600
+    }
+  }
+}
+```
+
+:::note[Loop guards vs. budgets]
+`max_visits` bounds a single state — useful for "give the implementer up to 5 attempts before forcing review". `engine.budget` bounds the entire workflow — the runaway-loop safety net that catches cycles `max_visits` couldn't predict. Use both together: per-state caps for normal flow control, the budget as a backstop.
+:::
 
 ---
 
@@ -632,28 +741,29 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 | `tags` | string[] | No | Discovery tags for the agent, used by A2A registries and routers. |
 | `input_modes` | string[] | No | MIME types the agent accepts as input. Defaults to `["text/plain"]`. |
 | `output_modes` | string[] | No | MIME types the agent can produce as output. Defaults to `["text/plain"]`. |
+| `state` | string | No | Reference to a state key in the pack's `workflow.states`. When set, invoking this agent runs the pack workflow starting at that state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level `workflow`. If omitted, the agent is a single-prompt agent. See [RFC-0011](/docs/rfcs/workflow-states-as-agents). |
 
 ```json
 "agents": {
- "entry": "triage",
- "members": {
- "triage": {
- "description": "Routes customer requests to the right specialist",
- "tags": ["router", "customer-service"],
- "input_modes": ["text/plain"],
- "output_modes": ["text/plain"]
- },
- "billing": {
- "description": "Handles billing inquiries and payment issues",
- "tags": ["billing", "payments"],
- "input_modes": ["text/plain"],
- "output_modes": ["text/plain", "application/json"]
- },
- "technical": {
- "description": "Provides technical troubleshooting assistance",
- "tags": ["support", "technical"]
- }
- }
+  "entry": "triage",
+  "members": {
+    "triage": {
+      "description": "Routes customer requests to the right specialist",
+      "tags": ["router", "customer-service"],
+      "input_modes": ["text/plain"],
+      "output_modes": ["text/plain"]
+    },
+    "billing": {
+      "description": "Handles billing inquiries and payment issues",
+      "tags": ["billing", "payments"],
+      "input_modes": ["text/plain"],
+      "output_modes": ["text/plain", "application/json"]
+    },
+    "technical": {
+      "description": "Provides technical troubleshooting assistance",
+      "tags": ["support", "technical"]
+    }
+  }
 }
 ```
 
@@ -694,18 +804,189 @@ Each entry in the top-level `skills` array is one of three forms:
 
 ```json
 "skills": [
- "./skills/billing",
- { "path": "./skills/compliance", "preload": true },
- {
- "name": "escalation-protocol",
- "description": "Steps for escalating unresolved customer issues",
- "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket\n4. Provide the ticket reference to the customer"
- }
+  "./skills/billing",
+  { "path": "./skills/compliance", "preload": true },
+  {
+    "name": "escalation-protocol",
+    "description": "Steps for escalating unresolved customer issues",
+    "instructions": "When a customer issue cannot be resolved within 3 exchanges:\n1. Acknowledge the complexity\n2. Collect case details\n3. Create an escalation ticket\n4. Provide the ticket reference to the customer"
+  }
 ]
 ```
 
 :::note[Skills + Workflow]
 When a `WorkflowState` declares a `skills` field, it scopes which skills are available in that state. Use `"none"` to disable skills for a state. Without a `skills` field, all pack-level skills are available.
+:::
+
+---
+
+## Compositions *(v1.5+)*
+
+PromptPack v1.5 adds **workflow composition**: a workflow state can set `orchestration: composition` to drive its work with a declarative step graph instead of a single prompt. Compositions live in a new top-level `compositions` map, keyed by name, and are reached *only* through a workflow state. A purely procedural ("Function-mode") pack is a one-state terminal workflow whose state is in composition mode.
+
+### WorkflowState amendments
+
+Two backward-compatible changes to [WorkflowState](#workflowstate):
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `orchestration` | string | No | Now accepts a fourth value, `composition`, alongside `internal` / `external` / `hybrid`. `composition` delegates the state's *entire* orchestration (work + transitions) to the referenced composition. Exclusive — don't combine with the other modes on the same state. |
+| `composition` | string | Conditional | Reference to a key in the pack's `compositions` map. **Required** when `orchestration` is `composition`; must be absent otherwise. |
+| `prompt_task` | string | Conditional | Now **optional**. Still required for `internal` / `external` / `hybrid` (and the default `internal`); not used in `composition` mode. |
+
+### Composition
+
+A named step graph over the pack's prompts, tools, and evals.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `version` | integer | **Yes** | Composition format version. Currently `1`. |
+| `steps` | [Step](#step)[] | **Yes** | Ordered array of step definitions (minimum 1). Order is logical — sequential by default; `branch` and `parallel` alter flow. The graph must be **acyclic**. |
+| `description` | string | No | Human-readable description of what the composition does. |
+| `input_schema` | string | No | Reference to a JSON Schema declaring the structured input shape. |
+| `output_schema` | string | No | Reference to a JSON Schema declaring the structured output shape. |
+| `output` | string | No | Step ID whose output is the composition's output. Defaults to the last step's output. |
+| `engine` | object | No | Opaque runtime-specific configuration (budgets, telemetry, scheduling hints). No schema enforcement. |
+
+### Step
+
+A single node in the step graph. The `kind` discriminator selects the step shape.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | **Yes** | Stable identifier, unique within the composition (including across nested `parallel.branches`). Pattern: `^[a-zA-Z_][a-zA-Z0-9_]*$`. Used for output references, eval attachment, and trace records. |
+| `kind` | string | **Yes** | Step kind. v1 conventional values: `"prompt"`, `"agent"`, `"tool"`, `"branch"`, `"parallel"`. Free-form string (like `Eval.type`); runtimes may support vendor-namespaced kinds (e.g. `"omnia.judge"`). |
+| `description` | string | No | Human-readable description. |
+| `depends_on` | string[] | No | Explicit predecessor step IDs. If omitted, the step sequentially follows the prior step in `steps[]`. Required to declare a join point after a `branch` or `parallel`. |
+| `modifiers` | [StepModifiers](#stepmodifiers) | No | Declarative modifiers (retry, eval attachment). Semantics are runtime-defined. |
+
+Each step also carries kind-specific fields, below.
+
+#### PromptStep (`kind: "prompt"`)
+
+A one-shot LLM invocation against a prompt task. No tool calls.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | **Yes** | Constant `"prompt"`. |
+| `prompt_task` | string | **Yes** | Reference to a key in the pack's `prompts` object. |
+| `input` | [StepInput](#stepinput) | No | Input binding resolved against the composition input and prior step outputs. |
+| `output_schema` | string | No | Reference to a JSON Schema for the expected output shape. |
+
+#### AgentStep (`kind: "agent"`)
+
+A **bounded LLM-tool loop** (distinct in name only from RFC 0007 `agents`).
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | **Yes** | Constant `"agent"`. |
+| `prompt_task` | string | **Yes** | Reference to a key in the pack's `prompts` object. |
+| `termination` | [TerminationPredicate](#terminationpredicate) | **Yes** | The condition under which the bounded loop exits. Without it, the agent step is invalid. |
+| `input` | [StepInput](#stepinput) | No | Input binding. |
+| `tools` | string[] | No | Subset of the pack's tools available to this step — a per-step scoped tool registry. Each must resolve to a key in `tools`. |
+| `output_schema` | string | No | Reference to a JSON Schema for the expected output shape. |
+
+#### ToolStep (`kind: "tool"`)
+
+A deterministic tool invocation called directly by the runtime (not via an LLM tool-call decision).
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | **Yes** | Constant `"tool"`. |
+| `tool` | string | **Yes** | Reference to a key in the pack's `tools` object. |
+| `args` | object | No | Argument bindings, resolved against the composition input and prior step outputs. |
+
+#### BranchStep (`kind: "branch"`)
+
+A conditional that picks a successor based on a constrained predicate.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | **Yes** | Constant `"branch"`. |
+| `predicate` | [Predicate](#predicate) | **Yes** | Constrained predicate (no free-form expressions). |
+| `then` | string | **Yes** | Step ID to execute when the predicate is true. |
+| `else` | string | No | Step ID to execute when the predicate is false. |
+
+#### ParallelStep (`kind: "parallel"`)
+
+A static fan-out whose branches execute concurrently and are merged by a reducer.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kind` | string | **Yes** | Constant `"parallel"`. |
+| `branches` | [Step](#step)[] | **Yes** | At least **2** branch steps. |
+| `reduce` | [Reducer](#reducer) | **Yes** | How branch outputs are merged. |
+
+### Predicate
+
+Predicates use a constrained, declarative shape — **not** an expression language. A predicate is exactly one of: a compare, an exists check, or an `all_of` / `any_of` / `not` combinator. Authors who need complex conditions emit a boolean from a `prompt` step and branch on its output.
+
+| Form | Shape | Description |
+|------|-------|-------------|
+| **Compare** | `{ path, op, value }` | Compare a `path` against a literal `value`. `op` ∈ `equals`, `not_equals`, `in`, `not_in`, `less_than`, `less_than_or_equals`, `greater_than`, `greater_than_or_equals`. (`value` is an array for `in`/`not_in`.) |
+| **Exists** | `{ path, exists }` | `exists: true`/`false` tests presence of the value at `path`. |
+| **All of** | `{ all_of: [Predicate, …] }` | Logical AND of nested predicates. |
+| **Any of** | `{ any_of: [Predicate, …] }` | Logical OR of nested predicates. |
+| **Not** | `{ not: Predicate }` | Logical negation of a nested predicate. |
+
+`path` references a value via the same `${...}` dot-notation used for step inputs, e.g. `${classify.output.intent}`.
+
+```yaml
+predicate:
+  any_of:
+    - path: "${assess.output.confidence}"
+      op: less_than
+      value: 0.8
+    - path: "${assess.output.complexity}"
+      op: greater_than
+      value: 7
+```
+
+### Reducer
+
+Names how a `parallel` block's branch outputs are merged into a single value.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `strategy` | string | **Yes** | v1 conventional values: `"append"` (extend lists), `"replace"` (last write wins), `"barrier"` (collect all outputs into a named map). Free-form string; runtimes may add vendor-namespaced reducers. |
+| `into` | string | **Yes** | Field name under which the merged result is placed on the parallel step's output, read downstream as `${<parallelStepId>.output.<into>}`. |
+
+### StepModifiers
+
+Declarative annotations on a step. Semantics are runtime-defined.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `retry` | object | No | `{ "max_attempts": <integer ≥ 1> }` — retry budget for the step. |
+| `eval` | string[] | No | References to keys in the pack's `evals` object (RFC 0006). Runtimes may execute these inline or post-Send. |
+
+### TerminationPredicate
+
+The required exit condition for an `agent` step. At least one field must be set.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `max_steps` | integer | Conditional | Maximum loop iterations (≥ 1). Either this or `tool_called` (or both) must be present. |
+| `tool_called` | string | Conditional | Tool name; the agent terminates when the LLM successfully invokes this tool. |
+
+### StepInput
+
+Input binding for a step — either a reference string or an object combining literals and references.
+
+| Form | Description |
+|------|-------------|
+| **String** | A reference of the form `${path.to.value}`. |
+| **Object** | A free-form object whose values may be literals or `${...}` references. |
+
+References resolve against:
+
+- `${input.X}` — the composition's structured input.
+- `${stepId.output.X}` — a prior step's structured output.
+
+This is a strict subset of the RFC 0003 template-variable system — no expressions, arithmetic, or function calls.
+
+:::note[Composition validation rules]
+A `composition`-mode state must set `composition` and may omit `prompt_task`; every other state must set `prompt_task` and must not set `composition`. Step IDs must be unique within the composition; every `prompt_task`, `tool`, `eval`, `then`/`else`/`depends_on`, and `${...}` reference must resolve. `agent` steps require `termination`; `parallel` steps require ≥2 branches and a `reduce`; the graph must be acyclic.
 :::
 
 ---

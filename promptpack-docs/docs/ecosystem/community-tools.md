@@ -4,7 +4,7 @@ sidebar:
   order: 4
 ---
 
-:::caution Status
+:::caution[Status]
  **Community-Driven** - This ecosystem is in early stages
 :::
 

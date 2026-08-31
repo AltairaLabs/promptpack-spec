@@ -4,7 +4,7 @@ sidebar:
   order: 2
 ---
 
-:::info Status
+:::note[Status]
 - **Available Now** - PromptArena is actively being used for LLM testing
 :::
 
