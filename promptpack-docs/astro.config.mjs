@@ -84,6 +84,7 @@ export default defineConfig({
               label: 'Archive',
               collapsed: true,
               items: [
+                archive('v1.6.0'),
                 archive('v1.5.1'),
                 archive('v1.5.0'),
                 archive('v1.4.1'),

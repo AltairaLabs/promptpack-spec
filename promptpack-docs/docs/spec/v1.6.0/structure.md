@@ -1,6 +1,7 @@
 ---
 title: "Pack Structure & Design"
 sidebar:
+  label: "Pack Structure & Design (v1.6.0)"
   order: 2
 ---
 
@@ -366,50 +367,6 @@ Four building blocks turn an unbounded workflow into a production-safe agent loo
 :::note[Time-travel debugging for free]
 Because artifacts are captured at every state transition, runtimes that persist them produce a structured, replayable execution trace. You get audit, replay, and step-back debugging without writing any extra orchestration code.
 :::
-
-## Turn Control *(v1.7+)*
-
-Every state above yields to the user after a transition. The agent calls `workflow__transition`, the state changes, and the conversation waits. That is right for interactive flows and wrong for **transient states** — decision points that exist only to route, and processing steps in a loop that shouldn't stop to ask permission between rounds.
-
-PromptPack v1.7 adds `control` to `WorkflowState` (RFC 0014). It declares who holds the next turn after entering the state:
-
-- **`control: "user"`** (default) — yield the conversation to the user. Every state behaved this way before v1.7, and a state without the property still does.
-- **`control: "agent"`** — run another agent round in this state instead of yielding, rebuilding the pipeline for the new state's `prompt_task`, tools, and validators.
-
-```json
-{
-  "workflow": {
-    "version": 2,
-    "entry": "verifying",
-    "states": {
-      "verifying": {
-        "prompt_task": "verifying",
-        "on_event": { "AccountVerified": "triage" }
-      },
-      "triage": {
-        "prompt_task": "triage",
-        "control": "agent",
-        "on_event": { "ServeBalance": "resolution", "EscalateToAgent": "handoff" }
-      },
-      "resolution": { "prompt_task": "resolution", "terminal": true },
-      "handoff":    { "prompt_task": "handoff",    "terminal": true }
-    }
-  }
-}
-```
-
-A caller who says "I need my balance, my ID is ACC-12345" is verified, routed through `triage`, and answered in `resolution` — one user message, one reply, three states. Without `control`, `triage` would ask the user to speak again before it could route on what they already said.
-
-**`control` is not `orchestration`.** They answer different questions and compose freely:
-
-| Property | Question it answers | Values |
-|---|---|---|
-| `orchestration` | Who *initiates* the transition? | `internal`, `external`, `hybrid`, `composition` |
-| `control` | Who holds the turn *after* one? | `user`, `agent` |
-
-`control` is consulted only on an agent-initiated transition, so it is inert on a state reached through `external` orchestration — there is no turn in hand to give back.
-
-Loops of `control: agent` states need no new safety net: they terminate on reaching a `control: "user"` state or a terminal one, and are bounded by the same `max_visits` and `engine.budget` limits described above. A runtime that doesn't implement `control` yields as it always did, so packs using it stay portable — they just take more user turns.
 
 ## Workflow Composition *(v1.5+)*
 

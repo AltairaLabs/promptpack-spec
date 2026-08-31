@@ -6,13 +6,28 @@ sidebar:
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.6.0
+## Current Version: v1.7.0
 
 **Status:** current
 **Released:** August 2026
-**Schema:** `https://promptpack.org/schema/v1.6.0/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.7.0/promptpack.schema.json`
 
-### What's New in v1.6.0
+### What's New in v1.7.0
+
+- **Workflow State Control** ([RFC-0014](/docs/rfcs/workflow-state-control)) — an optional `control` property on each workflow state declaring who holds the next turn after entering it: `user` (default, and the behavior of every state before v1.7.0) or `agent`
+- **`control: "agent"`** — the state runs another agent round instead of yielding, so transient decision points and iterative loops can be modelled as real states rather than collapsed into one to avoid dead user turns. Bounded by terminal states, `max_visits` and `engine.budget` — no new limits
+- **Orthogonal to `orchestration`** — `orchestration` declares who *initiates* a transition, `control` who holds the turn *after* one. `control` is inert on states reached via `external` orchestration
+- **`Validator.fail_on_violation` deprecated** ([RFC-0015](/docs/rfcs/deprecate-fail-on-violation)) — the specification's first deprecation. Validators always enforce; the property is ignored, remains schema-valid through v1.x, and is removed in v2.0.0. Use `enabled: false` to disable a validator, or declare an eval for observation without enforcement
+
+All additions are optional. Packs written against v1.6.x remain valid and behave identically, including packs still carrying `fail_on_violation`.
+
+### Deprecations
+
+| Property | Deprecated | Removed | Replacement |
+|---|---|---|---|
+| `Validator.fail_on_violation` | v1.7.0 | v2.0.0 (no earlier than 2027-08-31) | `enabled: false` to disable; `evals` for observation |
+
+### Also in v1.6 (v1.6.0)
 
 - **Governance Declarations** ([RFC-0013](/docs/rfcs/governance-declarations)) — an optional `metadata.governance` block records what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, how it is classified, and which environments it is cleared to run in
 - **`Tool.action_scope`** — a companion block on each tool declaring what it can affect: `effect` (read / write / external), `reversibility` (reversible / compensable / irreversible) and the `data_classes` it touches. Lets a policy act on consequence instead of enumerating tool names, so "approve anything irreversible" stays correct when the next irreversible tool is added
@@ -41,11 +56,23 @@ All fields are optional and additive. Packs written against v1.5.x remain valid 
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.6.0 Spec →](./overview)
+[View v1.7.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.6.0
+
+**Status:** stable
+**Released:** August 2026
+**Schema:** `https://promptpack.org/schema/v1.6.0/promptpack.schema.json`
+
+- Governance Declarations — an optional `metadata.governance` block recording purpose, prohibited uses, autonomy level, accountability and approved environments
+- `Tool.action_scope` — per-tool effect, reversibility and data classes, so policy can act on consequence rather than tool names
+- `AgentDef.governance` overrides, `extensions` bags, and CURIE/IRI vocabulary terms
+
+[View v1.6.0 Spec →](./v1.6.0/overview)
 
 ### v1.5.1
 
@@ -179,7 +206,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.6.0 | current | Full support | - |
+| v1.7.0 | current | Full support | - |
+| v1.6.0 | stable | Security fixes only | TBD |
 | v1.5.1 | stable | Security fixes only | TBD |
 | v1.5.0 | stable | Security fixes only | TBD |
 | v1.4.1 | stable | Security fixes only | TBD |
@@ -195,6 +223,17 @@ The foundational release of PromptPack.
 - **End of Life**: No further updates
 
 ---
+
+## Migration from v1.6.0 to v1.7.0
+
+**No migration required to remain valid.** `control` is optional and defaults to the behavior every state already had, and `fail_on_violation` stays schema-valid for the whole v1.x series. A v1.6.x pack is a valid v1.7.0 pack.
+
+There is one behavior change to be aware of, and it affects a specific population:
+
+- **Packs using `fail_on_violation: false`.** That validator now enforces. If you were relying on it to observe without blocking, move the rule to `evals` and assert on the score in your test scenarios before upgrading a runtime that implements RFC 0015. Scan your packs for the literal `fail_on_violation: false` to find them.
+- **Packs using `fail_on_violation: true`, or omitting it.** Nothing changes. Delete the line when convenient.
+
+To adopt `control`, look for states that always transition again immediately — routing states and processing steps in a loop — and mark them `control: "agent"`. States you had collapsed into one to avoid dead user turns can be split back apart, which restores state-level assertions on the intermediate steps.
 
 ## Migration from v1.5.1 to v1.6.0
 
@@ -652,7 +691,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - Your flows are conversational/event-driven and don't need procedural step graphs
 - Prefer maximum stability
 
-**Recommendation:** Use v1.5.1 for all new projects. It's backward compatible and adds an optional `requires.providers` block for declaring provider needs, on top of v1.5.0 workflow composition and the full v1.4 workflow, agent-loop, and agent model.
+**Recommendation:** Use v1.7.0 for all new projects. It's backward compatible and adds `control` on workflow states for transient routing and processing, on top of v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
 
 ---
 
@@ -660,6 +699,8 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.7.0 | Aug 2026 | Workflow state `control`; `Validator.fail_on_violation` deprecated |
+| v1.6.0 | Aug 2026 | Governance declarations: `metadata.governance` and per-tool `action_scope` |
 | v1.5.1 | Jun 2026 | Provider requirements: optional `requires.providers` block declaring a pack's model-provider needs |
 | v1.5.0 | Jun 2026 | Workflow composition: `composition` orchestration mode + step-graph `compositions` |
 | v1.4.1 | Jun 2026 | Workflow states as agents (`AgentDef.state`) |
