@@ -294,6 +294,27 @@ This is a deliberate hedge. DPV's `eu-aiact` extension is a Community Group Repo
 
 Predictability over expressiveness: deep-merging `foreseeable_misuse` across two levels would produce a list no one wrote, which is the wrong property for a declaration whose purpose is to state what a human intended.
 
+`vocabularies` is the exception, and it merges. It is a prefix-to-IRI map that makes CURIE values resolvable rather than a declaration in its own right, so replacing it would put an agent's **inherited** values out of scope:
+
+```yaml
+metadata:
+  governance:
+    vocabularies:
+      acme: https://acme.example/ns#
+    risk_classification: acme:tier-3     # a CURIE against the pack's prefix
+
+agents:
+  members:
+    refunds:
+      governance:
+        vocabularies:
+          other: https://other.example/ns#
+```
+
+The `refunds` agent inherits `risk_classification`. Under replacement the `acme` prefix leaves scope and that inherited value becomes unresolvable — an agent breaking a field it never touched. Prefix maps accumulate for the same reason they do everywhere else CURIEs are used.
+
+An agent that redeclares a prefix still wins on it, which is how a name is pointed at a different IRI.
+
 ### Absence is not a safe default
 
 An omitted field means **undeclared**. An omitted `action_scope` does not mean `read`, and does not mean `reversible`. An omitted `approved_environments` does not mean "cleared everywhere", and equally does not mean "cleared nowhere".
@@ -563,7 +584,7 @@ Resolved during review, recorded here because the reasoning matters more than th
 - An unknown property inside `governance` or `action_scope` is rejected; the same property inside `extensions` is accepted.
 - `extensions` accepts arbitrarily nested JSON without interpretation.
 - A CURIE with an undeclared, non-well-known prefix warns and validates.
-- `AgentDef.governance` replaces per field and inherits the rest; arrays replace whole.
+- `AgentDef.governance` replaces per field and inherits the rest; arrays and `extensions` replace whole, `vocabularies` merges.
 
 ### Compatibility Tests
 
