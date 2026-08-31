@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          # Astro 6 requires >=22.12. Docusaurus ran fine on 20; this is part of
+          # Astro 7 requires >=22.12. Docusaurus ran fine on 20; this is part of
           # the migration, not an incidental bump.
           node-version: 22
           cache: npm
