@@ -234,16 +234,17 @@ title: "PromptPack Specification"
         - [13.3.1.5.1. Property `PromptPack Specification > workflow > states > additionalProperties > on_event > additionalProperties`](#workflow_states_additionalProperties_on_event_additionalProperties)
       - [13.3.1.6. Property `PromptPack Specification > workflow > states > additionalProperties > persistence`](#workflow_states_additionalProperties_persistence)
       - [13.3.1.7. Property `PromptPack Specification > workflow > states > additionalProperties > orchestration`](#workflow_states_additionalProperties_orchestration)
-      - [13.3.1.8. Property `PromptPack Specification > workflow > states > additionalProperties > composition`](#workflow_states_additionalProperties_composition)
-      - [13.3.1.9. Property `PromptPack Specification > workflow > states > additionalProperties > skills`](#workflow_states_additionalProperties_skills)
-      - [13.3.1.10. Property `PromptPack Specification > workflow > states > additionalProperties > terminal`](#workflow_states_additionalProperties_terminal)
-      - [13.3.1.11. Property `PromptPack Specification > workflow > states > additionalProperties > max_visits`](#workflow_states_additionalProperties_max_visits)
-      - [13.3.1.12. Property `PromptPack Specification > workflow > states > additionalProperties > on_max_visits`](#workflow_states_additionalProperties_on_max_visits)
-      - [13.3.1.13. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts`](#workflow_states_additionalProperties_artifacts)
-        - [13.3.1.13.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > ArtifactDef`](#workflow_states_additionalProperties_artifacts_additionalProperties)
-          - [13.3.1.13.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`](#workflow_states_additionalProperties_artifacts_additionalProperties_type)
-          - [13.3.1.13.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`](#workflow_states_additionalProperties_artifacts_additionalProperties_description)
-          - [13.3.1.13.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`](#workflow_states_additionalProperties_artifacts_additionalProperties_mode)
+      - [13.3.1.8. Property `PromptPack Specification > workflow > states > additionalProperties > control`](#workflow_states_additionalProperties_control)
+      - [13.3.1.9. Property `PromptPack Specification > workflow > states > additionalProperties > composition`](#workflow_states_additionalProperties_composition)
+      - [13.3.1.10. Property `PromptPack Specification > workflow > states > additionalProperties > skills`](#workflow_states_additionalProperties_skills)
+      - [13.3.1.11. Property `PromptPack Specification > workflow > states > additionalProperties > terminal`](#workflow_states_additionalProperties_terminal)
+      - [13.3.1.12. Property `PromptPack Specification > workflow > states > additionalProperties > max_visits`](#workflow_states_additionalProperties_max_visits)
+      - [13.3.1.13. Property `PromptPack Specification > workflow > states > additionalProperties > on_max_visits`](#workflow_states_additionalProperties_on_max_visits)
+      - [13.3.1.14. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts`](#workflow_states_additionalProperties_artifacts)
+        - [13.3.1.14.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > ArtifactDef`](#workflow_states_additionalProperties_artifacts_additionalProperties)
+          - [13.3.1.14.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`](#workflow_states_additionalProperties_artifacts_additionalProperties_type)
+          - [13.3.1.14.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`](#workflow_states_additionalProperties_artifacts_additionalProperties_description)
+          - [13.3.1.14.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`](#workflow_states_additionalProperties_artifacts_additionalProperties_mode)
   - [13.4. Property `PromptPack Specification > workflow > engine`](#workflow_engine)
     - [13.4.1. Property `PromptPack Specification > workflow > engine > budget`](#workflow_engine_budget)
       - [13.4.1.1. Property `PromptPack Specification > workflow > engine > budget > max_total_visits`](#workflow_engine_budget_max_total_visits)
@@ -369,7 +370,7 @@ title: "PromptPack Specification"
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012). Packs may declare governance facts (metadata.governance) and per-tool action scope (Tool.action_scope) so consequence is recorded alongside capability.
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012). Packs may declare governance facts (metadata.governance) and per-tool action scope (Tool.action_scope) so consequence is recorded alongside capability. Workflow states may declare who holds the next turn via 'control' (RFC 0014). Validator.fail_on_violation is deprecated — validators always enforce (RFC 0015).
 
 **Examples:**
 
@@ -1888,13 +1889,13 @@ null
 
 **Description:** A validation rule (guardrail) applied to LLM responses. Validators can check content, length, format, and other constraints to ensure response quality and safety.
 
-| Property                                                                                 | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                     |
-| ---------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| + [type](#prompts_additionalProperties_validators_items_type )                           | No      | string  | No         | -          | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types. |
-| - [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them.                                      |
-| - [message](#prompts_additionalProperties_validators_items_message )                     | No      | string  | No         | -          | User-facing message returned when the validator blocks content.                                                                       |
-| - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean | No         | -          | If true, validation failures cause an error. If false, violations are logged but allowed.                                             |
-| - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object  | No         | -          | Validator-specific parameters                                                                                                         |
+| Property                                                                                 | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| + [type](#prompts_additionalProperties_validators_items_type )                           | No      | string  | No         | -          | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types.                                                                                                                                                                                    |
+| - [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them.                                                                                                                                                                                                                         |
+| - [message](#prompts_additionalProperties_validators_items_message )                     | No      | string  | No         | -          | User-facing message returned when the validator blocks content.                                                                                                                                                                                                                                                          |
+| - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean | No         | -          | DEPRECATED as of v1.7.0, removed in v2.0.0 (RFC 0015). Ignored — validators always enforce. A triggered validator rewrites or blocks the assistant message regardless of this value. To disable a validator, use 'enabled: false'. For observation without enforcement, declare an eval and assert on its score instead. |
+| - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object  | No         | -          | Validator-specific parameters                                                                                                                                                                                                                                                                                            |
 
 ###### <a name="prompts_additionalProperties_validators_items_type"></a>7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`
 
@@ -1976,7 +1977,7 @@ null
 | **Required** | No        |
 | **Default**  | `false`   |
 
-**Description:** If true, validation failures cause an error. If false, violations are logged but allowed.
+**Description:** DEPRECATED as of v1.7.0, removed in v2.0.0 (RFC 0015). Ignored — validators always enforce. A triggered validator rewrites or blocks the assistant message regardless of this value. To disable a validator, use 'enabled: false'. For observation without enforcement, declare an eval and assert on its score instead.
 
 ###### <a name="prompts_additionalProperties_validators_items_params"></a>7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`
 
@@ -4976,19 +4977,20 @@ Must be one of:
 
 **Description:** A single state in the workflow state machine. The orchestration mode determines how the state's work is driven: 'internal'/'external'/'hybrid' reference a prompt task and declare event-driven transitions; 'composition' (RFC 0010) runs a declarative step graph in place of a prompt. May be marked as terminal to indicate workflow completion, or guarded with max_visits to bound loop iterations.
 
-| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object. Required for orchestration modes 'internal', 'external', 'hybrid' (or when orchestration is omitted, default 'internal'); not used in 'composition' mode.                                                                                                                                                                                                                                                       |
-| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                                                                                                                                                                                                                                                                                                                               |
-| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string           | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                                                                                                                                                                                                                                                                                                                                |
-| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How the state is orchestrated. 'internal' = agent controls transitions (default). 'external' = system controls transitions. 'hybrid' = both. 'composition' = the referenced composition fully handles the state's orchestration (work + transitions): the composition runs end-to-end, and on completion its output may map to on_event transitions or terminate the state. The composition mode is exclusive; it is not mixed with internal/external/hybrid on the same state. |
-| - [composition](#workflow_states_additionalProperties_composition )     | No      | string           | No         | -          | Reference to a composition key defined in the pack's compositions object (RFC 0010). Required when orchestration is 'composition'; absent otherwise.                                                                                                                                                                                                                                                                                                                            |
-| - [skills](#workflow_states_additionalProperties_skills )               | No      | string           | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.                                                                                                                                                                                                                                                                                                           |
-| - [terminal](#workflow_states_additionalProperties_terminal )           | No      | boolean          | No         | -          | If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.                                                                                                                                                                                                                                                                                                                    |
-| - [max_visits](#workflow_states_additionalProperties_max_visits )       | No      | integer          | No         | -          | Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.                                                                                                                                                                                                                                            |
-| - [on_max_visits](#workflow_states_additionalProperties_on_max_visits ) | No      | string           | No         | -          | Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.                                                                                                                                                                                                                                                                              |
-| - [artifacts](#workflow_states_additionalProperties_artifacts )         | No      | object           | No         | -          | Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., `{{artifacts.commit_sha}}`).                                                                                               |
+| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object. Required for orchestration modes 'internal', 'external', 'hybrid' (or when orchestration is omitted, default 'internal'); not used in 'composition' mode.                                                                                                                                                                                                                                                                                                                              |
+| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string           | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How the state is orchestrated. 'internal' = agent controls transitions (default). 'external' = system controls transitions. 'hybrid' = both. 'composition' = the referenced composition fully handles the state's orchestration (work + transitions): the composition runs end-to-end, and on completion its output may map to on_event transitions or terminate the state. The composition mode is exclusive; it is not mixed with internal/external/hybrid on the same state.                                                                        |
+| - [control](#workflow_states_additionalProperties_control )             | No      | enum (of string) | No         | -          | Who holds the next turn after entering this state (RFC 0014). 'user' yields the conversation to the user (default, and the behavior of every state before v1.7.0). 'agent' runs another agent round in this state without yielding, for transient routing or processing states. Orthogonal to 'orchestration', which declares who initiates a transition rather than who holds the turn after one; inert on states reached via 'external' orchestration. Bounded by terminal states, max_visits and the workflow budget — it introduces no new limits. |
+| - [composition](#workflow_states_additionalProperties_composition )     | No      | string           | No         | -          | Reference to a composition key defined in the pack's compositions object (RFC 0010). Required when orchestration is 'composition'; absent otherwise.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| - [skills](#workflow_states_additionalProperties_skills )               | No      | string           | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.                                                                                                                                                                                                                                                                                                                                                                                  |
+| - [terminal](#workflow_states_additionalProperties_terminal )           | No      | boolean          | No         | -          | If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.                                                                                                                                                                                                                                                                                                                                                                                           |
+| - [max_visits](#workflow_states_additionalProperties_max_visits )       | No      | integer          | No         | -          | Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.                                                                                                                                                                                                                                                                                                                   |
+| - [on_max_visits](#workflow_states_additionalProperties_on_max_visits ) | No      | string           | No         | -          | Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.                                                                                                                                                                                                                                                                                                                                                     |
+| - [artifacts](#workflow_states_additionalProperties_artifacts )         | No      | object           | No         | -          | Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., `{{artifacts.commit_sha}}`).                                                                                                                                                                      |
 
 ##### <a name="autogenerated_heading_2"></a>13.3.1.1. If (orchestration = "composition")
 
@@ -5109,7 +5111,27 @@ Must be one of:
 * "hybrid"
 * "composition"
 
-##### <a name="workflow_states_additionalProperties_composition"></a>13.3.1.8. Property `PromptPack Specification > workflow > states > additionalProperties > composition`
+##### <a name="workflow_states_additionalProperties_control"></a>13.3.1.8. Property `PromptPack Specification > workflow > states > additionalProperties > control`
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+| **Default**  | `"user"`           |
+
+**Description:** Who holds the next turn after entering this state (RFC 0014). 'user' yields the conversation to the user (default, and the behavior of every state before v1.7.0). 'agent' runs another agent round in this state without yielding, for transient routing or processing states. Orthogonal to 'orchestration', which declares who initiates a transition rather than who holds the turn after one; inert on states reached via 'external' orchestration. Bounded by terminal states, max_visits and the workflow budget — it introduces no new limits.
+
+**Example:**
+
+```json
+"agent"
+```
+
+Must be one of:
+* "user"
+* "agent"
+
+##### <a name="workflow_states_additionalProperties_composition"></a>13.3.1.9. Property `PromptPack Specification > workflow > states > additionalProperties > composition`
 
 |              |          |
 | ------------ | -------- |
@@ -5128,7 +5150,7 @@ Must be one of:
 "classify_document"
 ```
 
-##### <a name="workflow_states_additionalProperties_skills"></a>13.3.1.9. Property `PromptPack Specification > workflow > states > additionalProperties > skills`
+##### <a name="workflow_states_additionalProperties_skills"></a>13.3.1.10. Property `PromptPack Specification > workflow > states > additionalProperties > skills`
 
 |              |          |
 | ------------ | -------- |
@@ -5147,7 +5169,7 @@ Must be one of:
 "none"
 ```
 
-##### <a name="workflow_states_additionalProperties_terminal"></a>13.3.1.10. Property `PromptPack Specification > workflow > states > additionalProperties > terminal`
+##### <a name="workflow_states_additionalProperties_terminal"></a>13.3.1.11. Property `PromptPack Specification > workflow > states > additionalProperties > terminal`
 
 |              |           |
 | ------------ | --------- |
@@ -5163,7 +5185,7 @@ Must be one of:
 true
 ```
 
-##### <a name="workflow_states_additionalProperties_max_visits"></a>13.3.1.11. Property `PromptPack Specification > workflow > states > additionalProperties > max_visits`
+##### <a name="workflow_states_additionalProperties_max_visits"></a>13.3.1.12. Property `PromptPack Specification > workflow > states > additionalProperties > max_visits`
 
 |              |           |
 | ------------ | --------- |
@@ -5190,7 +5212,7 @@ true
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-##### <a name="workflow_states_additionalProperties_on_max_visits"></a>13.3.1.12. Property `PromptPack Specification > workflow > states > additionalProperties > on_max_visits`
+##### <a name="workflow_states_additionalProperties_on_max_visits"></a>13.3.1.13. Property `PromptPack Specification > workflow > states > additionalProperties > on_max_visits`
 
 |              |          |
 | ------------ | -------- |
@@ -5213,7 +5235,7 @@ true
 "error_handler"
 ```
 
-##### <a name="workflow_states_additionalProperties_artifacts"></a>13.3.1.13. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts`
+##### <a name="workflow_states_additionalProperties_artifacts"></a>13.3.1.14. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts`
 
 |                           |                                                                                                                             |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -5242,7 +5264,7 @@ true
 | --------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | - - additionalProperties | No      | object | No         | In #/$defs/ArtifactDef | Declares a named artifact slot for carrying lightweight, structured metadata across workflow state visits. Artifacts are typically pointers (commit SHAs, file paths, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Values are captured at each state transition, forming an observable trace that enables time-travel debugging and workflow audit. They persist across loop iterations and are accessible to prompts as template variables. |
 
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties"></a>13.3.1.13.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > ArtifactDef`
+###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties"></a>13.3.1.14.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > ArtifactDef`
 
 |                           |                     |
 | ------------------------- | ------------------- |
@@ -5259,7 +5281,7 @@ true
 | - [description](#workflow_states_additionalProperties_artifacts_additionalProperties_description ) | No      | string           | No         | -          | Human-readable description of what this artifact contains and how it's used.                                                                                                       |
 | - [mode](#workflow_states_additionalProperties_artifacts_additionalProperties_mode )               | No      | enum (of string) | No         | -          | How the artifact is updated across visits. 'replace' overwrites the previous value on each visit. 'append' accumulates content across visits (e.g., a log). Defaults to 'replace'. |
 
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_type"></a>13.3.1.13.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`
+###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_type"></a>13.3.1.14.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`
 
 |              |          |
 | ------------ | -------- |
@@ -5286,7 +5308,7 @@ true
 "text/x-python"
 ```
 
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_description"></a>13.3.1.13.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`
+###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_description"></a>13.3.1.14.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`
 
 |              |          |
 | ------------ | -------- |
@@ -5295,7 +5317,7 @@ true
 
 **Description:** Human-readable description of what this artifact contains and how it's used.
 
-###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_mode"></a>13.3.1.13.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`
+###### <a name="workflow_states_additionalProperties_artifacts_additionalProperties_mode"></a>13.3.1.14.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`
 
 |              |                    |
 | ------------ | ------------------ |
@@ -6979,4 +7001,4 @@ Specific value: `"parallel"`
 | **Minimum**  | &ge; 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-08-31 at 09:33:20 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-08-31 at 19:08:20 +0000
