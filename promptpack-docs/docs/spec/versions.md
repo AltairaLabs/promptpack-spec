@@ -41,11 +41,23 @@ All fields are optional and additive. Packs written against v1.5.x remain valid 
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.5.1 Spec →](./overview)
+[View v1.6.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.5.1
+
+**Status:** stable
+**Released:** June 2026
+**Schema:** `https://promptpack.org/schema/v1.5.1/promptpack.schema.json`
+
+- Provider Requirements — an optional top-level `requires.providers` block lets a pack declare, runtime-agnostically, the model providers it needs to run
+- String shorthand for a plain `llm` requirement; `default` reserved for the primary LLM
+- Advisory `ProviderCapabilities` hints for automatic matching
+
+[View v1.5.1 Spec →](./v1.5.1/overview)
 
 ### v1.4.1
 
@@ -156,7 +168,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.5.1 | current | Full support | - |
+| v1.6.0 | current | Full support | - |
+| v1.5.1 | stable | Security fixes only | TBD |
 | v1.5.0 | stable | Security fixes only | TBD |
 | v1.4.1 | stable | Security fixes only | TBD |
 | v1.4.0 | stable | Security fixes only | TBD |
@@ -169,6 +182,40 @@ The foundational release of PromptPack.
 - **Full Support**: New features, bug fixes, and security updates
 - **Security Fixes Only**: Critical security patches only
 - **End of Life**: No further updates
+
+---
+
+## Migration from v1.5.1 to v1.6.0
+
+**No migration required.** Every field added in v1.6.0 is optional and additive; a v1.5.x pack is a valid v1.6.0 pack and behaves identically.
+
+To adopt governance declarations, add what you can state truthfully and leave the rest out — an omitted field means *undeclared*, which is a different claim from a default.
+
+```yaml
+metadata:
+  governance:
+    intended_purpose: >
+      Answers cardholder questions about settled transactions.
+    autonomy_level: acts_with_approval
+    accountable_owner: payments-risk
+    approved_environments: [staging, production]
+
+tools:
+  issue_refund:
+    description: Issue a refund against a settled transaction
+    action_scope:
+      effect: external
+      reversibility: compensable
+```
+
+A sensible order of adoption, each step useful on its own:
+
+1. **`action_scope` on tools that obviously warrant it** — anything `external` or `irreversible`. Immediately useful for policy and telemetry, independent of any governance block.
+2. **`intended_purpose`, `foreseeable_misuse`, `autonomy_level`** — useful for registries and listings before any compliance consumer exists.
+3. **`accountable_owner` and `approved_environments`** — the point at which admission control becomes possible.
+4. **The legal classifications** (`operator_role`, `risk_classification`, `intended_deployment_contexts`, `capabilities`), moved to vocabulary terms where a term exists. Free strings stay valid indefinitely.
+
+Nothing in v1.6.0 changes how a pack executes. A runtime that ignores both blocks runs the pack identically.
 
 ---
 

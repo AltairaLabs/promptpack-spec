@@ -114,6 +114,7 @@ PromptKit is the reference toolkit — multi-provider testing, red-team scenario
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
 - **Provider Requirements** — Declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
+- **Governance Declarations** — Record what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, and what each tool can affect (`metadata.governance`, `Tool.action_scope`)
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
 - **Built-in Testing** — Testing metadata and quality assurance built into the spec
@@ -294,6 +295,44 @@ PromptPack v1.5.1 adds an optional top-level `requires.providers` block so a pac
 | **Coverage, binding, parity** | Deployers verify needed providers exist, resolve each key to a concrete provider, and warn when a resolved model diverges from `tested_models` |
 
 See [RFC-0012: Provider Requirements](https://promptpack.org/docs/rfcs/provider-requirements) for the full design.
+
+## Governance Declarations *(v1.6.0)*
+
+A pack has always described **capability** in detail and **consequence** not at all. v1.6.0 adds two optional blocks so the governance facts live with the thing they describe, versioned alongside it.
+
+```yaml
+metadata:
+  governance:
+    intended_purpose: >
+      Answers cardholder questions about settled transactions and raises
+      disputes on the cardholder's explicit instruction.
+    foreseeable_misuse:
+      - Credit, pricing or eligibility decisioning
+    autonomy_level: acts_with_approval
+    accountable_owner: payments-risk
+    approved_environments: [staging, production]
+    requires_ai_disclosure: true
+
+tools:
+  issue_refund:
+    description: Issue a refund against a settled transaction
+    action_scope:
+      effect: external
+      reversibility: compensable
+      data_classes: [dpv:FinancialData]
+```
+
+| Capability | What it gives you |
+|---|---|
+| **Purpose and misuse** | What the agent is built to do, and what its author considers out of bounds |
+| **Autonomy level** | `suggests`, `acts_with_approval`, `acts_with_oversight` or `acts_autonomously` — a human gate before the fact, or a check after it |
+| **Accountability** | The role or team answerable for the agent, and the declaring organisation's role |
+| **Approved environments** | Where the pack has been cleared to run, so a runtime can refuse a staging-only pack in production |
+| **Action scope** | Per tool: `effect`, `reversibility`, `data_classes` — so a policy can say "approve anything irreversible" instead of listing tool names that go stale |
+
+Every field is optional and declarative: these describe the agent as designed, they do not configure or enforce anything. Absence means *undeclared* — an omitted `action_scope` does not mean `read`, and does not mean `reversible`.
+
+See [RFC-0013: Governance Declarations](https://promptpack.org/docs/rfcs/governance-declarations) for the full design.
 
 ## Documentation
 
