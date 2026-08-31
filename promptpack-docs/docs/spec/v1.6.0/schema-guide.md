@@ -1,6 +1,7 @@
 ---
 title: "Schema Guide"
 sidebar:
+  label: "Schema Guide (v1.6.0)"
   order: 5
 ---
 
@@ -273,8 +274,8 @@ A validation rule (guardrail) applied to LLM responses.
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `type` | string | **Yes** | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own types. Examples: `"banned_words"`, `"max_length"`, `"length"`, `"max_sentences"`, `"regex_match"`, `"sentiment"`, `"custom"`. |
-| `enabled` | boolean | No | Whether this validator is active. Default: `true`. This is the supported way to turn a validator off. |
-| `fail_on_violation` | boolean | No | **Deprecated in v1.7.0, removed in v2.0.0.** Ignored — validators always enforce. See below. |
+| `enabled` | boolean | No | Whether this validator is active. Default: `true`. |
+| `fail_on_violation` | boolean | No | If true, violations cause an error. If false, violations are logged but allowed. Default: `false`. |
 | `message` | string | No | User-facing message returned when the validator blocks content (e.g., `"Response contains banned words"`). |
 | `params` | object | No | Validator-specific parameters (e.g., word lists, character limits). |
 
@@ -283,50 +284,18 @@ A validation rule (guardrail) applied to LLM responses.
   {
     "type": "banned_words",
     "enabled": true,
+    "fail_on_violation": true,
     "params": {
       "words": ["impossible", "can't help"]
     }
   },
   {
     "type": "pii_detection",
-    "enabled": true
+    "enabled": true,
+    "fail_on_violation": true
   }
 ]
 ```
-
-### `fail_on_violation` is deprecated *(v1.7+)*
-
-Declaring a validator means it enforces. A triggered validator rewrites or blocks the assistant message, and `fail_on_violation` is no longer consulted (RFC 0015). The property remains schema-valid through the v1.x series and is removed in v2.0.0.
-
-The old `fail_on_violation: false` conflated two different things. A **guardrail** changes the message on a hit and belongs in production; an **eval** records a score and belongs in tests. A validator that fired and did nothing was an eval in the wrong place — and worse, it made a security-shaped feature fail open, because a reader reasonably assumes a validator with `enabled: true` validates.
-
-Migrating depends on which value you used:
-
-| You had | Do this |
-|---|---|
-| `fail_on_violation: true`, or the property absent | Nothing. Delete the line when convenient — the validator already enforced. |
-| `fail_on_violation: false` | Move the rule to `evals` and assert on the score in your test scenarios. |
-
-```json
-// Before — a guardrail that never fired
-"validators": [
-  { "type": "length_check", "fail_on_violation": false, "params": { "max_characters": 1000 } }
-]
-
-// After — measurement declared as measurement
-"evals": [
-  {
-    "id": "response_length",
-    "type": "length_check",
-    "trigger": "on_response",
-    "params": { "max_characters": 1000 },
-    "metric": "within_limit",
-    "threshold": 0.95
-  }
-]
-```
-
-To disable a validator entirely, use `enabled: false`. That is honest about doing nothing, which `fail_on_violation: false` was not.
 
 ---
 
@@ -635,8 +604,7 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 | `description` | string | No | Human-readable description of this state's purpose. |
 | `on_event` | object&lt;string, string&gt; | No | Map of event name to target state name. When the named event fires, the workflow transitions to the target state. Terminal states should omit it (or set it to `{}`). |
 | `persistence` | string | No | Whether conversation context is kept (`persistent`) or reset (`transient`) on entry. |
-| `orchestration` | string | No | How this state is orchestrated: `internal` (runtime manages), `external` (caller manages), or `hybrid`. Declares who *initiates* a transition — distinct from `control`. |
-| `control` | string | No | Who holds the next turn after entering this state: `user` (default — yield to the user) or `agent` (run another agent round without yielding, for transient routing or processing states). Inert on states reached via `external` orchestration. *(v1.7+)* |
+| `orchestration` | string | No | How this state is orchestrated: `internal` (runtime manages), `external` (caller manages), or `hybrid`. |
 | `skills` | string | No | Skill filter for this state. A path scoping which skills are available, or `"none"` to disable skills. *(v1.3.1+)* |
 | `terminal` | boolean | No | If `true`, this state is a terminal state — the workflow completes after its prompt executes. Terminal states should not declare `on_event` transitions. Default: `false`. *(v1.4+)* |
 | `max_visits` | integer | No | Maximum number of times this state may be entered during a single workflow execution. Minimum: 1. When the limit is reached the workflow transitions to `on_max_visits`, or terminates with a budget-exhausted status if `on_max_visits` is not set. *(v1.4+)* |

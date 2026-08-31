@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.6.0-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.7.0-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -109,7 +109,7 @@ PromptKit is the reference toolkit — multi-provider testing, red-team scenario
 - **Multi-Prompt Architecture** — Specialized prompts for different scenarios instead of one-size-fits-all
 - **Complete Packaging** — Prompts, tools, fragments, evals, and config in a single JSON file
 - **Evals & Metrics** — Declare automated quality checks (deterministic or LLM judge) with Prometheus metric export
-- **Workflows** — State-machine orchestration with event-driven transitions between prompts
+- **Workflows** — State-machine orchestration with event-driven transitions between prompts, and per-state turn control (`control`) for transient routing and processing states
 - **Agent Loops** — Iterative, self-correcting execution with terminal states, per-state visit guards, artifact trails, and engine budgets
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
@@ -334,6 +334,33 @@ Every field is optional and declarative: these describe the agent as designed, t
 
 See [RFC-0013: Governance Declarations](https://promptpack.org/docs/rfcs/governance-declarations) for the full design.
 
+## Turn Control *(v1.7.0)*
+
+Every workflow state yields to the user after a transition. That is right for interactive flows and wrong for **transient states** — decision points that only route, and processing steps in a loop that shouldn't stop to ask permission between rounds. v1.7.0 adds `control` to say which is which:
+
+```yaml
+workflow:
+  version: 2
+  entry: verifying
+  states:
+    verifying:
+      prompt_task: verifying
+      on_event: { AccountVerified: triage }
+    triage:
+      prompt_task: triage
+      control: agent          # transient — route without asking
+      on_event: { ServeBalance: resolution, EscalateToAgent: handoff }
+    resolution:
+      prompt_task: resolution
+      terminal: true
+```
+
+A caller who says "I need my balance, my ID is ACC-12345" is verified, routed through `triage`, and answered in `resolution` — one user message, one reply, three states. `control` is orthogonal to `orchestration`: that one declares who *initiates* a transition, this one who holds the turn *after* one. Loops are bounded by the existing `max_visits` and `engine.budget`; no new limits.
+
+v1.7.0 also carries the specification's first deprecation. `Validator.fail_on_violation` is ignored — validators always enforce — and is removed in v2.0.0. Use `enabled: false` to disable a validator, or declare an eval for observation without enforcement.
+
+See [RFC-0014: Workflow State Control](https://promptpack.org/docs/rfcs/workflow-state-control) and [RFC-0015: Deprecate `fail_on_violation`](https://promptpack.org/docs/rfcs/deprecate-fail-on-violation) for the full designs.
+
 ## Documentation
 
 - [Specification](https://promptpack.org/docs/spec/overview) — Complete PromptPack spec
@@ -344,7 +371,7 @@ See [RFC-0013: Governance Declarations](https://promptpack.org/docs/rfcs/governa
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.6.0/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.7.0/promptpack.schema.json`
 
 ## Ecosystem
 

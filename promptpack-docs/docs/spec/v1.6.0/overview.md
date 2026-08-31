@@ -1,17 +1,18 @@
 ---
 title: "Specification Overview"
 sidebar:
+  label: "Specification Overview (v1.6.0)"
   order: 2
 ---
 
-<span className="ppVersionBadge ppVersionBadge--current">v1.7.0 · current</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.6.0 · stable</span>
+
+:::caution[Archived Version]
+This is the **v1.6.0** documentation. For the latest features, see [v1.7.0 docs →](../overview)
+:::
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
-:::note[Version Information]
-This documentation covers **v1.7.0** of the PromptPack specification. **v1.7.0** adds **workflow state control** (RFC 0014): an optional `control` property on each workflow state declaring who holds the next turn after entering it. `control: agent` lets a state route or process without yielding to the user, so transient decision points and iterative loops can be modelled as real states instead of being collapsed into one. It also issues the specification's first deprecation — `Validator.fail_on_violation` is deprecated (RFC 0015) and removed in v2.0.0; validators always enforce, and observation belongs in `evals`. **v1.6.0** added **governance declarations** (RFC 0013): an optional `metadata.governance` block plus `action_scope` on each tool, letting a policy act on *consequence* rather than on tool names.
-Looking for previous versions? [View v1.6.0 docs →](./v1.6.0/overview) | [Version History →](./versions)
-:::
 
 ## Why PromptPacks?
 

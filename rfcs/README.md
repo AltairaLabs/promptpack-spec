@@ -44,6 +44,8 @@ Each RFC has one of the following statuses:
 | 0011 | [Workflow States as Agents](0011-workflow-states-as-agents.md) | Implemented | Charlie Holland | 2026-06-13 |
 | 0012 | [Provider Requirements](0012-provider-requirements.md) | Implemented | Charlie Holland | 2026-06-25 |
 | 0013 | [Governance Declarations](0013-governance-declarations.md) | Implemented | Charlie Holland | 2026-08-28 |
+| 0014 | [Workflow State Control](0014-workflow-state-control.md) | Implemented | Charlie Holland | 2026-08-31 |
+| 0015 | [Deprecate `fail_on_violation`](0015-deprecate-fail-on-violation.md) | Implemented | Charlie Holland | 2026-08-31 |
 
 ## Active RFCs
 
