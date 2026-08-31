@@ -63,7 +63,35 @@ This document describes the governance model for the PromptPack specification an
 
 ### RFC (Request for Comments) Process
 
-All specification changes follow the RFC process:
+Not every specification change needs an RFC. Which path a change takes depends
+on what it touches, not on how large the diff is.
+
+**An RFC is required when the change:**
+
+- **Adds or removes an entity type** — prompts, tools, workflows, agents,
+  skills, compositions, evals, and their peers
+- **Introduces new runtime semantics** — anything a conforming runtime must
+  newly *do*, including new validation or processing requirements
+- **Changes, deprecates, or removes existing behavior**
+- **Breaks backward compatibility** in any schema or behavior
+
+**A normal issue or pull request is enough when the change:**
+
+- Fixes documentation, typos, or examples
+- Clarifies wording without changing meaning
+- Adds an optional schema field that carries **no new runtime semantics** —
+  annotation, description, or metadata a runtime may ignore
+
+The third bullet on each side is where the line actually falls, and it is the
+one that catches people out. A single optional field still needs an RFC if a
+conforming runtime has to behave differently because of it. Diff size is not
+the test; new behavior is.
+
+When in doubt, open a thread in
+[Ideas](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/ideas)
+first. That is cheaper than a draft RFC and easier to abandon.
+
+**RFC stages**:
 
 1. **Discussion**: Initial idea discussion in GitHub Discussions
 2. **Draft RFC**: Create RFC using the template
@@ -72,7 +100,13 @@ All specification changes follow the RFC process:
 5. **Core Maintainer Approval**: Final decision by core maintainers
 6. **Implementation**: Update specification and schema
 
-**RFC Categories**:
+**Approval bar**: the scrutiny an RFC needs scales with its impact. These
+categories describe *approval*, and are independent of the
+[SemVer](https://promptpack.org/docs/processes/versioning) bump the change
+eventually ships in — a Minor RFC can land in a MINOR release, but a
+deprecation approved at the Minor bar still removes the field in the next
+MAJOR.
+
 - **Major**: Breaking changes, new major features (requires broad consensus)
 - **Minor**: New non-breaking features (requires spec editor approval)  
 - **Patch**: Bug fixes, clarifications (can be fast-tracked)
