@@ -222,7 +222,9 @@ metadata:
       enforcement: strict
 ```
 
-The pack states the requirement without naming the agent it must be independent *of* — that agent is generally in a different pack, and a pack-local reference could not resolve. The runtime knows the composition and resolves it, exactly as it resolves `requires_ai_disclosure` against whichever interfaces face a human. Naming the counterparty was rejected for the reason a list is always rejected here: it stops being correct when the topology changes, and fails silently when it does.
+The pack states the requirement without naming the agent it must be independent *of* — that agent is generally in a different pack, and a pack-local reference could not resolve. The runtime knows the composition and resolves it, exactly as it resolves `requires_ai_disclosure` against whichever interfaces face a human. Naming the counterparty was rejected for the reason a list is always rejected here: it stops being correct when the topology changes, and fails silently when it does. An optional `of:` naming a pack id becomes worth revisiting only if a composition idiom emerges in which the producer is known at authoring time.
+
+`on` is a closed enum because independence is a *comparison*, and an author-supplied axis would name something a runtime has no way to compare. `operator_role` is the obvious candidate for a sixth — an outsourced reviewer that must be a different legal entity, not merely a different team — and is left out until a deployment needs it.
 
 | Axis | Resolves against | Buys |
 |---|---|---|
@@ -322,7 +324,9 @@ The prohibition below is on the *fact*, not on the field that carries it. A `las
 
 A `last_completed` date inside a versioned artifact goes stale by design, and recording one would force a new pack version to capture something that is not a change to the agent. The pack declares the cadence and the owner; the runtime holds completions.
 
-The consequence is worth stating plainly rather than hiding: **the pack alone cannot answer "is this obligation current?"** It answers "how often is this supposed to happen, and who owns it", which is a question about the agent. Whether it actually happened is a question about a deployment, and it is answered by joining the pack's `reviews` to the runtime's completion records on `id`. That join is the runtime's to make, and this RFC does not specify it.
+The consequence is worth stating plainly rather than hiding: **the pack alone cannot answer "is this obligation current?"** It answers "how often is this supposed to happen, and who owns it", which is a question about the agent. Whether it actually happened is a question about a deployment.
+
+The join between the two is the runtime's to make, but the key is not. A runtime that records completions SHOULD key them by `reviews[].id`, and an author SHOULD keep a review's `id` stable across pack versions for as long as the review means the same thing. Specifying only the key leaves runtimes free to store and expose completions however they like, while stopping two of them from inventing incompatible identifiers for the same recurring obligation — which is what would otherwise make the pack's ids a de facto interface nobody designed.
 
 ### Vocabulary
 
@@ -378,13 +382,17 @@ Two namespaces, published as data artifacts at `https://promptpack.org/vocab/`, 
 | `operator_role` | `CoveredEntity` · `BusinessAssociate` |
 | `data_classes` | `PHI` · `ePHI` · `LimitedDataSet` · `DeIdentified` |
 
-**`pp:`** — generic terms with no single instrument behind them, for cases DPV does not address because they are not about personal data.
+**`pp:`** — generic terms with no single instrument behind them, for cases DPV does not address because they are not about personal data. The `reviews[].type` terms belong here because nothing external supplies them: DPV's risk extension covers risk-management *process* — `risk:RiskAssessment`, `risk:RiskAnalysis`, `risk:RiskEvaluation` — and carries no terms for assurance *practices* such as bias testing or red teaming. Use `risk:` where a review is generic risk management and `pp:` for a named practice.
 
 | Slot | Terms |
 |---|---|
 | `data_classes` | `Confidential` · `Restricted` · `Public` · `Credentials` · `FinancialAccount` |
 | `capabilities` | `SyntheticMedia` |
 | `reviews.type` | `BiasTesting` · `AccuracyReview` · `RedTeaming` · `DataQualityReview` · `HumanOversightReview` |
+
+:::note[Reviewing a minted namespace]
+There is no scheduled review cadence, and adding one would imply the terms drift. They are chosen not to: a namespace is reviewed when the instrument behind it is amended, and nothing else triggers it. If a minted term ever does need to change, that is evidence the frozen-terms rule was misapplied when it was minted, and the fix belongs at the selection rule rather than in a calendar.
+:::
 
 :::note[Two things a published prefix does not mean]
 A prefix says *"this is the identifier for that concept"* and nothing more. It does not interpret the instrument, and — as RFC 0013's non-goals already state — declaring a field makes nothing compliant with anything.
@@ -439,7 +447,7 @@ Every one is `additionalProperties: false` today, so there is currently no way t
 Extending RFC 0013's levels rather than introducing new ones.
 
 - **Level 0 — Ignore.** A runtime may ignore every field in this RFC. Packs carrying them remain valid and execute identically.
-- **Level 1 — Validate and surface.** Validate structure and enum values, resolve the intra-pack references in [Validation Rules](#validation-rules), and make declarations available to tooling — registries, agent cards, audit exports, documentation generators. No effect on execution. `obligations` and `reviews` are records and never rise above this level: the controls they name may well act — a guardrail blocks, an eval's score pages someone — but that is those primitives doing their own job, not the obligation being enforced.
+- **Level 1 — Validate and surface.** Validate structure and enum values, resolve the intra-pack references in [Validation Rules](#validation-rules), and make declarations available to tooling — registries, agent cards, audit exports, documentation generators. A runtime that records review completions SHOULD key them by `reviews[].id`. No effect on execution. `obligations` and `reviews` are records and never rise above this level: the controls they name may well act — a guardrail blocks, an eval's score pages someone — but that is those primitives doing their own job, not the obligation being enforced.
 - **Level 2 — Enforce.** RFC 0013's enforceable constraints, plus:
   - **`independent_of`.** Do not deploy the pack where the producer of its input shares a listed property with it. A runtime that cannot determine the producer MUST treat the requirement as unsatisfied when `enforcement: strict`.
 
@@ -1061,7 +1069,7 @@ A single house vocabulary with consistent naming, and the plan this RFC started 
 
 ### Alternative 3: A separately versioned vocabulary registry
 
-Publish the prefix table as a dated artifact at `promptpack.org`, amendable by pull request without an RFC, with bindings append-only. This is the only option under which a new DPV extension or jurisdiction costs no specification cycle. Rejected for consistency with RFC 0013, which put its table in the RFC, and to avoid a second artifact that can drift from the normative text. Worth revisiting if the table turns over more than once a year — see [Unresolved Questions](#unresolved-questions).
+Publish the prefix table as a dated artifact at `promptpack.org`, amendable by pull request without an RFC, with bindings append-only. This is the only option under which a new DPV extension or jurisdiction costs no specification cycle. Rejected for consistency with RFC 0013, which put its table in the RFC, and to avoid a second artifact that can drift from the normative text. The trigger to revisit is the first amendment that is *not* absorbed by the unversioned `w3id.org` IRIs — a new DPV extension or a new jurisdiction, rather than a new DPV version. One such amendment is a cost worth paying; a second within a year would settle the argument the other way.
 
 ### Alternative 4: Specify execution isolation
 
@@ -1103,13 +1111,11 @@ None required.
 
 ## Unresolved Questions
 
-1. **Should the prefix table move to a separately versioned registry?** Alternative 3 sets out the trade. The answer depends on how often the table turns over, which will not be known until DPV or a new jurisdiction forces the first amendment. Revisit after the first one.
-2. **Should `independent_of` be able to name a specific upstream pack?** The current design deliberately does not, because the runtime knows the composition and the pack does not. If a composition idiom emerges where the producer is known at authoring time, an optional `of:` naming a pack id would be a small addition.
-3. **How should a runtime expose the join between `reviews` and its completion records?** Out of scope here, but if two runtimes solve it differently the pack's `id` values become the de facto interface, and that would be better designed than discovered.
-4. **Is `pp:` the right home for `reviews[].type` terms?** `BiasTesting` and `RedTeaming` are practices, not legal concepts, and other vocabularies may cover them better. Worth a look before publication.
-5. **Should there be a review cadence for the minted namespaces?** The frozen-terms rule is meant to make one unnecessary. Confirm that judgement before publishing rather than after.
-6. **Does declining duty labels cost a real deal?** `independent_of` on `accountable_owner` gives a regulated buyer a checkable answer for the case where an approval requirement is declared. It gives nothing for the case where a pack simply does both and declares no requirement. If a procurement questionnaire asks for the second, the evidence for reopening Alternative 1 will arrive quickly.
-7. **Should other governance fields become independence axes?** `operator_role` is the obvious candidate — an outsourced reviewer that must be a different legal entity, not merely a different team. Left out because no use case demanded it, and `on` is a closed enum so it cannot be added by an author. Add it when someone needs it.
+**Does declining duty labels cost a real deal?** `independent_of` on `accountable_owner` gives a regulated buyer a checkable answer wherever an approval requirement is declared. It gives nothing for a pack that simply approves and acts while declaring no requirement at all, because there is no counterparty to compare against.
+
+This cannot be settled by design argument, and the RFC should not pretend otherwise. What would settle it is a procurement questionnaire or a customer control matrix that asks specifically for the second case. If that arrives, [Alternative 1](#alternative-1-add-a-duty-field-to-action_scope) is the worked design and a `duties` array on `governance` is the shape to promote.
+
+Every other question raised during drafting is resolved in the section it belongs to: the prefix table stays in the RFC ([Alternative 3](#alternative-3-a-separately-versioned-vocabulary-registry)), `independent_of` does not name its counterparty and `on` stays closed ([`independent_of`](#independent_of)), completions join on `reviews[].id` ([Completion records stay out](#completion-records-stay-out)), and the minted namespaces are reviewed on amendment rather than on a cadence ([Minted terms](#minted-terms)).
 
 ## Implementation Plan
 
@@ -1214,7 +1220,7 @@ EU AI Act Articles 72 and 73 concern post-market monitoring and serious-incident
 
 - **2026-08-31:** Initial draft.
 - **2026-09-01:** Removed the proposed `action_scope.duty` field and the segregation-of-duties material that depended on it; the reasoning is preserved in Alternative 1 and the arrangement is shown structurally in Example 4. Retitled from "Governance Obligations and Duty Declarations". No change to `$defs.ActionScope` remains.
-- **2026-09-01:** Added `accountable_owner` as an `independent_of` axis, which expresses segregation of duties through separation of responsibility rather than duty labels, and distinguished technical from organisational independence. Added an optional `extensions` object to `obligations` and `reviews` entries. Renamed `validations` to `reviews` to avoid colliding with schema validation, which this document uses throughout. Corrected the description of what an `eval` control buys: an eval yields a score rather than a verdict. Added a `validator` control form and an optional `id` on `$defs.Validator` so the one primitive that actually enforces can be named — the RFC's only change to an execution primitive. Scoped the `eval` control form to what it actually claims: it names the measurement that watches the obligation, not proof that the obligation held. An eval does not act in the response path as a validator does, but its score may drive alerts, paging, deployment gates or quarantine — which of those is a runtime concern. No use of `Eval.threshold`; a pass/fail measurement declares `metric.type: boolean`. Generalised that to a stated rule — a definition gets `extensions` if a runtime policy makes a decision at it and it occurs as one of many — and applied it to the six qualifying definitions that lacked one: `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState`, `Composition`. Retitled from "Governance Obligations and Vocabulary" to reflect it. Completed the worked examples, which were previously missing the required `template_engine` and `prompts`.
+- **2026-09-01:** Added `accountable_owner` as an `independent_of` axis, which expresses segregation of duties through separation of responsibility rather than duty labels, and distinguished technical from organisational independence. Added an optional `extensions` object to `obligations` and `reviews` entries. Renamed `validations` to `reviews` to avoid colliding with schema validation, which this document uses throughout. Corrected the description of what an `eval` control buys: an eval yields a score rather than a verdict. Added a `validator` control form and an optional `id` on `$defs.Validator` so the one primitive that actually enforces can be named — the RFC's only change to an execution primitive. Scoped the `eval` control form to what it actually claims: it names the measurement that watches the obligation, not proof that the obligation held. An eval does not act in the response path as a validator does, but its score may drive alerts, paging, deployment gates or quarantine — which of those is a runtime concern. No use of `Eval.threshold`; a pass/fail measurement declares `metric.type: boolean`. Generalised that to a stated rule — a definition gets `extensions` if a runtime policy makes a decision at it and it occurs as one of many — and applied it to the six qualifying definitions that lacked one: `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState`, `Composition`. Retitled from "Governance Obligations and Vocabulary" to reflect it. Resolved six of the seven open questions into the sections they belong to; only the question of whether declining duty labels costs a deal remains open, because it cannot be settled by argument. Completed the worked examples, which were previously missing the required `template_engine` and `prompts`.
 
 ## References
 
