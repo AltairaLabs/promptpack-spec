@@ -22,7 +22,7 @@
     "@astrojs/starlight": "~0.41.10",
     "@fontsource/space-grotesk": "^5.2.10",
     "@fontsource/spline-sans-mono": "^5.2.8",
-    "astro": "^7.2.9",
+    "astro": "^7.3.1",
     "mermaid": "^11.16.0"
   },
   "devDependencies": {
