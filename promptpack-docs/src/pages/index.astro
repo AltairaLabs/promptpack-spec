@@ -112,6 +112,25 @@ const description =
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+    <!--
+      Written out by hand, because this page is not a Starlight page and
+      therefore inherits none of Starlight's head — so the one URL anyone
+      actually pastes into Slack had no card at all. Title and description
+      reuse the page's own; the image and alt match astro.config.mjs.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PromptPack" />
+    <meta property="og:url" content="https://promptpack.org/" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://promptpack.org/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="PromptPack — the open specification for AI agent behaviour" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://promptpack.org/og-image.png" />
     <script is:inline>
       // Pre-hydration theme init, matching Starlight's storage key so the
       // landing page and the docs agree on the reader's choice.

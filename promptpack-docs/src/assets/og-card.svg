@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Link-preview card, rendered to static/og-image.png. Atlas register:
+       night-sky ink, starlight lead, and a blue rule where the runtime's card
+       has gold — PromptPack's own cards carry no gold. No version number: a
+       static image cannot read the schema, and scrapers cache it for months. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070C16"/>
+      <stop offset="100%" stop-color="#0A1120"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.22" r="0.55">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- starfield: fixed positions, no randomness, so a rebuild is byte-identical -->
+  <g fill="#93C5FD">
+    <circle cx="150" cy="96" r="1.6" opacity="0.55"/>
+    <circle cx="322" cy="58" r="1.1" opacity="0.35"/>
+    <circle cx="486" cy="128" r="1.4" opacity="0.28"/>
+    <circle cx="742" cy="74" r="1.8" opacity="0.45"/>
+    <circle cx="905" cy="162" r="1.2" opacity="0.30"/>
+    <circle cx="1064" cy="88" r="1.5" opacity="0.40"/>
+    <circle cx="1132" cy="286" r="1.1" opacity="0.26"/>
+    <circle cx="96" cy="332" r="1.3" opacity="0.30"/>
+    <circle cx="1016" cy="470" r="1.4" opacity="0.26"/>
+    <circle cx="214" cy="548" r="1.2" opacity="0.24"/>
+    <circle cx="628" cy="592" r="1.5" opacity="0.22"/>
+    <circle cx="858" cy="546" r="1.1" opacity="0.28"/>
+  </g>
+
+  <!-- the mark, verbatim from logo-promptpack-dark.svg (outline-only) -->
+  <g transform="translate(96,150) scale(1.75)">
+    <rect x="4" y="4" width="56" height="56" rx="15" fill="none" stroke="#93C5FD" stroke-width="2"/>
+    <polygon points="32,12 36.5,27 51,32 36.5,37 32,52 27.5,37 13,32 27.5,27" fill="none" stroke="#C7D5EA" stroke-width="2" stroke-linejoin="round"/>
+  </g>
+
+  <text x="96" y="378" font-family="Space Grotesk" font-weight="700" font-size="112" fill="#E6EDF8" letter-spacing="-2">PromptPack</text>
+
+  <text x="96" y="446" font-family="Space Grotesk" font-weight="500" font-size="34" fill="#C7D5EA">The open specification for AI agent behaviour</text>
+
+  <text x="96" y="502" font-family="Space Grotesk" font-weight="400" font-size="26" fill="#93C5FD" opacity="0.85">Prompts · tools · workflows · guardrails · evals — one versioned file</text>
+
+  <rect x="96" y="548" width="96" height="4" rx="2" fill="#3B82F6"/>
+
+  <text x="1104" y="566" text-anchor="end" font-family="Space Grotesk" font-weight="500" font-size="24" fill="#C7D5EA" opacity="0.75">promptpack.org</text>
+</svg>

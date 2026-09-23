@@ -26,8 +26,13 @@ import sitemap from '@astrojs/sitemap';
  * the Starlight default, so sync-rfcs.js and generate-schema-docs.yml keep
  * writing where they always did.
  */
+// Declared once: `site` below needs it, and so does every absolute URL in the
+// link-preview tags, which a scraper fetches with no page to resolve against.
+const SITE = 'https://promptpack.org';
+const OG_ALT = 'PromptPack — the open specification for AI agent behaviour';
+
 export default defineConfig({
-  site: 'https://promptpack.org',
+  site: SITE,
   outDir: './build',
   publicDir: './static',
   integrations: [
@@ -130,6 +135,23 @@ export default defineConfig({
       ],
       head: [
         { tag: 'script', attrs: { type: 'module', src: '/mermaid-init.js' } },
+        // The link-preview card. Starlight already emits og:title,
+        // og:description and twitter:card per page; what it has no opinion
+        // about is the IMAGE, and a summary_large_image card with no image is
+        // what Slack renders as a bare line of text.
+        //
+        // A PNG, not SVG: Slack, LinkedIn and X all decline to rasterise SVG.
+        // Absolute, because a scraper resolves this URL with no page to be
+        // relative to. Keep this the ONE `head:` key — a second one in this
+        // object silently replaces the first.
+        //
+        // Regenerate from src/assets/og-card.svg:
+        //   rsvg-convert -w 1200 -h 630 -o static/og-image.png src/assets/og-card.svg
+        { tag: 'meta', attrs: { property: 'og:image', content: `${SITE}/og-image.png` } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: OG_ALT } },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: `${SITE}/og-image.png` } },
       ],
     }),
   ],
