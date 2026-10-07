@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.7.0-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.8.0-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -114,7 +114,7 @@ PromptKit is the reference toolkit — multi-provider testing, red-team scenario
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
 - **Provider Requirements** — Declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
-- **Governance Declarations** — Record what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, and what each tool can affect (`metadata.governance`, `Tool.action_scope`)
+- **Governance Declarations** — Record what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, and what each tool can affect (`metadata.governance`, `Tool.action_scope`) — plus the obligations those trigger, the controls that discharge them, recurring reviews, and independence requirements for reviewing agents
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
 - **Built-in Testing** — Testing metadata and quality assurance built into the spec
@@ -361,6 +361,38 @@ v1.7.0 also carries the specification's first deprecation. `Validator.fail_on_vi
 
 See [RFC-0014: Workflow State Control](https://promptpack.org/docs/rfcs/workflow-state-control) and [RFC-0015: Deprecate `fail_on_violation`](https://promptpack.org/docs/rfcs/deprecate-fail-on-violation) for the full designs.
 
+## Obligations and Reviews *(v1.8.0)*
+
+`capabilities` is a list of labels. v1.8.0 lets a pack say what each one obliges, which controls discharge it, and which duties recur:
+
+```yaml
+metadata:
+  governance:
+    capabilities: [dpv:AutomatedDecisionMaking]
+    obligations:
+      - id: art22-human-review
+        obligation: legal-eu-gdpr:Article22
+        controls:
+          - field: autonomy_level             # declared
+          - validator: decline-reasons-guard  # enforced in the response path
+          - eval: decline-carries-reasons     # watched
+          - external: Underwriter queue with four-hour SLA
+    reviews:
+      - id: quarterly-bias-test
+        type: pp:BiasTesting
+        cadence: P3M
+        owner: fair-lending-team
+        satisfies: [art22-human-review]
+```
+
+Every control except `external` must resolve against the pack, so an obligation can't be discharged by naming something that doesn't exist. Completion dates stay out of the pack — a date in a versioned artifact is stale by design — and runtimes key them by the review's `id`.
+
+A reviewing agent can also declare `independent_of`: it must not share a model, provider, tools, prompts or `accountable_owner` with whatever produces its input. Naming `accountable_owner` is how a pack expresses segregation of duties, checked by the runtime across two packs rather than asserted by either.
+
+v1.8.0 also publishes well-known vocabulary prefixes (mostly the W3C Data Privacy Vocabulary), adds an opaque `extensions` slot at every point where a runtime policy makes a decision, and lets composition steps use vendor-namespaced kinds (`omnia.judge`).
+
+See [RFC-0016: Governance Obligations, Vocabulary and Policy Annotation](https://promptpack.org/docs/rfcs/governance-and-policy-annotation) and the [governance guide](https://promptpack.org/docs/guides/add-governance).
+
 ## Documentation
 
 - [Specification](https://promptpack.org/docs/spec/overview) — Complete PromptPack spec
@@ -371,7 +403,7 @@ See [RFC-0014: Workflow State Control](https://promptpack.org/docs/rfcs/workflow
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.7.0/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.8.0/promptpack.schema.json`
 
 ## Ecosystem
 

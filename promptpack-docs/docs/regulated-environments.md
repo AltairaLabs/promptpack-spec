@@ -123,6 +123,83 @@ These are declarations. A runtime must honour them for them to bind — but
 because they are declared, a reviewer can read the intended limits without
 reading the implementation, and a runtime can be tested against them.
 
+## Obligations and reviews
+
+*Which duties attach to this agent, and how would we know if one stopped being met?*
+
+`metadata.governance` records what the agent is for, how far it acts without a
+human and who answers for it. Since v1.8 it can also record the duties that
+follow (see [How to Declare Governance](./guides/add-governance.md)):
+
+- **`obligations`** map a declared capability, data class or classification to
+  the duty it triggers, and name the controls that discharge it — a validator
+  that enforces in the response path, an eval that watches, a governance field,
+  or a control outside the pack described in prose. Every reference except the
+  prose one must resolve against the pack, so an obligation cannot be
+  discharged by naming something that does not exist.
+- **`reviews`** record which duties recur, on what cadence, and which team owns
+  them.
+
+The pack deliberately does not record whether a review happened. A completion
+date inside a versioned artifact is stale the moment it is written, so the pack
+answers *how often, and who* and leaves *when last* to the runtime, which keys
+its records by the review's `id`. An auditor asking *"how would you know if this
+stopped being true?"* gets a named, versioned measurement that can be re-run
+against exactly what was deployed. That is not proof the obligation currently
+holds, and should not be presented as such.
+
+## Segregation of duties
+
+*Can one agent both approve and act?*
+
+There is no field that labels a tool as approving or executing. Segregation of
+duties ([NIST SP 800-53 AC-5](https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/),
+[ISO/IEC 27001:2022 A.5.3](https://www.isms.online/iso-27001/annex-a-2022/5-3-segregation-of-duties-2022/))
+separates areas of *responsibility*, and a pack already records responsibility
+in `accountable_owner`. The control is expressed in two parts.
+
+**Two duties, two packs.** Tools are pack-scoped, so the blast radius of a
+prompt injection is the pack, not one agent inside it. Put approval and
+execution in separate packs. Each then has its own digest, its own accountable
+owner and its own admission decision, and the separation is a property of the
+artifacts rather than of a configuration.
+
+**Independence the runtime checks.** The approving pack declares that it must
+answer to a different team than whatever it approves:
+
+```yaml
+metadata:
+  governance:
+    accountable_owner: finance-controls
+    independent_of:
+      axes: [accountable_owner, model, provider, prompts]
+      enforcement: strict
+```
+
+An operator's admission policy then compares two owners it resolved itself,
+rather than trusting either pack's account of itself:
+
+```rego
+deny contains msg if {
+    req := input.metadata.governance.independent_of
+    req.enforcement == "strict"
+    "accountable_owner" in req.axes
+    mine := input.metadata.governance.accountable_owner
+    mine == data.binding.producer.metadata.governance.accountable_owner
+    msg := sprintf("independence requires an owner other than %q", [mine])
+}
+```
+
+The same policy can refuse any pack declaring `acts_autonomously` that holds a
+tool whose `action_scope` is `external` and `irreversible`, so an agent able to
+act without approval cannot hold an irreversible external tool.
+
+The gap is worth knowing. A single pack that approves and acts, and declares no
+approval requirement, has no counterparty to compare against. The policy above
+catches it only when it also holds an irreversible external tool.
+[RFC 0016](/docs/rfcs/governance-and-policy-annotation#alternative-1-add-a-duty-field-to-action_scope)
+records why duty labels were not added to close it.
+
 ## Supervisory evidence
 
 *What can we show someone who asks?*
@@ -142,7 +219,7 @@ reading the implementation, and a runtime can be tested against them.
 Together these support the claim most often needed: *this specific behaviour,
 at this version, was checked in this way, and here is what it produced.*
 
-## Boundaries {#boundaries}
+## Boundaries
 
 Being precise about this matters more than the rest of the page, because a
 governance story that overstates itself is worse than none.

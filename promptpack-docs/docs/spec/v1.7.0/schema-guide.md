@@ -1,6 +1,7 @@
 ---
 title: "Schema Guide"
 sidebar:
+  label: "Schema Guide (v1.7.0)"
   order: 5
 ---
 
@@ -99,7 +100,6 @@ A single prompt configuration within a pack. Each prompt represents a specific t
 | `model_overrides` | object&lt;string, [ModelOverride](#model-override)&gt; | No | Model-specific template modifications. Keys are model names (e.g., `"claude-3-opus"`, `"gpt-4"`). |
 | `evals` | [Eval](#eval)[] | No | Prompt-level eval definitions. Override pack-level evals by `id`. *(v1.2+)* |
 | `media` | [MediaConfig](#media-config) | No | Multimodal content configuration. Defines supported media types and constraints. *(v1.1+)* |
-| `extensions` | object | No | Opaque policy annotations about this object. Never interpreted by this specification, and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. See [Policy annotation](#policy-annotation-v180). *(v1.8+)* |
 
 ```json
 "prompts": {
@@ -273,13 +273,11 @@ A validation rule (guardrail) applied to LLM responses.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | string | No | Identifier, so a governance obligation control can name this validator. Lowercase letters, digits, `_` and `-`; unique across the pack where declared. Does not change how the validator runs. *(v1.8+)* |
 | `type` | string | **Yes** | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own types. Examples: `"banned_words"`, `"max_length"`, `"length"`, `"max_sentences"`, `"regex_match"`, `"sentiment"`, `"custom"`. |
 | `enabled` | boolean | No | Whether this validator is active. Default: `true`. This is the supported way to turn a validator off. |
 | `fail_on_violation` | boolean | No | **Deprecated in v1.7.0, removed in v2.0.0.** Ignored — validators always enforce. See below. |
 | `message` | string | No | User-facing message returned when the validator blocks content (e.g., `"Response contains banned words"`). |
 | `params` | object | No | Validator-specific parameters (e.g., word lists, character limits). |
-| `extensions` | object | No | Opaque policy annotations about this object. Never interpreted by this specification, and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. See [Policy annotation](#policy-annotation-v180). *(v1.8+)* |
 
 ```json
 "validators": [
@@ -436,7 +434,6 @@ Evals are automated quality checks on LLM outputs. Unlike validators (which run 
 | `message` | string | No | Human-readable message describing the eval result or failure reason. |
 | `when` | object | No | Conditional expression that determines whether this eval runs for a given turn or session (e.g., `{ "has_variable": "customer_tier" }`, `{ "turn_count_gte": 3 }`). Free-form — runtimes interpret. |
 | `groups` | string[] | No | Eval group tags for organizing and filtering evals (e.g., `["quality", "tone"]`, `["safety", "compliance"]`). |
-| `extensions` | object | No | Opaque policy annotations about this object. Never interpreted by this specification, and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. See [Policy annotation](#policy-annotation-v180). *(v1.8+)* |
 
 ### Metric Def
 
@@ -646,7 +643,6 @@ PromptPack v1.3 adds a state-machine workflow over the pack's prompts. Each stat
 | `max_visits` | integer | No | Maximum number of times this state may be entered during a single workflow execution. Minimum: 1. When the limit is reached the workflow transitions to `on_max_visits`, or terminates with a budget-exhausted status if `on_max_visits` is not set. *(v1.4+)* |
 | `on_max_visits` | string | No | Target state to transition to when `max_visits` is reached. Must reference a key in the `states` object. *(v1.4+)* |
 | `artifacts` | object&lt;string, [ArtifactDef](#artifactdef)&gt; | No | Named artifact slots for lightweight, structured metadata that flows across state visits. Values are exposed to the prompt as `{{artifacts.<name>}}`. *(v1.4+)* |
-| `extensions` | object | No | Opaque policy annotations about this object. Never interpreted by this specification, and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. See [Policy annotation](#policy-annotation-v180). *(v1.8+)* |
 
 ```json
 "workflow": {
@@ -774,7 +770,6 @@ PromptPack v1.3 adds agent definitions that map prompts to A2A (Agent-to-Agent) 
 | `input_modes` | string[] | No | MIME types the agent accepts as input. Defaults to `["text/plain"]`. |
 | `output_modes` | string[] | No | MIME types the agent can produce as output. Defaults to `["text/plain"]`. |
 | `state` | string | No | Reference to a state key in the pack's `workflow.states`. When set, invoking this agent runs the pack workflow starting at that state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level `workflow`. If omitted, the agent is a single-prompt agent. See [RFC-0011](/docs/rfcs/workflow-states-as-agents). |
-| `extensions` | object | No | Opaque policy annotations about this object. Never interpreted by this specification, and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. See [Policy annotation](#policy-annotation-v180). *(v1.8+)* |
 
 ```json
 "agents": {
@@ -880,7 +875,6 @@ A named step graph over the pack's prompts, tools, and evals.
 | `output_schema` | string | No | Reference to a JSON Schema declaring the structured output shape. |
 | `output` | string | No | Step ID whose output is the composition's output. Defaults to the last step's output. |
 | `engine` | object | No | Opaque runtime-specific configuration (budgets, telemetry, scheduling hints). No schema enforcement. |
-| `extensions` | object | No | Opaque policy annotations about this object. Never interpreted by this specification, and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. See [Policy annotation](#policy-annotation-v180). *(v1.8+)* |
 
 ### Step
 
@@ -889,7 +883,7 @@ A single node in the step graph. The `kind` discriminator selects the step shape
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | string | **Yes** | Stable identifier, unique within the composition (including across nested `parallel.branches`). Pattern: `^[a-zA-Z_][a-zA-Z0-9_]*$`. Used for output references, eval attachment, and trace records. |
-| `kind` | string | **Yes** | Step kind. v1 values: `"prompt"`, `"agent"`, `"tool"`, `"branch"`, `"parallel"`. Any other kind must be vendor-namespaced as `vendor.kind` (e.g. `"omnia.judge"`); an unnamespaced kind outside the v1 set is invalid. Fields beyond the common ones are defined by the runtime that supports the kind. *(namespacing enforced from v1.8)* |
+| `kind` | string | **Yes** | Step kind. v1 conventional values: `"prompt"`, `"agent"`, `"tool"`, `"branch"`, `"parallel"`. Free-form string (like `Eval.type`); runtimes may support vendor-namespaced kinds (e.g. `"omnia.judge"`). |
 | `description` | string | No | Human-readable description. |
 | `depends_on` | string[] | No | Explicit predecessor step IDs. If omitted, the step sequentially follows the prior step in `steps[]`. Required to declare a join point after a `branch` or `parallel`. |
 | `modifiers` | [StepModifiers](#stepmodifiers) | No | Declarative modifiers (retry, eval attachment). Semantics are runtime-defined. |
@@ -1089,9 +1083,6 @@ Referenced from `metadata.governance` and from `AgentDef.governance`.
 | `requires_ai_disclosure` | boolean | No | Whether the agent must disclose that it is an AI. The runtime decides which of its interfaces this applies to. |
 | `vocabularies` | object | No | Prefix → IRI map for CURIE values. `dpv`, `eu-aiact` and `ai` are well-known defaults and need not be declared. |
 | `extensions` | object | No | Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced. |
-| `obligations` | [Obligation](#obligation)[] | No | What obligations follow from the agent's declared capabilities, data or classification, and which controls discharge them. *(v1.8+)* |
-| `reviews` | [Review](#review)[] | No | Obligations that recur: what is reviewed, how often, and which team owns it. *(v1.8+)* |
-| `independent_of` | [IndependentOf](#independentof) | No | Requires that whatever produces this agent's input does not share the listed properties with it. *(v1.8+)* |
 
 The object is closed (`additionalProperties: false`) — unrecognised information belongs in `extensions`.
 
@@ -1130,121 +1121,6 @@ An omitted field means **undeclared**. An omitted `action_scope` does not mean `
 :::note[Declarations are asserted, not verified]
 Nothing checks that a tool marked `reversible` can be reversed, or that `risk_classification` reflects a real assessment. These are assertions, exactly as `description` is. Recording *who* declared a value, when, and under what review is deliberately deferred to a future RFC.
 :::
-
-### Obligations, reviews and independence *(v1.8.0+)*
-
-v1.8.0 adds the facts a regulated reader asks for after RFC 0013's: which obligation a declared capability triggers and what discharges it, which obligations recur, and that a reviewing agent must be independent of what it reviews (RFC 0016). All three are declarations; none enforces anything.
-
-#### Obligation
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | string | **Yes** | Unique within the governance object that declares it. Referenced by `reviews[].satisfies`. |
-| `obligation` | string | **Yes** | The obligation, as a vocabulary term or free string (e.g. `eu-aiact:Article50`). |
-| `applies_to` | object | No | What triggers it: any of `capability`, `data_class`, `risk_classification`. A record, not a filter — whether an obligation applies is a legal determination. |
-| `controls` | [ObligationControl](#obligationcontrol)[] | **Yes** | At least one control that discharges the obligation. |
-| `note` | string | No | Free-text context, such as the article the obligation comes from. |
-| `extensions` | object | No | Opaque annotations — a control-framework id, an internal risk rating. Never evidence that the obligation is current. |
-
-#### ObligationControl
-
-Exactly one key per entry. They are four different kinds of claim, and most real obligations want more than one.
-
-| Key | Resolves against | What it says |
-|-----|------------------|--------------|
-| `field` | a property of `governance` | *This is declared.* The named field must be declared in the effective governance object. |
-| `validator` | a `Validator.id` on one of the pack's prompts | *This is enforced in the response path.* Validators always enforce (RFC 0015). |
-| `eval` | an eval `id` in the pack's or a prompt's `evals` | *This is watched.* Records that a measurement exists, not its outcome; what acts on the score is runtime policy. |
-| `external` | nothing | *This is handled somewhere the pack cannot point at.* Prose. |
-
-An eval named here needs no `threshold`. A pass/fail measurement declares `metric.type: boolean`; a score is the measurement, and the judgement about it belongs to whatever consumes the metric.
-
-#### Review
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | string | **Yes** | Unique within the governance object. Keep it stable across pack versions while the review means the same thing — runtimes key completion records by it. |
-| `type` | string | **Yes** | The kind of review, as a vocabulary term or free string (e.g. `pp:BiasTesting`, `risk:RiskAssessment`). |
-| `cadence` | string | **Yes** | ISO 8601 duration between reviews (`P3M`, `P1Y`, `PT12H`). Not the empty duration `P`. |
-| `owner` | string | **Yes** | The team or role that owns the review. Never a named individual. |
-| `satisfies` | string[] | No | Ids of obligations in the effective governance object that this review answers to. |
-| `eval` | string | No | An eval `id` that this review runs or reads. |
-| `extensions` | object | No | Opaque annotations — method reference, evidence location, escalation route. MUST NOT be used to record completions. |
-
-`reviews` is a sibling of `obligations` because one review routinely satisfies several obligations. The pack declares cadence and owner; **whether a review actually happened is runtime state**, so the pack alone cannot answer "is this obligation current?".
-
-#### IndependentOf
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `axes` | string[] | **Yes** | At least one of `model`, `provider`, `tools`, `prompts`, `accountable_owner`, no duplicates. |
-| `enforcement` | string | No | `strict` or `advisory` (default). Under `strict`, a runtime that enforces this MUST NOT deploy the pack when the requirement is unsatisfied — including when it cannot determine the producer. |
-
-The requirement names no counterparty: the producer is usually in another pack, and the runtime resolves it from the composition it is running.
-
-| Axis | Resolves against | Buys |
-|---|---|---|
-| `model` | the effective model after `model_overrides` | technical independence |
-| `provider` | the effective provider | technical, plus insulation from one provider's outage |
-| `tools` | the tool sets — independent when disjoint | technical; a shared tool is a shared blast radius |
-| `prompts` | prompt keys — independent when neither uses the other's | technical; shared instructions correlate judgement |
-| `accountable_owner` | the `accountable_owner` of each | **organisational** — a different team answers for the review |
-
-:::caution[The technical axes are a quality control, not a security control]
-They guard against correlated failure, not compromise. A pack that wants segregation of duties must name `accountable_owner`; the technical axes alone buy diversity of judgement, not separation of responsibility.
-:::
-
-#### Reference rules
-
-These are what stop an obligation being satisfied by naming something that does not exist. A validator implementing Level 1 MUST report each as an error:
-
-1. `controls[].eval` and `reviews[].eval` resolve to an eval `id` in the pack's `evals` or a prompt's `evals`.
-2. `controls[].validator` resolves to a `Validator.id`; `Validator.id` values are unique across the pack.
-3. `controls[].field` names a governance property that is declared in the effective governance object.
-4. `reviews[].satisfies` entries resolve to `obligations[].id` in the effective governance object.
-5. `obligations[].id` and `reviews[].id` are each unique within the object that declares them.
-
-Terms in `obligation`, `applies_to.*` and `review.type` follow the CURIE rule above: an undeclared prefix warns and never errors; a value with no colon is a free string. `AgentDef.governance` replaces `obligations`, `reviews` and `independent_of` whole, like every other array.
-
-### Well-known prefixes *(v1.8.0+)*
-
-None of these need declaring in `vocabularies`. All external namespaces are unversioned `w3id.org` IRIs, which follow the current DPV release. The table saves boilerplate and is not a gate — any prefix works if declared, and an undeclared one only warns.
-
-| Prefix | Namespace | Supplies |
-|---|---|---|
-| `dpv` | `https://w3id.org/dpv#` | roles, `PersonalData`, `SpecialCategoryPersonalData`, `AutomatedDecisionMaking` *(v1.6)* |
-| `eu-aiact` | `https://w3id.org/dpv/legal/eu/aiact#` | AI Act actor roles and risk levels *(v1.6)* |
-| `ai` | `https://w3id.org/dpv/ai#` | AI capabilities and techniques *(v1.6)* |
-| `pd` | `https://w3id.org/dpv/pd#` | personal-data categories, for `data_classes` |
-| `risk` | `https://w3id.org/dpv/risk#` | risk taxonomy, including risk-management `reviews[].type` |
-| `tech` | `https://w3id.org/dpv/tech#` | technology concepts |
-| `legal-eu-gdpr` | `https://w3id.org/dpv/legal/eu/gdpr#` | GDPR legal concepts |
-| `legal-us` | `https://w3id.org/dpv/legal/us#` | US state privacy laws and authorities |
-| `sector-health`, `sector-finance`, `sector-education`, `sector-law`, `sector-publicservices`, `sector-infra` | `https://w3id.org/dpv/sector/<name>#` | `intended_deployment_contexts` |
-| `hipaa` | `https://promptpack.org/vocab/hipaa#` | minted: `CoveredEntity`, `BusinessAssociate`, `PHI`, `ePHI`, `LimitedDataSet`, `DeIdentified` |
-| `pp` | `https://promptpack.org/vocab/pp#` | minted: `Confidential`, `Restricted`, `Public`, `Credentials`, `FinancialAccount`, `SyntheticMedia`, and the review practices `BiasTesting`, `AccuracyReview`, `RedTeaming`, `DataQualityReview`, `HumanOversightReview` |
-
-A term is minted under `promptpack.org` only where no external vocabulary supplies it **and** the instrument that defines it has frozen its meaning. A prefix identifies a concept; it does not interpret the instrument, and declaring it makes nothing compliant with anything.
-
-## Policy annotation *(v1.8.0+)*
-
-Wherever a runtime policy makes a decision, it needs somewhere to keep what it knows. v1.8.0 settles which definitions get an `extensions` slot by rule rather than case by case (RFC 0016): **a definition gets `extensions` if a policy could make a decision at it, and it occurs as one of many.**
-
-| Definition | The decision a policy makes there | Since |
-|---|---|---|
-| `Tool` | whether this call is allowed | v1.6 |
-| `ActionScope` | what consequence the call carries | v1.6 |
-| `Governance` | whether this agent may run at all | v1.6 |
-| `Prompt` | the point the model is invoked | v1.8 |
-| `Validator` | whether to gate the response | v1.8 |
-| `Eval` | what to measure, and what to do with the score | v1.8 |
-| `AgentDef` | which agent runs, and where | v1.8 |
-| `WorkflowState` | whether a transition is allowed | v1.8 |
-| `Composition` | how the orchestration is admitted | v1.8 |
-
-The contract is the same everywhere: any JSON object, keys SHOULD be namespaced, and a conforming implementation MUST NOT validate or interpret the contents, or pass them to a scorer or guardrail as configuration. That last point is why annotation does not belong in `params` — `params` is configuration the runtime executes; `extensions` is data it only carries.
-
-Plumbing definitions (`Variable`, `Parameters`, `ModelOverride`, `TestedModel`, the media configs) stay closed, as do singletons whose parent already has a slot (`ToolPolicy`). When a namespaced key appears across independent authors with a consistent meaning, it is a candidate for promotion to a real field.
 
 ---
 

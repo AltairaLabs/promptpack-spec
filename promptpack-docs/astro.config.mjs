@@ -89,6 +89,7 @@ export default defineConfig({
               label: 'Archive',
               collapsed: true,
               items: [
+                archive('v1.7.0'),
                 archive('v1.6.0'),
                 archive('v1.5.1'),
                 archive('v1.5.0'),
@@ -111,6 +112,7 @@ export default defineConfig({
             { slug: 'docs/guides/setup-agents' },
             { slug: 'docs/guides/add-skills' },
             { slug: 'docs/guides/add-evals' },
+            { slug: 'docs/guides/add-governance' },
           ],
         },
         {

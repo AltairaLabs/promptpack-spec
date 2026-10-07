@@ -1,6 +1,7 @@
 ---
 title: "Real-World Examples"
 sidebar:
+  label: "Real-World Examples (v1.7.0)"
   order: 3
 ---
 
@@ -1586,92 +1587,6 @@ requires:
 ```
 
 With requirements declared once in the portable pack, a deployer can: verify the workspace provides an `llm` and an `embedding` provider (**coverage**), resolve each `key` to a concrete provider (**binding**), and warn if the resolved `default` model is absent from the pack's `tested_models` (**parity**). `required: false` entries like `reranker` and `judge` degrade a feature rather than blocking startup. See the [Provider Requirements schema reference](./schema-guide#provider-requirements-v151) and [RFC-0012](/docs/rfcs/provider-requirements) for the full design.
-
-## Transparency Obligation with Controls *(v1.8+)*
-
-### The Audit Question
-
-A customer-facing assistant falls under EU AI Act Article 50(1): people must be told they are talking to an AI. The pack can already say `requires_ai_disclosure: true`. What it couldn't say is *how* that duty is met — and an auditor's next question is always "how would you know if it stopped being true?"
-
-### The `obligations` Solution
-
-> YAML shown for readability (per [RFC 0002](/docs/rfcs/yaml-format)). Equally valid as JSON.
-
-```yaml
-id: support-assistant
-name: Customer Support Assistant
-version: 1.4.0
-template_engine: { version: v1, syntax: "{{variable}}" }
-
-metadata:
-  governance:
-    intended_purpose: >
-      Answers customer questions about orders, delivery and returns in a
-      web chat widget. Hands off to a human agent on request.
-    foreseeable_misuse:
-      - Presenting itself as a human agent
-    autonomy_level: suggests
-    accountable_owner: support-platform-team
-    operator_role: eu-aiact:AIDeployer
-    risk_classification: eu-aiact:RiskLevelTransparencyRequired
-    approved_environments: [staging, production-eu]
-    requires_ai_disclosure: true
-
-    obligations:
-      - id: art50-disclosure
-        obligation: eu-aiact:Article50
-        applies_to: { risk_classification: eu-aiact:RiskLevelTransparencyRequired }
-        controls:
-          - field: requires_ai_disclosure      # declared
-          - validator: ai-disclosure-guard     # enforced in the response path
-          - eval: disclosure-present           # watched on every turn
-          - external: >
-              Persistent "You are chatting with an AI assistant" label
-              rendered by the web widget, outside this pack.
-
-    reviews:
-      - id: annual-purpose-review
-        type: pp:HumanOversightReview
-        cadence: P1Y
-        owner: support-platform-team
-        satisfies: [art50-disclosure]
-
-evals:
-  - id: disclosure-present
-    description: Every response identifies itself as automated
-    type: contains
-    params:
-      text: "automated assistant"
-    metric: { name: promptpack_disclosure_present, type: boolean }
-    trigger: every_turn
-
-prompts:
-  support:
-    id: support
-    name: Support Assistant
-    version: 1.0.0
-    system_template: |
-      You are an automated assistant for {{company}} customer support.
-      Open every conversation by stating that you are an automated assistant.
-    validators:
-      - id: ai-disclosure-guard
-        type: required_phrase
-        message: Responses must identify the assistant as automated.
-        params:
-          phrase: "automated assistant"
-        extensions:
-          acme.example/control:
-            framework_ref: TRANSPARENCY-01
-```
-
-### Obligation Benefits
-
-- **One duty, four kinds of claim.** The field says the duty is declared, the validator stops a response that omits the disclosure, the eval notices if the disclosure drifts, and the widget control is labelled as living outside the pack rather than dressed up as a guardrail.
-- **References that can't lie.** `ai-disclosure-guard` and `disclosure-present` must resolve. Rename the validator without updating the obligation and the pack fails validation.
-- **Measurement bound to the artifact.** The eval ships at the same version and digest as the behavior it watches, so an auditor can re-run it against exactly what was deployed.
-- **A cadence without a stale date.** The review says yearly and who owns it; when it last ran is the runtime's record, keyed by `annual-purpose-review`.
-
-See [How to Declare Governance](/docs/guides/add-governance) for the full walkthrough, including recurring reviews and segregation of duties, and [RFC-0016](/docs/rfcs/governance-and-policy-annotation) for worked GDPR, HIPAA and financial-services examples.
 
 ## Why These Examples Matter
 

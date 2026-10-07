@@ -3,13 +3,13 @@
 - **Status:** Implemented
 - **Author(s):** Charlie Holland
 - **Created:** 2026-08-31
-- **Updated:** 2026-08-31
+- **Updated:** 2026-10-07
 - **Discussion:** [RFC Comments](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/rfc-comments)
 - **Related Issues:** [#45](https://github.com/AltairaLabs/promptpack-spec/issues/45)
 
 ## Summary
 
-Add an optional `control` property to workflow state definitions, with values `user` (default) and `agent`. The property declares who holds the next turn after the conversation enters that state. `control: user` yields to the user, which is what every state does today. `control: agent` tells the runtime to run another agent round in the new state instead of yielding — letting a pack express transient states that route or process without asking the user for anything.
+Add an optional `control` property to workflow state definitions, with values `user` (default) and `agent`. The property declares who holds the next turn after the conversation enters that state. `control: user` yields to the user. `control: agent` tells the runtime to run another agent round in the new state instead of yielding — letting a pack express transient states that route or process without asking the user for anything.
 
 ## Motivation
 
@@ -55,7 +55,7 @@ The loop terminates when the conversation reaches a state with `control: user`, 
 
 | `orchestration` | `control` | Meaning |
 |---|---|---|
-| `internal` (default) | `user` (default) | Today's behavior: agent transitions, conversation yields |
+| `internal` (default) | `user` (default) | Agent transitions, conversation yields |
 | `internal` | `agent` | Agent transitions and keeps the floor |
 | `external` | not applicable | An external system drives transitions; the agent did not trigger one, so there is no turn to hand back |
 
@@ -206,7 +206,9 @@ Rejected in favor of the enum because it does not extend. `control` names an axi
 
 ## Adoption Strategy
 
-Existing packs need no change. `control` is optional and its default is the current behavior, so a pack authored before this RFC and a pack that explicitly writes `control: user` everywhere are indistinguishable to a runtime.
+Existing packs need no change to remain valid. `control` is optional.
+
+Before this RFC the specification did not say who holds the turn after a transition, so implementations filled the gap differently. PromptKit, the reference implementation, already continued into `internal` and `hybrid` destination states without yielding — `control: agent` behavior, applied unconditionally. For a runtime like that, adopting `user` as the meaning of an absent `control` is a behavioral change: every routing state in an existing pack becomes a stop until its author adds `control: agent`. A runtime that previously yielded after every transition changes nothing by adopting the default. ([#79](https://github.com/AltairaLabs/promptpack-spec/issues/79))
 
 Adoption is incremental and per-state: an author identifies a state that always immediately transitions again, adds `control: agent`, and removes whatever workaround stood in for it. Packs that collapsed several logical states into one to avoid dead turns can now split them back apart, which restores state-level assertions on the intermediate steps.
 
@@ -231,6 +233,7 @@ Not applicable.
 ## Revision History
 
 - **2026-08-31:** Initial version, authored at Implemented under the fast-track path in GOVERNANCE.md (design and implementation shipped together in spec v1.7.0).
+- **2026-10-07:** Corrected the claim that `user` was the behavior of every state before v1.7.0. The specification left the matter unspecified and PromptKit did otherwise, so adopting the default is a behavioral change for some runtimes ([#79](https://github.com/AltairaLabs/promptpack-spec/issues/79)). Documentation only; the default is unchanged.
 
 ## References
 

@@ -1,6 +1,7 @@
 ---
 title: "Pack Structure & Design"
 sidebar:
+  label: "Pack Structure & Design (v1.7.0)"
   order: 2
 ---
 
@@ -466,8 +467,6 @@ A composition is a directed **acyclic** graph of typed steps. v1 defines five st
 - **`branch`** — picks `then`/`else` based on a constrained `predicate` (no expression language).
 - **`parallel`** — a static fan-out of **≥2 branches** merged by a declared `reduce` strategy (`append` / `replace` / `barrier`).
 
-A runtime may support further kinds, written `vendor.kind` (`omnia.judge`). The dot is required from v1.8: it keeps vendor kinds clear of any kind a future version of the specification defines, and a composition using one is portable only to runtimes that support it.
-
 Steps wire together with reference bindings — `${input.X}` reads the composition's structured input; `${stepId.output.X}` reads a prior step's output. Optional per-step `modifiers` add `retry` (max attempts) and `eval` (attach pack-level eval keys). Compositions are reached *only* through a workflow state, so a purely procedural ("Function-mode") pack is simply a one-state terminal workflow whose state is in composition mode — the workflow state machine remains the universal orchestration primitive.
 
 See the [Compositions schema reference](./schema-guide#compositions-v15), the [worked example](./examples#procedural-document-analyzer-with-composition-v15), and [How to Add a Composition](/docs/guides/add-composition) for the full vocabulary.
@@ -574,40 +573,6 @@ Every field here states something about the agent as designed. None of them conf
 `vocabularies` is the exception and merges. It is a prefix-to-IRI map that makes CURIEs resolvable rather than a declaration in its own right, so replacing it would put an agent's *inherited* values out of scope — a pack declaring `acme:` and a `risk_classification: acme:tier-3`, under an agent declaring only `other:`, would leave that inherited value unresolvable. Prefixes accumulate; an agent that redeclares one still wins on it.
 
 See the [Governance schema reference](./schema-guide#governance-v160).
-
-### Obligations, reviews and independence *(v1.8.0+)*
-
-`capabilities` is a list of labels. v1.8.0 lets a pack say what each label obliges, what discharges it, which duties recur, and who must not be reviewing whom (RFC 0016):
-
-```yaml
-metadata:
-  governance:
-    capabilities: [dpv:AutomatedDecisionMaking]
-    autonomy_level: acts_with_approval
-    accountable_owner: lending-risk
-    obligations:
-      - id: art22-human-review
-        obligation: legal-eu-gdpr:Article22
-        applies_to: { capability: dpv:AutomatedDecisionMaking }
-        controls:
-          - field: autonomy_level             # declared
-          - validator: decline-reasons-guard  # enforced in the response path
-          - eval: decline-carries-reasons     # watched
-          - external: Underwriter queue with four-hour SLA
-    reviews:
-      - id: quarterly-bias-test
-        type: pp:BiasTesting
-        cadence: P3M
-        owner: fair-lending-team
-        satisfies: [art22-human-review]
-        eval: demographic-parity
-```
-
-- **`obligations`** map a duty to its **controls**. Every control form except `external` resolves against pack content, and a reference that doesn't resolve is a validation error, so an obligation can't be discharged by naming something that doesn't exist. `validator` points at a guardrail by its new optional `id`.
-- **`reviews`** record cadence (an ISO 8601 duration) and an owning team. Completion dates stay out: a date inside a versioned artifact is stale by design. Runtimes that track completions key them by `reviews[].id`.
-- **`independent_of`** says a reviewing agent must not share the listed `axes` — `model`, `provider`, `tools`, `prompts`, `accountable_owner` — with whatever produces its input. Naming `accountable_owner` is how a pack expresses **segregation of duties**: the runtime compares two owners it resolved itself rather than trusting a label. There is deliberately no duty field on tools; the stronger separation is two packs, with two digests, two owners and two admission decisions.
-
-Open values take terms from the [well-known prefixes](./schema-guide#well-known-prefixes-v180), mostly the W3C Data Privacy Vocabulary, plus two small minted namespaces (`hipaa:`, `pp:`). Any other scheme works by declaring its prefix in `vocabularies`, and shapes the schema doesn't have go in `extensions` — which v1.8.0 also adds to every definition where a runtime policy makes a decision. See [Policy annotation](./schema-guide#policy-annotation-v180) and [How to Declare Governance](/docs/guides/add-governance).
 
 ## Deployment Benefits
 
