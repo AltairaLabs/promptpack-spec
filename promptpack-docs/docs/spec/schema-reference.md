@@ -66,11 +66,13 @@ title: "PromptPack Specification"
       - [7.1.10.6. Property `PromptPack Specification > prompts > additionalProperties > parameters > presence_penalty`](#prompts_additionalProperties_parameters_presence_penalty)
     - [7.1.11. Property `PromptPack Specification > prompts > additionalProperties > validators`](#prompts_additionalProperties_validators)
       - [7.1.11.1. PromptPack Specification > prompts > additionalProperties > validators > Validator](#prompts_additionalProperties_validators_items)
-        - [7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`](#prompts_additionalProperties_validators_items_type)
-        - [7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`](#prompts_additionalProperties_validators_items_enabled)
-        - [7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > message`](#prompts_additionalProperties_validators_items_message)
-        - [7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`](#prompts_additionalProperties_validators_items_fail_on_violation)
-        - [7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`](#prompts_additionalProperties_validators_items_params)
+        - [7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > id`](#prompts_additionalProperties_validators_items_id)
+        - [7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`](#prompts_additionalProperties_validators_items_type)
+        - [7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`](#prompts_additionalProperties_validators_items_enabled)
+        - [7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > message`](#prompts_additionalProperties_validators_items_message)
+        - [7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`](#prompts_additionalProperties_validators_items_fail_on_violation)
+        - [7.1.11.1.6. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`](#prompts_additionalProperties_validators_items_params)
+        - [7.1.11.1.7. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > extensions`](#prompts_additionalProperties_validators_items_extensions)
     - [7.1.12. Property `PromptPack Specification > prompts > additionalProperties > evals`](#prompts_additionalProperties_evals)
       - [7.1.12.1. PromptPack Specification > prompts > additionalProperties > evals > Eval](#prompts_additionalProperties_evals_items)
         - [7.1.12.1.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > id`](#prompts_additionalProperties_evals_items_id)
@@ -93,6 +95,7 @@ title: "PromptPack Specification"
         - [7.1.12.1.11. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > when`](#prompts_additionalProperties_evals_items_when)
         - [7.1.12.1.12. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > groups`](#prompts_additionalProperties_evals_items_groups)
           - [7.1.12.1.12.1. PromptPack Specification > prompts > additionalProperties > evals > evals items > groups > groups items](#prompts_additionalProperties_evals_items_groups_items)
+        - [7.1.12.1.13. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > extensions`](#prompts_additionalProperties_evals_items_extensions)
     - [7.1.13. Property `PromptPack Specification > prompts > additionalProperties > tested_models`](#prompts_additionalProperties_tested_models)
       - [7.1.13.1. PromptPack Specification > prompts > additionalProperties > tested_models > TestedModel](#prompts_additionalProperties_tested_models_items)
         - [7.1.13.1.1. Property `PromptPack Specification > prompts > additionalProperties > tested_models > tested_models items > provider`](#prompts_additionalProperties_tested_models_items_provider)
@@ -166,6 +169,7 @@ title: "PromptPack Specification"
             - [7.1.15.8.5.2.1. PromptPack Specification > prompts > additionalProperties > media > additionalProperties > oneOf > item 4 > allowed_formats > allowed_formats items](#prompts_additionalProperties_media_additionalProperties_oneOf_i4_allowed_formats_items)
           - [7.1.15.8.5.3. Property `PromptPack Specification > prompts > additionalProperties > media > additionalProperties > oneOf > item 4 > require_metadata`](#prompts_additionalProperties_media_additionalProperties_oneOf_i4_require_metadata)
           - [7.1.15.8.5.4. Property `PromptPack Specification > prompts > additionalProperties > media > additionalProperties > oneOf > item 4 > validation_params`](#prompts_additionalProperties_media_additionalProperties_oneOf_i4_validation_params)
+    - [7.1.16. Property `PromptPack Specification > prompts > additionalProperties > extensions`](#prompts_additionalProperties_extensions)
 - [8. Property `PromptPack Specification > fragments`](#fragments)
   - [8.1. Property `PromptPack Specification > fragments > additionalProperties`](#fragments_additionalProperties)
 - [9. Property `PromptPack Specification > tools`](#tools)
@@ -212,6 +216,36 @@ title: "PromptPack Specification"
       - [10.5.10.1. PromptPack Specification > metadata > governance > approved_environments > approved_environments items](#metadata_governance_approved_environments_items)
     - [10.5.11. Property `PromptPack Specification > metadata > governance > requires_ai_disclosure`](#metadata_governance_requires_ai_disclosure)
     - [10.5.12. Property `PromptPack Specification > metadata > governance > extensions`](#metadata_governance_extensions)
+    - [10.5.13. Property `PromptPack Specification > metadata > governance > independent_of`](#metadata_governance_independent_of)
+      - [10.5.13.1. Property `PromptPack Specification > metadata > governance > independent_of > axes`](#metadata_governance_independent_of_axes)
+        - [10.5.13.1.1. PromptPack Specification > metadata > governance > independent_of > axes > axes items](#metadata_governance_independent_of_axes_items)
+      - [10.5.13.2. Property `PromptPack Specification > metadata > governance > independent_of > enforcement`](#metadata_governance_independent_of_enforcement)
+    - [10.5.14. Property `PromptPack Specification > metadata > governance > obligations`](#metadata_governance_obligations)
+      - [10.5.14.1. PromptPack Specification > metadata > governance > obligations > Obligation](#metadata_governance_obligations_items)
+        - [10.5.14.1.1. Property `PromptPack Specification > metadata > governance > obligations > obligations items > id`](#metadata_governance_obligations_items_id)
+        - [10.5.14.1.2. Property `PromptPack Specification > metadata > governance > obligations > obligations items > obligation`](#metadata_governance_obligations_items_obligation)
+        - [10.5.14.1.3. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to`](#metadata_governance_obligations_items_applies_to)
+          - [10.5.14.1.3.1. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to > capability`](#metadata_governance_obligations_items_applies_to_capability)
+          - [10.5.14.1.3.2. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to > data_class`](#metadata_governance_obligations_items_applies_to_data_class)
+          - [10.5.14.1.3.3. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to > risk_classification`](#metadata_governance_obligations_items_applies_to_risk_classification)
+        - [10.5.14.1.4. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls`](#metadata_governance_obligations_items_controls)
+          - [10.5.14.1.4.1. PromptPack Specification > metadata > governance > obligations > obligations items > controls > ObligationControl](#metadata_governance_obligations_items_controls_items)
+            - [10.5.14.1.4.1.1. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > field`](#metadata_governance_obligations_items_controls_items_field)
+            - [10.5.14.1.4.1.2. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > validator`](#metadata_governance_obligations_items_controls_items_validator)
+            - [10.5.14.1.4.1.3. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > eval`](#metadata_governance_obligations_items_controls_items_eval)
+            - [10.5.14.1.4.1.4. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > external`](#metadata_governance_obligations_items_controls_items_external)
+        - [10.5.14.1.5. Property `PromptPack Specification > metadata > governance > obligations > obligations items > note`](#metadata_governance_obligations_items_note)
+        - [10.5.14.1.6. Property `PromptPack Specification > metadata > governance > obligations > obligations items > extensions`](#metadata_governance_obligations_items_extensions)
+    - [10.5.15. Property `PromptPack Specification > metadata > governance > reviews`](#metadata_governance_reviews)
+      - [10.5.15.1. PromptPack Specification > metadata > governance > reviews > Review](#metadata_governance_reviews_items)
+        - [10.5.15.1.1. Property `PromptPack Specification > metadata > governance > reviews > reviews items > id`](#metadata_governance_reviews_items_id)
+        - [10.5.15.1.2. Property `PromptPack Specification > metadata > governance > reviews > reviews items > type`](#metadata_governance_reviews_items_type)
+        - [10.5.15.1.3. Property `PromptPack Specification > metadata > governance > reviews > reviews items > cadence`](#metadata_governance_reviews_items_cadence)
+        - [10.5.15.1.4. Property `PromptPack Specification > metadata > governance > reviews > reviews items > owner`](#metadata_governance_reviews_items_owner)
+        - [10.5.15.1.5. Property `PromptPack Specification > metadata > governance > reviews > reviews items > satisfies`](#metadata_governance_reviews_items_satisfies)
+          - [10.5.15.1.5.1. PromptPack Specification > metadata > governance > reviews > reviews items > satisfies > satisfies items](#metadata_governance_reviews_items_satisfies_items)
+        - [10.5.15.1.6. Property `PromptPack Specification > metadata > governance > reviews > reviews items > eval`](#metadata_governance_reviews_items_eval)
+        - [10.5.15.1.7. Property `PromptPack Specification > metadata > governance > reviews > reviews items > extensions`](#metadata_governance_reviews_items_extensions)
 - [11. Property `PromptPack Specification > compilation`](#compilation)
   - [11.1. Property `PromptPack Specification > compilation > compiled_with`](#compilation_compiled_with)
   - [11.2. Property `PromptPack Specification > compilation > created_at`](#compilation_created_at)
@@ -245,6 +279,7 @@ title: "PromptPack Specification"
           - [13.3.1.14.1.1. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > type`](#workflow_states_additionalProperties_artifacts_additionalProperties_type)
           - [13.3.1.14.1.2. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > description`](#workflow_states_additionalProperties_artifacts_additionalProperties_description)
           - [13.3.1.14.1.3. Property `PromptPack Specification > workflow > states > additionalProperties > artifacts > additionalProperties > mode`](#workflow_states_additionalProperties_artifacts_additionalProperties_mode)
+      - [13.3.1.15. Property `PromptPack Specification > workflow > states > additionalProperties > extensions`](#workflow_states_additionalProperties_extensions)
   - [13.4. Property `PromptPack Specification > workflow > engine`](#workflow_engine)
     - [13.4.1. Property `PromptPack Specification > workflow > engine > budget`](#workflow_engine_budget)
       - [13.4.1.1. Property `PromptPack Specification > workflow > engine > budget > max_total_visits`](#workflow_engine_budget_max_total_visits)
@@ -263,6 +298,7 @@ title: "PromptPack Specification"
         - [14.2.1.4.1. PromptPack Specification > agents > members > additionalProperties > output_modes > output_modes items](#agents_members_additionalProperties_output_modes_items)
       - [14.2.1.5. Property `PromptPack Specification > agents > members > additionalProperties > state`](#agents_members_additionalProperties_state)
       - [14.2.1.6. Property `PromptPack Specification > agents > members > additionalProperties > governance`](#agents_members_additionalProperties_governance)
+      - [14.2.1.7. Property `PromptPack Specification > agents > members > additionalProperties > extensions`](#agents_members_additionalProperties_extensions)
 - [15. Property `PromptPack Specification > skills`](#skills)
   - [15.1. PromptPack Specification > skills > SkillSource](#skills_items)
     - [15.1.1. Property `PromptPack Specification > skills > skills items > oneOf > item 0`](#skills_items_oneOf_i0)
@@ -334,17 +370,20 @@ title: "PromptPack Specification"
           - [16.1.6.1.5.3. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 4 > reduce`](#compositions_additionalProperties_steps_items_oneOf_i4_reduce)
             - [16.1.6.1.5.3.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 4 > reduce > strategy`](#compositions_additionalProperties_steps_items_oneOf_i4_reduce_strategy)
             - [16.1.6.1.5.3.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 4 > reduce > into`](#compositions_additionalProperties_steps_items_oneOf_i4_reduce_into)
-        - [16.1.6.1.6. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > id`](#compositions_additionalProperties_steps_items_id)
-        - [16.1.6.1.7. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > kind`](#compositions_additionalProperties_steps_items_kind)
-        - [16.1.6.1.8. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > description`](#compositions_additionalProperties_steps_items_description)
-        - [16.1.6.1.9. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on`](#compositions_additionalProperties_steps_items_depends_on)
-          - [16.1.6.1.9.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on > depends_on items](#compositions_additionalProperties_steps_items_depends_on_items)
-        - [16.1.6.1.10. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers`](#compositions_additionalProperties_steps_items_modifiers)
-          - [16.1.6.1.10.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry`](#compositions_additionalProperties_steps_items_modifiers_retry)
-            - [16.1.6.1.10.1.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry > max_attempts`](#compositions_additionalProperties_steps_items_modifiers_retry_max_attempts)
-          - [16.1.6.1.10.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval`](#compositions_additionalProperties_steps_items_modifiers_eval)
-            - [16.1.6.1.10.2.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval > eval items](#compositions_additionalProperties_steps_items_modifiers_eval_items)
+        - [16.1.6.1.6. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > ExtensionStep`](#compositions_additionalProperties_steps_items_oneOf_i5)
+          - [16.1.6.1.6.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 5 > kind`](#compositions_additionalProperties_steps_items_oneOf_i5_kind)
+        - [16.1.6.1.7. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > id`](#compositions_additionalProperties_steps_items_id)
+        - [16.1.6.1.8. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > kind`](#compositions_additionalProperties_steps_items_kind)
+        - [16.1.6.1.9. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > description`](#compositions_additionalProperties_steps_items_description)
+        - [16.1.6.1.10. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on`](#compositions_additionalProperties_steps_items_depends_on)
+          - [16.1.6.1.10.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on > depends_on items](#compositions_additionalProperties_steps_items_depends_on_items)
+        - [16.1.6.1.11. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers`](#compositions_additionalProperties_steps_items_modifiers)
+          - [16.1.6.1.11.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry`](#compositions_additionalProperties_steps_items_modifiers_retry)
+            - [16.1.6.1.11.1.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry > max_attempts`](#compositions_additionalProperties_steps_items_modifiers_retry_max_attempts)
+          - [16.1.6.1.11.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval`](#compositions_additionalProperties_steps_items_modifiers_eval)
+            - [16.1.6.1.11.2.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval > eval items](#compositions_additionalProperties_steps_items_modifiers_eval_items)
     - [16.1.7. Property `PromptPack Specification > compositions > additionalProperties > engine`](#compositions_additionalProperties_engine)
+    - [16.1.8. Property `PromptPack Specification > compositions > additionalProperties > extensions`](#compositions_additionalProperties_extensions)
 - [17. Property `PromptPack Specification > requires`](#requires)
   - [17.1. Property `PromptPack Specification > requires > providers`](#requires_providers)
     - [17.1.1. PromptPack Specification > requires > providers > ProviderRequirement](#requires_providers_items)
@@ -370,7 +409,7 @@ title: "PromptPack Specification"
 | **Required**              | No          |
 | **Additional properties** | Not allowed |
 
-**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012). Packs may declare governance facts (metadata.governance) and per-tool action scope (Tool.action_scope) so consequence is recorded alongside capability. Workflow states may declare who holds the next turn via 'control' (RFC 0014). Validator.fail_on_violation is deprecated — validators always enforce (RFC 0015).
+**Description:** Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012). Packs may declare governance facts (metadata.governance) and per-tool action scope (Tool.action_scope) so consequence is recorded alongside capability. Workflow states may declare who holds the next turn via 'control' (RFC 0014). Validator.fail_on_violation is deprecated — validators always enforce (RFC 0015). Governance may record the obligations a declaration triggers and the controls that discharge them, recurring reviews, and independence requirements; policy decision points carry an opaque 'extensions' slot (RFC 0016).
 
 **Examples:**
 
@@ -786,23 +825,24 @@ Must be one of:
 
 **Description:** A single prompt configuration within a pack. Each prompt represents a specific task type (e.g., 'support', 'sales') with its own template, variables, tools, and validation rules. Prompts within a pack can evolve independently with their own version numbers.
 
-| Property                                                            | Pattern | Type            | Deprecated | Definition                | Title/Description                                                                                                                                                                     |
-| ------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [id](#prompts_additionalProperties_id )                           | No      | string          | No         | -                         | Unique identifier for this prompt, typically matching the task_type key                                                                                                               |
-| + [name](#prompts_additionalProperties_name )                       | No      | string          | No         | -                         | Human-readable name for this prompt                                                                                                                                                   |
-| - [description](#prompts_additionalProperties_description )         | No      | string          | No         | -                         | Detailed description of this prompt's purpose and behavior                                                                                                                            |
-| + [version](#prompts_additionalProperties_version )                 | No      | string          | No         | -                         | Prompt version following Semantic Versioning 2.0.0. Independent from pack version, allowing individual prompts to evolve separately.                                                  |
-| + [system_template](#prompts_additionalProperties_system_template ) | No      | string          | No         | -                         | The system prompt template. Use template syntax (e.g., `{{variable}}`) for variable substitution. This is the core instruction that guides the LLM's behavior.                          |
-| - [variables](#prompts_additionalProperties_variables )             | No      | array           | No         | -                         | Variable definitions for this prompt. Variables are placeholders in the template that are replaced with actual values at runtime.                                                     |
-| - [tools](#prompts_additionalProperties_tools )                     | No      | array of string | No         | -                         | List of tool names that this prompt is allowed to use. Tools must be defined in the pack-level 'tools' object.                                                                        |
-| - [tool_policy](#prompts_additionalProperties_tool_policy )         | No      | object          | No         | In #/$defs/ToolPolicy     | Policy governing how tools can be used by this prompt                                                                                                                                 |
-| - [pipeline](#prompts_additionalProperties_pipeline )               | No      | object          | No         | In #/$defs/PipelineConfig | Pipeline configuration defining processing stages and middleware                                                                                                                      |
-| - [parameters](#prompts_additionalProperties_parameters )           | No      | object          | No         | In #/$defs/Parameters     | LLM generation parameters like temperature and max_tokens                                                                                                                             |
-| - [validators](#prompts_additionalProperties_validators )           | No      | array           | No         | -                         | Validation rules (guardrails) applied to LLM responses                                                                                                                                |
-| - [evals](#prompts_additionalProperties_evals )                     | No      | array           | No         | -                         | Eval definitions scoped to this prompt. These evals assess the quality of responses generated by this specific prompt. Prompt-level evals with the same id override pack-level evals. |
-| - [tested_models](#prompts_additionalProperties_tested_models )     | No      | array           | No         | -                         | Model testing results documenting which models have been tested with this prompt and their performance                                                                                |
-| - [model_overrides](#prompts_additionalProperties_model_overrides ) | No      | object          | No         | -                         | Model-specific template modifications. Keys are model names (e.g., 'claude-3-opus', 'gpt-4'), values are override configurations.                                                     |
-| - [media](#prompts_additionalProperties_media )                     | No      | object          | No         | In #/$defs/MediaConfig    | Multimodal content configuration for this prompt. Defines supported media types and validation rules.                                                                                 |
+| Property                                                            | Pattern | Type            | Deprecated | Definition                | Title/Description                                                                                                                                                                             |
+| ------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [id](#prompts_additionalProperties_id )                           | No      | string          | No         | -                         | Unique identifier for this prompt, typically matching the task_type key                                                                                                                       |
+| + [name](#prompts_additionalProperties_name )                       | No      | string          | No         | -                         | Human-readable name for this prompt                                                                                                                                                           |
+| - [description](#prompts_additionalProperties_description )         | No      | string          | No         | -                         | Detailed description of this prompt's purpose and behavior                                                                                                                                    |
+| + [version](#prompts_additionalProperties_version )                 | No      | string          | No         | -                         | Prompt version following Semantic Versioning 2.0.0. Independent from pack version, allowing individual prompts to evolve separately.                                                          |
+| + [system_template](#prompts_additionalProperties_system_template ) | No      | string          | No         | -                         | The system prompt template. Use template syntax (e.g., `{{variable}}`) for variable substitution. This is the core instruction that guides the LLM's behavior.                                  |
+| - [variables](#prompts_additionalProperties_variables )             | No      | array           | No         | -                         | Variable definitions for this prompt. Variables are placeholders in the template that are replaced with actual values at runtime.                                                             |
+| - [tools](#prompts_additionalProperties_tools )                     | No      | array of string | No         | -                         | List of tool names that this prompt is allowed to use. Tools must be defined in the pack-level 'tools' object.                                                                                |
+| - [tool_policy](#prompts_additionalProperties_tool_policy )         | No      | object          | No         | In #/$defs/ToolPolicy     | Policy governing how tools can be used by this prompt                                                                                                                                         |
+| - [pipeline](#prompts_additionalProperties_pipeline )               | No      | object          | No         | In #/$defs/PipelineConfig | Pipeline configuration defining processing stages and middleware                                                                                                                              |
+| - [parameters](#prompts_additionalProperties_parameters )           | No      | object          | No         | In #/$defs/Parameters     | LLM generation parameters like temperature and max_tokens                                                                                                                                     |
+| - [validators](#prompts_additionalProperties_validators )           | No      | array           | No         | -                         | Validation rules (guardrails) applied to LLM responses                                                                                                                                        |
+| - [evals](#prompts_additionalProperties_evals )                     | No      | array           | No         | -                         | Eval definitions scoped to this prompt. These evals assess the quality of responses generated by this specific prompt. Prompt-level evals with the same id override pack-level evals.         |
+| - [tested_models](#prompts_additionalProperties_tested_models )     | No      | array           | No         | -                         | Model testing results documenting which models have been tested with this prompt and their performance                                                                                        |
+| - [model_overrides](#prompts_additionalProperties_model_overrides ) | No      | object          | No         | -                         | Model-specific template modifications. Keys are model names (e.g., 'claude-3-opus', 'gpt-4'), values are override configurations.                                                             |
+| - [media](#prompts_additionalProperties_media )                     | No      | object          | No         | In #/$defs/MediaConfig    | Multimodal content configuration for this prompt. Defines supported media types and validation rules.                                                                                         |
+| - [extensions](#prompts_additionalProperties_extensions )           | No      | object          | No         | -                         | Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. |
 
 #### <a name="prompts_additionalProperties_id"></a>7.1.1. Property `PromptPack Specification > prompts > additionalProperties > id`
 
@@ -1891,13 +1931,28 @@ null
 
 | Property                                                                                 | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                        |
 | ---------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [id](#prompts_additionalProperties_validators_items_id )                               | No      | string  | No         | -          | Optional identifier, so a governance obligation control can name this validator (RFC 0016). Unique across the pack where declared. Does not change how the validator runs.                                                                                                                                               |
 | + [type](#prompts_additionalProperties_validators_items_type )                           | No      | string  | No         | -          | The validator type that determines how validation is performed. Not an enum — runtimes define and register their own validator types.                                                                                                                                                                                    |
 | - [enabled](#prompts_additionalProperties_validators_items_enabled )                     | No      | boolean | No         | -          | Whether this validator is active. Allows temporarily disabling validators without removing them.                                                                                                                                                                                                                         |
 | - [message](#prompts_additionalProperties_validators_items_message )                     | No      | string  | No         | -          | User-facing message returned when the validator blocks content.                                                                                                                                                                                                                                                          |
 | - [fail_on_violation](#prompts_additionalProperties_validators_items_fail_on_violation ) | No      | boolean | No         | -          | DEPRECATED as of v1.7.0, removed in v2.0.0 (RFC 0015). Ignored — validators always enforce. A triggered validator rewrites or blocks the assistant message regardless of this value. To disable a validator, use 'enabled: false'. For observation without enforcement, declare an eval and assert on its score instead. |
 | - [params](#prompts_additionalProperties_validators_items_params )                       | No      | object  | No         | -          | Validator-specific parameters                                                                                                                                                                                                                                                                                            |
+| - [extensions](#prompts_additionalProperties_validators_items_extensions )               | No      | object  | No         | -          | Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.                                                                                                                            |
 
-###### <a name="prompts_additionalProperties_validators_items_type"></a>7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`
+###### <a name="prompts_additionalProperties_validators_items_id"></a>7.1.11.1.1. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > id`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Optional identifier, so a governance obligation control can name this validator (RFC 0016). Unique across the pack where declared. Does not change how the validator runs.
+
+| Restrictions                      |                                                                                               |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Must match regular expression** | ```^[a-z][a-z0-9_-]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-z%5D%5Ba-z0-9_-%5D%2A%24) |
+
+###### <a name="prompts_additionalProperties_validators_items_type"></a>7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > type`
 
 |              |          |
 | ------------ | -------- |
@@ -1940,7 +1995,7 @@ null
 | -------------- | - |
 | **Min length** | 1 |
 
-###### <a name="prompts_additionalProperties_validators_items_enabled"></a>7.1.11.1.2. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`
+###### <a name="prompts_additionalProperties_validators_items_enabled"></a>7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > enabled`
 
 |              |           |
 | ------------ | --------- |
@@ -1950,7 +2005,7 @@ null
 
 **Description:** Whether this validator is active. Allows temporarily disabling validators without removing them.
 
-###### <a name="prompts_additionalProperties_validators_items_message"></a>7.1.11.1.3. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > message`
+###### <a name="prompts_additionalProperties_validators_items_message"></a>7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > message`
 
 |              |          |
 | ------------ | -------- |
@@ -1969,7 +2024,7 @@ null
 "Response exceeds maximum length"
 ```
 
-###### <a name="prompts_additionalProperties_validators_items_fail_on_violation"></a>7.1.11.1.4. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`
+###### <a name="prompts_additionalProperties_validators_items_fail_on_violation"></a>7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > fail_on_violation`
 
 |              |           |
 | ------------ | --------- |
@@ -1979,7 +2034,7 @@ null
 
 **Description:** DEPRECATED as of v1.7.0, removed in v2.0.0 (RFC 0015). Ignored — validators always enforce. A triggered validator rewrites or blocks the assistant message regardless of this value. To disable a validator, use 'enabled: false'. For observation without enforcement, declare an eval and assert on its score instead.
 
-###### <a name="prompts_additionalProperties_validators_items_params"></a>7.1.11.1.5. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`
+###### <a name="prompts_additionalProperties_validators_items_params"></a>7.1.11.1.6. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > params`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -2009,6 +2064,20 @@ null
 
 | Property                                                                          | Pattern | Type   | Deprecated | Definition | Title/Description |
 | --------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
+###### <a name="prompts_additionalProperties_validators_items_extensions"></a>7.1.11.1.7. Property `PromptPack Specification > prompts > additionalProperties > validators > validators items > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.
+
+| Property                                                                              | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ------------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - - additionalProperties | No      | object | No         | -          | -                 |
 
 #### <a name="prompts_additionalProperties_evals"></a>7.1.12. Property `PromptPack Specification > prompts > additionalProperties > evals`
@@ -2043,20 +2112,21 @@ null
 
 **Description:** An eval definition that declares how to assess LLM output quality. Evals run asynchronously and produce scores or metrics, unlike validators which run inline and block.
 
-| Property                                                                            | Pattern | Type            | Deprecated | Definition           | Title/Description                                                                                                                        |
-| ----------------------------------------------------------------------------------- | ------- | --------------- | ---------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| + [id](#prompts_additionalProperties_evals_items_id )                               | No      | string          | No         | -                    | Unique identifier for this eval within its scope (prompt-level or pack-level).                                                           |
-| - [description](#prompts_additionalProperties_evals_items_description )             | No      | string          | No         | -                    | Human-readable description of what this eval measures and why it matters.                                                                |
-| + [type](#prompts_additionalProperties_evals_items_type )                           | No      | string          | No         | -                    | The assertion type that determines how this eval is executed. Not an enum — runtimes define and register their own types.                |
-| + [trigger](#prompts_additionalProperties_evals_items_trigger )                     | No      | string          | No         | -                    | When this eval should be triggered.                                                                                                      |
-| - [sample_percentage](#prompts_additionalProperties_evals_items_sample_percentage ) | No      | number          | No         | -                    | Percentage of turns or sessions to sample when trigger is sample_turns or sample_sessions. Ignored for other trigger types.              |
-| - [enabled](#prompts_additionalProperties_evals_items_enabled )                     | No      | boolean         | No         | -                    | Whether this eval is active. Allows temporarily disabling evals without removing them.                                                   |
-| - [params](#prompts_additionalProperties_evals_items_params )                       | No      | object          | No         | -                    | Type-specific configuration for the eval. Structure depends on the eval type — runtimes interpret these based on the type field.         |
-| - [metric](#prompts_additionalProperties_evals_items_metric )                       | No      | object          | No         | In #/$defs/MetricDef | Prometheus-style metric declaration describing the output shape of this eval. Runtimes use this to expose results to monitoring systems. |
-| - [threshold](#prompts_additionalProperties_evals_items_threshold )                 | No      | object          | No         | -                    | Pass/fail threshold for the eval score.                                                                                                  |
-| - [message](#prompts_additionalProperties_evals_items_message )                     | No      | string          | No         | -                    | Human-readable message describing the eval result or failure reason.                                                                     |
-| - [when](#prompts_additionalProperties_evals_items_when )                           | No      | object          | No         | -                    | Conditional expression that determines whether this eval runs for a given turn or session.                                               |
-| - [groups](#prompts_additionalProperties_evals_items_groups )                       | No      | array of string | No         | -                    | Eval group tags for organizing and filtering evals.                                                                                      |
+| Property                                                                            | Pattern | Type            | Deprecated | Definition           | Title/Description                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------- | ------- | --------------- | ---------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [id](#prompts_additionalProperties_evals_items_id )                               | No      | string          | No         | -                    | Unique identifier for this eval within its scope (prompt-level or pack-level).                                                                                                                |
+| - [description](#prompts_additionalProperties_evals_items_description )             | No      | string          | No         | -                    | Human-readable description of what this eval measures and why it matters.                                                                                                                     |
+| + [type](#prompts_additionalProperties_evals_items_type )                           | No      | string          | No         | -                    | The assertion type that determines how this eval is executed. Not an enum — runtimes define and register their own types.                                                                     |
+| + [trigger](#prompts_additionalProperties_evals_items_trigger )                     | No      | string          | No         | -                    | When this eval should be triggered.                                                                                                                                                           |
+| - [sample_percentage](#prompts_additionalProperties_evals_items_sample_percentage ) | No      | number          | No         | -                    | Percentage of turns or sessions to sample when trigger is sample_turns or sample_sessions. Ignored for other trigger types.                                                                   |
+| - [enabled](#prompts_additionalProperties_evals_items_enabled )                     | No      | boolean         | No         | -                    | Whether this eval is active. Allows temporarily disabling evals without removing them.                                                                                                        |
+| - [params](#prompts_additionalProperties_evals_items_params )                       | No      | object          | No         | -                    | Type-specific configuration for the eval. Structure depends on the eval type — runtimes interpret these based on the type field.                                                              |
+| - [metric](#prompts_additionalProperties_evals_items_metric )                       | No      | object          | No         | In #/$defs/MetricDef | Prometheus-style metric declaration describing the output shape of this eval. Runtimes use this to expose results to monitoring systems.                                                      |
+| - [threshold](#prompts_additionalProperties_evals_items_threshold )                 | No      | object          | No         | -                    | Pass/fail threshold for the eval score.                                                                                                                                                       |
+| - [message](#prompts_additionalProperties_evals_items_message )                     | No      | string          | No         | -                    | Human-readable message describing the eval result or failure reason.                                                                                                                          |
+| - [when](#prompts_additionalProperties_evals_items_when )                           | No      | object          | No         | -                    | Conditional expression that determines whether this eval runs for a given turn or session.                                                                                                    |
+| - [groups](#prompts_additionalProperties_evals_items_groups )                       | No      | array of string | No         | -                    | Eval group tags for organizing and filtering evals.                                                                                                                                           |
+| - [extensions](#prompts_additionalProperties_evals_items_extensions )               | No      | object          | No         | -                    | Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. |
 
 ###### <a name="prompts_additionalProperties_evals_items_id"></a>7.1.12.1.1. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > id`
 
@@ -2492,6 +2562,20 @@ Must be one of:
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
+
+###### <a name="prompts_additionalProperties_evals_items_extensions"></a>7.1.12.1.13. Property `PromptPack Specification > prompts > additionalProperties > evals > evals items > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.
+
+| Property                                                                         | Pattern | Type   | Deprecated | Definition | Title/Description |
+| -------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
 
 #### <a name="prompts_additionalProperties_tested_models"></a>7.1.13. Property `PromptPack Specification > prompts > additionalProperties > tested_models`
 
@@ -3967,6 +4051,20 @@ Must be one of:
 | --------------------------------------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - - additionalProperties | No      | object | No         | -          | -                 |
 
+#### <a name="prompts_additionalProperties_extensions"></a>7.1.16. Property `PromptPack Specification > prompts > additionalProperties > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.
+
+| Property                                                             | Pattern | Type   | Deprecated | Definition | Title/Description |
+| -------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
 ## <a name="fragments"></a>8. Property `PromptPack Specification > fragments`
 
 |                           |                                                                                        |
@@ -4457,20 +4555,23 @@ Must be one of:
 
 **Description:** Governance facts about the agent this pack defines (RFC 0013).
 
-| Property                                                                             | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                |
-| ------------------------------------------------------------------------------------ | ------- | ---------------- | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [vocabularies](#metadata_governance_vocabularies )                                 | No      | object           | No         | -          | Prefix to IRI map for CURIE values used in this block. The dpv, eu-aiact and ai prefixes are well-known defaults and need not be declared.                                                                                                                                                                                                                       |
-| - [intended_purpose](#metadata_governance_intended_purpose )                         | No      | string           | No         | -          | What the agent is built to do, stated by its author. Free text.                                                                                                                                                                                                                                                                                                  |
-| - [foreseeable_misuse](#metadata_governance_foreseeable_misuse )                     | No      | array of string  | No         | -          | Uses the author considers out of bounds and reasonably foreseeable.                                                                                                                                                                                                                                                                                              |
-| - [autonomy_level](#metadata_governance_autonomy_level )                             | No      | enum (of string) | No         | -          | How far the agent acts without a human in the loop, as designed and tested. 'suggests': produces output, a human performs any action. 'acts_with_approval': acts, but each consequential action is approved first. 'acts_with_oversight': acts on its own, a human monitors and can intervene or reverse. 'acts_autonomously': acts without a human in the loop. |
-| - [accountable_owner](#metadata_governance_accountable_owner )                       | No      | string           | No         | -          | The role, team or function answerable for this agent. Prefer a durable identifier over a named individual.                                                                                                                                                                                                                                                       |
-| - [operator_role](#metadata_governance_operator_role )                               | No      | string           | No         | -          | The declaring organisation's role for this agent, as a vocabulary term or free string.                                                                                                                                                                                                                                                                           |
-| - [risk_classification](#metadata_governance_risk_classification )                   | No      | string           | No         | -          | The risk classification assigned to this agent, as a vocabulary term or free string. A namespaced term carries both the framework and the value, so no separate framework field is needed; a second classification under another framework belongs in extensions.                                                                                                |
-| - [intended_deployment_contexts](#metadata_governance_intended_deployment_contexts ) | No      | array of string  | No         | -          | Sectors or settings the agent is built for, as vocabulary terms or free strings. Distinct from metadata.domain, which is a discovery tag.                                                                                                                                                                                                                        |
-| - [capabilities](#metadata_governance_capabilities )                                 | No      | array of string  | No         | -          | Capabilities the agent exercises, as vocabulary terms or free strings. Some capabilities carry obligations regardless of sector, so this is not covered by intended_deployment_contexts.                                                                                                                                                                         |
-| - [approved_environments](#metadata_governance_approved_environments )               | No      | array of string  | No         | -          | Environments this pack has been cleared to run in. Open strings, because environment names are organisation-specific. Absence means undeclared, not cleared everywhere and not cleared nowhere.                                                                                                                                                                  |
-| - [requires_ai_disclosure](#metadata_governance_requires_ai_disclosure )             | No      | boolean          | No         | -          | Whether the agent must disclose that it is an AI to the people interacting with it. The runtime decides which of its interfaces this applies to.                                                                                                                                                                                                                 |
-| - [extensions](#metadata_governance_extensions )                                     | No      | object           | No         | -          | Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced.                                                                                                                                                                                                                                                     |
+| Property                                                                             | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------ | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [vocabularies](#metadata_governance_vocabularies )                                 | No      | object           | No         | -          | Prefix to IRI map for CURIE values used in this block. The dpv, eu-aiact and ai prefixes are well-known defaults and need not be declared.                                                                                                                                                                                                                                                                                                                        |
+| - [intended_purpose](#metadata_governance_intended_purpose )                         | No      | string           | No         | -          | What the agent is built to do, stated by its author. Free text.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| - [foreseeable_misuse](#metadata_governance_foreseeable_misuse )                     | No      | array of string  | No         | -          | Uses the author considers out of bounds and reasonably foreseeable.                                                                                                                                                                                                                                                                                                                                                                                               |
+| - [autonomy_level](#metadata_governance_autonomy_level )                             | No      | enum (of string) | No         | -          | How far the agent acts without a human in the loop, as designed and tested. 'suggests': produces output, a human performs any action. 'acts_with_approval': acts, but each consequential action is approved first. 'acts_with_oversight': acts on its own, a human monitors and can intervene or reverse. 'acts_autonomously': acts without a human in the loop.                                                                                                  |
+| - [accountable_owner](#metadata_governance_accountable_owner )                       | No      | string           | No         | -          | The role, team or function answerable for this agent. Prefer a durable identifier over a named individual.                                                                                                                                                                                                                                                                                                                                                        |
+| - [operator_role](#metadata_governance_operator_role )                               | No      | string           | No         | -          | The declaring organisation's role for this agent, as a vocabulary term or free string.                                                                                                                                                                                                                                                                                                                                                                            |
+| - [risk_classification](#metadata_governance_risk_classification )                   | No      | string           | No         | -          | The risk classification assigned to this agent, as a vocabulary term or free string. A namespaced term carries both the framework and the value, so no separate framework field is needed; a second classification under another framework belongs in extensions.                                                                                                                                                                                                 |
+| - [intended_deployment_contexts](#metadata_governance_intended_deployment_contexts ) | No      | array of string  | No         | -          | Sectors or settings the agent is built for, as vocabulary terms or free strings. Distinct from metadata.domain, which is a discovery tag.                                                                                                                                                                                                                                                                                                                         |
+| - [capabilities](#metadata_governance_capabilities )                                 | No      | array of string  | No         | -          | Capabilities the agent exercises, as vocabulary terms or free strings. Some capabilities carry obligations regardless of sector, so this is not covered by intended_deployment_contexts.                                                                                                                                                                                                                                                                          |
+| - [approved_environments](#metadata_governance_approved_environments )               | No      | array of string  | No         | -          | Environments this pack has been cleared to run in. Open strings, because environment names are organisation-specific. Absence means undeclared, not cleared everywhere and not cleared nowhere.                                                                                                                                                                                                                                                                   |
+| - [requires_ai_disclosure](#metadata_governance_requires_ai_disclosure )             | No      | boolean          | No         | -          | Whether the agent must disclose that it is an AI to the people interacting with it. The runtime decides which of its interfaces this applies to.                                                                                                                                                                                                                                                                                                                  |
+| - [extensions](#metadata_governance_extensions )                                     | No      | object           | No         | -          | Opaque annotations for external tooling. Never interpreted by this specification. Keys SHOULD be namespaced.                                                                                                                                                                                                                                                                                                                                                      |
+| - [independent_of](#metadata_governance_independent_of )                             | No      | object           | No         | -          | Requires that whatever produces this agent's input does not share the listed properties with it (RFC 0016). A deployment requirement the runtime resolves against the composition it is running, not a reference to another agent. 'accountable_owner' expresses organisational independence, which is how a pack states segregation of duties; the other axes are technical independence — a quality control against correlated failure, not a security control. |
+| - [obligations](#metadata_governance_obligations )                                   | No      | array            | No         | -          | What obligations follow from this agent's declared capabilities, data or classification, and which controls discharge them (RFC 0016). A record, never a filter: nothing here decides whether an obligation applies, and naming a control does not assert that the obligation currently holds.                                                                                                                                                                    |
+| - [reviews](#metadata_governance_reviews )                                           | No      | array            | No         | -          | Obligations that recur, with their cadence and owning team (RFC 0016). Completion records are runtime state and do not belong in the pack; a runtime that records completions SHOULD key them by reviews[].id.                                                                                                                                                                                                                                                    |
 
 #### <a name="metadata_governance_vocabularies"></a>10.5.1. Property `PromptPack Specification > metadata > governance > vocabularies`
 
@@ -4774,6 +4875,445 @@ Must be one of:
 | ----------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - - additionalProperties | No      | object | No         | -          | -                 |
 
+#### <a name="metadata_governance_independent_of"></a>10.5.13. Property `PromptPack Specification > metadata > governance > independent_of`
+
+|                           |             |
+| ------------------------- | ----------- |
+| **Type**                  | `object`    |
+| **Required**              | No          |
+| **Additional properties** | Not allowed |
+
+**Description:** Requires that whatever produces this agent's input does not share the listed properties with it (RFC 0016). A deployment requirement the runtime resolves against the composition it is running, not a reference to another agent. 'accountable_owner' expresses organisational independence, which is how a pack states segregation of duties; the other axes are technical independence — a quality control against correlated failure, not a security control.
+
+**Example:**
+
+```json
+{
+    "axes": [
+        "accountable_owner",
+        "model",
+        "provider",
+        "prompts"
+    ],
+    "enforcement": "strict"
+}
+```
+
+| Property                                                          | Pattern | Type                      | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                       |
+| ----------------------------------------------------------------- | ------- | ------------------------- | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [axes](#metadata_governance_independent_of_axes )               | No      | array of enum (of string) | No         | -          | The axes on which the producer must differ. 'model' and 'provider' compare the effective values after model_overrides; 'tools' requires disjoint tool sets; 'prompts' requires that neither uses the other's prompt keys; 'accountable_owner' compares the two governance declarations. |
+| - [enforcement](#metadata_governance_independent_of_enforcement ) | No      | enum (of string)          | No         | -          | 'strict': a runtime that enforces independent_of MUST NOT deploy the pack when the requirement is unsatisfied, including when it cannot determine the producer. 'advisory': surface the violation without refusing.                                                                     |
+
+##### <a name="metadata_governance_independent_of_axes"></a>10.5.13.1. Property `PromptPack Specification > metadata > governance > independent_of > axes`
+
+|              |                             |
+| ------------ | --------------------------- |
+| **Type**     | `array of enum (of string)` |
+| **Required** | Yes                         |
+
+**Description:** The axes on which the producer must differ. 'model' and 'provider' compare the effective values after model_overrides; 'tools' requires disjoint tool sets; 'prompts' requires that neither uses the other's prompt keys; 'accountable_owner' compares the two governance declarations.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | 1                  |
+| **Max items**        | N/A                |
+| **Items unicity**    | True               |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                              | Description |
+| ------------------------------------------------------------ | ----------- |
+| [axes items](#metadata_governance_independent_of_axes_items) | -           |
+
+###### <a name="metadata_governance_independent_of_axes_items"></a>10.5.13.1.1. PromptPack Specification > metadata > governance > independent_of > axes > axes items
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+
+Must be one of:
+* "model"
+* "provider"
+* "tools"
+* "prompts"
+* "accountable_owner"
+
+##### <a name="metadata_governance_independent_of_enforcement"></a>10.5.13.2. Property `PromptPack Specification > metadata > governance > independent_of > enforcement`
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+| **Default**  | `"advisory"`       |
+
+**Description:** 'strict': a runtime that enforces independent_of MUST NOT deploy the pack when the requirement is unsatisfied, including when it cannot determine the producer. 'advisory': surface the violation without refusing.
+
+Must be one of:
+* "strict"
+* "advisory"
+
+#### <a name="metadata_governance_obligations"></a>10.5.14. Property `PromptPack Specification > metadata > governance > obligations`
+
+|              |         |
+| ------------ | ------- |
+| **Type**     | `array` |
+| **Required** | No      |
+
+**Description:** What obligations follow from this agent's declared capabilities, data or classification, and which controls discharge them (RFC 0016). A record, never a filter: nothing here decides whether an obligation applies, and naming a control does not assert that the obligation currently holds.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                      | Description                                                                                             |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| [Obligation](#metadata_governance_obligations_items) | An obligation triggered by something the agent declares, and the controls that discharge it (RFC 0016). |
+
+##### <a name="metadata_governance_obligations_items"></a>10.5.14.1. PromptPack Specification > metadata > governance > obligations > Obligation
+
+|                           |                    |
+| ------------------------- | ------------------ |
+| **Type**                  | `object`           |
+| **Required**              | No                 |
+| **Additional properties** | Not allowed        |
+| **Defined in**            | #/$defs/Obligation |
+
+**Description:** An obligation triggered by something the agent declares, and the controls that discharge it (RFC 0016).
+
+| Property                                                           | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                                  |
+| ------------------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [id](#metadata_governance_obligations_items_id )                 | No      | string | No         | -          | Identifier, unique within the governance object that declares it. Referenced by reviews[].satisfies.                                                                               |
+| + [obligation](#metadata_governance_obligations_items_obligation ) | No      | string | No         | -          | The obligation, as a vocabulary term (CURIE or absolute IRI) or a free string.                                                                                                     |
+| - [applies_to](#metadata_governance_obligations_items_applies_to ) | No      | object | No         | -          | What triggers the obligation. A record, not a filter — whether it applies is a legal determination.                                                                                |
+| + [controls](#metadata_governance_obligations_items_controls )     | No      | array  | No         | -          | Controls that discharge the obligation. Each entry carries exactly one of 'field', 'validator', 'eval' or 'external'.                                                              |
+| - [note](#metadata_governance_obligations_items_note )             | No      | string | No         | -          | Free-text context, such as the article or section the obligation comes from.                                                                                                       |
+| - [extensions](#metadata_governance_obligations_items_extensions ) | No      | object | No         | -          | Opaque annotations, such as a control-framework identifier. Never interpreted by this specification, and never evidence that the obligation is current. Keys SHOULD be namespaced. |
+
+###### <a name="metadata_governance_obligations_items_id"></a>10.5.14.1.1. Property `PromptPack Specification > metadata > governance > obligations > obligations items > id`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** Identifier, unique within the governance object that declares it. Referenced by reviews[].satisfies.
+
+###### <a name="metadata_governance_obligations_items_obligation"></a>10.5.14.1.2. Property `PromptPack Specification > metadata > governance > obligations > obligations items > obligation`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** The obligation, as a vocabulary term (CURIE or absolute IRI) or a free string.
+
+**Examples:**
+
+```json
+"eu-aiact:Article50"
+```
+
+```json
+"legal-eu-gdpr:Article22"
+```
+
+###### <a name="metadata_governance_obligations_items_applies_to"></a>10.5.14.1.3. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to`
+
+|                           |             |
+| ------------------------- | ----------- |
+| **Type**                  | `object`    |
+| **Required**              | No          |
+| **Additional properties** | Not allowed |
+
+**Description:** What triggers the obligation. A record, not a filter — whether it applies is a legal determination.
+
+| Property                                                                                        | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ----------------------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - [capability](#metadata_governance_obligations_items_applies_to_capability )                   | No      | string | No         | -          | -                 |
+| - [data_class](#metadata_governance_obligations_items_applies_to_data_class )                   | No      | string | No         | -          | -                 |
+| - [risk_classification](#metadata_governance_obligations_items_applies_to_risk_classification ) | No      | string | No         | -          | -                 |
+
+###### <a name="metadata_governance_obligations_items_applies_to_capability"></a>10.5.14.1.3.1. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to > capability`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+###### <a name="metadata_governance_obligations_items_applies_to_data_class"></a>10.5.14.1.3.2. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to > data_class`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+###### <a name="metadata_governance_obligations_items_applies_to_risk_classification"></a>10.5.14.1.3.3. Property `PromptPack Specification > metadata > governance > obligations > obligations items > applies_to > risk_classification`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+###### <a name="metadata_governance_obligations_items_controls"></a>10.5.14.1.4. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls`
+
+|              |         |
+| ------------ | ------- |
+| **Type**     | `array` |
+| **Required** | Yes     |
+
+**Description:** Controls that discharge the obligation. Each entry carries exactly one of 'field', 'validator', 'eval' or 'external'.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | 1                  |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                            | Description                                                            |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [ObligationControl](#metadata_governance_obligations_items_controls_items) | One control that discharges an obligation (RFC 0016). Exactly one key. |
+
+###### <a name="metadata_governance_obligations_items_controls_items"></a>10.5.14.1.4.1. PromptPack Specification > metadata > governance > obligations > obligations items > controls > ObligationControl
+
+|                           |                           |
+| ------------------------- | ------------------------- |
+| **Type**                  | `object`                  |
+| **Required**              | No                        |
+| **Additional properties** | Not allowed               |
+| **Defined in**            | #/$defs/ObligationControl |
+
+**Description:** One control that discharges an obligation (RFC 0016). Exactly one key.
+
+| Property                                                                        | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                                  |
+| ------------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [field](#metadata_governance_obligations_items_controls_items_field )         | No      | string | No         | -          | Names a governance property that must be declared in the effective governance object.                                                                                              |
+| - [validator](#metadata_governance_obligations_items_controls_items_validator ) | No      | string | No         | -          | Names the id of a Validator declared on one of this pack's prompts. Enforces in the response path; validators always enforce (RFC 0015).                                           |
+| - [eval](#metadata_governance_obligations_items_controls_items_eval )           | No      | string | No         | -          | Names the id of an eval in the pack's evals or in a prompt's evals. Records that a measurement for this control exists, not its outcome; what acts on the score is runtime policy. |
+| - [external](#metadata_governance_obligations_items_controls_items_external )   | No      | string | No         | -          | A control outside the pack, described in prose. Resolves against nothing.                                                                                                          |
+
+###### <a name="metadata_governance_obligations_items_controls_items_field"></a>10.5.14.1.4.1.1. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > field`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Names a governance property that must be declared in the effective governance object.
+
+###### <a name="metadata_governance_obligations_items_controls_items_validator"></a>10.5.14.1.4.1.2. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > validator`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Names the id of a Validator declared on one of this pack's prompts. Enforces in the response path; validators always enforce (RFC 0015).
+
+###### <a name="metadata_governance_obligations_items_controls_items_eval"></a>10.5.14.1.4.1.3. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > eval`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Names the id of an eval in the pack's evals or in a prompt's evals. Records that a measurement for this control exists, not its outcome; what acts on the score is runtime policy.
+
+###### <a name="metadata_governance_obligations_items_controls_items_external"></a>10.5.14.1.4.1.4. Property `PromptPack Specification > metadata > governance > obligations > obligations items > controls > controls items > external`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** A control outside the pack, described in prose. Resolves against nothing.
+
+###### <a name="metadata_governance_obligations_items_note"></a>10.5.14.1.5. Property `PromptPack Specification > metadata > governance > obligations > obligations items > note`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Free-text context, such as the article or section the obligation comes from.
+
+###### <a name="metadata_governance_obligations_items_extensions"></a>10.5.14.1.6. Property `PromptPack Specification > metadata > governance > obligations > obligations items > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque annotations, such as a control-framework identifier. Never interpreted by this specification, and never evidence that the obligation is current. Keys SHOULD be namespaced.
+
+| Property                                                                      | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ----------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
+#### <a name="metadata_governance_reviews"></a>10.5.15. Property `PromptPack Specification > metadata > governance > reviews`
+
+|              |         |
+| ------------ | ------- |
+| **Type**     | `array` |
+| **Required** | No      |
+
+**Description:** Obligations that recur, with their cadence and owning team (RFC 0016). Completion records are runtime state and do not belong in the pack; a runtime that records completions SHOULD key them by reviews[].id.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be              | Description                                                                             |
+| -------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [Review](#metadata_governance_reviews_items) | A recurring obligation: what is reviewed, how often, and which team owns it (RFC 0016). |
+
+##### <a name="metadata_governance_reviews_items"></a>10.5.15.1. PromptPack Specification > metadata > governance > reviews > Review
+
+|                           |                |
+| ------------------------- | -------------- |
+| **Type**                  | `object`       |
+| **Required**              | No             |
+| **Additional properties** | Not allowed    |
+| **Defined in**            | #/$defs/Review |
+
+**Description:** A recurring obligation: what is reviewed, how often, and which team owns it (RFC 0016).
+
+| Property                                                       | Pattern | Type            | Deprecated | Definition | Title/Description                                                                                                                                                                    |
+| -------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| + [id](#metadata_governance_reviews_items_id )                 | No      | string          | No         | -          | Identifier, unique within the governance object that declares it. Keep it stable across pack versions while the review means the same thing — runtimes key completion records by it. |
+| + [type](#metadata_governance_reviews_items_type )             | No      | string          | No         | -          | The kind of review, as a vocabulary term (CURIE or absolute IRI) or a free string.                                                                                                   |
+| + [cadence](#metadata_governance_reviews_items_cadence )       | No      | string          | No         | -          | ISO 8601 duration between reviews. Must not be the empty duration 'P'.                                                                                                               |
+| + [owner](#metadata_governance_reviews_items_owner )           | No      | string          | No         | -          | The team or role that owns the review. Never a named individual.                                                                                                                     |
+| - [satisfies](#metadata_governance_reviews_items_satisfies )   | No      | array of string | No         | -          | Ids of obligations in the effective governance object that this review answers to.                                                                                                   |
+| - [eval](#metadata_governance_reviews_items_eval )             | No      | string          | No         | -          | Names the id of an eval in the pack's evals or in a prompt's evals that this review runs or reads.                                                                                   |
+| - [extensions](#metadata_governance_reviews_items_extensions ) | No      | object          | No         | -          | Opaque annotations, such as a method reference or evidence location. Never interpreted by this specification. MUST NOT be used to record completions. Keys SHOULD be namespaced.     |
+
+###### <a name="metadata_governance_reviews_items_id"></a>10.5.15.1.1. Property `PromptPack Specification > metadata > governance > reviews > reviews items > id`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** Identifier, unique within the governance object that declares it. Keep it stable across pack versions while the review means the same thing — runtimes key completion records by it.
+
+###### <a name="metadata_governance_reviews_items_type"></a>10.5.15.1.2. Property `PromptPack Specification > metadata > governance > reviews > reviews items > type`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** The kind of review, as a vocabulary term (CURIE or absolute IRI) or a free string.
+
+**Examples:**
+
+```json
+"pp:BiasTesting"
+```
+
+```json
+"pp:AccuracyReview"
+```
+
+```json
+"risk:RiskAssessment"
+```
+
+###### <a name="metadata_governance_reviews_items_cadence"></a>10.5.15.1.3. Property `PromptPack Specification > metadata > governance > reviews > reviews items > cadence`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** ISO 8601 duration between reviews. Must not be the empty duration 'P'.
+
+**Examples:**
+
+```json
+"P3M"
+```
+
+```json
+"P1Y"
+```
+
+| Restrictions                      |                                                                                                                                                                                                                                                                                                            |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Must match regular expression** | ```^P(?!$)(\d+Y)?(\d+M)?(\d+W)?(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+S)?)?$``` [Test](https://regex101.com/?regex=%5EP%28%3F%21%24%29%28%5Cd%2BY%29%3F%28%5Cd%2BM%29%3F%28%5Cd%2BW%29%3F%28%5Cd%2BD%29%3F%28T%28%3F%3D%5Cd%29%28%5Cd%2BH%29%3F%28%5Cd%2BM%29%3F%28%5Cd%2BS%29%3F%29%3F%24&testString=%22P3M%22) |
+
+###### <a name="metadata_governance_reviews_items_owner"></a>10.5.15.1.4. Property `PromptPack Specification > metadata > governance > reviews > reviews items > owner`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+**Description:** The team or role that owns the review. Never a named individual.
+
+###### <a name="metadata_governance_reviews_items_satisfies"></a>10.5.15.1.5. Property `PromptPack Specification > metadata > governance > reviews > reviews items > satisfies`
+
+|              |                   |
+| ------------ | ----------------- |
+| **Type**     | `array of string` |
+| **Required** | No                |
+
+**Description:** Ids of obligations in the effective governance object that this review answers to.
+
+|                      | Array restrictions |
+| -------------------- | ------------------ |
+| **Min items**        | N/A                |
+| **Max items**        | N/A                |
+| **Items unicity**    | False              |
+| **Additional items** | False              |
+| **Tuple validation** | See below          |
+
+| Each item of this array must be                                       | Description |
+| --------------------------------------------------------------------- | ----------- |
+| [satisfies items](#metadata_governance_reviews_items_satisfies_items) | -           |
+
+###### <a name="metadata_governance_reviews_items_satisfies_items"></a>10.5.15.1.5.1. PromptPack Specification > metadata > governance > reviews > reviews items > satisfies > satisfies items
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+###### <a name="metadata_governance_reviews_items_eval"></a>10.5.15.1.6. Property `PromptPack Specification > metadata > governance > reviews > reviews items > eval`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
+
+**Description:** Names the id of an eval in the pack's evals or in a prompt's evals that this review runs or reads.
+
+###### <a name="metadata_governance_reviews_items_extensions"></a>10.5.15.1.7. Property `PromptPack Specification > metadata > governance > reviews > reviews items > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque annotations, such as a method reference or evidence location. Never interpreted by this specification. MUST NOT be used to record completions. Keys SHOULD be namespaced.
+
+| Property                                                                  | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
 ## <a name="compilation"></a>11. Property `PromptPack Specification > compilation`
 
 |                           |                  |
@@ -4977,20 +5517,21 @@ Must be one of:
 
 **Description:** A single state in the workflow state machine. The orchestration mode determines how the state's work is driven: 'internal'/'external'/'hybrid' reference a prompt task and declare event-driven transitions; 'composition' (RFC 0010) runs a declarative step graph in place of a prompt. May be marked as terminal to indicate workflow completion, or guarded with max_visits to bound loop iterations.
 
-| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| - [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object. Required for orchestration modes 'internal', 'external', 'hybrid' (or when orchestration is omitted, default 'internal'); not used in 'composition' mode.                                                                                                                                                                                                                                                                                                                              |
-| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string           | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How the state is orchestrated. 'internal' = agent controls transitions (default). 'external' = system controls transitions. 'hybrid' = both. 'composition' = the referenced composition fully handles the state's orchestration (work + transitions): the composition runs end-to-end, and on completion its output may map to on_event transitions or terminate the state. The composition mode is exclusive; it is not mixed with internal/external/hybrid on the same state.                                                                        |
-| - [control](#workflow_states_additionalProperties_control )             | No      | enum (of string) | No         | -          | Who holds the next turn after entering this state (RFC 0014). 'user' yields the conversation to the user (default, and the behavior of every state before v1.7.0). 'agent' runs another agent round in this state without yielding, for transient routing or processing states. Orthogonal to 'orchestration', which declares who initiates a transition rather than who holds the turn after one; inert on states reached via 'external' orchestration. Bounded by terminal states, max_visits and the workflow budget — it introduces no new limits. |
-| - [composition](#workflow_states_additionalProperties_composition )     | No      | string           | No         | -          | Reference to a composition key defined in the pack's compositions object (RFC 0010). Required when orchestration is 'composition'; absent otherwise.                                                                                                                                                                                                                                                                                                                                                                                                   |
-| - [skills](#workflow_states_additionalProperties_skills )               | No      | string           | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.                                                                                                                                                                                                                                                                                                                                                                                  |
-| - [terminal](#workflow_states_additionalProperties_terminal )           | No      | boolean          | No         | -          | If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.                                                                                                                                                                                                                                                                                                                                                                                           |
-| - [max_visits](#workflow_states_additionalProperties_max_visits )       | No      | integer          | No         | -          | Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.                                                                                                                                                                                                                                                                                                                   |
-| - [on_max_visits](#workflow_states_additionalProperties_on_max_visits ) | No      | string           | No         | -          | Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.                                                                                                                                                                                                                                                                                                                                                     |
-| - [artifacts](#workflow_states_additionalProperties_artifacts )         | No      | object           | No         | -          | Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., `{{artifacts.commit_sha}}`).                                                                                                                                                                      |
+| Property                                                                | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [prompt_task](#workflow_states_additionalProperties_prompt_task )     | No      | string           | No         | -          | Reference to a prompt key defined in the pack's prompts object. Required for orchestration modes 'internal', 'external', 'hybrid' (or when orchestration is omitted, default 'internal'); not used in 'composition' mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| - [description](#workflow_states_additionalProperties_description )     | No      | string           | No         | -          | Human-readable description of this state's purpose.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| - [on_event](#workflow_states_additionalProperties_on_event )           | No      | object           | No         | -          | Map of event name to target state name. When the named event fires, the workflow transitions to the target state.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| - [persistence](#workflow_states_additionalProperties_persistence )     | No      | string           | No         | -          | Whether conversation context is kept (persistent) or reset (transient) on entry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| - [orchestration](#workflow_states_additionalProperties_orchestration ) | No      | enum (of string) | No         | -          | How the state is orchestrated. 'internal' = agent controls transitions (default). 'external' = system controls transitions. 'hybrid' = both. 'composition' = the referenced composition fully handles the state's orchestration (work + transitions): the composition runs end-to-end, and on completion its output may map to on_event transitions or terminate the state. The composition mode is exclusive; it is not mixed with internal/external/hybrid on the same state.                                                                                                                                                                                                                                                                                               |
+| - [control](#workflow_states_additionalProperties_control )             | No      | enum (of string) | No         | -          | Who holds the next turn after entering this state (RFC 0014). 'user' yields the conversation to the user (the default). Before v1.7.0 the specification did not say who holds the turn after a transition, and implementations differed; one that previously ran the destination state should treat adopting this default as a behavioral change for packs that do not declare 'control'. 'agent' runs another agent round in this state without yielding, for transient routing or processing states. Orthogonal to 'orchestration', which declares who initiates a transition rather than who holds the turn after one; inert on states reached via 'external' orchestration. Bounded by terminal states, max_visits and the workflow budget — it introduces no new limits. |
+| - [composition](#workflow_states_additionalProperties_composition )     | No      | string           | No         | -          | Reference to a composition key defined in the pack's compositions object (RFC 0010). Required when orchestration is 'composition'; absent otherwise.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| - [skills](#workflow_states_additionalProperties_skills )               | No      | string           | No         | -          | Skill filter for this workflow state. A path to a skill directory/file that scopes which skills are available in this state, or the literal 'none' to disable skills.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| - [terminal](#workflow_states_additionalProperties_terminal )           | No      | boolean          | No         | -          | If true, this state is a terminal state. The workflow completes after this state's prompt executes. Terminal states should not declare on_event transitions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| - [max_visits](#workflow_states_additionalProperties_max_visits )       | No      | integer          | No         | -          | Maximum number of times this state can be entered during a single workflow execution. When the limit is reached, the workflow transitions to the state named in on_max_visits. If on_max_visits is not set, the workflow terminates.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| - [on_max_visits](#workflow_states_additionalProperties_on_max_visits ) | No      | string           | No         | -          | Target state to transition to when max_visits is reached. Must reference a key in the states object. If omitted and max_visits is reached, the workflow terminates with a budget-exhausted status.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| - [artifacts](#workflow_states_additionalProperties_artifacts )         | No      | object           | No         | -          | Named artifact slots for lightweight, structured metadata that flows across state visits. Artifacts should be pointers (commit SHAs, URIs), compact representations (schemas, summaries, diffs), or small structured results — not bulk data. Artifact values are available to the prompt as template variables under the 'artifacts' namespace (e.g., `{{artifacts.commit_sha}}`).                                                                                                                                                                                                                                                                                                                                                                                             |
+| - [extensions](#workflow_states_additionalProperties_extensions )       | No      | object           | No         | -          | Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ##### <a name="autogenerated_heading_2"></a>13.3.1.1. If (orchestration = "composition")
 
@@ -5119,7 +5660,7 @@ Must be one of:
 | **Required** | No                 |
 | **Default**  | `"user"`           |
 
-**Description:** Who holds the next turn after entering this state (RFC 0014). 'user' yields the conversation to the user (default, and the behavior of every state before v1.7.0). 'agent' runs another agent round in this state without yielding, for transient routing or processing states. Orthogonal to 'orchestration', which declares who initiates a transition rather than who holds the turn after one; inert on states reached via 'external' orchestration. Bounded by terminal states, max_visits and the workflow budget — it introduces no new limits.
+**Description:** Who holds the next turn after entering this state (RFC 0014). 'user' yields the conversation to the user (the default). Before v1.7.0 the specification did not say who holds the turn after a transition, and implementations differed; one that previously ran the destination state should treat adopting this default as a behavioral change for packs that do not declare 'control'. 'agent' runs another agent round in this state without yielding, for transient routing or processing states. Orthogonal to 'orchestration', which declares who initiates a transition rather than who holds the turn after one; inert on states reached via 'external' orchestration. Bounded by terminal states, max_visits and the workflow budget — it introduces no new limits.
 
 **Example:**
 
@@ -5341,6 +5882,20 @@ Must be one of:
 * "replace"
 * "append"
 
+##### <a name="workflow_states_additionalProperties_extensions"></a>13.3.1.15. Property `PromptPack Specification > workflow > states > additionalProperties > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.
+
+| Property                                                                     | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ---------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
 ### <a name="workflow_engine"></a>13.4. Property `PromptPack Specification > workflow > engine`
 
 |                           |                  |
@@ -5522,6 +6077,7 @@ Must be one of:
 | - [output_modes](#agents_members_additionalProperties_output_modes ) | No      | array of string | No         | -                                           | MIME types the agent can produce as output. Defaults to ["text/plain"] if omitted.                                                                                                                                                                                                                             |
 | - [state](#agents_members_additionalProperties_state )               | No      | string          | No         | -                                           | Reference to a state key in the pack's workflow.states. When set, invoking this agent runs the pack workflow starting at the named state (following its transitions and loops) instead of executing the member-key prompt once. Requires a top-level workflow. If omitted, the agent is a single-prompt agent. |
 | - [governance](#agents_members_additionalProperties_governance )     | No      | object          | No         | Same as [governance](#metadata_governance ) | Governance facts for this agent, overriding metadata.governance by per-field replacement: a field present here replaces the pack value for that field, a field absent inherits. Arrays and extensions replace whole (RFC 0013).                                                                                |
+| - [extensions](#agents_members_additionalProperties_extensions )     | No      | object          | No         | -                                           | Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.                                                                                                                  |
 
 ##### <a name="agents_members_additionalProperties_description"></a>14.2.1.1. Property `PromptPack Specification > agents > members > additionalProperties > description`
 
@@ -5693,6 +6249,20 @@ Must be one of:
 | **Same definition as**    | [governance](#metadata_governance) |
 
 **Description:** Governance facts for this agent, overriding metadata.governance by per-field replacement: a field present here replaces the pack value for that field, a field absent inherits. Arrays and extensions replace whole (RFC 0013).
+
+##### <a name="agents_members_additionalProperties_extensions"></a>14.2.1.7. Property `PromptPack Specification > agents > members > additionalProperties > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.
+
+| Property                                                                    | Pattern | Type   | Deprecated | Definition | Title/Description |
+| --------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
 
 ## <a name="skills"></a>15. Property `PromptPack Specification > skills`
 
@@ -5899,15 +6469,16 @@ false
 
 **Description:** A named step graph defining a procedural composition over the pack's prompts, tools, and evals (RFC 0010). Reached through a workflow state whose orchestration is 'composition'.
 
-| Property                                                             | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                   |
-| -------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [version](#compositions_additionalProperties_version )             | No      | const  | No         | -          | Composition format version. Currently 1.                                                                                                                            |
-| - [description](#compositions_additionalProperties_description )     | No      | string | No         | -          | Human-readable description of what this composition does.                                                                                                           |
-| - [input_schema](#compositions_additionalProperties_input_schema )   | No      | string | No         | -          | Reference to a JSON Schema declaring the structured input shape. Path or fragment reference.                                                                        |
-| - [output_schema](#compositions_additionalProperties_output_schema ) | No      | string | No         | -          | Reference to a JSON Schema declaring the structured output shape.                                                                                                   |
-| - [output](#compositions_additionalProperties_output )               | No      | string | No         | -          | Step ID whose output is the composition's output. If omitted, runtimes should treat the last step's output as the composition output.                               |
-| + [steps](#compositions_additionalProperties_steps )                 | No      | array  | No         | -          | Ordered array of step definitions. Order is logical; control flow is determined by the steps themselves (sequential by default; branches and parallels alter flow). |
-| - [engine](#compositions_additionalProperties_engine )               | No      | object | No         | -          | Runtime-specific configuration (e.g. budgets, telemetry, scheduling hints). Opaque escape hatch with no schema enforcement.                                         |
+| Property                                                             | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                                                                                                             |
+| -------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [version](#compositions_additionalProperties_version )             | No      | const  | No         | -          | Composition format version. Currently 1.                                                                                                                                                      |
+| - [description](#compositions_additionalProperties_description )     | No      | string | No         | -          | Human-readable description of what this composition does.                                                                                                                                     |
+| - [input_schema](#compositions_additionalProperties_input_schema )   | No      | string | No         | -          | Reference to a JSON Schema declaring the structured input shape. Path or fragment reference.                                                                                                  |
+| - [output_schema](#compositions_additionalProperties_output_schema ) | No      | string | No         | -          | Reference to a JSON Schema declaring the structured output shape.                                                                                                                             |
+| - [output](#compositions_additionalProperties_output )               | No      | string | No         | -          | Step ID whose output is the composition's output. If omitted, runtimes should treat the last step's output as the composition output.                                                         |
+| + [steps](#compositions_additionalProperties_steps )                 | No      | array  | No         | -          | Ordered array of step definitions. Order is logical; control flow is determined by the steps themselves (sequential by default; branches and parallels alter flow).                           |
+| - [engine](#compositions_additionalProperties_engine )               | No      | object | No         | -          | Runtime-specific configuration (e.g. budgets, telemetry, scheduling hints). Opaque escape hatch with no schema enforcement.                                                                   |
+| - [extensions](#compositions_additionalProperties_extensions )       | No      | object | No         | -          | Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced. |
 
 #### <a name="compositions_additionalProperties_version"></a>16.1.1. Property `PromptPack Specification > compositions > additionalProperties > version`
 
@@ -5988,21 +6559,22 @@ Specific value: `1`
 
 **Description:** A single step in a composition's step graph. The 'kind' discriminator selects the step shape (RFC 0010).
 
-| Property                                                                     | Pattern | Type            | Deprecated | Definition               | Title/Description                                                                                                                                                                                                       |
-| ---------------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| + [id](#compositions_additionalProperties_steps_items_id )                   | No      | string          | No         | -                        | Stable identifier for this step. Must be unique within the composition. Used for output references, eval attachment, and trace records.                                                                                 |
-| + [kind](#compositions_additionalProperties_steps_items_kind )               | No      | string          | No         | -                        | Step kind. v1 conventional values: 'prompt', 'agent', 'tool', 'branch', 'parallel'. Free-form string with documented conventional values; runtimes may support additional vendor-namespaced kinds (e.g. 'omnia.judge'). |
-| - [description](#compositions_additionalProperties_steps_items_description ) | No      | string          | No         | -                        | -                                                                                                                                                                                                                       |
-| - [depends_on](#compositions_additionalProperties_steps_items_depends_on )   | No      | array of string | No         | -                        | Optional explicit predecessor step IDs. If omitted, the step sequentially follows the prior step in steps[]. Required when steps run after a branch or parallel and need to declare a join point.                       |
-| - [modifiers](#compositions_additionalProperties_steps_items_modifiers )     | No      | object          | No         | In #/$defs/StepModifiers | Optional declarative modifiers (retry, eval attachment). Modifier semantics are runtime-defined.                                                                                                                        |
+| Property                                                                     | Pattern | Type            | Deprecated | Definition               | Title/Description                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------- | ------- | --------------- | ---------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| + [id](#compositions_additionalProperties_steps_items_id )                   | No      | string          | No         | -                        | Stable identifier for this step. Must be unique within the composition. Used for output references, eval attachment, and trace records.                                                                                                                                                |
+| + [kind](#compositions_additionalProperties_steps_items_kind )               | No      | string          | No         | -                        | Step kind. v1 conventional values: 'prompt', 'agent', 'tool', 'branch', 'parallel'. Any other kind must be vendor-namespaced as 'vendor.kind' (e.g. 'omnia.judge'); an unnamespaced kind outside the v1 set is invalid, so future specification kinds cannot collide with vendor ones. |
+| - [description](#compositions_additionalProperties_steps_items_description ) | No      | string          | No         | -                        | -                                                                                                                                                                                                                                                                                      |
+| - [depends_on](#compositions_additionalProperties_steps_items_depends_on )   | No      | array of string | No         | -                        | Optional explicit predecessor step IDs. If omitted, the step sequentially follows the prior step in steps[]. Required when steps run after a branch or parallel and need to declare a join point.                                                                                      |
+| - [modifiers](#compositions_additionalProperties_steps_items_modifiers )     | No      | object          | No         | In #/$defs/StepModifiers | Optional declarative modifiers (retry, eval attachment). Modifier semantics are runtime-defined.                                                                                                                                                                                       |
 
-| One of(Option)                                                          |
-| ----------------------------------------------------------------------- |
-| [PromptStep](#compositions_additionalProperties_steps_items_oneOf_i0)   |
-| [AgentStep](#compositions_additionalProperties_steps_items_oneOf_i1)    |
-| [ToolStep](#compositions_additionalProperties_steps_items_oneOf_i2)     |
-| [BranchStep](#compositions_additionalProperties_steps_items_oneOf_i3)   |
-| [ParallelStep](#compositions_additionalProperties_steps_items_oneOf_i4) |
+| One of(Option)                                                           |
+| ------------------------------------------------------------------------ |
+| [PromptStep](#compositions_additionalProperties_steps_items_oneOf_i0)    |
+| [AgentStep](#compositions_additionalProperties_steps_items_oneOf_i1)     |
+| [ToolStep](#compositions_additionalProperties_steps_items_oneOf_i2)      |
+| [BranchStep](#compositions_additionalProperties_steps_items_oneOf_i3)    |
+| [ParallelStep](#compositions_additionalProperties_steps_items_oneOf_i4)  |
+| [ExtensionStep](#compositions_additionalProperties_steps_items_oneOf_i5) |
 
 ###### <a name="compositions_additionalProperties_steps_items_oneOf_i0"></a>16.1.6.1.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > PromptStep`
 
@@ -6623,7 +7195,33 @@ Specific value: `"parallel"`
 
 **Description:** Field name under which the merged result is placed on the parallel step's output. Subsequent steps reference it as `${<parallelStepId>.output.<into>}`.
 
-###### <a name="compositions_additionalProperties_steps_items_id"></a>16.1.6.1.6. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > id`
+###### <a name="compositions_additionalProperties_steps_items_oneOf_i5"></a>16.1.6.1.6. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > ExtensionStep`
+
+|                           |                       |
+| ------------------------- | --------------------- |
+| **Type**                  | `object`              |
+| **Required**              | No                    |
+| **Additional properties** | Any type allowed      |
+| **Defined in**            | #/$defs/ExtensionStep |
+
+**Description:** A vendor-namespaced step kind, written 'vendor.kind' (e.g. 'omnia.judge'). The namespace dot keeps extension kinds disjoint from the v1 kinds and from any future unnamespaced kind the specification defines. Fields beyond the common step fields are defined by the runtime that supports the kind, and a composition using one is portable only to runtimes that support it (RFC 0010 Level 3).
+
+| Property                                                                | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ----------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| + [kind](#compositions_additionalProperties_steps_items_oneOf_i5_kind ) | No      | string | No         | -          | -                 |
+
+###### <a name="compositions_additionalProperties_steps_items_oneOf_i5_kind"></a>16.1.6.1.6.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > oneOf > item 5 > kind`
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | Yes      |
+
+| Restrictions                      |                                                                                                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Must match regular expression** | ```^[a-z][a-z0-9_-]*\.[a-z][a-z0-9_.-]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-z%5D%5Ba-z0-9_-%5D%2A%5C.%5Ba-z%5D%5Ba-z0-9_.-%5D%2A%24) |
+
+###### <a name="compositions_additionalProperties_steps_items_id"></a>16.1.6.1.7. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > id`
 
 |              |          |
 | ------------ | -------- |
@@ -6636,23 +7234,23 @@ Specific value: `"parallel"`
 | --------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | **Must match regular expression** | ```^[a-zA-Z_][a-zA-Z0-9_]*$``` [Test](https://regex101.com/?regex=%5E%5Ba-zA-Z_%5D%5Ba-zA-Z0-9_%5D%2A%24) |
 
-###### <a name="compositions_additionalProperties_steps_items_kind"></a>16.1.6.1.7. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > kind`
+###### <a name="compositions_additionalProperties_steps_items_kind"></a>16.1.6.1.8. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > kind`
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | Yes      |
 
-**Description:** Step kind. v1 conventional values: 'prompt', 'agent', 'tool', 'branch', 'parallel'. Free-form string with documented conventional values; runtimes may support additional vendor-namespaced kinds (e.g. 'omnia.judge').
+**Description:** Step kind. v1 conventional values: 'prompt', 'agent', 'tool', 'branch', 'parallel'. Any other kind must be vendor-namespaced as 'vendor.kind' (e.g. 'omnia.judge'); an unnamespaced kind outside the v1 set is invalid, so future specification kinds cannot collide with vendor ones.
 
-###### <a name="compositions_additionalProperties_steps_items_description"></a>16.1.6.1.8. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > description`
+###### <a name="compositions_additionalProperties_steps_items_description"></a>16.1.6.1.9. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > description`
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-###### <a name="compositions_additionalProperties_steps_items_depends_on"></a>16.1.6.1.9. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on`
+###### <a name="compositions_additionalProperties_steps_items_depends_on"></a>16.1.6.1.10. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on`
 
 |              |                   |
 | ------------ | ----------------- |
@@ -6673,14 +7271,14 @@ Specific value: `"parallel"`
 | ----------------------------------------------------------------------------------- | ----------- |
 | [depends_on items](#compositions_additionalProperties_steps_items_depends_on_items) | -           |
 
-###### <a name="compositions_additionalProperties_steps_items_depends_on_items"></a>16.1.6.1.9.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on > depends_on items
+###### <a name="compositions_additionalProperties_steps_items_depends_on_items"></a>16.1.6.1.10.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > depends_on > depends_on items
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | No       |
 
-###### <a name="compositions_additionalProperties_steps_items_modifiers"></a>16.1.6.1.10. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers`
+###### <a name="compositions_additionalProperties_steps_items_modifiers"></a>16.1.6.1.11. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers`
 
 |                           |                       |
 | ------------------------- | --------------------- |
@@ -6696,7 +7294,7 @@ Specific value: `"parallel"`
 | - [retry](#compositions_additionalProperties_steps_items_modifiers_retry ) | No      | object          | No         | -          | -                                                                                                                      |
 | - [eval](#compositions_additionalProperties_steps_items_modifiers_eval )   | No      | array of string | No         | -          | References to eval keys defined in the pack's evals object (RFC 0006). Runtimes may execute these inline or post-Send. |
 
-###### <a name="compositions_additionalProperties_steps_items_modifiers_retry"></a>16.1.6.1.10.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry`
+###### <a name="compositions_additionalProperties_steps_items_modifiers_retry"></a>16.1.6.1.11.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -6708,7 +7306,7 @@ Specific value: `"parallel"`
 | ---------------------------------------------------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
 | - [max_attempts](#compositions_additionalProperties_steps_items_modifiers_retry_max_attempts ) | No      | integer | No         | -          | -                 |
 
-###### <a name="compositions_additionalProperties_steps_items_modifiers_retry_max_attempts"></a>16.1.6.1.10.1.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry > max_attempts`
+###### <a name="compositions_additionalProperties_steps_items_modifiers_retry_max_attempts"></a>16.1.6.1.11.1.1. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > retry > max_attempts`
 
 |              |           |
 | ------------ | --------- |
@@ -6719,7 +7317,7 @@ Specific value: `"parallel"`
 | ------------ | ------ |
 | **Minimum**  | &ge; 1 |
 
-###### <a name="compositions_additionalProperties_steps_items_modifiers_eval"></a>16.1.6.1.10.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval`
+###### <a name="compositions_additionalProperties_steps_items_modifiers_eval"></a>16.1.6.1.11.2. Property `PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval`
 
 |              |                   |
 | ------------ | ----------------- |
@@ -6740,7 +7338,7 @@ Specific value: `"parallel"`
 | --------------------------------------------------------------------------------- | ----------- |
 | [eval items](#compositions_additionalProperties_steps_items_modifiers_eval_items) | -           |
 
-###### <a name="compositions_additionalProperties_steps_items_modifiers_eval_items"></a>16.1.6.1.10.2.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval > eval items
+###### <a name="compositions_additionalProperties_steps_items_modifiers_eval_items"></a>16.1.6.1.11.2.1. PromptPack Specification > compositions > additionalProperties > steps > steps items > modifiers > eval > eval items
 
 |              |          |
 | ------------ | -------- |
@@ -6759,6 +7357,20 @@ Specific value: `"parallel"`
 
 | Property                                                              | Pattern | Type   | Deprecated | Definition | Title/Description |
 | --------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| - - additionalProperties | No      | object | No         | -          | -                 |
+
+#### <a name="compositions_additionalProperties_extensions"></a>16.1.8. Property `PromptPack Specification > compositions > additionalProperties > extensions`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Opaque policy annotations about this object (RFC 0016). Never interpreted by this specification and never passed to a scorer, guardrail or model as configuration. Keys SHOULD be namespaced.
+
+| Property                                                                  | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ------------------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
 | - - additionalProperties | No      | object | No         | -          | -                 |
 
 ## <a name="requires"></a>17. Property `PromptPack Specification > requires`
@@ -7001,4 +7613,4 @@ Specific value: `"parallel"`
 | **Minimum**  | &ge; 1 |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-08-31 at 19:08:20 +0000
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2026-10-07 at 15:39:06 +0000
