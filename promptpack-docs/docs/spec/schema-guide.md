@@ -1221,10 +1221,10 @@ None of these need declaring in `vocabularies`. All external namespaces are unve
 | `legal-eu-gdpr` | `https://w3id.org/dpv/legal/eu/gdpr#` | GDPR legal concepts |
 | `legal-us` | `https://w3id.org/dpv/legal/us#` | US state privacy laws and authorities |
 | `sector-health`, `sector-finance`, `sector-education`, `sector-law`, `sector-publicservices`, `sector-infra` | `https://w3id.org/dpv/sector/<name>#` | `intended_deployment_contexts` |
-| `hipaa` | `https://promptpack.org/vocab/hipaa#` | minted: `CoveredEntity`, `BusinessAssociate`, `PHI`, `ePHI`, `LimitedDataSet`, `DeIdentified` |
-| `pp` | `https://promptpack.org/vocab/pp#` | minted: `Confidential`, `Restricted`, `Public`, `Credentials`, `FinancialAccount`, `SyntheticMedia`, and the review practices `BiasTesting`, `AccuracyReview`, `RedTeaming`, `DataQualityReview`, `HumanOversightReview` |
+| `hipaa` | [`https://promptpack.org/vocab/hipaa#`](/vocab/hipaa/) | minted: `CoveredEntity`, `BusinessAssociate`, `PHI`, `ePHI`, `LimitedDataSet`, `DeIdentified` |
+| `pp` | [`https://promptpack.org/vocab/pp#`](/vocab/pp/) | minted: `Confidential`, `Restricted`, `Public`, `Credentials`, `FinancialAccount`, `SyntheticMedia`, and the review practices `BiasTesting`, `AccuracyReview`, `RedTeaming`, `DataQualityReview`, `HumanOversightReview` |
 
-A term is minted under `promptpack.org` only where no external vocabulary supplies it **and** the instrument that defines it has frozen its meaning. A prefix identifies a concept; it does not interpret the instrument, and declaring it makes nothing compliant with anything.
+A term is minted under `promptpack.org` only where no external vocabulary supplies it **and** its meaning is fixed — by the instrument that defines it (`hipaa:`, each term linking to its CFR section), or by PromptPack's own definition, which is never revised in place (`pp:`). Both namespaces are published as [Turtle, JSON-LD and a readable page](/vocab/). A prefix identifies a concept; it does not interpret the instrument, and declaring it makes nothing compliant with anything.
 
 ## Policy annotation *(v1.8.0+)*
 

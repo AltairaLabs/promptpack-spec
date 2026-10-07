@@ -1,0 +1,156 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "hipaa": "https://promptpack.org/vocab/hipaa#",
+    "rdfs:seeAlso": {
+      "@type": "@id"
+    },
+    "rdfs:isDefinedBy": {
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "https://promptpack.org/vocab/hipaa",
+      "@type": "owl:Ontology",
+      "dcterms:title": {
+        "@value": "HIPAA terms",
+        "@language": "en"
+      },
+      "dcterms:description": {
+        "@value": "Identifiers for HIPAA concepts that no external vocabulary supplies, minted by RFC 0016 for operator_role and data_classes. Each definition is a paraphrase; the cited section of the Code of Federal Regulations is authoritative. Publishing a term does not interpret the regulation, and declaring one makes nothing compliant.",
+        "@language": "en"
+      }
+    },
+    {
+      "@id": "hipaa:CoveredEntity",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Covered entity",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "A health plan, a health care clearinghouse, or a health care provider that transmits health information electronically in connection with a transaction covered by HIPAA.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/hipaa",
+      "dcterms:source": {
+        "@value": "45 CFR 160.103",
+        "@language": "en"
+      },
+      "rdfs:seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "@id": "hipaa:BusinessAssociate",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Business associate",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "A person or organisation that, on behalf of a covered entity and other than as a member of its workforce, creates, receives, maintains or transmits protected health information, or provides services to a covered entity that involve disclosing it.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/hipaa",
+      "dcterms:source": {
+        "@value": "45 CFR 160.103",
+        "@language": "en"
+      },
+      "rdfs:seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "@id": "hipaa:PHI",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Protected health information",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Individually identifiable health information transmitted or maintained in any form or medium, excluding certain education and employment records.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/hipaa",
+      "dcterms:source": {
+        "@value": "45 CFR 160.103",
+        "@language": "en"
+      },
+      "rdfs:seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "@id": "hipaa:ePHI",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Electronic protected health information",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Protected health information that is transmitted by, or maintained in, electronic media.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/hipaa",
+      "dcterms:source": {
+        "@value": "45 CFR 160.103",
+        "@language": "en"
+      },
+      "rdfs:seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "@id": "hipaa:LimitedDataSet",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Limited data set",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Protected health information that excludes the direct identifiers listed in the regulation for the individual and for their relatives, employers and household members.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/hipaa",
+      "dcterms:source": {
+        "@value": "45 CFR 164.514(e)",
+        "@language": "en"
+      },
+      "rdfs:seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514#p-164.514(e)"
+    },
+    {
+      "@id": "hipaa:DeIdentified",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "De-identified health information",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Health information that does not identify an individual and offers no reasonable basis to identify one, as established by expert determination or by removing the identifiers the regulation lists. De-identified information is not protected health information.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/hipaa",
+      "dcterms:source": {
+        "@value": "45 CFR 164.514(a)–(b)",
+        "@language": "en"
+      },
+      "rdfs:seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514#p-164.514(a)"
+    }
+  ]
+}

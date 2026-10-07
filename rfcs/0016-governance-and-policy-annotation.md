@@ -333,7 +333,7 @@ The join between the two is the runtime's to make, but the key is not. A runtime
 
 RFC 0013 established that open-list values are terms — a CURIE or an absolute IRI — with `vocabularies` mapping prefixes to namespaces, and that a small set of prefixes are well-known. This RFC extends that set, under a rule stated so it need not be re-argued:
 
-> **Reference, do not author.** A prefix is added by pointing at an existing vocabulary. A term is minted under `promptpack.org` only where **no external vocabulary supplies it** *and* **the term is definitionally frozen in the instrument that defines it**.
+> **Reference, do not author.** A prefix is added by pointing at an existing vocabulary. A term is minted under `promptpack.org` only where **no external vocabulary supplies it** *and* **its meaning is fixed** — by the instrument that defines it, or, where no instrument does, by a definition PromptPack publishes and does not revise.
 
 The second condition carries the weight. A stale published vocabulary is worse than none, and RFC 0013 made these lists open precisely because legal taxonomy is content the specification has "no business maintaining and no ability to keep current". Minting terms that move would contradict that; minting terms that cannot does not.
 
@@ -374,7 +374,7 @@ Terms available for each RFC 0013 slot, for the common cases:
 
 #### Minted terms
 
-Two namespaces, published as data artifacts at `https://promptpack.org/vocab/`, each term carrying `rdfs:seeAlso` to the instrument it names.
+Two namespaces, published at `https://promptpack.org/vocab/` as Turtle, JSON-LD and a human-readable page. A term carries `rdfs:seeAlso` to the instrument that defines it where one exists, which is every `hipaa:` term and no `pp:` term.
 
 **`hipaa:`** — DPV's US legal extension covers seven state privacy laws (CCPA, CPRA, CPA, CTPA, NPICICA, UCPA, VCDPA) and their enforcement authorities. It does not cover HIPAA, and no other vocabulary supplies these terms. They meet the frozen test: the covered-entity and business-associate definitions have been stable since 1996, and the PHI, limited-data-set and de-identification definitions are fixed in 45 CFR 160.103 and 164.514.
 
@@ -385,6 +385,8 @@ Two namespaces, published as data artifacts at `https://promptpack.org/vocab/`, 
 
 **`pp:`** — generic terms with no single instrument behind them, for cases DPV does not address because they are not about personal data. The `reviews[].type` terms belong here because nothing external supplies them: DPV's risk extension covers risk-management *process* — `risk:RiskAssessment`, `risk:RiskAnalysis`, `risk:RiskEvaluation` — and carries no terms for assurance *practices* such as bias testing or red teaming. Use `risk:` where a review is generic risk management and `pp:` for a named practice.
 
+No instrument defines these terms, so they carry no `rdfs:seeAlso`; PromptPack's published definition is the definition. That satisfies the frozen-terms rule only because the definitions are not revised: a `pp:` term that needed a different meaning would be deprecated and replaced by a new term, never redefined in place.
+
 | Slot | Terms |
 |---|---|
 | `data_classes` | `Confidential` · `Restricted` · `Public` · `Credentials` · `FinancialAccount` |
@@ -392,7 +394,7 @@ Two namespaces, published as data artifacts at `https://promptpack.org/vocab/`, 
 | `reviews.type` | `BiasTesting` · `AccuracyReview` · `RedTeaming` · `DataQualityReview` · `HumanOversightReview` |
 
 :::note[Reviewing a minted namespace]
-There is no scheduled review cadence, and adding one would imply the terms drift. They are chosen not to: a namespace is reviewed when the instrument behind it is amended, and nothing else triggers it. If a minted term ever does need to change, that is evidence the frozen-terms rule was misapplied when it was minted, and the fix belongs at the selection rule rather than in a calendar.
+There is no scheduled review cadence, and adding one would imply the terms drift. They are chosen not to: `hipaa:` is reviewed when the instrument behind it is amended, `pp:` has no instrument and is never revised in place, and nothing else triggers a review. If a minted term ever does need to change, that is evidence the frozen-terms rule was misapplied when it was minted, and the fix belongs at the selection rule rather than in a calendar.
 :::
 
 :::note[Two things a published prefix does not mean]
@@ -1128,7 +1130,7 @@ The most likely candidate for future revision is the segregation-of-duties gap: 
    - [x] README badge and versioned schema URL updated in lockstep
 
 2. **Phase 2: Vocabulary**
-   - [ ] `hipaa:` and `pp:` published at `https://promptpack.org/vocab/`, each term carrying `rdfs:seeAlso` to its instrument
+   - [x] `hipaa:` and `pp:` published at `https://promptpack.org/vocab/`, with `rdfs:seeAlso` to the defining instrument where one exists
    - [x] Well-known prefix table published in the spec docs
 
 3. **Phase 3: Documentation**
@@ -1222,6 +1224,7 @@ EU AI Act Articles 72 and 73 concern post-market monitoring and serious-incident
 - **2026-09-01:** Removed the proposed `action_scope.duty` field and the segregation-of-duties material that depended on it; the reasoning is preserved in Alternative 1 and the arrangement is shown structurally in Example 4. Retitled from "Governance Obligations and Duty Declarations". No change to `$defs.ActionScope` remains.
 - **2026-09-01:** Added `accountable_owner` as an `independent_of` axis, which expresses segregation of duties through separation of responsibility rather than duty labels, and distinguished technical from organisational independence. Added an optional `extensions` object to `obligations` and `reviews` entries. Renamed `validations` to `reviews` to avoid colliding with schema validation, which this document uses throughout. Corrected the description of what an `eval` control buys: an eval yields a score rather than a verdict. Added a `validator` control form and an optional `id` on `$defs.Validator` so the one primitive that actually enforces can be named — the RFC's only change to an execution primitive. Scoped the `eval` control form to what it actually claims: it names the measurement that watches the obligation, not proof that the obligation held. An eval does not act in the response path as a validator does, but its score may drive alerts, paging, deployment gates or quarantine — which of those is a runtime concern. No use of `Eval.threshold`; a pass/fail measurement declares `metric.type: boolean`. Generalised that to a stated rule — a definition gets `extensions` if a runtime policy makes a decision at it and it occurs as one of many — and applied it to the six qualifying definitions that lacked one: `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState`, `Composition`. Retitled from "Governance Obligations and Vocabulary" to reflect it. Resolved every open question into the section it belongs to. Completed the worked examples, which were previously missing the required `template_engine` and `prompts`.
 - **2026-10-07:** Accepted and implemented in spec v1.8.0. Renamed `independent_of.on` to `independent_of.axes`: under YAML 1.1 parsers such as PyYAML the bare key `on` reads as boolean `true`, so the RFC's own `refunds-approver` example failed validation there. `obligations[]`, `controls[]` and `reviews[]` are published as the named definitions `Obligation`, `ObligationControl` and `Review`. Status → Implemented.
+- **2026-10-07:** Corrected the minted-terms text, found while publishing the namespaces. It said every minted term carries `rdfs:seeAlso` to its instrument and that a term is minted only where an instrument freezes its meaning, but this RFC itself describes `pp:` as having no instrument behind it. `rdfs:seeAlso` now applies where an instrument exists (every `hipaa:` term), and the frozen-terms rule admits a definition PromptPack publishes and never revises in place; a `pp:` term needing a new meaning is deprecated and replaced. No term or schema change.
 
 ## References
 

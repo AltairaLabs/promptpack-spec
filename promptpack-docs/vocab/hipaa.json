@@ -1,0 +1,56 @@
+{
+  "prefix": "hipaa",
+  "namespace": "https://promptpack.org/vocab/hipaa#",
+  "title": "HIPAA terms",
+  "description": "Identifiers for HIPAA concepts that no external vocabulary supplies, minted by RFC 0016 for operator_role and data_classes. Each definition is a paraphrase; the cited section of the Code of Federal Regulations is authoritative. Publishing a term does not interpret the regulation, and declaring one makes nothing compliant.",
+  "terms": [
+    {
+      "id": "CoveredEntity",
+      "slot": "operator_role",
+      "label": "Covered entity",
+      "definition": "A health plan, a health care clearinghouse, or a health care provider that transmits health information electronically in connection with a transaction covered by HIPAA.",
+      "source": "45 CFR 160.103",
+      "seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "id": "BusinessAssociate",
+      "slot": "operator_role",
+      "label": "Business associate",
+      "definition": "A person or organisation that, on behalf of a covered entity and other than as a member of its workforce, creates, receives, maintains or transmits protected health information, or provides services to a covered entity that involve disclosing it.",
+      "source": "45 CFR 160.103",
+      "seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "id": "PHI",
+      "slot": "data_classes",
+      "label": "Protected health information",
+      "definition": "Individually identifiable health information transmitted or maintained in any form or medium, excluding certain education and employment records.",
+      "source": "45 CFR 160.103",
+      "seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "id": "ePHI",
+      "slot": "data_classes",
+      "label": "Electronic protected health information",
+      "definition": "Protected health information that is transmitted by, or maintained in, electronic media.",
+      "source": "45 CFR 160.103",
+      "seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103"
+    },
+    {
+      "id": "LimitedDataSet",
+      "slot": "data_classes",
+      "label": "Limited data set",
+      "definition": "Protected health information that excludes the direct identifiers listed in the regulation for the individual and for their relatives, employers and household members.",
+      "source": "45 CFR 164.514(e)",
+      "seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514#p-164.514(e)"
+    },
+    {
+      "id": "DeIdentified",
+      "slot": "data_classes",
+      "label": "De-identified health information",
+      "definition": "Health information that does not identify an individual and offers no reasonable basis to identify one, as established by expert determination or by removing the identifiers the regulation lists. De-identified information is not protected health information.",
+      "source": "45 CFR 164.514(a)–(b)",
+      "seeAlso": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514#p-164.514(a)"
+    }
+  ]
+}

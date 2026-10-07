@@ -1,0 +1,74 @@
+{
+  "prefix": "pp",
+  "namespace": "https://promptpack.org/vocab/pp#",
+  "title": "PromptPack terms",
+  "description": "Generic terms minted by RFC 0016 for slots the Data Privacy Vocabulary does not address because they are not about personal data. No external instrument defines these terms; PromptPack does, and their definitions do not change. A term that needed to change would be deprecated and replaced, never redefined.",
+  "terms": [
+    {
+      "id": "Confidential",
+      "slot": "data_classes",
+      "label": "Confidential",
+      "definition": "Information whose disclosure outside its authorised audience would harm the organisation or the people it concerns. Organisations map their own classification schemes onto this term."
+    },
+    {
+      "id": "Restricted",
+      "slot": "data_classes",
+      "label": "Restricted",
+      "definition": "Information whose disclosure would cause serious harm, with access limited to named roles. Stricter than Confidential."
+    },
+    {
+      "id": "Public",
+      "slot": "data_classes",
+      "label": "Public",
+      "definition": "Information approved for disclosure without restriction."
+    },
+    {
+      "id": "Credentials",
+      "slot": "data_classes",
+      "label": "Credentials",
+      "definition": "Secrets that authenticate a person, service or system: passwords, API keys, access tokens and private keys."
+    },
+    {
+      "id": "FinancialAccount",
+      "slot": "data_classes",
+      "label": "Financial account",
+      "definition": "Identifiers and details of a financial account, such as account and card numbers, balances and transactions."
+    },
+    {
+      "id": "SyntheticMedia",
+      "slot": "capabilities",
+      "label": "Synthetic media",
+      "definition": "Generating or manipulating image, audio, video or text content that resembles real people, objects, places or events and could falsely appear authentic."
+    },
+    {
+      "id": "BiasTesting",
+      "slot": "reviews.type",
+      "label": "Bias testing",
+      "definition": "Testing whether the agent's outputs or the outcomes they lead to differ without justification across groups of people."
+    },
+    {
+      "id": "AccuracyReview",
+      "slot": "reviews.type",
+      "label": "Accuracy review",
+      "definition": "Reviewing whether the agent's outputs meet the accuracy declared for its intended purpose."
+    },
+    {
+      "id": "RedTeaming",
+      "slot": "reviews.type",
+      "label": "Red teaming",
+      "definition": "Adversarial testing in which testers try to make the agent act outside its intended purpose or declared limits."
+    },
+    {
+      "id": "DataQualityReview",
+      "slot": "reviews.type",
+      "label": "Data quality review",
+      "definition": "Reviewing whether the data the agent uses or produces is fit for its intended purpose: complete, accurate, relevant and, where required, de-identified."
+    },
+    {
+      "id": "HumanOversightReview",
+      "slot": "reviews.type",
+      "label": "Human oversight review",
+      "definition": "Reviewing whether human oversight of the agent works as declared: that the people overseeing it can understand its outputs, intervene, and override or stop it."
+    }
+  ]
+}
