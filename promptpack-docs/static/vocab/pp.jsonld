@@ -1,0 +1,206 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "pp": "https://promptpack.org/vocab/pp#",
+    "rdfs:seeAlso": {
+      "@type": "@id"
+    },
+    "rdfs:isDefinedBy": {
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "https://promptpack.org/vocab/pp",
+      "@type": "owl:Ontology",
+      "dcterms:title": {
+        "@value": "PromptPack terms",
+        "@language": "en"
+      },
+      "dcterms:description": {
+        "@value": "Generic terms minted by RFC 0016 for slots the Data Privacy Vocabulary does not address because they are not about personal data. No external instrument defines these terms; PromptPack does, and their definitions do not change. A term that needed to change would be deprecated and replaced, never redefined.",
+        "@language": "en"
+      }
+    },
+    {
+      "@id": "pp:Confidential",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Confidential",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Information whose disclosure outside its authorised audience would harm the organisation or the people it concerns. Organisations map their own classification schemes onto this term.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:Restricted",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Restricted",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Information whose disclosure would cause serious harm, with access limited to named roles. Stricter than Confidential.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:Public",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Public",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Information approved for disclosure without restriction.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:Credentials",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Credentials",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Secrets that authenticate a person, service or system: passwords, API keys, access tokens and private keys.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:FinancialAccount",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Financial account",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Identifiers and details of a financial account, such as account and card numbers, balances and transactions.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:SyntheticMedia",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Synthetic media",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Generating or manipulating image, audio, video or text content that resembles real people, objects, places or events and could falsely appear authentic.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:BiasTesting",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Bias testing",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Testing whether the agent's outputs or the outcomes they lead to differ without justification across groups of people.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:AccuracyReview",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Accuracy review",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Reviewing whether the agent's outputs meet the accuracy declared for its intended purpose.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:RedTeaming",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Red teaming",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Adversarial testing in which testers try to make the agent act outside its intended purpose or declared limits.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:DataQualityReview",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Data quality review",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Reviewing whether the data the agent uses or produces is fit for its intended purpose: complete, accurate, relevant and, where required, de-identified.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    },
+    {
+      "@id": "pp:HumanOversightReview",
+      "@type": [
+        "rdfs:Class",
+        "skos:Concept"
+      ],
+      "rdfs:label": {
+        "@value": "Human oversight review",
+        "@language": "en"
+      },
+      "skos:definition": {
+        "@value": "Reviewing whether human oversight of the agent works as declared: that the people overseeing it can understand its outputs, intervene, and override or stop it.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": "https://promptpack.org/vocab/pp"
+    }
+  ]
+}

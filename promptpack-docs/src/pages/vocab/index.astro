@@ -1,0 +1,20 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+const vocabs = Object.values(import.meta.glob('../../../vocab/*.json', { eager: true, import: 'default' }));
+---
+
+<StarlightPage frontmatter={{ title: 'Vocabularies', description: 'Namespaces minted by PromptPack for governance terms no external vocabulary supplies.' }}>
+  <p>
+    Governance fields take vocabulary terms. Most come from the W3C Data Privacy Vocabulary; these
+    namespaces cover what it does not. See the
+    <a href="/docs/spec/schema-guide#well-known-prefixes-v180">well-known prefixes</a> for the full table.
+  </p>
+  <ul>
+    {vocabs.map((v) => (
+      <li>
+        <a href={`/vocab/${v.prefix}/`}><code>{v.prefix}:</code> {v.title}</a> — {v.terms.length} terms ·
+        <a href={`/vocab/${v.prefix}.ttl`}>Turtle</a> · <a href={`/vocab/${v.prefix}.jsonld`}>JSON-LD</a>
+      </li>
+    ))}
+  </ul>
+</StarlightPage>

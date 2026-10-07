@@ -5,14 +5,16 @@
   "scripts": {
     "sync-rfcs": "node scripts/sync-rfcs.js",
     "sync-schema": "node scripts/sync-schema.js",
-    "prestart": "npm run sync-rfcs && npm run sync-schema",
+    "prestart": "npm run sync-rfcs && npm run sync-schema && npm run sync-vocab",
     "start": "astro dev",
     "dev": "astro dev",
-    "prebuild": "npm run sync-rfcs && npm run sync-schema",
+    "prebuild": "npm run sync-rfcs && npm run sync-schema && npm run sync-vocab",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "sync-vocab": "node scripts/sync-vocab.js",
+    "test": "node --test \"scripts/*.test.js\""
   },
   "dependencies": {
     "@altairalabs/atlas-tokens": "^0.4.1",

@@ -1,0 +1,52 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix hipaa: <https://promptpack.org/vocab/hipaa#> .
+
+<https://promptpack.org/vocab/hipaa> a owl:Ontology ;
+    dcterms:title "HIPAA terms"@en ;
+    dcterms:description "Identifiers for HIPAA concepts that no external vocabulary supplies, minted by RFC 0016 for operator_role and data_classes. Each definition is a paraphrase; the cited section of the Code of Federal Regulations is authoritative. Publishing a term does not interpret the regulation, and declaring one makes nothing compliant."@en .
+
+hipaa:CoveredEntity a rdfs:Class, skos:Concept ;
+    rdfs:label "Covered entity"@en ;
+    skos:definition "A health plan, a health care clearinghouse, or a health care provider that transmits health information electronically in connection with a transaction covered by HIPAA."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/hipaa> ;
+    dcterms:source "45 CFR 160.103"@en ;
+    rdfs:seeAlso <https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103> .
+
+hipaa:BusinessAssociate a rdfs:Class, skos:Concept ;
+    rdfs:label "Business associate"@en ;
+    skos:definition "A person or organisation that, on behalf of a covered entity and other than as a member of its workforce, creates, receives, maintains or transmits protected health information, or provides services to a covered entity that involve disclosing it."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/hipaa> ;
+    dcterms:source "45 CFR 160.103"@en ;
+    rdfs:seeAlso <https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103> .
+
+hipaa:PHI a rdfs:Class, skos:Concept ;
+    rdfs:label "Protected health information"@en ;
+    skos:definition "Individually identifiable health information transmitted or maintained in any form or medium, excluding certain education and employment records."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/hipaa> ;
+    dcterms:source "45 CFR 160.103"@en ;
+    rdfs:seeAlso <https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103> .
+
+hipaa:ePHI a rdfs:Class, skos:Concept ;
+    rdfs:label "Electronic protected health information"@en ;
+    skos:definition "Protected health information that is transmitted by, or maintained in, electronic media."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/hipaa> ;
+    dcterms:source "45 CFR 160.103"@en ;
+    rdfs:seeAlso <https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-A/section-160.103> .
+
+hipaa:LimitedDataSet a rdfs:Class, skos:Concept ;
+    rdfs:label "Limited data set"@en ;
+    skos:definition "Protected health information that excludes the direct identifiers listed in the regulation for the individual and for their relatives, employers and household members."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/hipaa> ;
+    dcterms:source "45 CFR 164.514(e)"@en ;
+    rdfs:seeAlso <https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514#p-164.514(e)> .
+
+hipaa:DeIdentified a rdfs:Class, skos:Concept ;
+    rdfs:label "De-identified health information"@en ;
+    skos:definition "Health information that does not identify an individual and offers no reasonable basis to identify one, as established by expert determination or by removing the identifiers the regulation lists. De-identified information is not protected health information."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/hipaa> ;
+    dcterms:source "45 CFR 164.514(a)–(b)"@en ;
+    rdfs:seeAlso <https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-E/section-164.514#p-164.514(a)> .

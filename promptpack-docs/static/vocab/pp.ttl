@@ -1,0 +1,65 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix pp: <https://promptpack.org/vocab/pp#> .
+
+<https://promptpack.org/vocab/pp> a owl:Ontology ;
+    dcterms:title "PromptPack terms"@en ;
+    dcterms:description "Generic terms minted by RFC 0016 for slots the Data Privacy Vocabulary does not address because they are not about personal data. No external instrument defines these terms; PromptPack does, and their definitions do not change. A term that needed to change would be deprecated and replaced, never redefined."@en .
+
+pp:Confidential a rdfs:Class, skos:Concept ;
+    rdfs:label "Confidential"@en ;
+    skos:definition "Information whose disclosure outside its authorised audience would harm the organisation or the people it concerns. Organisations map their own classification schemes onto this term."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:Restricted a rdfs:Class, skos:Concept ;
+    rdfs:label "Restricted"@en ;
+    skos:definition "Information whose disclosure would cause serious harm, with access limited to named roles. Stricter than Confidential."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:Public a rdfs:Class, skos:Concept ;
+    rdfs:label "Public"@en ;
+    skos:definition "Information approved for disclosure without restriction."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:Credentials a rdfs:Class, skos:Concept ;
+    rdfs:label "Credentials"@en ;
+    skos:definition "Secrets that authenticate a person, service or system: passwords, API keys, access tokens and private keys."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:FinancialAccount a rdfs:Class, skos:Concept ;
+    rdfs:label "Financial account"@en ;
+    skos:definition "Identifiers and details of a financial account, such as account and card numbers, balances and transactions."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:SyntheticMedia a rdfs:Class, skos:Concept ;
+    rdfs:label "Synthetic media"@en ;
+    skos:definition "Generating or manipulating image, audio, video or text content that resembles real people, objects, places or events and could falsely appear authentic."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:BiasTesting a rdfs:Class, skos:Concept ;
+    rdfs:label "Bias testing"@en ;
+    skos:definition "Testing whether the agent's outputs or the outcomes they lead to differ without justification across groups of people."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:AccuracyReview a rdfs:Class, skos:Concept ;
+    rdfs:label "Accuracy review"@en ;
+    skos:definition "Reviewing whether the agent's outputs meet the accuracy declared for its intended purpose."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:RedTeaming a rdfs:Class, skos:Concept ;
+    rdfs:label "Red teaming"@en ;
+    skos:definition "Adversarial testing in which testers try to make the agent act outside its intended purpose or declared limits."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:DataQualityReview a rdfs:Class, skos:Concept ;
+    rdfs:label "Data quality review"@en ;
+    skos:definition "Reviewing whether the data the agent uses or produces is fit for its intended purpose: complete, accurate, relevant and, where required, de-identified."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
+
+pp:HumanOversightReview a rdfs:Class, skos:Concept ;
+    rdfs:label "Human oversight review"@en ;
+    skos:definition "Reviewing whether human oversight of the agent works as declared: that the people overseeing it can understand its outputs, intervene, and override or stop it."@en ;
+    rdfs:isDefinedBy <https://promptpack.org/vocab/pp> .
