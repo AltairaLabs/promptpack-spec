@@ -6,6 +6,7 @@ on:
       - "schema/promptpack.schema.json"
       - "README.md"
       - "scripts/check-version-consistency.mjs"
+      - "scripts/check-schema-patterns.mjs"
       - ".github/workflows/version-check.yml"
   push:
     branches: [main]
@@ -21,3 +22,5 @@ jobs:
           node-version: "20"
       - name: Run consistency check
         run: node scripts/check-version-consistency.mjs
+      - name: Check schema patterns compile under RE2 (Go)
+        run: node scripts/check-schema-patterns.mjs
