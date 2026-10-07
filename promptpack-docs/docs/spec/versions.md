@@ -6,13 +6,20 @@ sidebar:
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.8.0
+## Current Version: v1.8.1
 
 **Status:** current
 **Released:** October 2026
-**Schema:** `https://promptpack.org/schema/v1.8.0/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.8.1/promptpack.schema.json`
 
-### What's New in v1.8.0
+### What's New in v1.8.1
+
+- **`reviews[].cadence` pattern rewritten without lookaheads.** The v1.8.0 pattern used `(?!$)` and `(?=\d)`. JSON Schema patterns are ECMA-262, but Go's `regexp` (RE2) supports neither, and a Go validator refuses to load a schema containing one — so on v1.8.0 every pack failed validation in PromptKit. The new pattern accepts and rejects exactly the same durations.
+- **A CI check now rejects schema patterns that RE2 cannot compile** (lookaround, backreferences, atomic groups, possessive quantifiers).
+
+Patch release: no field changes, and every pack valid against v1.8.0 is valid against v1.8.1. The spec docs are unchanged, so v1.8.0 has no separate archive.
+
+### Also in v1.8 (v1.8.0)
 
 - **Governance Obligations, Vocabulary and Policy Annotation** ([RFC-0016](/docs/rfcs/governance-and-policy-annotation)) — three optional additions to `governance`, all declarations:
   - **`obligations`** — the duty a declared capability, data class or classification triggers, and the controls that discharge it: a governance `field`, a `validator`, an `eval`, or an `external` control. Every form except `external` must resolve against the pack, so an obligation can't be discharged by naming something that doesn't exist
@@ -70,7 +77,7 @@ All fields are optional and additive. Packs written against v1.5.x remain valid 
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.8.0 Spec →](./overview)
+[View v1.8.1 Spec →](./overview)
 
 ---
 
@@ -231,7 +238,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.8.0 | current | Full support | - |
+| v1.8.1 | current | Full support | - |
+| v1.8.0 | superseded | Upgrade to v1.8.1 | - |
 | v1.7.0 | stable | Security fixes only | TBD |
 | v1.6.0 | stable | Security fixes only | TBD |
 | v1.5.1 | stable | Security fixes only | TBD |
@@ -249,6 +257,10 @@ The foundational release of PromptPack.
 - **End of Life**: No further updates
 
 ---
+
+## Migration from v1.8.0 to v1.8.1
+
+**No migration required.** Only the `reviews[].cadence` pattern changed, and it accepts the same values. If your validator is written in Go, or any other RE2-based engine, v1.8.1 is the first v1.8 schema it can load.
 
 ## Migration from v1.7.0 to v1.8.0
 
@@ -729,7 +741,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - Your flows are conversational/event-driven and don't need procedural step graphs
 - Prefer maximum stability
 
-**Recommendation:** Use v1.8.0 for all new projects. It's backward compatible and adds governance obligations, recurring reviews and independence requirements, on top of v1.7.0 workflow state `control`, v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
+**Recommendation:** Use v1.8.1 for all new projects. It's backward compatible and adds governance obligations, recurring reviews and independence requirements, on top of v1.7.0 workflow state `control`, v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
 
 ---
 
@@ -737,6 +749,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.8.1 | Oct 2026 | `reviews[].cadence` pattern made RE2-compatible (Go validators can load the schema) |
 | v1.8.0 | Oct 2026 | Governance `obligations`, `reviews` and `independent_of`; policy-annotation `extensions`; vendor step kinds |
 | v1.7.0 | Aug 2026 | Workflow state `control`; `Validator.fail_on_violation` deprecated |
 | v1.6.0 | Aug 2026 | Governance declarations: `metadata.governance` and per-tool `action_scope` |

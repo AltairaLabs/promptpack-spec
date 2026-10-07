@@ -3,7 +3,7 @@
   "$id": "https://promptpack.org/schema/latest/promptpack.schema.json",
   "title": "PromptPack Specification",
   "description": "Schema for packaging, testing, and running multi-prompt conversational systems with multimodal, workflow, agent, agent-loop, skills, and composition support. Agents may be backed by a workflow state (AgentDef.state) to expose stateful, looping behavior. Workflow states may use 'composition' orchestration to run a declarative step graph (RFC 0010). A pack may declare the model providers it needs to run via the optional 'requires.providers' block (RFC 0012). Packs may declare governance facts (metadata.governance) and per-tool action scope (Tool.action_scope) so consequence is recorded alongside capability. Workflow states may declare who holds the next turn via 'control' (RFC 0014). Validator.fail_on_violation is deprecated — validators always enforce (RFC 0015). Governance may record the obligations a declaration triggers and the controls that discharge them, recurring reviews, and independence requirements; policy decision points carry an opaque 'extensions' slot (RFC 0016).",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "type": "object",
   "required": ["id", "name", "version", "template_engine", "prompts"],
   "additionalProperties": false,
@@ -746,7 +746,7 @@
         "cadence": {
           "type": "string",
           "description": "ISO 8601 duration between reviews. Must not be the empty duration 'P'.",
-          "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$",
+          "pattern": "^P(?:(?:\\d+Y(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?|\\d+M(?:\\d+W)?(?:\\d+D)?|\\d+W(?:\\d+D)?|\\d+D)(?:T(?:\\d+H(?:\\d+M)?(?:\\d+S)?|\\d+M(?:\\d+S)?|\\d+S))?|T(?:\\d+H(?:\\d+M)?(?:\\d+S)?|\\d+M(?:\\d+S)?|\\d+S))$",
           "examples": ["P3M", "P1Y"]
         },
         "owner": {

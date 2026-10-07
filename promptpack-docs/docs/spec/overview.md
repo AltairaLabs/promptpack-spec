@@ -4,12 +4,12 @@ sidebar:
   order: 2
 ---
 
-<span className="ppVersionBadge ppVersionBadge--current">v1.8.0 · current</span>
+<span className="ppVersionBadge ppVersionBadge--current">v1.8.1 · current</span>
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
 :::note[Version Information]
-This documentation covers **v1.8.0** of the PromptPack specification. **v1.8.0** extends governance (RFC 0016): `metadata.governance` can now record which **obligations** a declared capability triggers and which controls discharge them — a governance field, a validator, an eval, or a control outside the pack — plus recurring **reviews** with a cadence and an owning team, and an **independence** requirement that expresses segregation of duties. It publishes a table of well-known vocabulary prefixes, mostly pointing at the W3C Data Privacy Vocabulary, and gives every definition where a runtime policy makes a decision an opaque `extensions` slot. It also lets compositions use vendor-namespaced step kinds (`vendor.kind`), which the prose had always promised and the schema rejected. **v1.7.0** added **workflow state control** (RFC 0014) and deprecated `Validator.fail_on_violation` (RFC 0015).
+This documentation covers **v1.8.1** of the PromptPack specification. **v1.8.1** rewrites the `reviews[].cadence` pattern so validators built on Go's regex engine can load the schema; nothing else changes. **v1.8.0** extended governance (RFC 0016): `metadata.governance` can now record which **obligations** a declared capability triggers and which controls discharge them — a governance field, a validator, an eval, or a control outside the pack — plus recurring **reviews** with a cadence and an owning team, and an **independence** requirement that expresses segregation of duties. It publishes a table of well-known vocabulary prefixes, mostly pointing at the W3C Data Privacy Vocabulary, and gives every definition where a runtime policy makes a decision an opaque `extensions` slot. It also lets compositions use vendor-namespaced step kinds (`vendor.kind`), which the prose had always promised and the schema rejected. **v1.7.0** added **workflow state control** (RFC 0014) and deprecated `Validator.fail_on_violation` (RFC 0015).
 Looking for previous versions? [View v1.7.0 docs →](./v1.7.0/overview) | [Version History →](./versions)
 :::
 
