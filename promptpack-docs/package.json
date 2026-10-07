@@ -21,7 +21,7 @@
     "@altairalabs/brand": "^0.8.0",
     "@astrojs/mdx": "^7.0.8",
     "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/starlight": "~0.41.10",
+    "@astrojs/starlight": "~0.42.1",
     "@fontsource/space-grotesk": "^5.2.10",
     "@fontsource/spline-sans-mono": "^5.2.8",
     "astro": "^7.2.9",
