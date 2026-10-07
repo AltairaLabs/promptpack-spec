@@ -6,20 +6,34 @@ sidebar:
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.7.0
+## Current Version: v1.8.0
 
 **Status:** current
-**Released:** August 2026
-**Schema:** `https://promptpack.org/schema/v1.7.0/promptpack.schema.json`
+**Released:** October 2026
+**Schema:** `https://promptpack.org/schema/v1.8.0/promptpack.schema.json`
 
-### What's New in v1.7.0
+### What's New in v1.8.0
 
-- **Workflow State Control** ([RFC-0014](/docs/rfcs/workflow-state-control)) — an optional `control` property on each workflow state declaring who holds the next turn after entering it: `user` (default, and the behavior of every state before v1.7.0) or `agent`
+- **Governance Obligations, Vocabulary and Policy Annotation** ([RFC-0016](/docs/rfcs/governance-and-policy-annotation)) — three optional additions to `governance`, all declarations:
+  - **`obligations`** — the duty a declared capability, data class or classification triggers, and the controls that discharge it: a governance `field`, a `validator`, an `eval`, or an `external` control. Every form except `external` must resolve against the pack, so an obligation can't be discharged by naming something that doesn't exist
+  - **`reviews`** — recurring obligations, with an ISO 8601 `cadence` and an owning team. Completion records stay out of the pack; runtimes key them by `reviews[].id`
+  - **`independent_of`** — a reviewing agent must not share the listed `axes` (`model`, `provider`, `tools`, `prompts`, `accountable_owner`) with whatever produces its input. Naming `accountable_owner` is how a pack expresses segregation of duties
+- **`Validator.id`** — optional, so an obligation control can name the guardrail that enforces it. Unique across the pack where declared
+- **Policy annotation** — an opaque `extensions` slot on `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState` and `Composition`, under a stated rule: a definition gets one if a runtime policy makes a decision at it and it occurs as one of many
+- **Well-known vocabulary prefixes** — `pd`, `risk`, `tech`, `legal-eu-gdpr`, `legal-us` and the `sector-*` extensions from the W3C Data Privacy Vocabulary, plus two minted namespaces, `hipaa:` and `pp:`
+- **Vendor step kinds** ([#91](https://github.com/AltairaLabs/promptpack-spec/issues/91)) — a composition step may use a vendor-namespaced `kind` written `vendor.kind` (e.g. `omnia.judge`). RFC 0010 and the schema description always allowed these, but the schema rejected them. An unnamespaced kind outside the v1 five remains invalid, which keeps future specification kinds clear of vendor ones
+- **`control` default clarified** ([#79](https://github.com/AltairaLabs/promptpack-spec/issues/79)) — the `control` description no longer claims `user` was every state's behavior before v1.7.0. The specification never said who holds the turn after a transition, and implementations differed
+
+All additions are optional. Packs written against v1.7.x remain valid and behave identically.
+
+### Also in v1.7 (v1.7.0)
+
+- **Workflow State Control** ([RFC-0014](/docs/rfcs/workflow-state-control)) — an optional `control` property on each workflow state declaring who holds the next turn after entering it: `user` (default) or `agent`
 - **`control: "agent"`** — the state runs another agent round instead of yielding, so transient decision points and iterative loops can be modelled as real states rather than collapsed into one to avoid dead user turns. Bounded by terminal states, `max_visits` and `engine.budget` — no new limits
 - **Orthogonal to `orchestration`** — `orchestration` declares who *initiates* a transition, `control` who holds the turn *after* one. `control` is inert on states reached via `external` orchestration
 - **`Validator.fail_on_violation` deprecated** ([RFC-0015](/docs/rfcs/deprecate-fail-on-violation)) — the specification's first deprecation. Validators always enforce; the property is ignored, remains schema-valid through v1.x, and is removed in v2.0.0. Use `enabled: false` to disable a validator, or declare an eval for observation without enforcement
 
-All additions are optional. Packs written against v1.6.x remain valid and behave identically, including packs still carrying `fail_on_violation`.
+All additions are optional. Packs written against v1.6.x remain valid, including packs still carrying `fail_on_violation`.
 
 ### Deprecations
 
@@ -56,11 +70,22 @@ All fields are optional and additive. Packs written against v1.5.x remain valid 
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.7.0 Spec →](./overview)
+[View v1.8.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.7.0
+
+**Status:** stable
+**Released:** August 2026
+**Schema:** `https://promptpack.org/schema/v1.7.0/promptpack.schema.json`
+
+- Workflow State Control — an optional `control` on each workflow state declaring who holds the next turn after entering it
+- `Validator.fail_on_violation` deprecated — validators always enforce; removed in v2.0.0
+
+[View v1.7.0 Spec →](./v1.7.0/overview)
 
 ### v1.6.0
 
@@ -206,7 +231,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.7.0 | current | Full support | - |
+| v1.8.0 | current | Full support | - |
+| v1.7.0 | stable | Security fixes only | TBD |
 | v1.6.0 | stable | Security fixes only | TBD |
 | v1.5.1 | stable | Security fixes only | TBD |
 | v1.5.0 | stable | Security fixes only | TBD |
@@ -224,9 +250,21 @@ The foundational release of PromptPack.
 
 ---
 
+## Migration from v1.7.0 to v1.8.0
+
+**No migration required.** Every addition is optional, and a v1.7.x pack is a valid v1.8.0 pack that behaves identically. The one schema change that is not an addition is a widening: a composition step whose `kind` is `vendor.kind` used to fail validation and now passes.
+
+To adopt the new fields, follow the order they deliver value in:
+
+1. **Use well-known prefixes in the fields you already declare** — `operator_role: dpv:DataController` instead of a free string. Free strings stay valid indefinitely; there is no cutover.
+2. **Add `obligations` and `reviews`** where a regulated reader asks for them. Give each validator an `id` that a control will name. A half-filled `obligations` block is worse than none, because the reference rules make every control resolve.
+3. **Add `independent_of`** to reviewing agents once your runtime enforces it.
+
+If your runtime previously continued into the destination state after a transition, read the clarified `control` note in [Turn Control](./structure#turn-control-v17) before honouring the default.
+
 ## Migration from v1.6.0 to v1.7.0
 
-**No migration required to remain valid.** `control` is optional and defaults to the behavior every state already had, and `fail_on_violation` stays schema-valid for the whole v1.x series. A v1.6.x pack is a valid v1.7.0 pack.
+**No migration required to remain valid.** `control` is optional, and `fail_on_violation` stays schema-valid for the whole v1.x series. A v1.6.x pack is a valid v1.7.0 pack.
 
 There is one behavior change to be aware of, and it affects a specific population:
 
@@ -691,7 +729,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - Your flows are conversational/event-driven and don't need procedural step graphs
 - Prefer maximum stability
 
-**Recommendation:** Use v1.7.0 for all new projects. It's backward compatible and adds `control` on workflow states for transient routing and processing, on top of v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
+**Recommendation:** Use v1.8.0 for all new projects. It's backward compatible and adds governance obligations, recurring reviews and independence requirements, on top of v1.7.0 workflow state `control`, v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
 
 ---
 
@@ -699,6 +737,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.8.0 | Oct 2026 | Governance `obligations`, `reviews` and `independent_of`; policy-annotation `extensions`; vendor step kinds |
 | v1.7.0 | Aug 2026 | Workflow state `control`; `Validator.fail_on_violation` deprecated |
 | v1.6.0 | Aug 2026 | Governance declarations: `metadata.governance` and per-tool `action_scope` |
 | v1.5.1 | Jun 2026 | Provider requirements: optional `requires.providers` block declaring a pack's model-provider needs |

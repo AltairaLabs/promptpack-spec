@@ -3,7 +3,7 @@
 - **Status:** Implemented
 - **Author(s):** Charlie Holland (chaholl)
 - **Created:** 2026-04-28
-- **Updated:** 2026-06-15
+- **Updated:** 2026-10-07
 - **Related Issues:** N/A
 - **Implemented in:** Spec v1.5.0
 
@@ -761,7 +761,7 @@ For runtimes:
 
 1. **Composition output binding.** Should the `output` field on a `Composition` (which step's output is the composition's output) be required or default to "the last sequentially-executed step"? Current draft: optional with documented default of "last step." Reasonable for v1; revisit if ambiguity arises in practice.
 2. **Implicit vs explicit `depends_on`.** Current draft: sequential by default; `depends_on` required only after `branch` or `parallel`. Alternative: make all dependencies explicit. Trade-off is verbosity vs. clarity. Sequential default mirrors how authors think and is the established style across declarative workflow languages (GitHub Actions, BPMN). Worth confirming during prototyping.
-3. **Vendor namespacing convention for step kinds.** Following RFC 0006 `Eval.type` pattern, free-form strings allow `omnia.judge`, `langchain.refine`, etc. Should the spec recommend a namespace style (`vendor.kind`, `vendor:kind`, reverse-DNS)? RFC 0006 doesn't formalize this; consistency would help.
+3. ~~**Vendor namespacing convention for step kinds.**~~ *Resolved in spec v1.8.0:* `vendor.kind`, as in `omnia.judge`. The schema had never accepted vendor kinds — each of the five step shapes pins `kind` with `const`, so anything else matched no `oneOf` branch ([#91](https://github.com/AltairaLabs/promptpack-spec/issues/91)). A sixth branch now accepts a `kind` matching `^[a-z][a-z0-9_-]*\.[a-z][a-z0-9_.-]*$`. Requiring the dot keeps vendor kinds disjoint from the v1 kinds and from any unnamespaced kind a future RFC defines, which also answers question 6 for vendors: they cannot squat on `judge` or `foreach`.
 4. **Predicate path syntax.** Current draft uses `${classify.output.intent}` — same form as RFC 0003 template variables. Should the predicate's `path` field accept the bare dot-path (`classify.output.intent`) for compactness, or always require the `${...}` wrapper? Wrapper is more consistent with RFC 0003 but less readable in nested predicate structures.
 5. **Step ID uniqueness across nested `parallel.branches`.** Current draft requires unique within the entire composition. Alternative: scope IDs to the immediate parallel block. Global uniqueness simplifies references but constrains author choice. Worth deciding during prototyping.
 6. **Reserving step kind names.** Should the spec list `judge`, `subflow`, `speculate`, `foreach`, `map`, `while`, `pause`, `await_event`, `compensate` as reserved future kinds (preventing vendor use) or leave them entirely unreserved until a future RFC defines them? Reserving prevents conflict; not reserving allows vendor experimentation.
@@ -860,6 +860,7 @@ A future RFC may permit a composition step to invoke an agent declared via RFC 0
 
 - **2026-04-28:** Initial draft.
 - **2026-06-15:** Clarified reducer `into` reference form. Implemented in spec v1.5.0 — `compositions` top-level field, the `composition` orchestration mode + `WorkflowState.composition` field, and the full step-graph definitions (`Composition`, `Step`, the five step kinds, `Predicate` family, `Reducer`, `StepModifiers`, `TerminationPredicate`, `StepInput`) added to `schema/promptpack.schema.json`. Status → Implemented.
+- **2026-10-07:** Spec v1.8.0 makes the schema accept vendor-namespaced step kinds, written `vendor.kind`, through an `ExtensionStep` branch of `Step.oneOf`. The prose had always promised them and the schema had always rejected them ([#91](https://github.com/AltairaLabs/promptpack-spec/issues/91)). Resolves unresolved question 3.
 
 ## References
 

@@ -1,11 +1,12 @@
 # RFC 0016: Governance Obligations, Vocabulary and Policy Annotation
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland (chaholl)
 - **Created:** 2026-08-31
-- **Updated:** 2026-09-01
+- **Updated:** 2026-10-07
 - **Discussion:** To be opened in the RFC Comments category
 - **Related Issues:** N/A
+- **Implemented in:** Spec v1.8.0
 
 ## Summary
 
@@ -102,9 +103,9 @@ Three additions to `$defs.Governance`, all optional. No change to `$defs.ActionS
         "type": "object",
         "description": "Requires that whatever produces this agent's input does not share the listed properties with it. A deployment requirement resolved by the runtime, not a reference to another agent.",
         "additionalProperties": false,
-        "required": ["on"],
+        "required": ["axes"],
         "properties": {
-          "on": {
+          "axes": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
@@ -218,13 +219,13 @@ Where one agent reviews another's output, the review is worthless if both share 
 metadata:
   governance:
     independent_of:
-      on: [accountable_owner, model, provider, prompts]
+      axes: [accountable_owner, model, provider, prompts]
       enforcement: strict
 ```
 
 The pack states the requirement without naming the agent it must be independent *of* — that agent is generally in a different pack, and a pack-local reference could not resolve. The runtime knows the composition and resolves it, exactly as it resolves `requires_ai_disclosure` against whichever interfaces face a human. Naming the counterparty was rejected for the reason a list is always rejected here: it stops being correct when the topology changes, and fails silently when it does. An optional `of:` naming a pack id becomes worth revisiting only if a composition idiom emerges in which the producer is known at authoring time.
 
-`on` is a closed enum because independence is a *comparison*, and an author-supplied axis would name something a runtime has no way to compare. `operator_role` is the obvious candidate for a sixth — an outsourced reviewer that must be a different legal entity, not merely a different team — and is left out until a deployment needs it.
+`axes` is a closed enum because independence is a *comparison*, and an author-supplied axis would name something a runtime has no way to compare. `operator_role` is the obvious candidate for a sixth — an outsourced reviewer that must be a different legal entity, not merely a different team — and is left out until a deployment needs it.
 
 | Axis | Resolves against | Buys |
 |---|---|---|
@@ -465,7 +466,7 @@ As in RFC 0013, partial support is conformant. A runtime may enforce `approved_e
 
 ### Validation rules
 
-1. `independent_of.on` MUST contain at least one of `model`, `provider`, `tools`, `prompts`, `accountable_owner`, with no duplicates. `enforcement` MUST be `strict` or `advisory`, defaulting to `advisory`.
+1. `independent_of.axes` MUST contain at least one of `model`, `provider`, `tools`, `prompts`, `accountable_owner`, with no duplicates. `enforcement` MUST be `strict` or `advisory`, defaulting to `advisory`.
 2. `obligations[].id` and `reviews[].id` MUST each be unique within the object that declares them.
 3. A `controls` entry MUST carry exactly one of `field`, `validator`, `eval` or `external`.
 4. `controls[].eval` and `reviews[].eval` MUST resolve to an `id` in the pack's `evals`, or in the `evals` of a prompt the pack defines. A reference that does not resolve is an error. A conforming implementation MUST NOT infer from `controls[].eval` that the obligation is satisfied; the reference records that a measurement exists, not its outcome.
@@ -608,6 +609,7 @@ metadata:
         applies_to: { capability: ai:Profiling }
         controls:
           - validator: decline-reasons-guard
+          - eval: decline-carries-reasons
 
     reviews:
       - id: quarterly-bias-test
@@ -668,7 +670,7 @@ prompts:
           applies_when: assessment_negative
 ```
 
-Both obligations name `decline-carries-reasons`, and one review satisfies both — which is why `reviews` is a sibling of `obligations` rather than nested inside it. `quarterly-bias-test` names an eval that exists in the pack, so the recurring obligation is tied to a specific test rather than to a promise.
+Both obligations name `decline-reasons-guard`, the explanation duty is also watched by `decline-carries-reasons`, and one review satisfies both — which is why `reviews` is a sibling of `obligations` rather than nested inside it. `quarterly-bias-test` names an eval that exists in the pack, so the recurring obligation is tied to a specific test rather than to a promise.
 
 ### Example 3: A HIPAA business associate handling ePHI
 
@@ -841,7 +843,7 @@ metadata:
     accountable_owner: finance-controls
     approved_environments: [production-eu]
     independent_of:
-      on: [accountable_owner, model, provider, prompts]
+      axes: [accountable_owner, model, provider, prompts]
       enforcement: strict
 
 tools:
@@ -889,7 +891,7 @@ deny contains msg if {
 deny contains msg if {
     req := input.metadata.governance.independent_of
     req.enforcement == "strict"
-    "accountable_owner" in req.on
+    "accountable_owner" in req.axes
     mine := input.metadata.governance.accountable_owner
     mine == data.binding.producer.metadata.governance.accountable_owner
     msg := sprintf("independence requires an owner other than %q", [mine])
@@ -1111,23 +1113,23 @@ None required.
 
 ## Unresolved Questions
 
-None outstanding. Every question raised during drafting is resolved in the section it belongs to: the prefix table stays in the RFC ([Alternative 3](#alternative-3-a-separately-versioned-vocabulary-registry)), `independent_of` does not name its counterparty and `on` stays closed ([`independent_of`](#independent_of)), completions join on `reviews[].id` ([Completion records stay out](#completion-records-stay-out)), and the minted namespaces are reviewed on amendment rather than on a cadence ([Minted terms](#minted-terms)).
+None outstanding. Every question raised during drafting is resolved in the section it belongs to: the prefix table stays in the RFC ([Alternative 3](#alternative-3-a-separately-versioned-vocabulary-registry)), `independent_of` does not name its counterparty and `axes` stays closed ([`independent_of`](#independent_of)), completions join on `reviews[].id` ([Completion records stay out](#completion-records-stay-out)), and the minted namespaces are reviewed on amendment rather than on a cadence ([Minted terms](#minted-terms)).
 
 The most likely candidate for future revision is the segregation-of-duties gap: a pack that both approves and acts while declaring no approval requirement has no counterparty for `independent_of` to compare against, so nothing catches it. [Alternative 1](#alternative-1-add-a-duty-field-to-action_scope) is the worked design for closing it, and [Agent as approver](#agent-as-approver) records the evidence that would justify doing so. That change is not deferred pending anyone's decision — it is a proposal anybody can bring through the RFC process, and this section exists to say what has already been considered so a proposer need not start from scratch.
 
 ## Implementation Plan
 
 1. **Phase 1: Specification**
-   - [ ] RFC accepted
-   - [ ] `independent_of`, `obligations`, `reviews` added to `$defs.Governance`
-   - [ ] optional `id` added to `$defs.Validator`
-   - [ ] optional `extensions` added to `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState`, `Composition`
-   - [ ] Schema `version` bumped (minor — additive optional fields)
-   - [ ] README badge and versioned schema URL updated in lockstep
+   - [x] RFC accepted
+   - [x] `independent_of`, `obligations`, `reviews` added to `$defs.Governance`
+   - [x] optional `id` added to `$defs.Validator`
+   - [x] optional `extensions` added to `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState`, `Composition`
+   - [x] Schema `version` bumped (minor — additive optional fields)
+   - [x] README badge and versioned schema URL updated in lockstep
 
 2. **Phase 2: Vocabulary**
    - [ ] `hipaa:` and `pp:` published at `https://promptpack.org/vocab/`, each term carrying `rdfs:seeAlso` to its instrument
-   - [ ] Well-known prefix table published in the spec docs
+   - [x] Well-known prefix table published in the spec docs
 
 3. **Phase 3: Documentation**
    - [ ] `guides/add-governance.md` with the four domain examples and the extensibility example
@@ -1142,7 +1144,7 @@ The most likely candidate for future revision is the segregation-of-duties gap: 
 
 ### Validation Tests
 
-- `independent_of.on` accepts each of the five axes, and rejects an empty array, a duplicate entry and an unknown axis.
+- `independent_of.axes` accepts each of the five axes, and rejects an empty array, a duplicate entry and an unknown axis.
 - `independent_of.enforcement` defaults to `advisory` when omitted and rejects an unknown value.
 - A `controls` entry with zero keys, or with two, is rejected.
 - `reviews[].eval` naming a non-existent eval is an error; naming a prompt-level eval resolves.
@@ -1188,7 +1190,7 @@ The most likely candidate for future revision is the segregation-of-duties gap: 
 
 RFC 0013 records this as future work and it applies with more force here. `obligations` is the strongest candidate in the specification for attestation: an obligation discharged by an eval, with a signed eval result keyed to the pack's content digest, is close to a verifiable claim rather than an assertion. That needs the provenance design RFC 0013 defers, not this RFC.
 
-### Agent as approver {#agent-as-approver}
+### Agent as approver
 
 RFC 0013 models approval as a runtime gate with the approver bound from deployment configuration. If agent-approves-agent becomes a pattern implementers use in practice rather than a possibility in a design document, the specification will need a way to say which agent grants authorisation.
 
@@ -1219,6 +1221,7 @@ EU AI Act Articles 72 and 73 concern post-market monitoring and serious-incident
 - **2026-08-31:** Initial draft.
 - **2026-09-01:** Removed the proposed `action_scope.duty` field and the segregation-of-duties material that depended on it; the reasoning is preserved in Alternative 1 and the arrangement is shown structurally in Example 4. Retitled from "Governance Obligations and Duty Declarations". No change to `$defs.ActionScope` remains.
 - **2026-09-01:** Added `accountable_owner` as an `independent_of` axis, which expresses segregation of duties through separation of responsibility rather than duty labels, and distinguished technical from organisational independence. Added an optional `extensions` object to `obligations` and `reviews` entries. Renamed `validations` to `reviews` to avoid colliding with schema validation, which this document uses throughout. Corrected the description of what an `eval` control buys: an eval yields a score rather than a verdict. Added a `validator` control form and an optional `id` on `$defs.Validator` so the one primitive that actually enforces can be named — the RFC's only change to an execution primitive. Scoped the `eval` control form to what it actually claims: it names the measurement that watches the obligation, not proof that the obligation held. An eval does not act in the response path as a validator does, but its score may drive alerts, paging, deployment gates or quarantine — which of those is a runtime concern. No use of `Eval.threshold`; a pass/fail measurement declares `metric.type: boolean`. Generalised that to a stated rule — a definition gets `extensions` if a runtime policy makes a decision at it and it occurs as one of many — and applied it to the six qualifying definitions that lacked one: `Prompt`, `Validator`, `Eval`, `AgentDef`, `WorkflowState`, `Composition`. Retitled from "Governance Obligations and Vocabulary" to reflect it. Resolved every open question into the section it belongs to. Completed the worked examples, which were previously missing the required `template_engine` and `prompts`.
+- **2026-10-07:** Accepted and implemented in spec v1.8.0. Renamed `independent_of.on` to `independent_of.axes`: under YAML 1.1 parsers such as PyYAML the bare key `on` reads as boolean `true`, so the RFC's own `refunds-approver` example failed validation there. `obligations[]`, `controls[]` and `reviews[]` are published as the named definitions `Obligation`, `ObligationControl` and `Review`. Status → Implemented.
 
 ## References
 

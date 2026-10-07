@@ -33,12 +33,14 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 | [RFC-0007](/docs/rfcs/agents-extension) | Agents Extension | Implemented | v1.3 | 2026-02-15 | 2026-02-15 |
 | [RFC-0008](/docs/rfcs/skills-extension) | Skills Extension | Implemented | v1.3.1 | 2026-02-21 | 2026-02-21 |
 | [RFC-0009](/docs/rfcs/agent-loops) | Agent Loop Extension | Implemented | v1.4 | 2026-03-26 | 2026-04-18 |
-| [RFC-0010](/docs/rfcs/workflow-composition) | Workflow Composition Extension | Implemented | v1.5.0 | 2026-04-28 | 2026-06-15 |
+| [RFC-0010](/docs/rfcs/workflow-composition) | Workflow Composition Extension | Implemented | v1.5.0 | 2026-04-28 | 2026-10-07 |
 | [RFC-0011](/docs/rfcs/workflow-states-as-agents) | Workflow States as Agents | Implemented | v1.4.1 | 2026-06-13 | 2026-06-13 |
 | [RFC-0012](/docs/rfcs/provider-requirements) | Provider Requirements | Implemented | v1.5.1 | 2026-06-25 | 2026-06-25 |
 | [RFC-0013](/docs/rfcs/governance-declarations) | Governance Declarations | Implemented | v1.6.0 | 2026-08-28 | 2026-08-31 |
-| [RFC-0014](/docs/rfcs/workflow-state-control) | Workflow State Control | Implemented | v1.7.0 | 2026-08-31 | 2026-08-31 |
+| [RFC-0014](/docs/rfcs/workflow-state-control) | Workflow State Control | Implemented | v1.7.0 | 2026-08-31 | 2026-10-07 |
 | [RFC-0015](/docs/rfcs/deprecate-fail-on-violation) | Deprecate `fail_on_violation` | Implemented | v1.7.0 | 2026-08-31 | 2026-08-31 |
+| [RFC-0016](/docs/rfcs/governance-and-policy-annotation) | Governance Obligations, Vocabulary and Policy Annotation | Implemented | v1.8.0 | 2026-08-31 | 2026-10-07 |
+| [RFC-0017](/docs/rfcs/provider-references) | Provider References | Draft | — | 2026-10-07 | 2026-10-07 |
 <!-- RFC_TABLE_END -->
 
 ## At a Glance
@@ -46,9 +48,9 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 <!-- RFC_COUNTS_START -->
 | | Count |
 |---|---|
-| Total RFCs | 15 |
-| Implemented | 15 |
-| Draft | 0 |
+| Total RFCs | 17 |
+| Implemented | 16 |
+| Draft | 1 |
 | In Review | 0 |
 | Rejected | 0 |
 <!-- RFC_COUNTS_END -->

@@ -1,6 +1,7 @@
 ---
 title: "Architecture Patterns"
 sidebar:
+  label: "Architecture Patterns (v1.7.0)"
   order: 3
 ---
 
@@ -286,11 +287,6 @@ v1.4 packs are valid v1.5 packs unchanged. Composition is opt-in: a state only b
 | Skills | v1.3.1 | Workflow (state-scoped filtering), Agents |
 | Agent Loops (`terminal`, `max_visits`, `artifacts`, `engine.budget`) | v1.4 | Workflow (extends `WorkflowState` and `WorkflowConfig.engine`) |
 | Composition (`compositions`, `orchestration: composition`, `WorkflowState.composition`) | v1.5 | Workflow (a state delegates to a step graph), Prompts/Tools/Evals (step references) |
-| Provider Requirements (`requires.providers`) | v1.5.1 | Tested Models (contract vs provenance) |
-| Governance (`metadata.governance`, `Tool.action_scope`) | v1.6 | Agents (`AgentDef.governance` overrides per field), Tools |
-| Turn Control (`WorkflowState.control`) | v1.7 | Workflow (orthogonal to `orchestration`), Agent Loops |
-| Obligations, reviews, independence (`governance.obligations`, `reviews`, `independent_of`) | v1.8 | Validators (by `id`), Evals (by `id`), Agents |
-| Policy annotation (`extensions` on decision points) | v1.8 | Prompts, Validators, Evals, Agents, Workflow, Composition |
 
 ## Next Steps
 

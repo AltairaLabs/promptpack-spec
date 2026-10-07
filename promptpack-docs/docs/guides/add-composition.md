@@ -299,6 +299,7 @@ A document analyzer that classifies and routes to a type-specific extractor:
 - [ ] Each `agent` step has a `termination` predicate
 - [ ] Each `parallel` step has ≥2 branches and a `reduce`
 - [ ] Each `branch` predicate uses the constrained shape (no free-form expressions)
+- [ ] Any `kind` outside the v1 five is vendor-namespaced (`omnia.judge`, not `judge`) and supported by every runtime you deploy to *(v1.8+)*
 - [ ] The composition graph is acyclic
 - [ ] Pack validates against the v1.5 JSON schema
 
