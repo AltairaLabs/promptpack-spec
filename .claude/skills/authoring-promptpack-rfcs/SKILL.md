@@ -1,6 +1,6 @@
 ---
 name: authoring-promptpack-rfcs
-description: Use when proposing, drafting, submitting, or revising a change to the PromptPack specification in this repo — a new entity type, schema field, workflow/agent/eval/composition/skill extension, or any spec behavior change. Covers the RFC document, the index, the schema, and the docs-site landmines.
+description: Use when proposing, drafting, submitting, or revising a change to the PromptPack specification in this repo — a new entity type, schema field, workflow/agent/eval/composition/skill extension, or any spec behavior change — and when releasing, patching, tagging or promoting a spec version. Covers the RFC document, the index, the schema, the cross-language release gate, and the docs-site landmines.
 ---
 
 # Authoring PromptPack RFCs
@@ -49,6 +49,7 @@ A spec change lands in **two** PRs. Keep them separate.
 3. **README lockstep** — update the `Spec-vX.Y.Z-blue` badge **and** the versioned schema URL (`schema/vX.Y.Z/...`) to the new version. Enforced by `version-check` (`scripts/check-version-consistency.mjs`): schema version == badge == URL, or CI fails.
 4. **Docs + version snapshot** — update the current spec docs (`promptpack-docs/docs/spec/*`) with the new feature, and perform the manual docs-version snapshot (see Docs site versioning below).
 5. **`RFC_SPEC_VERSION` map** in `sync-rfcs.js` — add `NN: 'vX.Y'` (the spec version that ships it).
+6. **Cross-language gate** — add fixtures for the new fields to `xlang-check/fixtures/`, then run `xlang-check/run.sh`. It must pass before the PR is opened and again before the `v*` tag is pushed. This applies to **every** release and promotion, patch releases included. v1.8.0 shipped a regex that Go cannot compile; this gate exists so that cannot recur. Details are in the runbook's "Cross-language gate" section.
 
 > Why all in one PR: RFC-0009 was once marked Implemented while its schema fields were never added. `version-check` and this rule exist to stop exactly that drift. An RFC reaching `Implemented` and the schema version bump are the **same event**.
 
@@ -78,6 +79,7 @@ The docs site **is** versioned, but **manually** — only `docs/spec/` is versio
 | `promptpack-docs/astro.config.mjs` | sidebar, including the `Archive` list |
 | `promptpack-docs/src/styles/site.css` | `.ppVersionBadge` rules |
 | `schema/promptpack.schema.json` | schema source of truth (separate impl PR) |
+| `xlang-check/run.sh` + `fixtures/` | cross-language release gate (Python, Go, JS, Rust, .NET, Ruby) |
 
 ## Common mistakes
 
@@ -87,5 +89,6 @@ The docs site **is** versioned, but **manually** — only `docs/spec/` is versio
   (`:::note[Title]`); anything else renders as literal `:::` text mid-prose.
 - Bundling the schema change into the RFC PR → diverges from the process; split it.
 - Bumping the schema version without the README badge + URL → red CI.
+- Releasing on the strength of one validator. Python and ajv accept regex that Go's RE2 rejects, and ajv rejects keywords every other library accepts. Run `xlang-check/run.sh`.
 - A `stateDiagram-v2` with notes on composite states → won't render. Use `flowchart LR`.
 - Drafting before designing → use `superpowers:brainstorming` first. Turn the implementation/schema work into a plan with `superpowers:writing-plans`.

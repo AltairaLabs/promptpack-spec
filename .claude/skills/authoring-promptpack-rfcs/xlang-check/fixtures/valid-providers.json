@@ -1,0 +1,13 @@
+{"id":"tickets","name":"Ticket handling","version":"1.0.0","template_engine":{"version":"v1","syntax":"{{variable}}"},
+ "requires":{"providers":["default",
+   {"key":"triage","role":"inference","description":"Fast typed classifier."},
+   {"key":"drafter","role":"llm","description":"Cheap model for templated replies."}]},
+ "prompts":{
+  "classify_request":{"id":"classify_request","name":"Classify request","version":"1.0.0","provider":"triage","system_template":"Customer message: {{input}}"},
+  "refund_reply":{"id":"refund_reply","name":"Refund reply","version":"1.0.0","provider":"drafter","system_template":"Write a refund confirmation for: {{input}}"},
+  "support_agent":{"id":"support_agent","name":"Support agent","version":"1.0.0","system_template":"You are a support agent."}},
+ "compositions":{"handle_ticket":{"version":1,"steps":[
+  {"id":"intent","kind":"prompt","prompt_task":"classify_request","output_schema":"schemas/intent.json"},
+  {"id":"gate","kind":"branch","predicate":{"path":"${intent.output.category}","op":"equals","value":"refund"},"then":"refund","else":"escalate"},
+  {"id":"refund","kind":"prompt","prompt_task":"refund_reply","provider":"drafter","input":"${input}"},
+  {"id":"escalate","kind":"agent","prompt_task":"support_agent","provider":"default","tools":["crm_lookup"],"termination":{"max_steps":6}}]}}}

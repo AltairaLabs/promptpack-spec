@@ -1,0 +1,2 @@
+{"id":"minimal","name":"Minimal","version":"1.0.0","template_engine":{"version":"v1","syntax":"{{variable}}"},
+ "prompts":{"support":{"id":"support","name":"Support","version":"1.0.0","system_template":"You are a support agent."}}}
