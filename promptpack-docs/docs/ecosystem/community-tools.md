@@ -126,13 +126,17 @@ Use existing JSON Schema validators:
 
 ```bash
 # Install ajv-cli
-npm install -g ajv-cli
+npm install -g ajv-cli ajv-formats
 
 # Validate a PromptPack file
-ajv validate \
+ajv validate --spec=draft2020 --strict=false -c ajv-formats \
  -s schema/promptpack.schema.json \
  -d my-file.promptpack.yml
 ```
+
+:::note[ajv needs three flags]
+The schema is draft 2020-12, which ajv-cli does not assume (`--spec=draft2020`); it uses `format` (`-c ajv-formats`); and it carries a root `version` property that JSON Schema does not define. The spec allows unknown keywords, but ajv's strict mode rejects them, so pass `--strict=false`. In code, call `ajv.addKeyword('version')` on an `Ajv2020` instance instead. Validators in other languages need no such setting.
+:::
 
 ### CI/CD Integration
 
@@ -152,12 +156,12 @@ jobs:
  uses: actions/setup-node@v4
 
  - name: Install validator
- run: npm install -g ajv-cli
+ run: npm install -g ajv-cli ajv-formats
 
  - name: Validate files
  run: |
  for file in **/*.promptpack.yml; do
- ajv validate -s schema/promptpack.schema.json -d "$file"
+ ajv validate --spec=draft2020 --strict=false -c ajv-formats -s schema/promptpack.schema.json -d "$file"
  done
 ```
 

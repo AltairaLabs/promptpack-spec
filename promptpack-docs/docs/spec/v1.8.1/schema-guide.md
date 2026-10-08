@@ -1,6 +1,7 @@
 ---
 title: "Schema Guide"
 sidebar:
+  label: "Schema Guide (v1.8.1)"
   order: 5
 ---
 
@@ -94,7 +95,6 @@ A single prompt configuration within a pack. Each prompt represents a specific t
 | `tool_policy` | [ToolPolicy](#tool-policy) | No | Policy governing how tools can be used. |
 | `pipeline` | [PipelineConfig](#pipeline-config) | No | Pipeline configuration defining processing stages and middleware. |
 | `parameters` | [Parameters](#parameters) | No | LLM generation parameters (temperature, max_tokens, etc.). |
-| `provider` | string | No | Key of the [provider requirement](#provider-references-v190) that runs this prompt. Absent means `default`. *(v1.9.0+)* |
 | `validators` | [Validator](#validator)[] | No | Validation rules (guardrails) applied to LLM responses. |
 | `tested_models` | [TestedModel](#tested-model)[] | No | Model testing results documenting performance across different models. |
 | `model_overrides` | object&lt;string, [ModelOverride](#model-override)&gt; | No | Model-specific template modifications. Keys are model names (e.g., `"claude-3-opus"`, `"gpt-4"`). |
@@ -899,14 +899,13 @@ Each step also carries kind-specific fields, below.
 
 #### PromptStep (`kind: "prompt"`)
 
-A one-shot model invocation against a prompt task. No tool calls.
+A one-shot LLM invocation against a prompt task. No tool calls.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `kind` | string | **Yes** | Constant `"prompt"`. |
 | `prompt_task` | string | **Yes** | Reference to a key in the pack's `prompts` object. |
 | `input` | [StepInput](#stepinput) | No | Input binding resolved against the composition input and prior step outputs. |
-| `provider` | string | No | Key of the [provider requirement](#provider-references-v190) that runs this step, overriding the `prompt_task`'s `provider`. *(v1.9.0+)* |
 | `output_schema` | string | No | Reference to a JSON Schema for the expected output shape. |
 
 #### AgentStep (`kind: "agent"`)
@@ -919,7 +918,6 @@ A **bounded LLM-tool loop** (distinct in name only from RFC 0007 `agents`).
 | `prompt_task` | string | **Yes** | Reference to a key in the pack's `prompts` object. |
 | `termination` | [TerminationPredicate](#terminationpredicate) | **Yes** | The condition under which the bounded loop exits. Without it, the agent step is invalid. |
 | `input` | [StepInput](#stepinput) | No | Input binding. |
-| `provider` | string | No | Key of the [provider requirement](#provider-references-v190) that runs this step, overriding the `prompt_task`'s `provider`. *(v1.9.0+)* |
 | `tools` | string[] | No | Subset of the pack's tools available to this step — a per-step scoped tool registry. Each must resolve to a key in `tools`. |
 | `output_schema` | string | No | Reference to a JSON Schema for the expected output shape. |
 
@@ -1069,58 +1067,6 @@ Structured, **advisory** hints the satisfying provider should have. The `descrip
 :::note[Requirements vs. tested models]
 `requires.providers` is the pack's **contract** (what it needs to run); `tested_models` is **provenance** (what a prompt was tested against). They're complementary and independent — a runtime MAY cross-check the provider it resolves against `tested_models` to warn on test/deploy divergence.
 :::
-
-### Provider references *(v1.9.0+)*
-
-A requirement says *what* the pack needs. A **provider reference** says *where* each need is used: a `provider` property whose value is a requirement `key` ([RFC 0017](/docs/rfcs/provider-references)).
-
-| Location | Meaning |
-|---|---|
-| `prompts.<key>.provider` | The requirement that runs this prompt. Absent means `default`. |
-| `PromptStep.provider`, `AgentStep.provider` | Overrides the `prompt_task`'s provider for that step only. |
-
-Everything else inherits from the prompt it runs. A workflow state, an in-process agent member, and a state exposed as an agent all use their prompt's `provider`. `tool`, `branch` and `parallel` steps make no model call and take no `provider`. For a composition step the precedence is: step `provider`, then the prompt's `provider`, then `default`.
-
-```json
-{
-  "requires": {
-    "providers": [
-      "default",
-      { "key": "triage", "role": "inference", "description": "Fast typed classifier." },
-      { "key": "drafter", "role": "llm", "description": "Cheap model for templated replies." }
-    ]
-  },
-  "prompts": {
-    "classify_request": { "id": "classify_request", "name": "Classify request", "version": "1.0.0",
-                          "provider": "triage", "system_template": "Customer message: {{input}}" },
-    "refund_reply": { "id": "refund_reply", "name": "Refund reply", "version": "1.0.0",
-                      "provider": "drafter", "system_template": "Write a refund confirmation for: {{input}}" }
-  }
-}
-```
-
-The host still binds each key to a concrete provider, and may bind `triage` to an LLM with structured output — the pack runs unchanged.
-
-**Serving a call site.** A provider serves a call site when it can produce what the call site must produce:
-
-| Call site | Must produce | Typically served by |
-|---|---|---|
-| Prompt in a conversational workflow state | A conversational reply | `role: llm` |
-| Composition `agent` step | A bounded tool-calling loop | `role: llm` with `capabilities.tool_use` |
-| Composition `prompt` step without `output_schema` | Free text | `role: llm` |
-| Composition `prompt` step with `output_schema` | A JSON value conforming to the schema | `role: llm` with structured output, or any provider able to answer the schema |
-
-A classifier or typed-decision provider can answer an `output_schema` whose every leaf is an enumerated choice, a bounded number or a boolean. How a runtime maps the schema onto such a provider is runtime-defined; the value handed to later steps must conform to `output_schema` either way.
-
-**Rules.**
-
-1. `provider` must equal a `key` in `requires.providers`, except `default`, which is always valid. JSON Schema cannot express the cross-reference; validators enforce it, as they do for `prompt_task`.
-2. An absent `provider` is equivalent to `default` on a prompt and to the prompt's `provider` on a step.
-3. A runtime must reject the pack at load time when the provider bound to a referenced key cannot serve a call site that references it — including when the key is unbound. It should say whether the key is undeclared (the pack author's error), unbound, or bound to a provider that cannot serve the call site (the host's errors).
-4. Referencing a `required: false` requirement is valid, but if it is unbound at load time the pack is rejected: a call site that names it has nothing to fall back to.
-5. Validators should warn when a conversational state's prompt, or a `prompt` step without `output_schema`, names a requirement whose `role` is not `llm`.
-
-A runtime that ignores `provider` runs every call on the primary model. The output still conforms; latency and cost do not match what the author intended.
 
 ## Governance *(v1.6.0+)*
 

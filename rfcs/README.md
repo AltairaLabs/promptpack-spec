@@ -47,12 +47,11 @@ Each RFC has one of the following statuses:
 | 0014 | [Workflow State Control](0014-workflow-state-control.md) | Implemented | Charlie Holland | 2026-08-31 |
 | 0015 | [Deprecate `fail_on_violation`](0015-deprecate-fail-on-violation.md) | Implemented | Charlie Holland | 2026-08-31 |
 | 0016 | [Governance Obligations, Vocabulary and Policy Annotation](0016-governance-and-policy-annotation.md) | Implemented | Charlie Holland | 2026-08-31 |
+| 0017 | [Provider References](0017-provider-references.md) | Implemented | Charlie Holland | 2026-10-07 |
 
 ## Active RFCs
 
-| Number | Title | Status | Author | Created |
-|--------|-------|--------|--------|---------|
-| 0017 | [Provider References](0017-provider-references.md) | Draft | Charlie Holland | 2026-10-07 |
+None.
 
 ## Process
 

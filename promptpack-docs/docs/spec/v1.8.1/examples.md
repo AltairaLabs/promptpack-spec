@@ -1,6 +1,7 @@
 ---
 title: "Real-World Examples"
 sidebar:
+  label: "Real-World Examples (v1.8.1)"
   order: 3
 ---
 
@@ -1673,123 +1674,6 @@ prompts:
 
 See [How to Declare Governance](/docs/guides/add-governance) for the full walkthrough, including recurring reviews and segregation of duties, and [RFC-0016](/docs/rfcs/governance-and-policy-annotation) for worked GDPR, HIPAA and financial-services examples.
 
-## Mixed-Provider Ticket Desk *(v1.9+)*
-
-### The Cost Problem
-
-A support desk handles thousands of tickets a day. Most of the work is deciding three things — the category, how urgent it is, and whether the message is abusive — and then writing a short, templated reply. Only a minority of tickets need an agent that reads the account and reasons about it. Run every step on the strongest model and the routine 80% pays the price of the hard 20%, in latency and in money.
-
-### The Provider-References Solution
-
-> YAML shown for readability (per [RFC 0002](/docs/rfcs/yaml-format)). Equally valid as JSON.
-
-```yaml
-id: ticket-desk
-name: Ticket Desk
-version: 1.0.0
-template_engine:
-  version: v1
-  syntax: "{{variable}}"
-
-requires:
-  providers:
-    - default
-    - key: triage
-      role: inference
-      description: Fast typed classifier for choices, scores and yes/no questions.
-    - key: drafter
-      role: llm
-      description: Cheap, fast model for short templated replies.
-
-tools:
-  crm_lookup:
-    name: crm_lookup
-    description: Look up a customer's account and open orders.
-    parameters:
-      type: object
-      properties:
-        customer_id: { type: string }
-      required: [customer_id]
-
-prompts:
-  classify_request:
-    id: classify_request
-    name: Classify request
-    version: 1.0.0
-    provider: triage
-    system_template: "Customer message: {{input}}"
-  refund_reply:
-    id: refund_reply
-    name: Refund reply
-    version: 1.0.0
-    provider: drafter
-    system_template: "Write a two-sentence refund confirmation for: {{input}}"
-  support_agent:
-    id: support_agent
-    name: Support agent
-    version: 1.0.0
-    system_template: "You are a support agent. Resolve the customer's issue."
-    tools: [crm_lookup]
-
-compositions:
-  handle_ticket:
-    version: 1
-    steps:
-      - id: intent
-        kind: prompt
-        prompt_task: classify_request
-        input: "${input.message}"
-        output_schema: schemas/intent.json
-      - id: gate
-        kind: branch
-        predicate: { path: "${intent.output.category}", op: equals, value: refund }
-        then: refund
-        else: escalate
-      - id: refund
-        kind: prompt
-        prompt_task: refund_reply
-        input: "${input.message}"
-      - id: escalate
-        kind: agent
-        prompt_task: support_agent
-        input: "${input.message}"
-        tools: [crm_lookup]
-        termination: { max_steps: 6 }
-
-workflow:
-  version: 1
-  entry: handle
-  states:
-    handle:
-      orchestration: composition
-      composition: handle_ticket
-      terminal: true
-```
-
-`schemas/intent.json`, the shape the `intent` step must produce:
-
-```json
-{
-  "type": "object",
-  "required": ["category", "urgency", "is_abusive"],
-  "additionalProperties": false,
-  "properties": {
-    "category":   { "type": "string", "enum": ["refund", "billing", "technical", "other"] },
-    "urgency":    { "type": "number", "minimum": 0, "maximum": 1 },
-    "is_abusive": { "type": "boolean" }
-  }
-}
-```
-
-### Provider-Reference Benefits
-
-- **Each call on the model it was written for.** `classify_request` is framed as typed questions for a classifier; `refund_reply` is a template for a cheap model; `support_agent` gets the primary model and the CRM tool.
-- **No new step kind.** The classification is an ordinary `prompt` step with an `output_schema`. Every leaf is a choice, a bounded score or a boolean, so a runtime can serve it from the provider bound to `triage` — and `gate` reads `${intent.output.category}` without knowing what produced it.
-- **Binding stays with the host.** The pack names `triage` and `drafter`, never a vendor. A host with no classifier binds `triage` to an LLM with structured output, and the pack runs unchanged.
-- **Mistakes fail at load.** Add a free-text `summary` field to `intent.json` while `triage` is bound to a classifier, or forget to bind `drafter`, and the runtime rejects the pack before serving a request.
-
-See [Provider references](./schema-guide#provider-references-v190) and [RFC-0017](/docs/rfcs/provider-references) for the full design.
-
 ## Why These Examples Matter
 
 Each example shows how PromptPacks solve real business problems:
@@ -1804,6 +1688,5 @@ Each example shows how PromptPacks solve real business problems:
 8. **Bounded Iteration**: Agent loops let workflows revisit a state under explicit caps (`max_visits`, `engine.budget`) and flow structured state across visits via artifacts — turning "model that loops" into "production-safe self-correcting agent"
 9. **Procedural Composition**: Compositions express fixed step graphs (classify → branch → extract, or parallel fan-out → synthesize) declaratively — procedural flows become inspectable and portable instead of hidden inside a mega-prompt or abused event transitions
 10. **Portable Requirements**: `requires.providers` declares a pack's model-provider needs once, runtime-agnostically — so deployers get coverage checks, auto-binding, and test/deploy parity instead of rediscovering needs by hand and failing late
-11. **Right Model per Call**: provider references let each prompt or composition step name the requirement that runs it, so classification, templated replies and open-ended reasoning each run on a model suited to them
 
 PromptPacks transform conversational AI from experimental prototypes into production-ready business solutions.

@@ -1,9 +1,9 @@
 # RFC 0017: Provider References
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland
 - **Created:** 2026-10-07
-- **Updated:** 2026-10-07
+- **Updated:** 2026-10-08
 - **Discussion:** [RFC Comments](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/rfc-comments)
 - **Related Issues:** TBD
 
@@ -308,7 +308,7 @@ Not applicable.
 
 ## Unresolved Questions
 
-- **Is the step override needed in v1?** Example 3 is the only use case found so far. Shipping the prompt property alone would be smaller; adding the step property later is backward compatible.
+- **Is the step override needed in v1?** *Resolved: shipped in v1.9.0.* Example 3 is the only use case found so far, but the override costs one optional property and keeps one prompt usable on two models within a composition.
 - **`model_overrides` keys.** `model_overrides` is keyed by model name. Once a prompt names a logical key and the host picks the model, a runtime has to match the bound provider's model against those names. Does the spec need to say anything about that, or is it already a runtime matter?
 - **Should the spec define the schema subset a non-LLM provider is expected to answer?** Leaving it runtime-defined keeps the spec small but makes Level 3 behavior vary. Naming a minimal portable subset — enumerated strings, bounded numbers, booleans, and objects of those — would let validators warn earlier.
 - **Rule 4 and optional requirements.** Rejecting the pack when a referenced optional requirement is unbound is strict. The alternative is falling back to `default`, which hides a deployment mistake but keeps the pack running.
@@ -318,6 +318,7 @@ Not applicable.
 ## Revision History
 
 - **2026-10-07:** Initial draft.
+- **2026-10-08:** Implemented in spec v1.9.0. `provider` added to `Prompt`, `PromptStep` and `AgentStep`; `PromptStep` described as a one-shot model invocation. The step override ships; the remaining unresolved questions are left open as runtime matters.
 
 ## References
 

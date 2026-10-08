@@ -1,17 +1,18 @@
 ---
 title: "Specification Overview"
 sidebar:
+  label: "Specification Overview (v1.8.1)"
   order: 2
 ---
 
-<span className="ppVersionBadge ppVersionBadge--current">v1.9.0 · current</span>
+<span className="ppVersionBadge ppVersionBadge--archived">v1.8.1 · stable</span>
+
+:::caution[Archived Version]
+This is the **v1.8.1** documentation. For the latest features, see [v1.9.0 docs →](../overview)
+:::
 
 PromptPack is a portable specification for packaging AI agent behavior into reusable, testable bundles. Think of it as a "container format" for AI applications—similar to how Docker containers package software, PromptPacks package everything an agent needs to run: prompts, tools, workflows, guardrails, and evals.
 
-:::note[Version Information]
-This documentation covers **v1.9.0** of the PromptPack specification. **v1.9.0** adds **provider references** (RFC 0017): a prompt, or a composition `prompt` or `agent` step, may name the provider requirement that runs it with `provider`. One pack can send classification to a fast typed classifier, templated replies to a cheap model, and keep the primary model for open-ended work — while the host still decides which concrete provider stands behind each key. **v1.8.0** extended governance (RFC 0016) with obligations, recurring reviews and independence requirements; **v1.8.1** made its `reviews[].cadence` pattern loadable by Go's regex engine.
-Looking for previous versions? [View v1.8.1 docs →](./v1.8.1/overview) | [Version History →](./versions)
-:::
 
 ## Why PromptPacks?
 
@@ -76,7 +77,7 @@ The same spec format expresses simpler shapes too — a single-prompt assistant,
 
 ### Provider Requirements *(v1.5.1+)*
 
-Declare the model providers a pack needs to run, runtime-agnostically. The optional top-level `requires.providers` block lists *logical* providers — each with a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (`llm`, `embedding`, `tts`, …), an optional human `description`, and optional advisory `capabilities` (modalities, minimum context, tool-use, embedding dimensions). A pack states *what it needs*, never which concrete provider satisfies it — resolution stays the host runtime's job. Since v1.9.0, a prompt or composition step can name one of those keys with `provider` to say which requirement runs it. The block is optional and fully backward compatible; when present it's validated strictly, giving runtimes and deployers a contract for coverage checks, auto-binding, and test/deploy parity.
+Declare the model providers a pack needs to run, runtime-agnostically. The optional top-level `requires.providers` block lists *logical* providers — each with a `key` (e.g. `default`, `embeddings`, `judge`), a `role` (`llm`, `embedding`, `tts`, …), an optional human `description`, and optional advisory `capabilities` (modalities, minimum context, tool-use, embedding dimensions). A pack states *what it needs*, never which concrete provider satisfies it — resolution stays the host runtime's job. The block is optional and fully backward compatible; when present it's validated strictly, giving runtimes and deployers a contract for coverage checks, auto-binding, and test/deploy parity.
 
 ### Workflow Composition *(v1.5+)*
 

@@ -6,13 +6,22 @@ sidebar:
 
 The PromptPack specification evolves over time. This page helps you find the right version of the spec for your needs.
 
-## Current Version: v1.8.1
+## Current Version: v1.9.0
 
 **Status:** current
 **Released:** October 2026
-**Schema:** `https://promptpack.org/schema/v1.8.1/promptpack.schema.json`
+**Schema:** `https://promptpack.org/schema/v1.9.0/promptpack.schema.json`
 
-### What's New in v1.8.1
+### What's New in v1.9.0
+
+- **Provider References** ([RFC-0017](/docs/rfcs/provider-references)) — an optional `provider` on a prompt, and on composition `prompt` and `agent` steps, naming the `requires.providers` key that runs that call. Absent means `default`, which is what every call used before
+- **Inheritance, not new state properties** — workflow states, in-process agent members and states exposed as agents use the `provider` of the prompt they run; a composition step may override its prompt's provider for that step only
+- **Load-time serving check** — a runtime rejects the pack before serving a request when a referenced key is undeclared, unbound, or bound to a provider that cannot serve the call site
+- **Non-LLM providers for structured steps** — a `prompt` step with an `output_schema` whose leaves are choices, bounded numbers or booleans may be served by a classifier or other typed-decision provider. `PromptStep` is now described as a one-shot *model* invocation
+
+All additions are optional. Packs written against v1.8.x remain valid and behave identically.
+
+### Also in v1.8 (v1.8.1)
 
 - **`reviews[].cadence` pattern rewritten without lookaheads.** The v1.8.0 pattern used `(?!$)` and `(?=\d)`. JSON Schema patterns are ECMA-262, but Go's `regexp` (RE2) supports neither, and a Go validator refuses to load a schema containing one — so on v1.8.0 every pack failed validation in PromptKit. The new pattern accepts and rejects exactly the same durations.
 - **A CI check now rejects schema patterns that RE2 cannot compile** (lookaround, backreferences, atomic groups, possessive quantifiers).
@@ -77,11 +86,22 @@ All fields are optional and additive. Packs written against v1.5.x remain valid 
 - **`prompt_task` is now optional** — required for non-composition states, omitted in `composition` mode
 - Fully backward compatible — packs that don't use `compositions` are unaffected
 
-[View v1.8.1 Spec →](./overview)
+[View v1.9.0 Spec →](./overview)
 
 ---
 
 ## Previous Versions
+
+### v1.8.1
+
+**Status:** stable
+**Released:** October 2026
+**Schema:** `https://promptpack.org/schema/v1.8.1/promptpack.schema.json`
+
+- Governance `obligations`, recurring `reviews` and `independent_of` requirements; policy-annotation `extensions`; vendor step kinds (v1.8.0)
+- `reviews[].cadence` pattern made RE2-compatible, so Go validators can load the schema (v1.8.1)
+
+[View v1.8.1 Spec →](./v1.8.1/overview)
 
 ### v1.7.0
 
@@ -238,7 +258,8 @@ The foundational release of PromptPack.
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| v1.8.1 | current | Full support | - |
+| v1.9.0 | current | Full support | - |
+| v1.8.1 | stable | Security fixes only | TBD |
 | v1.8.0 | superseded | Upgrade to v1.8.1 | - |
 | v1.7.0 | stable | Security fixes only | TBD |
 | v1.6.0 | stable | Security fixes only | TBD |
@@ -257,6 +278,19 @@ The foundational release of PromptPack.
 - **End of Life**: No further updates
 
 ---
+
+## Migration from v1.8.1 to v1.9.0
+
+**No migration required.** `provider` is optional, its absence means `default`, and a v1.8.x pack is a valid v1.9.0 pack that behaves identically.
+
+To route calls to different providers:
+
+1. Declare each provider under `requires.providers` with a `key` and `role` (unchanged since v1.5.1).
+2. Set `provider: <key>` on the prompts that should use it. Workflow states and agent members follow their prompt.
+3. Optionally set `provider` on a composition `prompt` or `agent` step to override its prompt for that step only.
+4. Bind each key in the host runtime. A runtime that does not yet support provider references runs every call on the primary model; the pack stays valid.
+
+See [Provider references](./schema-guide#provider-references-v190) and [RFC-0017](/docs/rfcs/provider-references).
 
 ## Migration from v1.8.0 to v1.8.1
 
@@ -723,8 +757,9 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 ## Choosing a Version
 
-### Use v1.5.1 if:
+### Use v1.9.0 if:
 - Building new PromptPacks
+- Want different prompts or composition steps to run on different providers — a classifier, a cheap model, the primary model — without naming a vendor in the pack
 - Want to declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
 - Need procedural, Function-style flows expressed as declarative step graphs (composition)
 - Want classify → branch → extract or parallel fan-out → synthesize pipelines in the spec
@@ -741,7 +776,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 - Your flows are conversational/event-driven and don't need procedural step graphs
 - Prefer maximum stability
 
-**Recommendation:** Use v1.8.1 for all new projects. It's backward compatible and adds governance obligations, recurring reviews and independence requirements, on top of v1.7.0 workflow state `control`, v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
+**Recommendation:** Use v1.9.0 for all new projects. It's backward compatible and adds provider references, on top of v1.8 governance obligations, recurring reviews and independence requirements, v1.7.0 workflow state `control`, v1.6.0 governance declarations, v1.5.x provider requirements and workflow composition, and the full v1.4 workflow, agent-loop, and agent model. Note its one deprecation: `Validator.fail_on_violation` is ignored from v1.7.0 and removed in v2.0.0.
 
 ---
 
@@ -749,6 +784,7 @@ See [RFC-0004: Multimodal Support](/docs/rfcs/multimodal-support) for details.
 
 | Version | Release Date | Highlights |
 |---------|--------------|------------|
+| v1.9.0 | Oct 2026 | Provider references: `provider` on prompts and composition `prompt`/`agent` steps |
 | v1.8.1 | Oct 2026 | `reviews[].cadence` pattern made RE2-compatible (Go validators can load the schema) |
 | v1.8.0 | Oct 2026 | Governance `obligations`, `reviews` and `independent_of`; policy-annotation `extensions`; vendor step kinds |
 | v1.7.0 | Aug 2026 | Workflow state `control`; `Validator.fail_on_violation` deprecated |

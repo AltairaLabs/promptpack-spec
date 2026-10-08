@@ -1,6 +1,7 @@
 ---
 title: "Architecture Patterns"
 sidebar:
+  label: "Architecture Patterns (v1.8.1)"
   order: 3
 ---
 
@@ -254,10 +255,6 @@ The `orchestration` value chooses the shape of a state's flow:
 | Mixed conversational + procedural (greet, then dispatch to procedural reasoning) | Multi-state workflow mixing `internal` and `composition` states |
 | Inter-pack A2A delegation | `agents` (RFC 0007), orthogonal to the above |
 
-### Mixing providers in one composition *(v1.9+)*
-
-Steps in one composition need not share a model. A ticket-handling composition can classify the request on a fast typed classifier (a `prompt` step whose prompt names `provider: triage` and whose `output_schema` has only enumerated, bounded and boolean leaves), branch on the result, draft the routine reply on a cheap model (`provider: drafter`), and escalate the rest to an `agent` step on the primary model. The pack names keys, not vendors: a host that binds `triage` to an LLM with structured output runs the same composition unchanged.
-
 ### Composition vs Agent Loop
 
 Both express multi-step work, but at different layers and for different shapes:
@@ -295,7 +292,6 @@ v1.4 packs are valid v1.5 packs unchanged. Composition is opt-in: a state only b
 | Turn Control (`WorkflowState.control`) | v1.7 | Workflow (orthogonal to `orchestration`), Agent Loops |
 | Obligations, reviews, independence (`governance.obligations`, `reviews`, `independent_of`) | v1.8 | Validators (by `id`), Evals (by `id`), Agents |
 | Policy annotation (`extensions` on decision points) | v1.8 | Prompts, Validators, Evals, Agents, Workflow, Composition |
-| Provider references (`Prompt.provider`, `PromptStep.provider`, `AgentStep.provider`) | v1.9 | Provider Requirements (keys), Workflow and Agents (inherit via the prompt), Composition (per-step override) |
 
 ## Next Steps
 
