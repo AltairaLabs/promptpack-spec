@@ -1,6 +1,7 @@
 ---
 title: "File Format & Portability"
 sidebar:
+  label: "File Format & Portability (v1.8.1)"
   order: 4
 ---
 
@@ -171,16 +172,12 @@ Structure your JSON for maintainability:
 PromptPacks validate against JSON Schema, catching errors early:
 
 ```bash
-# Validate before deployment (ajv-cli and ajv-formats installed)
-ajv validate --spec=draft2020 --strict=false -c ajv-formats -s promptpack.schema.json -d my-pack.json
+# Validate before deployment
+ajv validate -s promptpack.schema.json -d my-pack.json
 
 # Validate in CI/CD pipeline
 npm test -- --validate-packs
 ```
-
-:::note[ajv needs three flags]
-The schema is draft 2020-12, which ajv-cli does not assume (`--spec=draft2020`); it uses `format` (`-c ajv-formats`); and it carries a root `version` property that JSON Schema does not define. The spec allows unknown keywords, but ajv's strict mode rejects them, so pass `--strict=false`. In code, call `ajv.addKeyword('version')` on an `Ajv2020` instance instead. Validators in other languages need no such setting.
-:::
 
 **Catches**:
 

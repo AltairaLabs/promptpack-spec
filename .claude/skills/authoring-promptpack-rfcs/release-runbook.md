@@ -177,8 +177,45 @@ category in `astro.config.mjs`.
 ```bash
 cat schema/promptpack.schema.json | python3 -m json.tool > /dev/null   # valid JSON
 node scripts/check-version-consistency.mjs                              # version lockstep
+.claude/skills/authoring-promptpack-rfcs/xlang-check/run.sh             # cross-language gate
 npm --prefix promptpack-docs run build                                  # links + MDX + SSR
 ```
+
+### Cross-language gate (every release and promotion)
+
+Run `xlang-check/run.sh` before **every** version bump, patch releases
+included, and again before pushing the `v*` tag. It loads the schema in the
+validators people actually use and validates the fixtures in
+`xlang-check/fixtures/`: `valid-*` must pass, `invalid-*` must fail.
+
+| Language | Library | Why it is there |
+|---|---|---|
+| Python | `jsonschema` Draft 2020-12 + PyYAML | promptpack-python; PyYAML is YAML 1.1 (`on` reads as `true`) |
+| Go | `gojsonschema`, `santhosh-tekuri/jsonschema` v6 | PromptKit; RE2 regex |
+| JavaScript | `ajv` 2020 defaults, and the `ajv-cli` command the docs publish | the dominant JS validator |
+| Rust | `jsonschema`, fancy-regex and regex engines | strict regex engine |
+| .NET | `JsonSchema.Net` + 2020-12 metaschema | .NET regex, metaschema validity |
+| Ruby | `json_schemer`, Ruby and ECMA regexp | |
+
+Java is not covered (no JVM was available when this was written). A missing
+toolchain reports `SKIP` and does not fail the run, but say which were skipped
+in the PR.
+
+**Fixtures are part of the release.** For each new field, add a `valid-*.json`
+fixture that uses it and an `invalid-*.json` one that misuses it (wrong type,
+misspelled key). If the docs gain a YAML example, add it as `valid-*.yaml` so
+PyYAML and `ajv-cli` parse it. Without a fixture that uses the field, the gate
+proves the schema loads but not that the field validates.
+
+Known trap: the root `version` property is not a JSON Schema keyword, and
+ajv's default strict mode rejects unknown keywords. The docs tell ajv users to
+pass `--strict=false` (CLI) or call `ajv.addKeyword('version')`. The JS check
+applies only that workaround, so any *other* new non-standard keyword fails it.
+If you change the documented ajv command, change `ajvcli` in `run.sh` with it.
+
+Prove the gate still bites when you change it: run it against a known-bad
+schema (`git show 362bc98:schema/promptpack.schema.json`, v1.8.0's lookahead)
+and confirm Go and Rust fail to load it.
 Spot-check locally (`npm --prefix promptpack-docs run dev`, or `preview`
 after a build — there is no `serve` script; that was Docusaurus): `/docs/spec/overview`
 (current badge), `/docs/spec/{OLD_VTAG}/overview` (archived badge + warning),

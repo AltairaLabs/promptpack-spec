@@ -40,7 +40,7 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 | [RFC-0014](/docs/rfcs/workflow-state-control) | Workflow State Control | Implemented | v1.7.0 | 2026-08-31 | 2026-10-07 |
 | [RFC-0015](/docs/rfcs/deprecate-fail-on-violation) | Deprecate `fail_on_violation` | Implemented | v1.7.0 | 2026-08-31 | 2026-08-31 |
 | [RFC-0016](/docs/rfcs/governance-and-policy-annotation) | Governance Obligations, Vocabulary and Policy Annotation | Implemented | v1.8.0 | 2026-08-31 | 2026-10-07 |
-| [RFC-0017](/docs/rfcs/provider-references) | Provider References | Draft | — | 2026-10-07 | 2026-10-07 |
+| [RFC-0017](/docs/rfcs/provider-references) | Provider References | Implemented | v1.9.0 | 2026-10-07 | 2026-10-08 |
 <!-- RFC_TABLE_END -->
 
 ## At a Glance
@@ -49,8 +49,8 @@ For the process itself (lifecycle, template, criteria), see the [RFC Process](/d
 | | Count |
 |---|---|
 | Total RFCs | 17 |
-| Implemented | 16 |
-| Draft | 1 |
+| Implemented | 17 |
+| Draft | 0 |
 | In Review | 0 |
 | Rejected | 0 |
 <!-- RFC_COUNTS_END -->

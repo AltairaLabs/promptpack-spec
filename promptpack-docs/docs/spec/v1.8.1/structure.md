@@ -1,6 +1,7 @@
 ---
 title: "Pack Structure & Design"
 sidebar:
+  label: "Pack Structure & Design (v1.8.1)"
   order: 2
 ---
 
@@ -460,7 +461,7 @@ Two amendments make this work, both fully backward compatible:
 
 A composition is a directed **acyclic** graph of typed steps. v1 defines five step kinds:
 
-- **`prompt`** — a one-shot model call against a `prompt_task`, with an optional `output_schema`. No tool calls.
+- **`prompt`** — a one-shot LLM call against a `prompt_task`, with an optional `output_schema`. No tool calls.
 - **`agent`** — a *bounded LLM-tool loop* over a scoped `tools` list. **Requires** a `termination` predicate (`max_steps` and/or `tool_called`).
 - **`tool`** — a deterministic tool invocation called directly by the runtime (not via an LLM tool-call decision).
 - **`branch`** — picks `then`/`else` based on a constrained `predicate` (no expression language).
@@ -507,22 +508,6 @@ Each entry under `requires.providers` is either a **string shorthand** (a bare k
 - **`capabilities`** — optional, advisory, structured hints for automatic matching: `modalities` (reusing the RFC 0004 media vocabulary), `min_context_tokens`, `tool_use`, `structured_output`, `embedding_dimensions`. The object is **open** — provider-specific keys are allowed and SHOULD be namespaced (e.g. an `x-` prefix) to avoid clashing with fields the spec may define later.
 
 A requirement declares *what the pack needs*, never *which concrete provider satisfies it* — resolution is the host runtime's job. The block is fully backward compatible (optional; validated strictly only when present) and complements `tested_models`: `tested_models` records provenance (what a prompt was tested against), `requires.providers` records the contract (what the pack needs), so a runtime can warn when the resolved provider diverges from what the pack was tested on. See the [Provider Requirements schema reference](./schema-guide#provider-requirements-v151).
-
-### Provider references *(v1.9.0+)*
-
-Declaring a requirement does not say which calls use it. From v1.9.0, a prompt — or a composition `prompt` or `agent` step — names one with `provider`:
-
-```json
-{
-  "prompts": {
-    "classify_request": { "...": "...", "provider": "triage" },
-    "refund_reply": { "...": "...", "provider": "drafter" },
-    "support_agent": { "...": "..." }
-  }
-}
-```
-
-An absent `provider` means `default`, which is what every call used before. Workflow states and agent members inherit the provider of the prompt they run; a composition step may override its prompt's provider for that step. The host still binds each key to a concrete provider, and must reject the pack at load time if a referenced key is unbound or bound to a provider that cannot serve the call site. A `prompt` step with an `output_schema` whose leaves are all choices, bounded numbers or booleans may be served by a non-LLM provider such as a classifier. See [Provider references](./schema-guide#provider-references-v190) and [RFC 0017](/docs/rfcs/provider-references).
 
 ## Governance Declarations *(v1.6.0+)*
 

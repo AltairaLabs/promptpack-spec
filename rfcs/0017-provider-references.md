@@ -1,9 +1,9 @@
 # RFC 0017: Provider References
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Author(s):** Charlie Holland
 - **Created:** 2026-10-07
-- **Updated:** 2026-10-07
+- **Updated:** 2026-10-08
 - **Discussion:** [RFC Comments](https://github.com/AltairaLabs/promptpack-spec/discussions/categories/rfc-comments)
 - **Related Issues:** TBD
 
@@ -308,16 +308,19 @@ Not applicable.
 
 ## Unresolved Questions
 
-- **Is the step override needed in v1?** Example 3 is the only use case found so far. Shipping the prompt property alone would be smaller; adding the step property later is backward compatible.
-- **`model_overrides` keys.** `model_overrides` is keyed by model name. Once a prompt names a logical key and the host picks the model, a runtime has to match the bound provider's model against those names. Does the spec need to say anything about that, or is it already a runtime matter?
-- **Should the spec define the schema subset a non-LLM provider is expected to answer?** Leaving it runtime-defined keeps the spec small but makes Level 3 behavior vary. Naming a minimal portable subset — enumerated strings, bounded numbers, booleans, and objects of those — would let validators warn earlier.
-- **Rule 4 and optional requirements.** Rejecting the pack when a referenced optional requirement is unbound is strict. The alternative is falling back to `default`, which hides a deployment mistake but keeps the pack running.
+None remain. Resolved at implementation (v1.9.0):
+
+- **Is the step override needed in v1?** Yes, shipped. It costs one optional property and lets one prompt run on two models within a composition (Example 3).
+- **`model_overrides` keys.** No spec change. `model_overrides` is an escape hatch, and what a host does with it once a key is bound to a provider is the host's decision.
+- **A portable schema subset for non-LLM providers.** Not defined. PromptPack describes the components of a pack and how they collaborate, not how a runtime carries that out, and the kinds of model that can answer a structured `output_schema` will change. Which schemas a provider can answer stays a runtime concern, enforced through rule 3's load-time check.
+- **Rule 4 and optional requirements.** Kept as written: a call site that references an unbound optional requirement rejects the pack. Falling back to `default` could have unintended consequences — an author who named a different provider meant that provider.
 
 ---
 
 ## Revision History
 
 - **2026-10-07:** Initial draft.
+- **2026-10-08:** Implemented in spec v1.9.0. `provider` added to `Prompt`, `PromptStep` and `AgentStep`; `PromptStep` described as a one-shot model invocation. The step override ships; the other unresolved questions are resolved without schema changes (see Unresolved Questions).
 
 ## References
 

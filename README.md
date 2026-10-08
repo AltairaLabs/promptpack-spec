@@ -1,6 +1,6 @@
 # PromptPack Specification
 
-[![Spec Version](https://img.shields.io/badge/Spec-v1.8.1-blue)](https://promptpack.org/docs/spec/overview)
+[![Spec Version](https://img.shields.io/badge/Spec-v1.9.0-blue)](https://promptpack.org/docs/spec/overview)
 [![Documentation](https://img.shields.io/badge/Documentation-promptpack.org-green)](https://promptpack.org)
 [![GitHub Pages](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml/badge.svg)](https://github.com/altairalabs/promptpack-spec/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -114,6 +114,7 @@ PromptKit is the reference toolkit — multi-provider testing, red-team scenario
 - **Agents** — A2A-compatible agent definitions for multi-agent discovery and orchestration
 - **Skills** — Progressive-disclosure knowledge loading with workflow state scoping
 - **Provider Requirements** — Declare the model providers a pack needs to run (`requires.providers`) for coverage checks, auto-binding, and test/deploy parity
+- **Provider References** — Name which declared provider runs each prompt or composition step (`provider`), so classification, templated replies and open-ended reasoning each run on a suitable model
 - **Governance Declarations** — Record what an agent is for, what it must not be used for, how far it acts without a human, who is accountable, and what each tool can affect (`metadata.governance`, `Tool.action_scope`) — plus the obligations those trigger, the controls that discharge them, recurring reviews, and independence requirements for reviewing agents
 - **Multimodal Content** — Text, images, audio, and structured content in prompt templates
 - **Portable & Provider-Agnostic** — Works across OpenAI, Anthropic, Google, and local models
@@ -393,6 +394,30 @@ v1.8.0 also publishes well-known vocabulary prefixes (mostly the W3C Data Privac
 
 See [RFC-0016: Governance Obligations, Vocabulary and Policy Annotation](https://promptpack.org/docs/rfcs/governance-and-policy-annotation) and the [governance guide](https://promptpack.org/docs/guides/add-governance).
 
+## Provider References *(v1.9.0)*
+
+`requires.providers` says what a pack needs. v1.9.0 lets each prompt, and each composition `prompt` or `agent` step, say which of those needs runs it:
+
+```yaml
+requires:
+  providers:
+    - default
+    - { key: triage,  role: inference, description: "Fast typed classifier." }
+    - { key: drafter, role: llm,       description: "Cheap model for templated replies." }
+
+prompts:
+  classify_request: { id: classify_request, name: Classify, version: 1.0.0, provider: triage,
+                      system_template: "Customer message: {{input}}" }
+  refund_reply:     { id: refund_reply, name: Refund reply, version: 1.0.0, provider: drafter,
+                      system_template: "Write a refund confirmation for: {{input}}" }
+  support_agent:    { id: support_agent, name: Support agent, version: 1.0.0,
+                      system_template: "You are a support agent." }   # no provider → default
+```
+
+The pack names keys; the host still binds each one to a concrete provider. Workflow states and agent members inherit their prompt's `provider`, and a composition step can override it. A `prompt` step with an `output_schema` made only of choices, bounded numbers and booleans may be served by a classifier rather than an LLM. A runtime rejects the pack at load time if a referenced key is unbound or bound to a provider that cannot serve the call.
+
+See [RFC-0017: Provider References](https://promptpack.org/docs/rfcs/provider-references).
+
 ## Documentation
 
 - [Specification](https://promptpack.org/docs/spec/overview) — Complete PromptPack spec
@@ -403,7 +428,7 @@ See [RFC-0016: Governance Obligations, Vocabulary and Policy Annotation](https:/
 ### JSON Schema
 
 - **Latest:** [`https://promptpack.org/schema/latest/promptpack.schema.json`](https://promptpack.org/schema/latest/promptpack.schema.json)
-- **Versioned:** `https://promptpack.org/schema/v1.8.1/promptpack.schema.json`
+- **Versioned:** `https://promptpack.org/schema/v1.9.0/promptpack.schema.json`
 
 ## Ecosystem
 
