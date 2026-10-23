@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
+import starlightLlmsTxt from 'starlight-llms-txt';
+import starlightPageActions from 'starlight-page-actions';
 
 /**
  * promptpack.org — Astro + Starlight.
@@ -61,6 +63,36 @@ export default defineConfig({
         // family-bar-height.test.ts fails if they disagree.
         '@altairalabs/brand/family-bar-starlight.css',
         './src/styles/site.css',
+      ],
+      plugins: [
+        // /llms.txt, /llms-full.txt and /llms-small.txt for LLMs and coding
+        // agents. The archived spec versions are demoted so the current spec
+        // comes first in llms-full.txt.
+        starlightLlmsTxt({
+          description:
+            'PromptPack is an open, vendor-neutral JSON specification for packaging the prompts, tools, fragments, workflows, agents, skills, policies and evals of an LLM application into one portable, versioned `.promptpack.json` file that works across providers.',
+          details: [
+            'The current spec version is v1.9.0. A pack declares its schema with `"$schema": "https://promptpack.org/schema/latest/promptpack.schema.json"`; versioned schemas live at `https://promptpack.org/schema/vX.Y.Z/promptpack.schema.json`. Validate packs against the JSON Schema rather than inferring the format from examples.',
+            '',
+            'Pages under `/docs/spec/` define the format; `/docs/spec/vX.Y.Z/` pages are superseded versions kept for reference. Every docs page is also served as Markdown at its URL with `.md` appended (for example `/docs/spec/overview.md`).',
+          ].join('\n'),
+          demote: ['docs/spec/v*/**', 'docs/rfcs/**'],
+          optionalLinks: [
+            { label: 'JSON Schema (latest)', url: 'https://promptpack.org/schema/latest/promptpack.schema.json', description: 'The machine-readable PromptPack schema' },
+            { label: 'PromptKit docs', url: 'https://promptkit.altairalabs.ai/llms.txt', description: 'Go runtime and SDK that loads and runs packs' },
+            { label: 'PromptArena and PackC docs', url: 'https://promptarena.altairalabs.ai/llms.txt', description: 'Test packs and compile them from source config' },
+            { label: 'Source code', url: 'https://github.com/AltairaLabs/promptpack-spec' },
+          ],
+        }),
+        // Copy-as-Markdown and "Open in ChatGPT/Claude" buttons. Its own .md
+        // copier only reads src/content/docs/, and this site's content lives in
+        // ./docs, so the per-page Markdown comes from src/pages/[...slug].md.ts.
+        // That copier fails the build when its glob matches nothing, which is
+        // why src/content/docs/index.md exists: it becomes /index.md, a
+        // Markdown front door pointing at llms.txt and the schema.
+        // No `baseUrl`: setting it makes this plugin write its own
+        // build/llms.txt at build:done, clobbering starlight-llms-txt's.
+        starlightPageActions(),
       ],
       components: {
         Header: './src/components/Header.astro',
