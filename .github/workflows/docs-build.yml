@@ -27,6 +27,7 @@ jobs:
           # Astro 7 requires >=22.12. Docusaurus ran fine on 20; this is part of
           # the migration, not an incidental bump.
           node-version: 22
+          check-latest: true
           cache: npm
           cache-dependency-path: ./promptpack-docs/package-lock.json
 
